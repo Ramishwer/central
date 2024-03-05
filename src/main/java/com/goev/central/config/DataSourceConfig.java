@@ -1,7 +1,7 @@
 package com.goev.central.config;
 
 
-import com.goev.central.constants.Credentials;
+import com.goev.central.constant.Credentials;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.slf4j.Slf4j;

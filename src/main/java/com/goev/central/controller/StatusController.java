@@ -1,4 +1,4 @@
-package com.goev.central.controllers;
+package com.goev.central.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;

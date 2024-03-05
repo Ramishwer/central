@@ -1,6 +1,6 @@
 package com.goev.central.config;
 
-import com.goev.central.constants.Credentials;
+import com.goev.central.constant.Credentials;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;

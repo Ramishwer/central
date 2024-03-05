@@ -2,7 +2,7 @@ package com.goev.central.config.interceptor;
 
 
 import com.goev.central.config.SpringContext;
-import com.goev.central.constants.ApplicationConstants;
+import com.goev.central.constant.ApplicationConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
