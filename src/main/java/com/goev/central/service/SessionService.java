@@ -1,8 +1,11 @@
 package com.goev.central.service;
 
+import com.goev.central.dto.partner.PartnerDto;
 import com.goev.central.dto.session.SessionDetailsDto;
 import com.goev.central.dto.session.SessionDto;
 import com.goev.lib.dto.PasswordCredentialsDto;
+
+import java.util.List;
 
 public interface SessionService {
     SessionDto createSession(PasswordCredentialsDto credentials);
@@ -10,4 +13,5 @@ public interface SessionService {
     SessionDetailsDto getSessionDetails(String sessionUUID);
     Boolean deleteSession(String sessionUUID);
 
+    List<SessionDto> getSessions();
 }

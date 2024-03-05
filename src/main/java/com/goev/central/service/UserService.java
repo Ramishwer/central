@@ -1,6 +1,9 @@
 package com.goev.central.service;
 
 import com.goev.central.dto.user.UserDetailsDto;
+import com.goev.central.dto.user.UserDto;
+
+import java.util.List;
 
 public interface UserService {
     UserDetailsDto createUser(UserDetailsDto userDto);
@@ -8,4 +11,5 @@ public interface UserService {
     UserDetailsDto getUserDetails(String userUUID);
     Boolean deleteUser(String userUUID);
 
+    List<UserDto> getUsers();
 }

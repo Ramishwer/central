@@ -7,6 +7,9 @@ import com.goev.lib.dto.PasswordCredentialsDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Slf4j
 @Service
 public class SessionServiceImpl implements SessionService {
@@ -28,5 +31,10 @@ public class SessionServiceImpl implements SessionService {
     @Override
     public Boolean deleteSession(String sessionUUID) {
         return null;
+    }
+
+    @Override
+    public List<SessionDto> getSessions() {
+        return new ArrayList<>();
     }
 }

@@ -1,5 +1,6 @@
 package com.goev.central.controller;
 
+import com.goev.central.dto.partner.PartnerDto;
 import com.goev.central.dto.session.SessionDetailsDto;
 import com.goev.central.dto.session.SessionDto;
 import com.goev.central.service.SessionService;
@@ -10,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequestMapping(value = "/api/v1/session-management")
@@ -17,6 +20,11 @@ public class SessionController {
 
     @Autowired
     private SessionService sessionService;
+
+    @GetMapping("/sessions")
+    public ResponseDto<List<SessionDto>> getSessions(){
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, sessionService.getSessions());
+    }
     @PostMapping("/sessions")
     public ResponseDto<SessionDto> createSession(@RequestBody PasswordCredentialsDto credentials){
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, sessionService.createSession(credentials));

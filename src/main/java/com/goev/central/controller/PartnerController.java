@@ -1,5 +1,6 @@
 package com.goev.central.controller;
 
+import com.goev.central.dto.customer.CustomerDto;
 import com.goev.central.dto.partner.PartnerDetailsDto;
 import com.goev.central.dto.partner.PartnerDto;
 import com.goev.central.dto.session.SessionDetailsDto;
@@ -13,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequestMapping(value = "/api/v1/partner-management")
@@ -20,6 +23,11 @@ public class PartnerController {
 
     @Autowired
     private PartnerService partnerService;
+
+    @GetMapping("/partners")
+    public ResponseDto<List<PartnerDto>> getPartners(){
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, partnerService.getPartners());
+    }
     @PostMapping("/partners")
     public ResponseDto<PartnerDetailsDto> createPartner(@RequestBody PartnerDetailsDto partnerDto){
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, partnerService.createPartner(partnerDto));

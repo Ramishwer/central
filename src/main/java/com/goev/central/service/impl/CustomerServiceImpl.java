@@ -2,9 +2,13 @@ package com.goev.central.service.impl;
 
 
 import com.goev.central.dto.customer.CustomerDetailsDto;
+import com.goev.central.dto.customer.CustomerDto;
 import com.goev.central.service.CustomerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -27,5 +31,10 @@ public class CustomerServiceImpl  implements CustomerService {
     @Override
     public Boolean deleteCustomer(String customerUUID) {
         return null;
+    }
+
+    @Override
+    public List<CustomerDto> getCustomers() {
+        return new ArrayList<>();
     }
 }

@@ -1,12 +1,16 @@
 package com.goev.central.controller;
 
+import com.goev.central.dto.session.SessionDto;
 import com.goev.central.dto.user.UserDetailsDto;
+import com.goev.central.dto.user.UserDto;
 import com.goev.central.service.UserService;
 import com.goev.lib.dto.ResponseDto;
 import com.goev.lib.dto.StatusDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -15,6 +19,11 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @GetMapping("/users")
+    public ResponseDto<List<UserDto>> getUsers(){
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, userService.getUsers());
+    }
     @PostMapping("/users")
     public ResponseDto<UserDetailsDto> createUser(@RequestBody UserDetailsDto userDto){
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, userService.createUser(userDto));
