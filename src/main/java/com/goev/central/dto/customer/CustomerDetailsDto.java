@@ -14,8 +14,4 @@ import org.joda.time.DateTime;
 public class CustomerDetailsDto {
     private CustomerDto details;
     private String uuid;
-    @JsonSerialize(using = DateTimeSerializer.class)
-    private DateTime onboardingDate;
-    @JsonSerialize(using = DateTimeSerializer.class)
-    private DateTime deboardingDate;
 }

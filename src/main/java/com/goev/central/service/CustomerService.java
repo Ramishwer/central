@@ -1,5 +1,6 @@
 package com.goev.central.service;
 
+import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.customer.CustomerDetailsDto;
 import com.goev.central.dto.customer.CustomerDto;
 
@@ -10,6 +11,5 @@ public interface CustomerService {
     CustomerDetailsDto updateCustomer(String customerUUID, CustomerDetailsDto credentials);
     CustomerDetailsDto getCustomerDetails(String customerUUID);
     Boolean deleteCustomer(String customerUUID);
-
-    List<CustomerDto> getCustomers();
+    PaginatedResponseDto<CustomerDto> getCustomers();
 }

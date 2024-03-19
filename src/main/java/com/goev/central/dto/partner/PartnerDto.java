@@ -1,8 +1,11 @@
 package com.goev.central.dto.partner;
 
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.goev.central.dto.common.AttributeDto;
+import com.goev.lib.utilities.DateTimeSerializer;
 import lombok.*;
+import org.joda.time.DateTime;
 
 import java.util.List;
 
@@ -19,5 +22,9 @@ public class PartnerDto {
     private String lastName;
     private String uuid;
     private String state;
+    @JsonSerialize(using = DateTimeSerializer.class)
+    private DateTime onboardingDate;
+    @JsonSerialize(using = DateTimeSerializer.class)
+    private DateTime deboardingDate;
     private List<AttributeDto> attributes;
 }

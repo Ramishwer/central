@@ -1,5 +1,6 @@
 package com.goev.central.controller;
 
+import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.vehicle.VehicleDetailsDto;
 import com.goev.central.dto.vehicle.VehicleDto;
 import com.goev.central.service.VehicleService;
@@ -20,7 +21,7 @@ public class VehicleController {
     private VehicleService vehicleService;
 
     @GetMapping("/vehicles")
-    public ResponseDto<List<VehicleDto>> getVehicles(){
+    public ResponseDto<PaginatedResponseDto<VehicleDto>> getVehicles(){
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, vehicleService.getVehicles());
     }
     @PostMapping("/vehicles")

@@ -1,5 +1,6 @@
 package com.goev.central.controller;
 
+import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.customer.CustomerDto;
 import com.goev.central.dto.partner.PartnerDetailsDto;
 import com.goev.central.dto.partner.PartnerDto;
@@ -25,7 +26,7 @@ public class PartnerController {
     private PartnerService partnerService;
 
     @GetMapping("/partners")
-    public ResponseDto<List<PartnerDto>> getPartners(){
+    public ResponseDto<PaginatedResponseDto<PartnerDto>> getPartners(){
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, partnerService.getPartners());
     }
     @PostMapping("/partners")

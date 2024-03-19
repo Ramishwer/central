@@ -1,6 +1,5 @@
 package com.goev.central.dto.session;
 
-import com.goev.lib.dto.AuthorisationDetailsDto;
 import lombok.*;
 
 @AllArgsConstructor

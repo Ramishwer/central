@@ -1,5 +1,6 @@
 package com.goev.central.service;
 
+import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.user.UserDetailsDto;
 import com.goev.central.dto.user.UserDto;
 
@@ -11,5 +12,5 @@ public interface UserService {
     UserDetailsDto getUserDetails(String userUUID);
     Boolean deleteUser(String userUUID);
 
-    List<UserDto> getUsers();
+    PaginatedResponseDto<UserDto> getUsers();
 }

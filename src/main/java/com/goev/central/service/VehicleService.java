@@ -1,5 +1,6 @@
 package com.goev.central.service;
 
+import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.vehicle.VehicleDetailsDto;
 import com.goev.central.dto.vehicle.VehicleDto;
 
@@ -11,5 +12,5 @@ public interface VehicleService {
     VehicleDetailsDto getVehicleDetails(String vehicleUUID);
     Boolean deleteVehicle(String vehicleUUID);
 
-    List<VehicleDto> getVehicles();
+    PaginatedResponseDto<VehicleDto> getVehicles();
 }

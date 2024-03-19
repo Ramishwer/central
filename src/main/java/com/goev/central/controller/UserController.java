@@ -1,5 +1,6 @@
 package com.goev.central.controller;
 
+import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.session.SessionDto;
 import com.goev.central.dto.user.UserDetailsDto;
 import com.goev.central.dto.user.UserDto;
@@ -21,7 +22,7 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/users")
-    public ResponseDto<List<UserDto>> getUsers(){
+    public ResponseDto<PaginatedResponseDto<UserDto>> getUsers(){
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, userService.getUsers());
     }
     @PostMapping("/users")

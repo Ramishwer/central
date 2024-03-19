@@ -1,5 +1,6 @@
 package com.goev.central.controller;
 
+import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.customer.CustomerDetailsDto;
 import com.goev.central.dto.customer.CustomerDto;
 import com.goev.central.service.CustomerService;
@@ -21,7 +22,7 @@ public class CustomerController {
 
 
     @GetMapping("/customers")
-    public ResponseDto<List<CustomerDto>> getCustomers(){
+    public ResponseDto<PaginatedResponseDto<CustomerDto>> getCustomers(){
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, customerService.getCustomers());
     }
     @PostMapping("/customers")

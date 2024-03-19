@@ -1,5 +1,6 @@
 package com.goev.central.service;
 
+import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.partner.PartnerDetailsDto;
 import com.goev.central.dto.partner.PartnerDto;
 
@@ -10,5 +11,5 @@ public interface PartnerService {
     PartnerDetailsDto updatePartner(String partnerUUID, PartnerDetailsDto credentials);
     PartnerDetailsDto getPartnerDetails(String partnerUUID);
     Boolean deletePartner(String partnerUUID);
-    List<PartnerDto> getPartners();
+    PaginatedResponseDto<PartnerDto> getPartners();
 }
