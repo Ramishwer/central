@@ -1,5 +1,6 @@
 package com.goev.central.config;
 
+import com.goev.central.config.interceptor.JooqAutoInsertUpdateListener;
 import org.jooq.SQLDialect;
 import org.jooq.conf.Settings;
 import org.jooq.impl.DataSourceConnectionProvider;
@@ -24,6 +25,7 @@ public class JooqConfig {
         DefaultConfiguration jooqConfiguration = new DefaultConfiguration();
         jooqConfiguration.set(connectionProvider(dataSource));
         jooqConfiguration.set(SQLDialect.MYSQL);
+        jooqConfiguration.set(new JooqAutoInsertUpdateListener());
         jooqConfiguration.set(new Settings().withFetchWarnings(false));
         return jooqConfiguration;
     }
