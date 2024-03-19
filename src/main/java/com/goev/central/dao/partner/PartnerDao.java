@@ -20,6 +20,13 @@ public class PartnerDao extends BaseDao<Integer, PartnerDto> {
 
     @Override
     public PartnerDao fromDto(PartnerDto partnerDto) {
-        return null;
+        PartnerDao result = new PartnerDao();
+        result.setEmail(partnerDto.getEmail());
+        result.setPhone(partnerDto.getPhone());
+        result.setFirstName(partnerDto.getFirstName());
+        result.setLastName(partnerDto.getLastName());
+        result.setState(partnerDto.getState());
+        result.setUuid(partnerDto.getUuid());
+        return result;
     }
 }

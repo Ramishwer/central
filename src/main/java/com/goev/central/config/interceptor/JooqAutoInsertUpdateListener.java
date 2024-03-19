@@ -8,6 +8,8 @@ import org.jooq.Record;
 import org.jooq.RecordContext;
 import org.jooq.RecordListener;
 
+import java.util.UUID;
+
 @Slf4j
 public class JooqAutoInsertUpdateListener implements RecordListener {
 
@@ -18,6 +20,7 @@ public class JooqAutoInsertUpdateListener implements RecordListener {
     public static final String CREATED_BY = "created_by";
     public static final String UPDATED_BY = "updated_by";
     public static final String API_SOURCE = "api_source";
+    public static final String UUID_KEY = "uuid";
 
     @Override
     public void insertStart(RecordContext ctx) {
@@ -40,8 +43,12 @@ public class JooqAutoInsertUpdateListener implements RecordListener {
 
         if (record.field(UPDATED_BY) != null)
             record.set((Field<? super String>) record.field(UPDATED_BY), ssoId);
+
         if (record.field(API_SOURCE) != null)
             record.set((Field<? super String>) record.field(API_SOURCE), RequestContext.getApplicationSource());
+
+        if (record.field(UUID_KEY) != null)
+            record.set((Field<? super String>) record.field(UUID_KEY), UUID.randomUUID().toString());
     }
 
     @Override

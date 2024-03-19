@@ -1,5 +1,6 @@
 package com.goev.central.dao.user;
 
+import com.goev.central.dao.partner.PartnerDao;
 import com.goev.central.dto.user.UserDto;
 import com.goev.lib.dao.BaseDao;
 import lombok.*;
@@ -19,6 +20,13 @@ public class UserDao extends BaseDao<Integer, UserDto> {
 
     @Override
     public UserDao fromDto(UserDto userDto) {
-        return null;
+        UserDao result = new UserDao();
+        result.setEmail(userDto.getEmail());
+        result.setPhone(userDto.getPhone());
+        result.setFirstName(userDto.getFirstName());
+        result.setLastName(userDto.getLastName());
+        result.setState(userDto.getState());
+        result.setUuid(userDto.getUuid());
+        return result;
     }
 }

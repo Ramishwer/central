@@ -9,6 +9,7 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
+@Builder
 public class CustomerDao extends BaseDao<Integer, CustomerDto> {
     private String email;
     private String phone;
@@ -18,6 +19,13 @@ public class CustomerDao extends BaseDao<Integer, CustomerDto> {
 
     @Override
     public CustomerDao fromDto(CustomerDto customerDto) {
-        return null;
+        CustomerDao result = new CustomerDao();
+        result.setEmail(customerDto.getEmail());
+        result.setPhone(customerDto.getPhone());
+        result.setFirstName(customerDto.getFirstName());
+        result.setLastName(customerDto.getLastName());
+        result.setState(customerDto.getState());
+        result.setUuid(customerDto.getUuid());
+        return result;
     }
 }
