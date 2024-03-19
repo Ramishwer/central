@@ -34,8 +34,10 @@ public class CustomerServiceImpl  implements CustomerService {
         CustomerDao customer = customerRepository.findByUUID(customerUUID);
         if(customer == null)
             throw new ResponseException("No customer found for Id :"+customerUUID);
-        customer = customer.fromDto(customerDto.getDetails());
-        customerRepository.update(customer);
+        CustomerDao newCustomer = customer.fromDto(customerDto.getDetails());
+        newCustomer.setId(customer.getId());
+        newCustomer.setUuid(customer.getUuid());
+        customer =customerRepository.update(newCustomer);
         if(customer == null)
             throw new ResponseException("Error in saving details");
         return CustomerDetailsDto.builder().details(customer.toDto()).uuid(customer.getUuid()).build();

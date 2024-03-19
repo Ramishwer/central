@@ -34,8 +34,10 @@ public class UserServiceImpl  implements UserService {
         UserDao user = userRepository.findByUUID(userUUID);
         if(user == null)
             throw new ResponseException("No user found for Id :"+userUUID);
-        user = user.fromDto(userDto.getDetails());
-        userRepository.update(user);
+        UserDao newUser = user.fromDto(userDto.getDetails());
+        newUser.setId(user.getId());
+        newUser.setUuid(user.getUuid());
+        user =userRepository.update(newUser);
         if(user == null)
             throw new ResponseException("Error in saving details");
         return UserDetailsDto.builder().details(user.toDto()).uuid(user.getUuid()).build();

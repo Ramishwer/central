@@ -34,8 +34,10 @@ public class VehicleServiceImpl  implements VehicleService {
         VehicleDao vehicle = vehicleRepository.findByUUID(vehicleUUID);
         if(vehicle == null)
             throw new ResponseException("No vehicle found for Id :"+vehicleUUID);
-        vehicle = vehicle.fromDto(vehicleDto.getDetails());
-        vehicleRepository.update(vehicle);
+        VehicleDao newVehicle = vehicle.fromDto(vehicleDto.getDetails());
+        newVehicle.setId(vehicle.getId());
+        newVehicle.setUuid(vehicle.getUuid());
+        vehicle =vehicleRepository.update(newVehicle);
         if(vehicle == null)
             throw new ResponseException("Error in saving details");
         return VehicleDetailsDto.builder().details(vehicle.toDto()).uuid(vehicle.getUuid()).build();

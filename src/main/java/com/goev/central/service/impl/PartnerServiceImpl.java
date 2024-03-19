@@ -34,8 +34,10 @@ public class PartnerServiceImpl  implements PartnerService {
         PartnerDao partner = partnerRepository.findByUUID(partnerUUID);
         if(partner == null)
             throw new ResponseException("No partner found for Id :"+partnerUUID);
-        partner = partner.fromDto(partnerDto.getDetails());
-        partnerRepository.update(partner);
+        PartnerDao newPartnerDto = partner.fromDto(partnerDto.getDetails());
+        newPartnerDto.setId(partner.getId());
+        newPartnerDto.setUuid(partner.getUuid());
+        partner =partnerRepository.update(newPartnerDto);
         if(partner == null)
             throw new ResponseException("Error in saving details");
         return PartnerDetailsDto.builder().details(partner.toDto()).uuid(partner.getUuid()).build();
