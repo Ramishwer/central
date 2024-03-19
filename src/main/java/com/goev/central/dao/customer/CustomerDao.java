@@ -4,6 +4,8 @@ import com.goev.central.dto.customer.CustomerDto;
 import com.goev.lib.dao.BaseDao;
 import lombok.*;
 
+import static com.goev.central.constant.ApplicationConstants.GSON;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -27,5 +29,15 @@ public class CustomerDao extends BaseDao<Integer, CustomerDto> {
         result.setState(customerDto.getState());
         result.setUuid(customerDto.getUuid());
         return result;
+    }
+
+    @Override
+    public String toJson() {
+        return GSON.toJson(this);
+    }
+
+    @Override
+    public CustomerDto toDto() {
+        return GSON.fromJson(this.toJson(),CustomerDto.class);
     }
 }

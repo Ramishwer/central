@@ -1,9 +1,12 @@
 package com.goev.central.dao.user;
 
 import com.goev.central.dao.partner.PartnerDao;
+import com.goev.central.dto.customer.CustomerDto;
 import com.goev.central.dto.user.UserDto;
 import com.goev.lib.dao.BaseDao;
 import lombok.*;
+
+import static com.goev.central.constant.ApplicationConstants.GSON;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -28,5 +31,15 @@ public class UserDao extends BaseDao<Integer, UserDto> {
         result.setState(userDto.getState());
         result.setUuid(userDto.getUuid());
         return result;
+    }
+
+    @Override
+    public String toJson() {
+        return GSON.toJson(this);
+    }
+
+    @Override
+    public UserDto toDto() {
+        return GSON.fromJson(this.toJson(),UserDto.class);
     }
 }

@@ -6,6 +6,8 @@ import com.goev.central.dto.partner.PartnerDto;
 import com.goev.lib.dao.BaseDao;
 import lombok.*;
 
+import static com.goev.central.constant.ApplicationConstants.GSON;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -28,5 +30,15 @@ public class PartnerDao extends BaseDao<Integer, PartnerDto> {
         result.setState(partnerDto.getState());
         result.setUuid(partnerDto.getUuid());
         return result;
+    }
+
+    @Override
+    public String toJson() {
+        return GSON.toJson(this);
+    }
+
+    @Override
+    public PartnerDto toDto() {
+        return GSON.fromJson(this.toJson(),PartnerDto.class);
     }
 }
