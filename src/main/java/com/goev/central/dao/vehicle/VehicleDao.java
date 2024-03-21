@@ -51,6 +51,7 @@ public class VehicleDao extends BaseDao<Integer, VehicleDto> {
                 .uuid(this.uuid)
                 .plateNumber(this.plateNumber)
                 .vinNumber(this.vinNumber)
+                .state(this.state)
                 .build();
     }
 }
