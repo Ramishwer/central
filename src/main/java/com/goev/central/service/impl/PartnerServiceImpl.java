@@ -21,11 +21,17 @@ public class PartnerServiceImpl  implements PartnerService {
 
     @Autowired
     private PartnerRepository partnerRepository;
+    @Autowired
+    private PartnerRepository documentTypeRepository;
+    @Autowired
+    private PartnerRepository partnerDocumentRepository;
     @Override
     public PartnerDetailsDto createPartner(PartnerDetailsDto partnerDto) {
         PartnerDao partner = partnerRepository.save(new PartnerDao().fromDto(partnerDto.getDetails()));
         if(partner == null)
             throw new ResponseException("Error in saving details");
+
+
         return PartnerDetailsDto.builder().details(partner.toDto()).uuid(partner.getUuid()).build();
     }
 

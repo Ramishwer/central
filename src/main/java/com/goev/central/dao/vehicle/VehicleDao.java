@@ -16,11 +16,22 @@ import static com.goev.central.constant.ApplicationConstants.GSON;
 public class VehicleDao extends BaseDao<Integer, VehicleDto> {
     private String plateNumber;
     private String state;
+    private String vinNumber;
+    private String motorNumber;
+    private String modelName;
+    private String modelYear;
+    private String manufacturerName;
+    private Integer vehicleDetailsId;
+
 
     @Override
     public VehicleDao fromDto(VehicleDto vehicleDto) {
         VehicleDao result = new VehicleDao();
         result.setPlateNumber(vehicleDto.getPlateNumber());
+        result.setModelName(vehicleDto.getModel());
+        result.setModelYear(vehicleDto.getYear());
+        result.setVinNumber(vehicleDto.getVinNumber());
+        result.setManufacturerName(vehicleDto.getManufacturer());
         result.setState(vehicleDto.getState());
         result.setUuid(vehicleDto.getUuid());
         return result;
@@ -33,6 +44,13 @@ public class VehicleDao extends BaseDao<Integer, VehicleDto> {
 
     @Override
     public VehicleDto toDto() {
-        return GSON.fromJson(this.toJson(),VehicleDto.class);
+        return VehicleDto.builder()
+                .model(this.modelName)
+                .manufacturer(this.manufacturerName)
+                .year(this.modelYear)
+                .uuid(this.uuid)
+                .plateNumber(this.plateNumber)
+                .vinNumber(this.vinNumber)
+                .build();
     }
 }

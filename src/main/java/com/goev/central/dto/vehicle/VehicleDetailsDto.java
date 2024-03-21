@@ -18,4 +18,8 @@ public class VehicleDetailsDto {
     private VehicleDto details;
     private String uuid;
     private List<DocumentDto> documents;
+    @JsonSerialize(using = DateTimeSerializer.class)
+    private DateTime onboardingDate;
+    @JsonSerialize(using = DateTimeSerializer.class)
+    private DateTime deboardingDate;
 }

@@ -21,10 +21,7 @@ public class PartnerDto {
     private String firstName;
     private String lastName;
     private String uuid;
+    private String punchId;
     private String state;
-    @JsonSerialize(using = DateTimeSerializer.class)
-    private DateTime onboardingDate;
-    @JsonSerialize(using = DateTimeSerializer.class)
-    private DateTime deboardingDate;
     private List<AttributeDto> attributes;
 }

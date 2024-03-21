@@ -56,6 +56,7 @@ dependencies {
 	implementation 'joda-time:joda-time:2.12.1'
 	implementation 'software.amazon.awssdk:protocol-core:2.17.261'
 	implementation 'io.micrometer:micrometer-registry-prometheus'
+	implementation 'com.amazonaws:aws-java-sdk-s3:1.12.466'
 
 
 	if (System.getenv("ENV") == 'local' || System.getenv("ENV") == null) {
