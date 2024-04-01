@@ -1,10 +1,11 @@
 package com.goev.central.utilities;
 
 
-import com.goev.central.dao.system.properties.SystemPropertiesDao;
-import com.goev.central.repository.system.properties.SystemPropertiesRepository;
+import com.goev.central.dao.system.property.SystemPropertyDao;
+import com.goev.central.repository.system.property.SystemPropertyRepository;
 import com.goev.lib.enums.PropertyTypes;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,12 +19,13 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@AllArgsConstructor
 public class ConstantUtils {
-    @Autowired
-    private SystemPropertiesRepository systemPropertiesRepository;
+
+    private final SystemPropertyRepository systemPropertiesRepository;
 
     public void configurationOfConstantsFromDataBase(Object app) throws IllegalAccessException {
-        Map<String, SystemPropertiesDao> configMap = systemPropertiesRepository.getPropertyMap();
+        Map<String, SystemPropertyDao> configMap = systemPropertiesRepository.getPropertyMap();
         if (configMap == null) return;
         Field[] fields = app.getClass().getDeclaredFields();
         for (Field field : fields) {

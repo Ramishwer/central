@@ -4,6 +4,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 
 import com.goev.central.constant.ApplicationConstants;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,10 +20,10 @@ import java.util.UUID;
 
 @Service
 @Slf4j
+@AllArgsConstructor
 public class S3Utils {
 
-    @Autowired
-    private AmazonS3 s3;
+    private final AmazonS3 s3;
 
     public String uploadFileOnS3(String fileName, String uploadFilePath) throws IOException {
 

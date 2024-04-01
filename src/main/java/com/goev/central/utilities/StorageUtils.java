@@ -2,6 +2,7 @@ package com.goev.central.utilities;
 
 import com.goev.central.constant.ApplicationConstants;
 import com.goev.lib.exceptions.ResponseException;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,11 +18,10 @@ import java.nio.file.StandardCopyOption;
 
 @Service
 @Slf4j
+@AllArgsConstructor
 public class StorageUtils {
     private final Path rootLocation = Paths.get("/tmp/central/");
-
-    @Autowired
-    private S3Utils s3;
+    private final S3Utils s3;
 
     public String store(MultipartFile file) {
         try {

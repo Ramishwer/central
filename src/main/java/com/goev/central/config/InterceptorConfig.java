@@ -3,6 +3,7 @@ package com.goev.central.config;
 
 import com.goev.central.config.interceptor.ApplicationSourceInterceptor;
 import com.goev.central.config.interceptor.AuthenticationInterceptor;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.AntPathMatcher;
@@ -13,12 +14,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebMvc
+@AllArgsConstructor
 public class InterceptorConfig implements WebMvcConfigurer {
 
-    @Autowired
-    private AuthenticationInterceptor authenticationInterceptor;
-    @Autowired
-    private ApplicationSourceInterceptor applicationSourceInterceptor;
+
+    private final AuthenticationInterceptor authenticationInterceptor;
+
+    private final ApplicationSourceInterceptor applicationSourceInterceptor;
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(applicationSourceInterceptor);
