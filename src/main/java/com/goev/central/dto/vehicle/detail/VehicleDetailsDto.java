@@ -1,11 +1,13 @@
 package com.goev.central.dto.vehicle.detail;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.goev.central.dao.vehicle.document.VehicleDocumentDao;
 import com.goev.central.dao.vehicle.document.VehicleDocumentTypeDao;
 import com.goev.central.dto.location.LocationDto;
 import com.goev.central.dto.vehicle.document.VehicleDocumentDto;
 import com.goev.central.dto.vehicle.document.VehicleDocumentTypeDto;
 import com.goev.central.enums.DocumentStatus;
+import com.goev.lib.utilities.DateTimeSerializer;
 import lombok.*;
 import org.joda.time.DateTime;
 
@@ -28,9 +30,12 @@ public class VehicleDetailsDto {
     private VehicleLeasingAgencyDto vehicleLeasingAgency;
     private VehicleFinancerDto vehicleFinancer;
     private VehicleCategoryDto vehicleCategory;
+    @JsonSerialize(using = DateTimeSerializer.class)
     private DateTime onboardingDate;
+    @JsonSerialize(using = DateTimeSerializer.class)
     private DateTime deboardingDate;
     private LocationDto homeLocation;
+    @JsonSerialize(using = DateTimeSerializer.class)
     private DateTime insuranceExpiry ;
     private String insurancePolicyNumber;
 
