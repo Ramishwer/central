@@ -166,6 +166,9 @@ public class VehicleServiceImpl implements VehicleService {
         Map<Integer, VehicleDetailDao> vehicleDetailMap = vehicleDetailsForVehicles.stream().collect(Collectors.toMap(VehicleDetailDao::getId, Function.identity()));
         for (VehicleDao vehicle : vehicles) {
             VehicleDetailDao vehicleDetails = vehicleDetailMap.get(vehicle.getVehicleDetailsId());
+
+            VehicleModelDao model = vehicleModelRepository.findById(vehicleDetails.getVehicleModelId());
+            VehicleManufacturerDao manufacturer = vehicleManufacturerRepository.findById(model.getManufacturerId());
             result.getElements().add(VehicleViewDto.builder()
                     .plateNumber(vehicle.getPlateNumber())
                     .motorNumber(vehicleDetails.getMotorNumber())
@@ -173,6 +176,9 @@ public class VehicleServiceImpl implements VehicleService {
                     .vinNumber(vehicleDetails.getVinNumber())
                     .uuid(vehicle.getUuid())
                     .state(vehicle.getState())
+                    .manufacturerName(manufacturer.getName())
+                    .year(model.getYear())
+                    .modelName(model.getName())
                     .build());
         }
         return result;
@@ -230,7 +236,7 @@ public class VehicleServiceImpl implements VehicleService {
         VehicleLeasingAgencyDao vehicleLeasingAgencyDao = vehicleLeasingAgencyRepository.findById(vehicleLeasingAgencyId);
         if (vehicleLeasingAgencyDao == null)
             return;
-        result.setVehicleFinancer(VehicleFinancerDto.builder()
+        result.setVehicleLeasingAgency(VehicleLeasingAgencyDto.builder()
                 .uuid(vehicleLeasingAgencyDao.getUuid())
                 .name(vehicleLeasingAgencyDao.getName())
                 .build());
@@ -241,7 +247,7 @@ public class VehicleServiceImpl implements VehicleService {
         VehicleCategoryDao vehicleCategoryDao = vehicleCategoryRepository.findById(vehicleCategoryId);
         if (vehicleCategoryDao == null)
             return;
-        result.setVehicleFinancer(VehicleFinancerDto.builder()
+        result.setVehicleCategory(VehicleCategoryDto.builder()
                 .uuid(vehicleCategoryDao.getUuid())
                 .name(vehicleCategoryDao.getName())
                 .build());
@@ -274,7 +280,8 @@ public class VehicleServiceImpl implements VehicleService {
         result.getDetails().setVinNumber(vehicleDetailDao.getVinNumber());
         result.getDetails().setMotorNumber(vehicleDetailDao.getMotorNumber());
         result.getDetails().setRegistrationDate(vehicleDetailDao.getRegistrationDate());
-
+        result.setInsuranceExpiry(vehicleDetailDao.getInsuranceExpiry());
+        result.setInsurancePolicyNumber(vehicleDetailDao.getInsurancePolicyNumber());
         result.setOnboardingDate(vehicleDetailDao.getOnboardingDate());
         result.setDeboardingDate(vehicleDetailDao.getDeboardingDate());
     }
@@ -286,6 +293,7 @@ public class VehicleServiceImpl implements VehicleService {
             newVehicleDetails.setVinNumber(vehicleDto.getDetails().getVinNumber());
             newVehicleDetails.setMotorNumber(vehicleDto.getDetails().getMotorNumber());
             newVehicleDetails.setRegistrationDate(vehicleDto.getDetails().getRegistrationDate());
+
         }
 
         if (vehicleDto.getVehicleModel() != null) {
@@ -331,6 +339,8 @@ public class VehicleServiceImpl implements VehicleService {
 
         newVehicleDetails.setOnboardingDate(vehicleDto.getOnboardingDate());
         newVehicleDetails.setDeboardingDate(vehicleDto.getDeboardingDate());
+        newVehicleDetails.setInsuranceExpiry(vehicleDto.getInsuranceExpiry());
+        newVehicleDetails.setInsurancePolicyNumber(vehicleDto.getInsurancePolicyNumber());
         return newVehicleDetails;
     }
 

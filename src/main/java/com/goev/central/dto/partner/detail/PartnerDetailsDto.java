@@ -1,6 +1,9 @@
 package com.goev.central.dto.partner.detail;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.joda.deser.DateTimeDeserializer;
+import com.fasterxml.jackson.datatype.joda.ser.DateTimeSerializer;
 import com.goev.central.dao.partner.document.PartnerDocumentDao;
 import com.goev.central.dao.partner.document.PartnerDocumentTypeDao;
 import com.goev.central.dto.business.BusinessClientDto;
@@ -8,10 +11,8 @@ import com.goev.central.dto.business.BusinessSegmentDto;
 import com.goev.central.dto.location.LocationDto;
 import com.goev.central.dto.partner.attendance.PartnerShiftConfigurationDto;
 import com.goev.central.dto.partner.document.PartnerDocumentDto;
-import com.goev.central.dto.partner.document.PartnerDocumentDto;
 import com.goev.central.dto.partner.document.PartnerDocumentTypeDto;
 import com.goev.central.enums.DocumentStatus;
-import com.goev.lib.utilities.DateTimeSerializer;
 import lombok.*;
 import org.joda.time.DateTime;
 
@@ -32,17 +33,22 @@ public class PartnerDetailsDto {
     private List<PartnerDocumentDto> documents;
     private List<PartnerReferenceDto> references;
     @JsonSerialize(using = DateTimeSerializer.class)
+    @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime onboardingDate;
     @JsonSerialize(using = DateTimeSerializer.class)
+    @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime deboardingDate;
     private String dlNumber;
     private List<PartnerAccountDto> accounts;
     @JsonSerialize(using = DateTimeSerializer.class)
+    @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime dateOfJoining;
     @JsonSerialize(using = DateTimeSerializer.class)
+    @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime dlExpiry;
     private LocationDto homeLocation;
     @JsonSerialize(using = DateTimeSerializer.class)
+    @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime interviewDate;
     private String sourceOfLeadType;
     private String sourceOfLead;
