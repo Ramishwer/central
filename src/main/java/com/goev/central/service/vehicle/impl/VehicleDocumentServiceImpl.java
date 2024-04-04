@@ -1,5 +1,6 @@
 package com.goev.central.service.vehicle.impl;
 
+import com.goev.central.constant.ApplicationConstants;
 import com.goev.central.dao.vehicle.detail.VehicleDao;
 import com.goev.central.dao.vehicle.detail.VehicleModelDao;
 import com.goev.central.dao.vehicle.document.VehicleDocumentDao;
@@ -13,12 +14,14 @@ import com.goev.central.repository.vehicle.detail.VehicleRepository;
 import com.goev.central.repository.vehicle.document.VehicleDocumentRepository;
 import com.goev.central.repository.vehicle.document.VehicleDocumentTypeRepository;
 import com.goev.central.service.vehicle.VehicleDocumentService;
+import com.goev.central.utilities.S3Utils;
 import com.goev.lib.exceptions.ResponseException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +37,7 @@ public class VehicleDocumentServiceImpl implements VehicleDocumentService {
     private final VehicleDocumentRepository vehicleDocumentRepository;
     private final VehicleDocumentTypeRepository vehicleDocumentTypeRepository;
     private final VehicleRepository vehicleRepository;
+    private final S3Utils s3;
 
     @Override
     public PaginatedResponseDto<VehicleDocumentDto> getDocuments(String vehicleUUID) {
@@ -62,12 +66,6 @@ public class VehicleDocumentServiceImpl implements VehicleDocumentService {
 
         VehicleDocumentDao vehicleDocumentDao = new VehicleDocumentDao();
 
-        vehicleDocumentDao.setUrl(vehicleDocumentDto.getUrl());
-        vehicleDocumentDao.setStatus(vehicleDocumentDto.getStatus());
-        vehicleDocumentDao.setDescription(vehicleDocumentDto.getDescription());
-        vehicleDocumentDao.setFileName(vehicleDocumentDto.getFileName());
-        vehicleDocumentDao.setVehicleId(vehicleDao.getId());
-
 
         if (vehicleDocumentDto.getType() == null || vehicleDocumentDto.getType().getUuid() == null)
             throw new ResponseException("Error in saving vehicle model: Invalid Manufacturer");
@@ -76,6 +74,11 @@ public class VehicleDocumentServiceImpl implements VehicleDocumentService {
         if (vehicleDocumentTypeDao == null || vehicleDocumentTypeDao.getId() == null)
             throw new ResponseException("Error in saving vehicle document: Invalid Document Type");
 
+        vehicleDocumentDao.setUrl(s3.getUrlForPath(vehicleDocumentDto.getUrl(),vehicleDocumentTypeDao.getS3Key()));
+        vehicleDocumentDao.setStatus(vehicleDocumentDto.getStatus());
+        vehicleDocumentDao.setDescription(vehicleDocumentDto.getDescription());
+        vehicleDocumentDao.setFileName(vehicleDocumentDto.getFileName());
+        vehicleDocumentDao.setVehicleId(vehicleDao.getId());
 
         vehicleDocumentDao.setVehicleDocumentTypeId(vehicleDocumentTypeDao.getId());
         vehicleDocumentDao = vehicleDocumentRepository.save(vehicleDocumentDao);
@@ -116,7 +119,7 @@ public class VehicleDocumentServiceImpl implements VehicleDocumentService {
         newVehicleDocumentDao.setVehicleDocumentTypeId(vehicleDocumentTypeDao.getId());
         newVehicleDocumentDao.setFileName(vehicleDocumentDto.getFileName());
         newVehicleDocumentDao.setDescription(vehicleDocumentDto.getDescription());
-        newVehicleDocumentDao.setUrl(vehicleDocumentDto.getUrl());
+        newVehicleDocumentDao.setUrl(s3.getUrlForPath(vehicleDocumentDto.getUrl(),vehicleDocumentTypeDao.getS3Key()));
         newVehicleDocumentDao.setStatus(DocumentStatus.UPLOADED.name());
         newVehicleDocumentDao.setVehicleId(vehicleDao.getId());
         vehicleDocumentRepository.delete(vehicleDocumentDao.getId());

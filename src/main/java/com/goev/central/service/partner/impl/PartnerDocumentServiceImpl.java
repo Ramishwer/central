@@ -12,6 +12,7 @@ import com.goev.central.repository.partner.detail.PartnerRepository;
 import com.goev.central.repository.partner.document.PartnerDocumentRepository;
 import com.goev.central.repository.partner.document.PartnerDocumentTypeRepository;
 import com.goev.central.service.partner.PartnerDocumentService;
+import com.goev.central.utilities.S3Utils;
 import com.goev.lib.exceptions.ResponseException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +34,7 @@ public class PartnerDocumentServiceImpl implements PartnerDocumentService {
     private final PartnerDocumentRepository partnerDocumentRepository;
     private final PartnerDocumentTypeRepository partnerDocumentTypeRepository;
     private final PartnerRepository partnerRepository;
-
+    private final S3Utils s3;
     @Override
     public PaginatedResponseDto<PartnerDocumentDto> getDocuments(String partnerUUID) {
         PartnerDao partnerDao = partnerRepository.findByUUID(partnerUUID);
@@ -61,11 +62,7 @@ public class PartnerDocumentServiceImpl implements PartnerDocumentService {
 
         PartnerDocumentDao partnerDocumentDao = new PartnerDocumentDao();
 
-        partnerDocumentDao.setUrl(partnerDocumentDto.getUrl());
-        partnerDocumentDao.setStatus(partnerDocumentDto.getStatus());
-        partnerDocumentDao.setDescription(partnerDocumentDto.getDescription());
-        partnerDocumentDao.setFileName(partnerDocumentDto.getFileName());
-        partnerDocumentDao.setPartnerId(partnerDao.getId());
+
 
 
         if (partnerDocumentDto.getType() == null || partnerDocumentDto.getType().getUuid() == null)
@@ -75,7 +72,11 @@ public class PartnerDocumentServiceImpl implements PartnerDocumentService {
         if (partnerDocumentTypeDao == null || partnerDocumentTypeDao.getId() == null)
             throw new ResponseException("Error in saving partner document: Invalid Document Type");
 
-
+        partnerDocumentDao.setUrl(s3.getUrlForPath(partnerDocumentDto.getUrl(),partnerDocumentTypeDao.getS3Key()));
+        partnerDocumentDao.setStatus(partnerDocumentDto.getStatus());
+        partnerDocumentDao.setDescription(partnerDocumentDto.getDescription());
+        partnerDocumentDao.setFileName(partnerDocumentDto.getFileName());
+        partnerDocumentDao.setPartnerId(partnerDao.getId());
         partnerDocumentDao.setPartnerDocumentTypeId(partnerDocumentTypeDao.getId());
         partnerDocumentDao = partnerDocumentRepository.save(partnerDocumentDao);
         if (partnerDocumentDao == null)
@@ -115,7 +116,7 @@ public class PartnerDocumentServiceImpl implements PartnerDocumentService {
         newPartnerDocumentDao.setPartnerDocumentTypeId(partnerDocumentTypeDao.getId());
         newPartnerDocumentDao.setFileName(partnerDocumentDto.getFileName());
         newPartnerDocumentDao.setDescription(partnerDocumentDto.getDescription());
-        newPartnerDocumentDao.setUrl(partnerDocumentDto.getUrl());
+        newPartnerDocumentDao.setUrl(s3.getUrlForPath(partnerDocumentDto.getUrl(),partnerDocumentTypeDao.getS3Key()));
         newPartnerDocumentDao.setStatus(DocumentStatus.UPLOADED.name());
         newPartnerDocumentDao.setPartnerId(partnerDao.getId());
         partnerDocumentRepository.delete(partnerDocumentDao.getId());

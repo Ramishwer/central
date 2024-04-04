@@ -20,6 +20,7 @@ public class PartnerDocumentDao extends BaseDao {
     private String description;
     private String extension;
     private String status;
+    private String data;
 }
 
 

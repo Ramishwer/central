@@ -1,19 +1,22 @@
 package com.goev.central.service.vehicle.impl;
 
 
+import com.goev.central.dao.location.LocationDao;
 import com.goev.central.dao.vehicle.detail.*;
 import com.goev.central.dao.vehicle.document.VehicleDocumentDao;
 import com.goev.central.dao.vehicle.document.VehicleDocumentTypeDao;
 import com.goev.central.dto.common.PaginatedResponseDto;
+import com.goev.central.dto.location.LocationDto;
 import com.goev.central.dto.vehicle.VehicleViewDto;
 import com.goev.central.dto.vehicle.detail.*;
 import com.goev.central.dto.vehicle.document.VehicleDocumentDto;
 import com.goev.central.enums.DocumentStatus;
+import com.goev.central.repository.location.LocationRepository;
 import com.goev.central.repository.vehicle.detail.*;
 import com.goev.central.repository.vehicle.document.VehicleDocumentRepository;
 import com.goev.central.repository.vehicle.document.VehicleDocumentTypeRepository;
 import com.goev.central.service.vehicle.VehicleService;
-import com.goev.lib.enums.RecordState;
+import com.goev.central.utilities.S3Utils;
 import com.goev.lib.exceptions.ResponseException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,11 +40,13 @@ public class VehicleServiceImpl implements VehicleService {
     private final VehicleDetailRepository vehicleDetailRepository;
     private final VehicleCategoryRepository vehicleCategoryRepository;
     private final VehicleLeasingAgencyRepository vehicleLeasingAgencyRepository;
-    private final VehicleFinancierRepository vehicleFinancierRepository;
+    private final VehicleFinancerRepository vehicleFinancerRepository;
     private final VehicleModelRepository vehicleModelRepository;
     private final VehicleManufacturerRepository vehicleManufacturerRepository;
     private final VehicleDocumentTypeRepository vehicleDocumentTypeRepository;
     private final VehicleDocumentRepository vehicleDocumentRepository;
+    private final LocationRepository locationRepository;
+    private final S3Utils s3;
 
 
     @Override
@@ -74,8 +79,9 @@ public class VehicleServiceImpl implements VehicleService {
         VehicleDetailsDto result = VehicleDetailsDto.builder().build();
         setVehicleDetails(result, vehicle, vehicleDetails);
         setVehicleCategory(result, vehicleDetails.getVehicleCategoryId());
+        setVehicleHomeLocation(result,vehicleDetails.getHomeLocationId());
         setVehicleLeasingAgency(result, vehicleDetails.getVehicleLeasingAgencyId());
-        setVehicleFinancier(result, vehicleDetails.getVehicleFinancierId());
+        setVehicleFinancer(result, vehicleDetails.getVehicleFinancerId());
         setVehicleModel(result, vehicleDetails.getVehicleModelId());
         setVehicleDocuments(result, vehicle.getId());
         return result;
@@ -107,8 +113,9 @@ public class VehicleServiceImpl implements VehicleService {
         VehicleDetailsDto result = VehicleDetailsDto.builder().build();
         setVehicleDetails(result, vehicle, newVehicleDetails);
         setVehicleCategory(result, newVehicleDetails.getVehicleCategoryId());
+        setVehicleHomeLocation(result,newVehicleDetails.getHomeLocationId());
         setVehicleLeasingAgency(result, newVehicleDetails.getVehicleLeasingAgencyId());
-        setVehicleFinancier(result, newVehicleDetails.getVehicleFinancierId());
+        setVehicleFinancer(result, newVehicleDetails.getVehicleFinancerId());
         setVehicleModel(result, newVehicleDetails.getVehicleModelId());
         setVehicleDocuments(result, vehicle.getId());
         return result;
@@ -129,8 +136,9 @@ public class VehicleServiceImpl implements VehicleService {
         VehicleDetailsDto result = VehicleDetailsDto.builder().build();
         setVehicleDetails(result, vehicle, vehicleDetailDao);
         setVehicleCategory(result, vehicleDetailDao.getVehicleCategoryId());
+        setVehicleHomeLocation(result,vehicleDetailDao.getHomeLocationId());
         setVehicleLeasingAgency(result, vehicleDetailDao.getVehicleLeasingAgencyId());
-        setVehicleFinancier(result, vehicleDetailDao.getVehicleFinancierId());
+        setVehicleFinancer(result, vehicleDetailDao.getVehicleFinancerId());
         setVehicleModel(result, vehicleDetailDao.getVehicleModelId());
         setVehicleDocuments(result, vehicle.getId());
 
@@ -190,7 +198,7 @@ public class VehicleServiceImpl implements VehicleService {
         if (vehicleModelDao == null)
             return;
         result.setVehicleModel(VehicleModelDto.builder()
-                .model(vehicleModelDao.getModel())
+                .name(vehicleModelDao.getName())
                 .variant(vehicleModelDao.getVariant())
                 .month(vehicleModelDao.getMonth())
                 .year(vehicleModelDao.getYear())
@@ -208,13 +216,13 @@ public class VehicleServiceImpl implements VehicleService {
 
     }
 
-    private void setVehicleFinancier(VehicleDetailsDto result, Integer vehicleFinancierId) {
-        VehicleFinancierDao vehicleFinancierDao = vehicleFinancierRepository.findById(vehicleFinancierId);
-        if (vehicleFinancierDao == null)
+    private void setVehicleFinancer(VehicleDetailsDto result, Integer vehicleFinancerId) {
+        VehicleFinancerDao vehicleFinancerDao = vehicleFinancerRepository.findById(vehicleFinancerId);
+        if (vehicleFinancerDao == null)
             return;
-        result.setVehicleFinancier(VehicleFinancierDto.builder()
-                .uuid(vehicleFinancierDao.getUuid())
-                .name(vehicleFinancierDao.getName())
+        result.setVehicleFinancer(VehicleFinancerDto.builder()
+                .uuid(vehicleFinancerDao.getUuid())
+                .name(vehicleFinancerDao.getName())
                 .build());
     }
 
@@ -222,7 +230,7 @@ public class VehicleServiceImpl implements VehicleService {
         VehicleLeasingAgencyDao vehicleLeasingAgencyDao = vehicleLeasingAgencyRepository.findById(vehicleLeasingAgencyId);
         if (vehicleLeasingAgencyDao == null)
             return;
-        result.setVehicleFinancier(VehicleFinancierDto.builder()
+        result.setVehicleFinancer(VehicleFinancerDto.builder()
                 .uuid(vehicleLeasingAgencyDao.getUuid())
                 .name(vehicleLeasingAgencyDao.getName())
                 .build());
@@ -233,12 +241,24 @@ public class VehicleServiceImpl implements VehicleService {
         VehicleCategoryDao vehicleCategoryDao = vehicleCategoryRepository.findById(vehicleCategoryId);
         if (vehicleCategoryDao == null)
             return;
-        result.setVehicleFinancier(VehicleFinancierDto.builder()
+        result.setVehicleFinancer(VehicleFinancerDto.builder()
                 .uuid(vehicleCategoryDao.getUuid())
                 .name(vehicleCategoryDao.getName())
                 .build());
     }
 
+    private void setVehicleHomeLocation(VehicleDetailsDto result, Integer homeLocationId) {
+        LocationDao locationDao = locationRepository.findById(homeLocationId);
+        if (locationDao == null)
+            return;
+        result.setHomeLocation(LocationDto.builder()
+                .latitude(locationDao.getLatitude())
+                .longitude(locationDao.getLongitude())
+                .name(locationDao.getName())
+                .type(locationDao.getType())
+                .uuid(locationDao.getUuid())
+                .build());
+    }
     private void setVehicleDetails(VehicleDetailsDto result, VehicleDao vehicle, VehicleDetailDao vehicleDetailDao) {
 
         VehicleDto vehicleDto = VehicleDto.builder().build();
@@ -284,12 +304,20 @@ public class VehicleServiceImpl implements VehicleService {
             newVehicleDetails.setVehicleCategoryId(vehicleCategoryDao.getId());
         }
 
-        if (vehicleDto.getVehicleFinancier() != null) {
+        if (vehicleDto.getHomeLocation() != null) {
 
-            VehicleFinancierDao vehicleFinancierDao = vehicleFinancierRepository.findByUUID(vehicleDto.getVehicleFinancier().getUuid());
-            if (vehicleFinancierDao == null)
-                throw new ResponseException("No vehicle financier found for Id :" + vehicleDto.getVehicleFinancier().getUuid());
-            newVehicleDetails.setVehicleFinancierId(vehicleFinancierDao.getId());
+            LocationDao locationDao = locationRepository.findByUUID(vehicleDto.getHomeLocation().getUuid());
+            if (locationDao == null)
+                throw new ResponseException("No location found for Id :" + vehicleDto.getHomeLocation().getUuid());
+            newVehicleDetails.setHomeLocationId(locationDao.getId());
+        }
+
+        if (vehicleDto.getVehicleFinancer() != null) {
+
+            VehicleFinancerDao vehicleFinancerDao = vehicleFinancerRepository.findByUUID(vehicleDto.getVehicleFinancer().getUuid());
+            if (vehicleFinancerDao == null)
+                throw new ResponseException("No vehicle financer found for Id :" + vehicleDto.getVehicleFinancer().getUuid());
+            newVehicleDetails.setVehicleFinancerId(vehicleFinancerDao.getId());
         }
 
         if (vehicleDto.getVehicleLeasingAgency() != null) {
@@ -330,6 +358,7 @@ public class VehicleServiceImpl implements VehicleService {
                         continue;
                     documentToDelete.add(existingDoc);
                 }
+                newDoc.setUrl(s3.getUrlForPath(newDoc.getUrl(),idToVehicleDocumentTypeMap.get(typeId).getS3Key()));
                 vehicleDocumentRepository.save(newDoc);
             }
             if(existingDoc!=null && newDoc ==null){

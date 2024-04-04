@@ -18,7 +18,7 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class VehicleDocumentTypeServiceImpl implements VehicleDocumentTypeService {
-   
+
     private final VehicleDocumentTypeRepository vehicleDocumentTypeRepository;
 
     @Override
@@ -31,6 +31,7 @@ public class VehicleDocumentTypeServiceImpl implements VehicleDocumentTypeServic
         for (VehicleDocumentTypeDao vehicleDocumentTypeDao : vehicleDocumentTypeDaos) {
             result.getElements().add(VehicleDocumentTypeDto.builder()
                     .name(vehicleDocumentTypeDao.getName())
+                    .label(vehicleDocumentTypeDao.getLabel())
                     .uuid(vehicleDocumentTypeDao.getUuid())
                     .build());
         }

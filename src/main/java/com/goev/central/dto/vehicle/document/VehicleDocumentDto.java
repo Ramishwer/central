@@ -2,6 +2,8 @@ package com.goev.central.dto.vehicle.document;
 
 import lombok.*;
 
+import java.util.Map;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -15,4 +17,5 @@ public class VehicleDocumentDto {
     private String fileName;
     private String description;
     private String status;
+    private Map<String,Object> data;
 }

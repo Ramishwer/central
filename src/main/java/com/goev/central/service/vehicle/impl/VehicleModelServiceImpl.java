@@ -42,7 +42,7 @@ public class VehicleModelServiceImpl implements VehicleModelService {
             VehicleManufacturerDao manufacturerDao = vehicleManufacturerMap.get(vehicleModelDao.getManufacturerId());
             result.getElements().add(VehicleModelDto.builder()
                     .year(vehicleModelDao.getYear())
-                    .model(vehicleModelDao.getModel())
+                    .name(vehicleModelDao.getName())
                     .kmRange(vehicleModelDao.getKmRange())
                     .variant(vehicleModelDao.getVariant())
                     .month(vehicleModelDao.getMonth())
@@ -61,7 +61,7 @@ public class VehicleModelServiceImpl implements VehicleModelService {
     public VehicleModelDto createModel(VehicleModelDto vehicleModelDto) {
         VehicleModelDao vehicleModelDao = new VehicleModelDao();
 
-        vehicleModelDao.setModel(vehicleModelDto.getModel());
+        vehicleModelDao.setName(vehicleModelDto.getName());
         vehicleModelDao.setVariant(vehicleModelDto.getVariant());
         vehicleModelDao.setMonth(vehicleModelDto.getMonth());
         vehicleModelDao.setYear(vehicleModelDto.getYear());
@@ -82,7 +82,7 @@ public class VehicleModelServiceImpl implements VehicleModelService {
 
         return VehicleModelDto.builder()
                 .year(vehicleModelDao.getYear())
-                .model(vehicleModelDao.getModel())
+                .name(vehicleModelDao.getName())
                 .kmRange(vehicleModelDao.getKmRange())
                 .variant(vehicleModelDao.getVariant())
                 .month(vehicleModelDao.getMonth())
@@ -113,7 +113,7 @@ public class VehicleModelServiceImpl implements VehicleModelService {
 
         VehicleModelDao newVehicleModelDao = new VehicleModelDao();
         newVehicleModelDao.setManufacturerId(manufacturerDao.getId());
-        newVehicleModelDao.setModel(vehicleModelDto.getModel());
+        newVehicleModelDao.setName(vehicleModelDto.getName());
         newVehicleModelDao.setVariant(vehicleModelDto.getVariant());
         newVehicleModelDao.setBatteryCapacity(vehicleModelDto.getBatteryCapacity());
         newVehicleModelDao.setKmRange(vehicleModelDto.getKmRange());
@@ -127,7 +127,7 @@ public class VehicleModelServiceImpl implements VehicleModelService {
             throw new ResponseException("Error in updating details vehicle manufacturer");
         return VehicleModelDto.builder()
                 .year(vehicleModelDao.getYear())
-                .model(vehicleModelDao.getModel())
+                .name(vehicleModelDao.getName())
                 .kmRange(vehicleModelDao.getKmRange())
                 .variant(vehicleModelDao.getVariant())
                 .month(vehicleModelDao.getMonth())
@@ -151,7 +151,7 @@ public class VehicleModelServiceImpl implements VehicleModelService {
 
         return VehicleModelDto.builder()
                 .year(vehicleModelDao.getYear())
-                .model(vehicleModelDao.getModel())
+                .name(vehicleModelDao.getName())
                 .kmRange(vehicleModelDao.getKmRange())
                 .variant(vehicleModelDao.getVariant())
                 .month(vehicleModelDao.getMonth())

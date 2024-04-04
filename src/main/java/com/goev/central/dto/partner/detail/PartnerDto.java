@@ -21,7 +21,8 @@ public class PartnerDto {
     private String state;
     private String fathersName;
     private String aadhaarCardNumber;
-    private String address;
+    private String localAddress;
+    private String permanentAddress;
     private String profileUrl;
     private String authId;
     private List<PartnerAttributeDto> attributes;

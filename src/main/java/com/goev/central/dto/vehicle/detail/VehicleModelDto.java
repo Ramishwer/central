@@ -1,7 +1,6 @@
 package com.goev.central.dto.vehicle.detail;
 
 import lombok.*;
-import org.joda.time.DateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -11,7 +10,7 @@ import org.joda.time.DateTime;
 @Builder
 public class VehicleModelDto {
     private String variant;
-    private String model;
+    private String name;
     private String year;
     private String month;
     private String batteryCapacity;

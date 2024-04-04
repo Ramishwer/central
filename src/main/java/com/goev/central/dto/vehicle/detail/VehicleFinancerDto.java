@@ -8,7 +8,7 @@ import lombok.*;
 @Setter
 @ToString
 @Builder
-public class VehicleFinancierDto {
+public class VehicleFinancerDto {
     private String name;
     private String uuid;
 }

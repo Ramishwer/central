@@ -20,7 +20,8 @@ public class PartnerDetailDao extends BaseDao {
     private String fathersName;
     private String aadhaarCardNumber;
     private String dlNumber;
-    private String address;
+    private String localAddress;
+    private String permanentAddress;
     private DateTime dateOfJoining;
     private DateTime dlExpiry;
     private Integer homeLocationId;

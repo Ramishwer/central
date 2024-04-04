@@ -1,6 +1,7 @@
 package com.goev.central.service.partner.impl;
 
 
+import com.goev.central.constant.ApplicationConstants;
 import com.goev.central.dao.business.BusinessClientDao;
 import com.goev.central.dao.business.BusinessSegmentDao;
 import com.goev.central.dao.location.LocationDao;
@@ -31,12 +32,14 @@ import com.goev.central.repository.partner.detail.PartnerRepository;
 import com.goev.central.repository.partner.document.PartnerDocumentRepository;
 import com.goev.central.repository.partner.document.PartnerDocumentTypeRepository;
 import com.goev.central.service.partner.PartnerService;
+import com.goev.central.utilities.S3Utils;
 import com.goev.lib.exceptions.ResponseException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -59,6 +62,7 @@ public class PartnerServiceImpl implements PartnerService {
     private final LocationRepository locationRepository;
     private final BusinessClientRepository businessClientRepository;
     private final BusinessSegmentRepository businessSegmentRepository;
+    private final S3Utils s3;
 
     @Override
     public PartnerDetailsDto createPartner(PartnerDetailsDto partnerDto) {
@@ -126,9 +130,11 @@ public class PartnerServiceImpl implements PartnerService {
         result.setIsVerified(partnerDetails.getIsVerified());
         result.setSourceOfLead(partnerDetails.getSourceOfLead());
         result.setSourceOfLeadType(partnerDetails.getSourceOfLeadType());
-
-
-
+        result.getDetails().setFirstName(partnerDetails.getFirstName());
+        result.getDetails().setLastName(partnerDetails.getLastName());
+        result.getDetails().setFathersName(partnerDetails.getFathersName());
+        result.getDetails().setLocalAddress(partnerDetails.getLocalAddress());
+        result.getDetails().setPermanentAddress(partnerDetails.getPermanentAddress());
     }
 
     private void setBusinessClient(PartnerDetailsDto result, Integer businessClientId) {
@@ -208,7 +214,8 @@ public class PartnerServiceImpl implements PartnerService {
             newPartnerDetails.setEmail(partnerDto.getDetails().getEmail());
             newPartnerDetails.setAadhaarCardNumber(partnerDto.getDetails().getAadhaarCardNumber());
             newPartnerDetails.setProfileUrl(partnerDto.getDetails().getProfileUrl());
-            newPartnerDetails.setAddress(partnerDto.getDetails().getAddress());
+            newPartnerDetails.setLocalAddress(partnerDto.getDetails().getLocalAddress());
+            newPartnerDetails.setPermanentAddress(partnerDto.getDetails().getPermanentAddress());
             newPartnerDetails.setFathersName(partnerDto.getDetails().getFathersName());
         }
 
@@ -387,6 +394,8 @@ public class PartnerServiceImpl implements PartnerService {
                         continue;
                     documentToDelete.add(existingDoc);
                 }
+
+                newDoc.setUrl(s3.getUrlForPath(newDoc.getUrl(),idToPartnerDocumentTypeMap.get(typeId).getS3Key()));
                 partnerDocumentRepository.save(newDoc);
             }
             if (existingDoc != null && newDoc == null) {

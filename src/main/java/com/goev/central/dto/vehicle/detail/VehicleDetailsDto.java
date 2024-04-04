@@ -2,6 +2,7 @@ package com.goev.central.dto.vehicle.detail;
 
 import com.goev.central.dao.vehicle.document.VehicleDocumentDao;
 import com.goev.central.dao.vehicle.document.VehicleDocumentTypeDao;
+import com.goev.central.dto.location.LocationDto;
 import com.goev.central.dto.vehicle.document.VehicleDocumentDto;
 import com.goev.central.dto.vehicle.document.VehicleDocumentTypeDto;
 import com.goev.central.enums.DocumentStatus;
@@ -25,10 +26,13 @@ public class VehicleDetailsDto {
     private List<VehicleDocumentDto> documents;
     private VehicleModelDto vehicleModel;
     private VehicleLeasingAgencyDto vehicleLeasingAgency;
-    private VehicleFinancierDto vehicleFinancier;
+    private VehicleFinancerDto vehicleFinancer;
     private VehicleCategoryDto vehicleCategory;
     private DateTime onboardingDate;
     private DateTime deboardingDate;
+    private LocationDto homeLocation;
+    private DateTime insuranceExpiry ;
+    private String insurancePolicyNumber;
 
 
 
