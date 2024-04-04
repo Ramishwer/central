@@ -31,6 +31,7 @@ public class PartnerDocumentTypeServiceImpl implements PartnerDocumentTypeServic
         for (PartnerDocumentTypeDao partnerDocumentTypeDao : partnerDocumentTypeDaos) {
             result.getElements().add(PartnerDocumentTypeDto.builder()
                     .name(partnerDocumentTypeDao.getName())
+                    .label(partnerDocumentTypeDao.getLabel())
                     .uuid(partnerDocumentTypeDao.getUuid())
                     .build());
         }
