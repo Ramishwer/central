@@ -42,7 +42,7 @@ public class PartnerDetailsDto {
     private List<PartnerAccountDto> accounts;
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
-    private DateTime dateOfJoining;
+    private DateTime joiningDate;
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime dlExpiry;

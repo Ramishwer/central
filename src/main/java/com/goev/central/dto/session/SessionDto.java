@@ -23,7 +23,7 @@ public class SessionDto {
     private String refreshToken;
     private Long expiresIn;
     private String uuid;
-    @JsonIgnore
+    private String userUUID;
     private String authUUID;
     private String email;
     private String phone;

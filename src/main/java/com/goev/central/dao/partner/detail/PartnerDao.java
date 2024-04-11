@@ -10,7 +10,7 @@ import lombok.*;
 @ToString
 public class PartnerDao extends BaseDao {
     private String punchId;
-    private String authUUID;
+    private String authUuid;
     private String phoneNumber;
     private String status;
     private Integer vehicleId;

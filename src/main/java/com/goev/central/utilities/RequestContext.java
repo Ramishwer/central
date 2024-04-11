@@ -1,5 +1,6 @@
 package com.goev.central.utilities;
 
+import com.goev.central.dao.user.detail.UserSessionDao;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -27,6 +28,7 @@ public class RequestContext {
         }
         return sessionUUID;
     }
+
 
     public static String getPlatform() {
         ServletRequestAttributes requestAttributes = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes());
@@ -72,5 +74,16 @@ public class RequestContext {
                 clientSecret = request.getHeader("Refresh-Token");
         }
         return clientSecret;
+    }
+
+    public static UserSessionDao getUserSession() {
+        ServletRequestAttributes requestAttributes = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes());
+        UserSessionDao userSessionDao = null;
+        if (requestAttributes != null) {
+            HttpServletRequest request = requestAttributes.getRequest();
+            if (request.getHeader("userSession") != null)
+                userSessionDao =(UserSessionDao) request.getAttribute("userSession");
+        }
+        return userSessionDao;
     }
 }

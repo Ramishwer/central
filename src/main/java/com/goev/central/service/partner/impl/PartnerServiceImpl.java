@@ -107,7 +107,7 @@ public class PartnerServiceImpl implements PartnerService {
         partnerDto.setState(partnerDao.getState());
         partnerDto.setUuid(partnerDao.getUuid());
         partnerDto.setPhoneNumber(partnerDao.getPhoneNumber());
-        partnerDto.setAuthUUID(partnerDao.getAuthUUID());
+        partnerDto.setAuthUUID(partnerDao.getAuthUuid());
 
         result.setDetails(partnerDto);
 
@@ -115,7 +115,7 @@ public class PartnerServiceImpl implements PartnerService {
         if(partnerDetails == null)
             return;
 
-        result.setDateOfJoining(partnerDetails.getDateOfJoining());
+        result.setJoiningDate(partnerDetails.getJoiningDate());
         result.setDlNumber(partnerDetails.getDlNumber());
         result.setDlExpiry(partnerDetails.getDlExpiry());
         result.setRemark(partnerDetails.getRemark());
@@ -246,7 +246,7 @@ public class PartnerServiceImpl implements PartnerService {
         newPartnerDetails.setOnboardingDate(partnerDto.getOnboardingDate());
         newPartnerDetails.setDeboardingDate(partnerDto.getDeboardingDate());
         newPartnerDetails.setDlExpiry(partnerDto.getDlExpiry());
-        newPartnerDetails.setDateOfJoining(partnerDto.getDateOfJoining());
+        newPartnerDetails.setJoiningDate(partnerDto.getJoiningDate());
         newPartnerDetails.setInterviewDate(partnerDto.getInterviewDate());
         newPartnerDetails.setDlNumber(partnerDto.getDlNumber());
         newPartnerDetails.setSourceOfLeadType(partnerDto.getSourceOfLeadType());

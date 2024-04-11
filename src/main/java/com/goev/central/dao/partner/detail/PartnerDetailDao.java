@@ -22,7 +22,7 @@ public class PartnerDetailDao extends BaseDao {
     private String dlNumber;
     private String localAddress;
     private String permanentAddress;
-    private DateTime dateOfJoining;
+    private DateTime joiningDate;
     private DateTime dlExpiry;
     private Integer homeLocationId;
     private DateTime interviewDate;

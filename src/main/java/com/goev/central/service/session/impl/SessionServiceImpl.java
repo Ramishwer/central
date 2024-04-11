@@ -20,6 +20,7 @@ import com.goev.lib.utilities.ApplicationContext;
 import com.google.gson.reflect.TypeToken;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.joda.time.DateTime;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +42,7 @@ public class SessionServiceImpl implements SessionService {
         UserDao user = userRepository.findByEmail(credentials.getUsername());
         if (user == null)
             throw new ResponseException("User does not exist");
-        String url = ApplicationConstants.AUTH_URL + "/api/v1/session-management";
+        String url = ApplicationConstants.AUTH_URL + "/api/v1/session-management/sessions";
         HttpHeaders header = new HttpHeaders();
         header.set(HttpHeaders.AUTHORIZATION, "Basic "+Base64.encodeAsString(String.valueOf(ApplicationConstants.CLIENT_ID+":"+ApplicationConstants.CLIENT_SECRET).getBytes(StandardCharsets.UTF_8)));
         String response = restClient.post(url, header,AuthCredentialDto.builder()
@@ -49,9 +50,27 @@ public class SessionServiceImpl implements SessionService {
                         .name(ApplicationConstants.CREDENTIAL_TYPE_NAME)
                         .uuid(ApplicationConstants.CREDENTIAL_TYPE_UUID)
                         .build())
-                .build(),true);
+                .authKey(credentials.getUsername())
+                .authSecret(credentials.getPassword())
+                .authUUID(user.getAuthUuid())
+                .build(), String.class,true);
         ResponseDto<SessionDto> session = ApplicationConstants.GSON.fromJson(response,new TypeToken<ResponseDto<SessionDto>>(){}.getType());
-        return session.getData();
+        if(session==null || session.getData()==null)
+            throw new ResponseException("User does not exist");
+        SessionDto sessionDto = session.getData();
+        UserSessionDao sessionDao = new UserSessionDao();
+        sessionDao.setAuthSessionUuid(sessionDto.getUuid());
+        sessionDao.setUserId(user.getId());
+        sessionDao.setLastActiveTime(DateTime.now());
+        sessionDao = userSessionRepository.save(sessionDao);
+
+        return SessionDto.builder()
+                .accessToken(sessionDto.getAccessToken())
+                .refreshToken(sessionDto.getRefreshToken())
+                .expiresIn(sessionDto.getExpiresIn())
+                .userUUID(user.getUuid())
+                .uuid(sessionDao.getUuid())
+                .build();
     }
 
     @Override
@@ -62,36 +81,61 @@ public class SessionServiceImpl implements SessionService {
             throw new ResponseException("Token Expired");
         if(RequestContext.getRefreshToken() == null)
             throw new ResponseException("Token Expired");
-        String url = ApplicationConstants.AUTH_URL + "/api/v1/session-management/"+userSessionDao.getAuthSessionUuid()+"/refresh";
+        String url = ApplicationConstants.AUTH_URL + "/api/v1/session-management/sessions/"+userSessionDao.getAuthSessionUuid()+"/token";
         HttpHeaders header = new HttpHeaders();
+        header.set(HttpHeaders.AUTHORIZATION, "Basic "+Base64.encodeAsString(String.valueOf(ApplicationConstants.CLIENT_ID+":"+ApplicationConstants.CLIENT_SECRET).getBytes(StandardCharsets.UTF_8)));
         header.set("Refresh-Token", RequestContext.getRefreshToken());
-        String response = restClient.get(url, header,true);
+        String response = restClient.get(url, header, String.class,true);
         ResponseDto<SessionDto> session = ApplicationConstants.GSON.fromJson(response,new TypeToken<ResponseDto<SessionDto>>(){}.getType());
-        return session.getData();
+        if(session==null || session.getData()==null)
+            throw new ResponseException("Token Expired");
+
+        SessionDto sessionDto = session.getData();
+        UserSessionDao sessionDao = new UserSessionDao();
+        sessionDao.setAuthSessionUuid(sessionDto.getUuid());
+        sessionDao.setUserId(sessionDao.getUserId());
+        sessionDao.setLastActiveTime(DateTime.now());
+        sessionDao = userSessionRepository.save(sessionDao);
+        userSessionRepository.delete(userSessionDao.getId());
+
+        UserDao user = userRepository.findById(userSessionDao.getUserId());
+        return SessionDto.builder()
+                .accessToken(sessionDto.getAccessToken())
+                .refreshToken(sessionDto.getRefreshToken())
+                .expiresIn(sessionDto.getExpiresIn())
+                .userUUID(user.getUuid())
+                .uuid(sessionDao.getUuid())
+                .build();
     }
 
     @Override
     public SessionDetailsDto getSessionDetails(String sessionUUID) {
-        UserSessionDao userSessionDao= userSessionRepository.findByUUID(sessionUUID);
+        UserSessionDao userSessionDao= RequestContext.getUserSession();
         if(userSessionDao == null)
             throw new ResponseException("Token Expired");
-        String url = ApplicationConstants.AUTH_URL + "/api/v1/session-management/"+userSessionDao.getAuthSessionUuid();
-        HttpHeaders header = new HttpHeaders();
-        header.set("Refresh-Token", RequestContext.getRefreshToken());
-        String response = restClient.get(url, header,true);
-        ResponseDto<SessionDetailsDto> session = ApplicationConstants.GSON.fromJson(response,new TypeToken<ResponseDto<SessionDetailsDto>>(){}.getType());
-        return session.getData();
+        userSessionDao.setLastActiveTime(DateTime.now());
+        userSessionDao = userSessionRepository.update(userSessionDao);
+
+        UserDao user = userRepository.findById(userSessionDao.getUserId());
+        return SessionDetailsDto.builder()
+                .details(SessionDto.builder()
+                        .userUUID(user.getUuid())
+                        .uuid(userSessionDao.getUuid())
+                        .build())
+                .build();
     }
 
     @Override
     public Boolean deleteSession(String sessionUUID) {
-        UserSessionDao userSessionDao= userSessionRepository.findByUUID(sessionUUID);
+        UserSessionDao userSessionDao= RequestContext.getUserSession();
         if(userSessionDao == null)
             throw new ResponseException("Token Expired");
-        String url = ApplicationConstants.AUTH_URL + "/api/v1/session-management/"+userSessionDao.getAuthSessionUuid();
+        String url = ApplicationConstants.AUTH_URL + "/api/v1/session-management/sessions/"+userSessionDao.getAuthSessionUuid();
         HttpHeaders header = new HttpHeaders();
         header.set("Refresh-Token", RequestContext.getRefreshToken());
-        String response = restClient.delete(url, header,true);
+        header.set("Authorization", RequestContext.getAccessToken());
+        String response = restClient.delete(url, header, String.class,true);
+        userSessionRepository.delete(userSessionDao.getId());
         return true;
     }
 

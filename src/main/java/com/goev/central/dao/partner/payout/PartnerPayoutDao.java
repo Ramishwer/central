@@ -11,7 +11,7 @@ import org.joda.time.DateTime;
 @ToString
 @Builder
 public class PartnerPayoutDao extends BaseDao {
-    private DateTime payoutStateDate;
+    private DateTime payoutStartDate;
     private DateTime payoutEndDate;
     private Integer partnerId;
     private String status;
