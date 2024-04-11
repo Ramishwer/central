@@ -1,6 +1,6 @@
 package com.goev.central.config;
 
-import com.goev.central.constant.Credentials;
+import com.goev.central.dto.SystemCredentialDto;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -16,9 +16,9 @@ import java.util.Base64;
 @Slf4j
 public class SecretsManager {
     @Bean
-    public Credentials getSecret() {
+    public SystemCredentialDto getSecret() {
         if ("local".equals(System.getenv("ENV"))|| System.getenv("ENV")==null ) {
-            return Credentials
+            return SystemCredentialDto
                     .builder()
                     .mysqlPoolSize("5")
                     .mysqlDatabase("goevCentralLocal")
@@ -50,7 +50,7 @@ public class SecretsManager {
         } else {
             decodedBinarySecret = new String(Base64.getDecoder().decode(getSecretValueResponse.secretBinary().asByteBuffer()).array());
         }
-        return  new Gson().fromJson(secret,Credentials.class);
+        return  new Gson().fromJson(secret, SystemCredentialDto.class);
     }
 }
 

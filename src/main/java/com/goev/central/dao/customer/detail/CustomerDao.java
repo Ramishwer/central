@@ -11,7 +11,7 @@ import lombok.*;
 @Builder
 public class CustomerDao extends BaseDao {
     private String phoneNumber;
-    private String authId;
+    private String authUUID;
     private String status;
     private String vehicleDetails;
     private String partnerDetails;

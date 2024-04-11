@@ -12,4 +12,8 @@ public interface UserRepository {
     UserDao findById(Integer id);
     List<UserDao> findAllByIds(List<Integer> ids);
     List<UserDao> findAll();
+
+    UserDao findByEmail(String username);
+
+    UserDao findByAuthUUID(String authUUID);
 }

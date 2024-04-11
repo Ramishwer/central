@@ -8,5 +8,5 @@ import lombok.*;
 @Setter
 @ToString
 @Builder
-public class SystemPropertiesDto {
+public class SystemPropertyDto {
 }

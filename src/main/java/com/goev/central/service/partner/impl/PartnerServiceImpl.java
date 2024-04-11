@@ -1,7 +1,6 @@
 package com.goev.central.service.partner.impl;
 
 
-import com.goev.central.constant.ApplicationConstants;
 import com.goev.central.dao.business.BusinessClientDao;
 import com.goev.central.dao.business.BusinessSegmentDao;
 import com.goev.central.dao.location.LocationDao;
@@ -39,7 +38,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -109,7 +107,7 @@ public class PartnerServiceImpl implements PartnerService {
         partnerDto.setState(partnerDao.getState());
         partnerDto.setUuid(partnerDao.getUuid());
         partnerDto.setPhoneNumber(partnerDao.getPhoneNumber());
-        partnerDto.setAuthId(partnerDao.getAuthId());
+        partnerDto.setAuthUUID(partnerDao.getAuthUUID());
 
         result.setDetails(partnerDto);
 

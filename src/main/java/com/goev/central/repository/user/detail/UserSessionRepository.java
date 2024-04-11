@@ -2,6 +2,7 @@
 package com.goev.central.repository.user.detail;
 
 import com.goev.central.dao.user.detail.UserSessionDao;
+import com.goev.central.dto.session.SessionDto;
 
 import java.util.List;
 
@@ -13,4 +14,5 @@ public interface UserSessionRepository {
     UserSessionDao findById(Integer id);
     List<UserSessionDao> findAllByIds(List<Integer> ids);
     List<UserSessionDao> findAll();
+    List<UserSessionDao> findAllByUserId(Integer userId);
 }

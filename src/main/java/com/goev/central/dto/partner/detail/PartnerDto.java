@@ -24,7 +24,7 @@ public class PartnerDto {
     private String localAddress;
     private String permanentAddress;
     private String profileUrl;
-    private String authId;
+    private String authUUID;
     private List<PartnerAttributeDto> attributes;
 
 }

@@ -6,9 +6,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
-public class StatusController {
-
-    @GetMapping("/api/v1/status")
+public class HealthCheckController {
+    @GetMapping("/status")
     public String getStatus(){
         return "I am Alive";
     }

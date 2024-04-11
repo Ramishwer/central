@@ -1,10 +1,7 @@
 package com.goev.central.dao.partner.detail;
 
-import com.goev.central.dto.partner.detail.PartnerDto;
 import com.goev.lib.dao.BaseDao;
 import lombok.*;
-
-import static com.goev.central.constant.ApplicationConstants.GSON;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,7 +10,7 @@ import static com.goev.central.constant.ApplicationConstants.GSON;
 @ToString
 public class PartnerDao extends BaseDao {
     private String punchId;
-    private String authId;
+    private String authUUID;
     private String phoneNumber;
     private String status;
     private Integer vehicleId;

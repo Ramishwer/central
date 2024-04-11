@@ -60,4 +60,14 @@ public class UserRepositoryImpl implements UserRepository {
     public List<UserDao> findAll() {
         return context.selectFrom(USERS).fetchInto(UserDao.class);
     }
+
+    @Override
+    public UserDao findByEmail(String email) {
+        return context.selectFrom(USERS).where(USERS.EMAIL.eq(email)).fetchAnyInto(UserDao.class);
+    }
+
+    @Override
+    public UserDao findByAuthUUID(String authUUID) {
+        return context.selectFrom(USERS).where(USERS.AUTH_UUID.eq(authUUID)).fetchAnyInto(UserDao.class);
+    }
 }
