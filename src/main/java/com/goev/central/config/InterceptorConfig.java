@@ -33,7 +33,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
                         "/swagger-ui/**",
                         "/api/v1/status",
                         "/api/v1/session-management/session",
-                        "/api/v1/partner-management/sessions/**/token"
+                        "/api/v1/session-management/sessions/**/token"
                 );
     }
 }
