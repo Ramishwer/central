@@ -25,8 +25,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
 
 @Slf4j
 @Service
@@ -68,6 +66,7 @@ public class SessionServiceImpl implements SessionService {
                 .accessToken(sessionDto.getAccessToken())
                 .refreshToken(sessionDto.getRefreshToken())
                 .expiresIn(sessionDto.getExpiresIn())
+                .refreshExpiresIn(sessionDto.getRefreshExpiresIn())
                 .userUUID(user.getUuid())
                 .uuid(sessionDao.getUuid())
                 .build();
@@ -103,6 +102,7 @@ public class SessionServiceImpl implements SessionService {
                 .accessToken(sessionDto.getAccessToken())
                 .refreshToken(sessionDto.getRefreshToken())
                 .expiresIn(sessionDto.getExpiresIn())
+                .refreshExpiresIn(sessionDto.getRefreshExpiresIn())
                 .userUUID(user.getUuid())
                 .uuid(sessionDao.getUuid())
                 .build();
@@ -140,21 +140,32 @@ public class SessionServiceImpl implements SessionService {
     }
 
     @Override
-    public List<SessionDto> getSessions() {
-        String authUUID = ApplicationContext.getAuthUUID();
-        if(authUUID == null)
-            throw new ResponseException("Token Expired");
-        UserDao user = userRepository.findByAuthUUID(authUUID);
-        List<UserSessionDao> allSessions = userSessionRepository.findAllByUserId(user.getId());
-        List<SessionDto> sessionsList = new ArrayList<>();
-        allSessions.forEach(x->{
-            SessionDto session = SessionDto.builder()
-                    .uuid(x.getUuid())
-                    .createdTime(x.getCreatedOn())
-                    .lastActiveTime(x.getLastActiveTime())
-                    .build();
-            sessionsList.add(session);
-        });
-        return sessionsList;
+    public SessionDto createSession(SessionDto token) {
+
+        String url = ApplicationConstants.AUTH_URL + "/api/v1/session-management/sessions/tokens";
+        HttpHeaders header = new HttpHeaders();
+        header.set(HttpHeaders.AUTHORIZATION, "Basic "+Base64.encodeAsString(String.valueOf(ApplicationConstants.CLIENT_ID+":"+ApplicationConstants.CLIENT_SECRET).getBytes(StandardCharsets.UTF_8)));
+        String response = restClient.post(url, header,token, String.class,true);
+        ResponseDto<SessionDto> session = ApplicationConstants.GSON.fromJson(response,new TypeToken<ResponseDto<SessionDto>>(){}.getType());
+        if(session==null || session.getData()==null || session.getData().getAuthUUID() == null)
+            throw new ResponseException("User does not exist");
+        UserDao user = userRepository.findByAuthUUID(session.getData().getAuthUUID());
+        if (user == null)
+            throw new ResponseException("User does not exist");
+        SessionDto sessionDto = session.getData();
+        UserSessionDao sessionDao = new UserSessionDao();
+        sessionDao.setAuthSessionUuid(sessionDto.getUuid());
+        sessionDao.setUserId(user.getId());
+        sessionDao.setLastActiveTime(DateTime.now());
+        sessionDao = userSessionRepository.save(sessionDao);
+
+        return SessionDto.builder()
+                .accessToken(sessionDto.getAccessToken())
+                .refreshToken(sessionDto.getRefreshToken())
+                .expiresIn(sessionDto.getExpiresIn())
+                .refreshExpiresIn(sessionDto.getRefreshExpiresIn())
+                .userUUID(user.getUuid())
+                .uuid(sessionDao.getUuid())
+                .build();
     }
 }

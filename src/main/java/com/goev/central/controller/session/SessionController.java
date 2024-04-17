@@ -22,16 +22,16 @@ public class SessionController {
 
     private final SessionService sessionService;
 
-    @GetMapping("/sessions")
-    public ResponseDto<List<SessionDto>> getSessions(){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, sessionService.getSessions());
+    @PostMapping("/sessions/tokens")
+    public ResponseDto<SessionDto> createSession(@RequestBody SessionDto token){
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, sessionService.createSession(token));
     }
     @PostMapping("/sessions")
     public ResponseDto<SessionDto> createSession(@RequestBody PasswordCredentialsDto credentials){
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, sessionService.createSession(credentials));
     }
 
-    @PostMapping("/sessions/{session-uuid}/refresh")
+    @PostMapping("/sessions/{session-uuid}/token")
     public ResponseDto<SessionDto> refreshSession(@PathVariable(value = "session-uuid")String sessionUUID){
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, sessionService.refreshSessionForSessionUUID(sessionUUID));
     }
