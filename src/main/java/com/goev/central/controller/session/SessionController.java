@@ -1,5 +1,6 @@
 package com.goev.central.controller.session;
 
+import com.goev.central.dto.session.ExchangeTokenRequestDto;
 import com.goev.central.dto.session.SessionDetailsDto;
 import com.goev.central.dto.session.SessionDto;
 import com.goev.central.service.session.SessionService;
@@ -23,7 +24,7 @@ public class SessionController {
     private final SessionService sessionService;
 
     @PostMapping("/sessions/tokens")
-    public ResponseDto<SessionDto> createSession(@RequestBody SessionDto token){
+    public ResponseDto<SessionDto> createSession(@RequestBody ExchangeTokenRequestDto token){
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, sessionService.createSession(token));
     }
     @PostMapping("/sessions")

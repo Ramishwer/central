@@ -4,6 +4,7 @@ import com.amazonaws.util.Base64;
 import com.goev.central.constant.ApplicationConstants;
 import com.goev.central.dao.user.detail.UserDao;
 import com.goev.central.dao.user.detail.UserSessionDao;
+import com.goev.central.dto.session.ExchangeTokenRequestDto;
 import com.goev.central.dto.session.SessionDetailsDto;
 import com.goev.central.dto.session.SessionDto;
 import com.goev.central.dto.user.auth.AuthCredentialDto;
@@ -16,7 +17,6 @@ import com.goev.lib.dto.PasswordCredentialsDto;
 import com.goev.lib.dto.ResponseDto;
 import com.goev.lib.exceptions.ResponseException;
 import com.goev.lib.services.RestClient;
-import com.goev.lib.utilities.ApplicationContext;
 import com.google.gson.reflect.TypeToken;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -140,7 +140,7 @@ public class SessionServiceImpl implements SessionService {
     }
 
     @Override
-    public SessionDto createSession(SessionDto token) {
+    public SessionDto createSession(ExchangeTokenRequestDto token) {
 
         String url = ApplicationConstants.AUTH_URL + "/api/v1/session-management/sessions/tokens";
         HttpHeaders header = new HttpHeaders();

@@ -81,7 +81,7 @@ public class RequestContext {
         UserSessionDao userSessionDao = null;
         if (requestAttributes != null) {
             HttpServletRequest request = requestAttributes.getRequest();
-            if (request.getHeader("userSession") != null)
+            if (request.getAttribute("userSession") != null)
                 userSessionDao =(UserSessionDao) request.getAttribute("userSession");
         }
         return userSessionDao;
