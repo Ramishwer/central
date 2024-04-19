@@ -38,4 +38,5 @@ public class SessionDto {
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime lastActiveTime;
+    private String organizationUUID;
 }
