@@ -1,6 +1,7 @@
 package com.goev.central.service.vehicle.impl;
 
 import com.goev.central.dao.vehicle.detail.VehicleFinancerDao;
+import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.vehicle.detail.VehicleFinancerDto;
 import com.goev.central.repository.vehicle.detail.VehicleFinancerRepository;
@@ -23,7 +24,7 @@ public class VehicleFinancerServiceImpl implements VehicleFinancerService {
 
     @Override
     public PaginatedResponseDto<VehicleFinancerDto> getFinancers() {
-        PaginatedResponseDto<VehicleFinancerDto> result = PaginatedResponseDto.<VehicleFinancerDto>builder().totalPages(0).currentPage(0).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<VehicleFinancerDto> result = PaginatedResponseDto.<VehicleFinancerDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
         List<VehicleFinancerDao> vehicleFinancerDaos = vehicleFinancerRepository.findAll();
         if (CollectionUtils.isEmpty(vehicleFinancerDaos))
             return result;

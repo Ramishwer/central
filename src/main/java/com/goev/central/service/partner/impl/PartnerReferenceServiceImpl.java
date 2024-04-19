@@ -2,6 +2,7 @@ package com.goev.central.service.partner.impl;
 
 import com.goev.central.dao.partner.detail.PartnerReferenceDao;
 import com.goev.central.dao.partner.detail.PartnerDao;
+import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.partner.detail.PartnerReferenceDto;
 import com.goev.central.repository.partner.detail.PartnerReferenceRepository;
@@ -33,7 +34,7 @@ public class PartnerReferenceServiceImpl implements PartnerReferenceService {
 
         List<PartnerReferenceDao> activeReferences = partnerReferenceRepository.findAllByPartnerId(partner.getId());
         if (CollectionUtils.isEmpty(activeReferences))
-            return PaginatedResponseDto.<PartnerReferenceDto>builder().currentPage(0).totalPages(0).elements(new ArrayList<>()).build();
+            return PaginatedResponseDto.<PartnerReferenceDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
 
         List<PartnerReferenceDto> referenceList = new ArrayList<>();
         activeReferences.forEach(x -> referenceList.add(PartnerReferenceDto.builder()

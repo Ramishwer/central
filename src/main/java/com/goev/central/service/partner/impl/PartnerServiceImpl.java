@@ -12,6 +12,7 @@ import com.goev.central.dao.partner.document.PartnerDocumentDao;
 import com.goev.central.dao.partner.document.PartnerDocumentTypeDao;
 import com.goev.central.dto.business.BusinessClientDto;
 import com.goev.central.dto.business.BusinessSegmentDto;
+import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.location.LocationDto;
 import com.goev.central.dto.partner.PartnerViewDto;
@@ -298,7 +299,7 @@ public class PartnerServiceImpl implements PartnerService {
     @Override
     public PaginatedResponseDto<PartnerViewDto> getPartners() {
 
-        PaginatedResponseDto<PartnerViewDto> result = PaginatedResponseDto.<PartnerViewDto>builder().totalPages(0).currentPage(0).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<PartnerViewDto> result = PaginatedResponseDto.<PartnerViewDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
         List<PartnerDao> partners = partnerRepository.findAll();
         if (CollectionUtils.isEmpty(partners))
             return result;

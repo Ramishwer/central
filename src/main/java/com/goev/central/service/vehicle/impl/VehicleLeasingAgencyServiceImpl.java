@@ -1,6 +1,7 @@
 package com.goev.central.service.vehicle.impl;
 
 import com.goev.central.dao.vehicle.detail.VehicleLeasingAgencyDao;
+import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.vehicle.detail.VehicleLeasingAgencyDto;
 import com.goev.central.repository.vehicle.detail.VehicleLeasingAgencyRepository;
@@ -24,7 +25,7 @@ public class VehicleLeasingAgencyServiceImpl implements VehicleLeasingAgencyServ
 
     @Override
     public PaginatedResponseDto<VehicleLeasingAgencyDto> getLeasingAgencies() {
-        PaginatedResponseDto<VehicleLeasingAgencyDto> result = PaginatedResponseDto.<VehicleLeasingAgencyDto>builder().totalPages(0).currentPage(0).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<VehicleLeasingAgencyDto> result = PaginatedResponseDto.<VehicleLeasingAgencyDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
         List<VehicleLeasingAgencyDao> vehicleLeasingAgencyDaos = vehicleLeasingAgencyRepository.findAll();
         if (CollectionUtils.isEmpty(vehicleLeasingAgencyDaos))
             return result;

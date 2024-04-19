@@ -1,6 +1,7 @@
 package com.goev.central.service.vehicle.impl;
 
 import com.goev.central.dao.vehicle.document.VehicleDocumentTypeDao;
+import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.vehicle.document.VehicleDocumentTypeDto;
 import com.goev.central.repository.vehicle.document.VehicleDocumentTypeRepository;
@@ -23,7 +24,7 @@ public class VehicleDocumentTypeServiceImpl implements VehicleDocumentTypeServic
 
     @Override
     public PaginatedResponseDto<VehicleDocumentTypeDto> getDocumentTypes() {
-        PaginatedResponseDto<VehicleDocumentTypeDto> result = PaginatedResponseDto.<VehicleDocumentTypeDto>builder().totalPages(0).currentPage(0).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<VehicleDocumentTypeDto> result = PaginatedResponseDto.<VehicleDocumentTypeDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
         List<VehicleDocumentTypeDao> vehicleDocumentTypeDaos = vehicleDocumentTypeRepository.findAll();
         if (CollectionUtils.isEmpty(vehicleDocumentTypeDaos))
             return result;

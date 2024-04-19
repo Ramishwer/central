@@ -1,6 +1,7 @@
 package com.goev.central.service.vehicle.impl;
 
 import com.goev.central.dao.vehicle.detail.VehicleCategoryDao;
+import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.vehicle.detail.VehicleCategoryDto;
 import com.goev.central.repository.vehicle.detail.VehicleCategoryRepository;
@@ -24,7 +25,7 @@ public class VehicleCategoryServiceImpl implements VehicleCategoryService {
 
     @Override
     public PaginatedResponseDto<VehicleCategoryDto> getCategories() {
-        PaginatedResponseDto<VehicleCategoryDto> result = PaginatedResponseDto.<VehicleCategoryDto>builder().totalPages(0).currentPage(0).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<VehicleCategoryDto> result = PaginatedResponseDto.<VehicleCategoryDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
         List<VehicleCategoryDao> vehicleCategoryDaos = vehicleCategoryRepository.findAll();
         if (CollectionUtils.isEmpty(vehicleCategoryDaos))
             return result;

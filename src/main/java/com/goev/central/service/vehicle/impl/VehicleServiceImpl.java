@@ -5,6 +5,7 @@ import com.goev.central.dao.location.LocationDao;
 import com.goev.central.dao.vehicle.detail.*;
 import com.goev.central.dao.vehicle.document.VehicleDocumentDao;
 import com.goev.central.dao.vehicle.document.VehicleDocumentTypeDao;
+import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.location.LocationDto;
 import com.goev.central.dto.vehicle.VehicleViewDto;
@@ -157,7 +158,7 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public PaginatedResponseDto<VehicleViewDto> getVehicles() {
-        PaginatedResponseDto<VehicleViewDto> result = PaginatedResponseDto.<VehicleViewDto>builder().totalPages(0).currentPage(0).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<VehicleViewDto> result = PaginatedResponseDto.<VehicleViewDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
         List<VehicleDao> vehicles = vehicleRepository.findAll();
         if (CollectionUtils.isEmpty(vehicles))
             return result;

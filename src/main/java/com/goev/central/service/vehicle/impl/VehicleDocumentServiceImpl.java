@@ -5,6 +5,7 @@ import com.goev.central.dao.vehicle.detail.VehicleDao;
 import com.goev.central.dao.vehicle.detail.VehicleModelDao;
 import com.goev.central.dao.vehicle.document.VehicleDocumentDao;
 import com.goev.central.dao.vehicle.document.VehicleDocumentTypeDao;
+import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.vehicle.detail.VehicleDetailsDto;
 import com.goev.central.dto.vehicle.document.VehicleDocumentDto;
@@ -47,7 +48,7 @@ public class VehicleDocumentServiceImpl implements VehicleDocumentService {
 
         List<VehicleDocumentTypeDao> activeDocumentTypes = vehicleDocumentTypeRepository.findAll();
         if (CollectionUtils.isEmpty(activeDocumentTypes))
-            return PaginatedResponseDto.<VehicleDocumentDto>builder().currentPage(0).totalPages(0).elements(new ArrayList<>()).build();
+            return PaginatedResponseDto.<VehicleDocumentDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
 
         Map<Integer, VehicleDocumentTypeDao> documentTypeIdToDocumentTypeMap = activeDocumentTypes.stream()
                 .collect(Collectors.toMap(VehicleDocumentTypeDao::getId, Function.identity()));

@@ -1,6 +1,7 @@
 package com.goev.central.service.location.impl;
 
 import com.goev.central.dao.location.LocationDao;
+import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.location.LocationDto;
 import com.goev.central.repository.location.LocationRepository;
@@ -24,7 +25,7 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     public PaginatedResponseDto<LocationDto> getLocations() {
-        PaginatedResponseDto<LocationDto> result = PaginatedResponseDto.<LocationDto>builder().totalPages(0).currentPage(0).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<LocationDto> result = PaginatedResponseDto.<LocationDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
         List<LocationDao> locationDaos = locationRepository.findAll();
         if (CollectionUtils.isEmpty(locationDaos))
             return result;

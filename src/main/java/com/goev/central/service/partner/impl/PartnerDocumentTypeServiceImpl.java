@@ -1,6 +1,7 @@
 package com.goev.central.service.partner.impl;
 
 import com.goev.central.dao.partner.document.PartnerDocumentTypeDao;
+import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.partner.document.PartnerDocumentTypeDto;
 import com.goev.central.repository.partner.document.PartnerDocumentTypeRepository;
@@ -23,7 +24,7 @@ public class PartnerDocumentTypeServiceImpl implements PartnerDocumentTypeServic
 
     @Override
     public PaginatedResponseDto<PartnerDocumentTypeDto> getDocumentTypes() {
-        PaginatedResponseDto<PartnerDocumentTypeDto> result = PaginatedResponseDto.<PartnerDocumentTypeDto>builder().totalPages(0).currentPage(0).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<PartnerDocumentTypeDto> result = PaginatedResponseDto.<PartnerDocumentTypeDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
         List<PartnerDocumentTypeDao> partnerDocumentTypeDaos = partnerDocumentTypeRepository.findAll();
         if (CollectionUtils.isEmpty(partnerDocumentTypeDaos))
             return result;

@@ -2,6 +2,7 @@ package com.goev.central.service.partner.impl;
 
 import com.goev.central.dao.partner.detail.PartnerAccountDetailDao;
 import com.goev.central.dao.partner.detail.PartnerDao;
+import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.partner.detail.PartnerAccountDto;
 import com.goev.central.repository.partner.detail.PartnerAccountDetailRepository;
@@ -33,7 +34,7 @@ public class PartnerAccountServiceImpl implements PartnerAccountService {
 
         List<PartnerAccountDetailDao> activeAccounts = partnerAccountDetailRepository.findAllByPartnerId(partner.getId());
         if (CollectionUtils.isEmpty(activeAccounts))
-            return PaginatedResponseDto.<PartnerAccountDto>builder().currentPage(0).totalPages(0).elements(new ArrayList<>()).build();
+            return PaginatedResponseDto.<PartnerAccountDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
 
         List<PartnerAccountDto> accountList = new ArrayList<>();
         activeAccounts.forEach(x -> accountList.add(PartnerAccountDto.builder()

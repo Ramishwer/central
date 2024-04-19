@@ -3,6 +3,7 @@ package com.goev.central.service.partner.impl;
 import com.goev.central.dao.partner.detail.PartnerDao;
 import com.goev.central.dao.partner.document.PartnerDocumentDao;
 import com.goev.central.dao.partner.document.PartnerDocumentTypeDao;
+import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.partner.detail.PartnerDetailsDto;
 import com.goev.central.dto.partner.document.PartnerDocumentDto;
@@ -43,7 +44,7 @@ public class PartnerDocumentServiceImpl implements PartnerDocumentService {
 
         List<PartnerDocumentTypeDao> activeDocumentTypes = partnerDocumentTypeRepository.findAll();
         if (CollectionUtils.isEmpty(activeDocumentTypes))
-            return PaginatedResponseDto.<PartnerDocumentDto>builder().currentPage(0).totalPages(0).elements(new ArrayList<>()).build();
+            return PaginatedResponseDto.<PartnerDocumentDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
 
         Map<Integer, PartnerDocumentTypeDao> documentTypeIdToDocumentTypeMap = activeDocumentTypes.stream()
                 .collect(Collectors.toMap(PartnerDocumentTypeDao::getId, Function.identity()));

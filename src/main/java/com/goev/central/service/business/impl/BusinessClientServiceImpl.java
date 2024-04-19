@@ -1,6 +1,7 @@
 package com.goev.central.service.business.impl;
 
 import com.goev.central.dao.business.BusinessClientDao;
+import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.business.BusinessClientDto;
 import com.goev.central.repository.business.BusinessClientRepository;
@@ -24,7 +25,7 @@ public class BusinessClientServiceImpl implements BusinessClientService {
 
     @Override
     public PaginatedResponseDto<BusinessClientDto> getClients() {
-        PaginatedResponseDto<BusinessClientDto> result = PaginatedResponseDto.<BusinessClientDto>builder().totalPages(0).currentPage(0).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<BusinessClientDto> result = PaginatedResponseDto.<BusinessClientDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
         List<BusinessClientDao> businessClientDaos = businessClientRepository.findAll();
         if (CollectionUtils.isEmpty(businessClientDaos))
             return result;

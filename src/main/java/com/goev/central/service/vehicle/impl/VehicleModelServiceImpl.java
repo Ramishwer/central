@@ -2,6 +2,7 @@ package com.goev.central.service.vehicle.impl;
 
 import com.goev.central.dao.vehicle.detail.VehicleManufacturerDao;
 import com.goev.central.dao.vehicle.detail.VehicleModelDao;
+import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.vehicle.detail.VehicleManufacturerDto;
 import com.goev.central.dto.vehicle.detail.VehicleModelDto;
@@ -30,7 +31,7 @@ public class VehicleModelServiceImpl implements VehicleModelService {
 
     @Override
     public PaginatedResponseDto<VehicleModelDto> getModels() {
-        PaginatedResponseDto<VehicleModelDto> result = PaginatedResponseDto.<VehicleModelDto>builder().totalPages(0).currentPage(0).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<VehicleModelDto> result = PaginatedResponseDto.<VehicleModelDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
         List<VehicleModelDao> vehicleModelDaos = vehicleModelRepository.findAll();
         if (CollectionUtils.isEmpty(vehicleModelDaos))
             return result;

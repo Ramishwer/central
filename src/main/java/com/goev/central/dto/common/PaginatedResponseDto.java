@@ -11,7 +11,6 @@ import java.util.List;
 @ToString
 @Builder
 public class PaginatedResponseDto <T>{
-    private Integer totalPages;
-    private Integer currentPage;
+    private PageDto pagination;
     private List<T> elements;
 }
