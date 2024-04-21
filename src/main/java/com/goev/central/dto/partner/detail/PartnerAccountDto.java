@@ -1,5 +1,6 @@
 package com.goev.central.dto.partner.detail;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
 @AllArgsConstructor
@@ -8,6 +9,7 @@ import lombok.*;
 @Setter
 @ToString
 @Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class PartnerAccountDto {
     private String accountNumber;
     private String accountHolderName;

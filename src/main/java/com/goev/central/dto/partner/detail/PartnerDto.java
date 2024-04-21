@@ -1,6 +1,7 @@
 package com.goev.central.dto.partner.detail;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 @Setter
 @ToString
 @Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class PartnerDto {
     private String email;
     private String phoneNumber;

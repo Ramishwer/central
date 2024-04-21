@@ -1,5 +1,6 @@
 package com.goev.central.dto.vehicle.detail;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.joda.deser.DateTimeDeserializer;
@@ -24,6 +25,7 @@ import java.util.Map;
 @Setter
 @ToString
 @Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class VehicleDetailsDto {
     private VehicleDto details;
     private String uuid;

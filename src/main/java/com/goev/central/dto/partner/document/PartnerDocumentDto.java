@@ -1,5 +1,6 @@
 package com.goev.central.dto.partner.document;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
 import java.util.Map;
@@ -10,6 +11,7 @@ import java.util.Map;
 @Setter
 @ToString
 @Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class PartnerDocumentDto {
     private String uuid;
     private String url;

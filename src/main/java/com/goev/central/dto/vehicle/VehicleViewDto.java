@@ -1,5 +1,6 @@
 package com.goev.central.dto.vehicle;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.joda.deser.DateTimeDeserializer;
@@ -13,6 +14,7 @@ import org.joda.time.DateTime;
 @Setter
 @ToString
 @Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class VehicleViewDto {
     private String plateNumber;
     private String vinNumber;
