@@ -13,4 +13,6 @@ public class VehicleDocumentTypeDto {
     private String name;
     private String s3Key;
     private String label;
+    private String groupKey;
+    private String groupDescription;
 }

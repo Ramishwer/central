@@ -33,6 +33,8 @@ public class PartnerDocumentTypeServiceImpl implements PartnerDocumentTypeServic
             result.getElements().add(PartnerDocumentTypeDto.builder()
                     .name(partnerDocumentTypeDao.getName())
                     .label(partnerDocumentTypeDao.getLabel())
+                    .groupKey(partnerDocumentTypeDao.getGroupKey())
+                    .groupDescription(partnerDocumentTypeDao.getGroupDescription())
                     .uuid(partnerDocumentTypeDao.getUuid())
                     .build());
         }

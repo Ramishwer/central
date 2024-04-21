@@ -33,6 +33,8 @@ public class VehicleDocumentTypeServiceImpl implements VehicleDocumentTypeServic
             result.getElements().add(VehicleDocumentTypeDto.builder()
                     .name(vehicleDocumentTypeDao.getName())
                     .label(vehicleDocumentTypeDao.getLabel())
+                    .groupKey(vehicleDocumentTypeDao.getGroupKey())
+                    .groupDescription(vehicleDocumentTypeDao.getGroupDescription())
                     .uuid(vehicleDocumentTypeDao.getUuid())
                     .build());
         }

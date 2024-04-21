@@ -68,6 +68,8 @@ public class PartnerDetailsDto {
                     .type(PartnerDocumentTypeDto.builder()
                             .name(type.getName())
                             .label(type.getLabel())
+                            .groupKey(type.getGroupKey())
+                            .groupDescription(type.getGroupDescription())
                             .uuid(type.getUuid())
                             .build())
                     .status(DocumentStatus.PENDING.name())
