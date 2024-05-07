@@ -23,7 +23,7 @@ public class PartnerDetailDao extends BaseDao {
     private String localAddress;
     private String permanentAddress;
     private DateTime joiningDate;
-    private DateTime dlExpiry;
+    private DateTime dlExpiryDate;
     private Integer homeLocationId;
     private DateTime interviewDate;
     private String sourceOfLeadType;
@@ -31,7 +31,7 @@ public class PartnerDetailDao extends BaseDao {
     private Integer shiftId;
     private Integer businessSegmentId;
     private Integer businessClientId;
-    private String driverTestStatus;
+    private String drivingTestStatus;
     private String selectionStatus;
     private String remark;
     private DateTime onboardingDate;

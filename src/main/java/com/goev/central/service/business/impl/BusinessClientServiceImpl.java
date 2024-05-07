@@ -31,23 +31,34 @@ public class BusinessClientServiceImpl implements BusinessClientService {
             return result;
 
         for (BusinessClientDao businessClientDao : businessClientDaos) {
-            result.getElements().add(BusinessClientDto.builder()
-                    .name(businessClientDao.getName())
-                    .uuid(businessClientDao.getUuid())
-                    .build());
+            result.getElements().add(getBusinessClientDto(businessClientDao));
         }
         return result;
+    }
+
+    private BusinessClientDto getBusinessClientDto(BusinessClientDao businessClientDao) {
+        return BusinessClientDto.builder()
+                .name(businessClientDao.getName())
+                .description(businessClientDao.getDescription())
+                .uuid(businessClientDao.getUuid())
+                .build();
     }
 
     @Override
     public BusinessClientDto createClient(BusinessClientDto businessClientDto) {
 
-        BusinessClientDao businessClientDao = new BusinessClientDao();
-        businessClientDao.setName(businessClientDto.getName());
+        BusinessClientDao businessClientDao = getBusinessClientDao(businessClientDto);
         businessClientDao = businessClientRepository.save(businessClientDao);
         if (businessClientDao == null)
             throw new ResponseException("Error in saving business client");
-        return BusinessClientDto.builder().name(businessClientDao.getName()).uuid(businessClientDao.getUuid()).build();
+        return getBusinessClientDto(businessClientDao);
+    }
+
+    private  BusinessClientDao getBusinessClientDao(BusinessClientDto businessClientDto) {
+        BusinessClientDao businessClientDao = new BusinessClientDao();
+        businessClientDao.setName(businessClientDto.getName());
+        businessClientDao.setDescription(businessClientDto.getDescription());
+        return businessClientDao;
     }
 
     @Override
@@ -55,17 +66,13 @@ public class BusinessClientServiceImpl implements BusinessClientService {
         BusinessClientDao businessClientDao = businessClientRepository.findByUUID(clientUUID);
         if (businessClientDao == null)
             throw new ResponseException("No business client found for Id :" + clientUUID);
-        BusinessClientDao newBusinessClientDao = new BusinessClientDao();
-        newBusinessClientDao.setName(businessClientDto.getName());
-
+        BusinessClientDao newBusinessClientDao = getBusinessClientDao(businessClientDto);
         newBusinessClientDao.setId(businessClientDao.getId());
         newBusinessClientDao.setUuid(businessClientDao.getUuid());
         businessClientDao = businessClientRepository.update(newBusinessClientDao);
         if (businessClientDao == null)
             throw new ResponseException("Error in updating details business client");
-        return BusinessClientDto.builder()
-                .name(businessClientDao.getName())
-                .uuid(businessClientDao.getUuid()).build();
+        return getBusinessClientDto(businessClientDao);
     }
 
     @Override
@@ -73,9 +80,7 @@ public class BusinessClientServiceImpl implements BusinessClientService {
         BusinessClientDao businessClientDao = businessClientRepository.findByUUID(clientUUID);
         if (businessClientDao == null)
             throw new ResponseException("No business client found for Id :" + clientUUID);
-        return BusinessClientDto.builder()
-                .name(businessClientDao.getName())
-                .uuid(businessClientDao.getUuid()).build();
+        return getBusinessClientDto(businessClientDao);
     }
 
     @Override

@@ -19,6 +19,6 @@ public class BookingPricingDetailDao extends BaseDao {
     private Integer actualTaxAmount;
     private Integer actualTaxPercentage;
     private String status;
-    private Integer bookingPricingModelId;
-    private Integer bookingPricingElementId;
+    private Integer pricingModelId;
+    private Integer pricingElementId;
 }

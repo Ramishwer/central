@@ -10,11 +10,11 @@ import lombok.*;
 @ToString
 @Builder
 public class PaymentDao extends BaseDao {
-    private String payingEntityType;
+    private String payingEntityType ;//USER,CUSTOMER,PARTNER,CLIENT
     private Integer payingEntityId;
-    private String payingFor;
+    private String payingFor;//BOOKING,WALLET
     private String paymentUuid;
-    private String type;
+    private String type;//
     private String status;
     private Integer bookingId;
     private Integer paymentDetailId;

@@ -13,4 +13,5 @@ import lombok.*;
 public class VehicleLeasingAgencyDto {
     private String name;
     private String uuid;
+    private String description;
 }

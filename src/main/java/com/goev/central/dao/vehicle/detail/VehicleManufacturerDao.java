@@ -13,4 +13,5 @@ import static com.goev.central.constant.ApplicationConstants.GSON;
 @ToString
 public class VehicleManufacturerDao extends BaseDao {
     private String name;
+    private String description;
 }

@@ -24,6 +24,7 @@ public class CustomerWalletTransactionDao extends BaseDao {
     private String status;
     private String transactionType;
     private String entryType;
+    private Integer amount;
 }
 
 

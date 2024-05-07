@@ -14,4 +14,6 @@ public class UserDao extends BaseDao {
     private String phoneNumber;
     private String role;
     private String authUuid;
+    private String viewInfo;
+    private String profileUrl;
 }

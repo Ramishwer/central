@@ -10,4 +10,5 @@ import lombok.*;
 @ToString
 public class BusinessSegmentDao extends BaseDao {
     private String name;
+    private String description;
 }

@@ -31,23 +31,34 @@ public class BusinessSegmentServiceImpl implements BusinessSegmentService {
             return result;
 
         for (BusinessSegmentDao businessSegmentDao : businessSegmentDaos) {
-            result.getElements().add(BusinessSegmentDto.builder()
-                    .name(businessSegmentDao.getName())
-                    .uuid(businessSegmentDao.getUuid())
-                    .build());
+            result.getElements().add(getBusinessSegmentDto(businessSegmentDao));
         }
         return result;
+    }
+
+    private BusinessSegmentDto getBusinessSegmentDto(BusinessSegmentDao businessSegmentDao) {
+        return BusinessSegmentDto.builder()
+                .name(businessSegmentDao.getName())
+                .description(businessSegmentDao.getDescription())
+                .uuid(businessSegmentDao.getUuid())
+                .build();
     }
 
     @Override
     public BusinessSegmentDto createSegment(BusinessSegmentDto businessSegmentDto) {
 
-        BusinessSegmentDao businessSegmentDao = new BusinessSegmentDao();
-        businessSegmentDao.setName(businessSegmentDto.getName());
+        BusinessSegmentDao businessSegmentDao = getBusinessSegmentDao(businessSegmentDto);
         businessSegmentDao = businessSegmentRepository.save(businessSegmentDao);
         if (businessSegmentDao == null)
             throw new ResponseException("Error in saving business segment");
-        return BusinessSegmentDto.builder().name(businessSegmentDao.getName()).uuid(businessSegmentDao.getUuid()).build();
+        return getBusinessSegmentDto(businessSegmentDao);
+    }
+
+    private BusinessSegmentDao getBusinessSegmentDao(BusinessSegmentDto businessSegmentDto) {
+        BusinessSegmentDao businessSegmentDao = new BusinessSegmentDao();
+        businessSegmentDao.setName(businessSegmentDto.getName());
+        businessSegmentDao.setDescription(businessSegmentDto.getDescription());
+        return businessSegmentDao;
     }
 
     @Override
@@ -55,17 +66,14 @@ public class BusinessSegmentServiceImpl implements BusinessSegmentService {
         BusinessSegmentDao businessSegmentDao = businessSegmentRepository.findByUUID(segmentUUID);
         if (businessSegmentDao == null)
             throw new ResponseException("No business segment found for Id :" + segmentUUID);
-        BusinessSegmentDao newBusinessSegmentDao = new BusinessSegmentDao();
-        newBusinessSegmentDao.setName(businessSegmentDto.getName());
+        BusinessSegmentDao newBusinessSegmentDao = getBusinessSegmentDao(businessSegmentDto);
 
         newBusinessSegmentDao.setId(businessSegmentDao.getId());
         newBusinessSegmentDao.setUuid(businessSegmentDao.getUuid());
         businessSegmentDao = businessSegmentRepository.update(newBusinessSegmentDao);
         if (businessSegmentDao == null)
             throw new ResponseException("Error in updating details business segment");
-        return BusinessSegmentDto.builder()
-                .name(businessSegmentDao.getName())
-                .uuid(businessSegmentDao.getUuid()).build();
+        return getBusinessSegmentDto(businessSegmentDao);
     }
 
     @Override
@@ -73,9 +81,7 @@ public class BusinessSegmentServiceImpl implements BusinessSegmentService {
         BusinessSegmentDao businessSegmentDao = businessSegmentRepository.findByUUID(segmentUUID);
         if (businessSegmentDao == null)
             throw new ResponseException("No business segment found for Id :" + segmentUUID);
-        return BusinessSegmentDto.builder()
-                .name(businessSegmentDao.getName())
-                .uuid(businessSegmentDao.getUuid()).build();
+        return getBusinessSegmentDto(businessSegmentDao);
     }
 
     @Override

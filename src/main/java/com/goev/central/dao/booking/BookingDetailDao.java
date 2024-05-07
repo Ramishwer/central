@@ -19,11 +19,10 @@ public class BookingDetailDao extends BaseDao {
     private Integer bookingTypeId;
     private Integer bookingPricingDetailId;
     private Integer requestedVehicleCategoryId;
-    private Integer customerPromotionId;
     private String startGeohash;
     private String endGeohash;
-    private Integer startRegionId;
-    private Integer endRegionId;
+    private String startRegions;
+    private String endRegions;
     private Integer plannedAmount;
     private Integer actualAmount;
     private DateTime plannedAssignmentTime;
@@ -66,4 +65,8 @@ public class BookingDetailDao extends BaseDao {
     private Integer actualEndSoc;
     private Integer bookingFeedbackId;
     private Integer bookingInvoicingDetailId;
+    private String platform;
+    private String appVersion;
+    private Integer deviceId;
+    private Integer sessionId;
 }

@@ -16,4 +16,6 @@ public interface UserRepository {
     UserDao findByEmail(String username);
 
     UserDao findByAuthUUID(String authUUID);
+
+    UserDao findByPhoneNumber(String phoneNumber);
 }

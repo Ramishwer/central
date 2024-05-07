@@ -11,6 +11,6 @@ import lombok.*;
 public class VehicleAssetTransferDetailDao extends BaseDao {
     private Integer vehicleId;
     private Integer vehicleTransferId;
-    private Integer vehicleAssetId;
+    private Integer assetId;
     private String status;
 }

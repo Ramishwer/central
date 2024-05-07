@@ -1,5 +1,6 @@
 package com.goev.central.dao.allocation;
 
+import com.goev.central.dto.allocation.AllocationLogDto;
 import com.goev.lib.dao.BaseDao;
 import lombok.*;
 
@@ -10,5 +11,6 @@ import lombok.*;
 @ToString
 public class AllocationLogDao extends BaseDao {
     private String allocationAttemptUUID;
+    private Integer allocationResultId;
     private String log;
 }

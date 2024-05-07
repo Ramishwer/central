@@ -70,4 +70,9 @@ public class UserRepositoryImpl implements UserRepository {
     public UserDao findByAuthUUID(String authUUID) {
         return context.selectFrom(USERS).where(USERS.AUTH_UUID.eq(authUUID)).fetchAnyInto(UserDao.class);
     }
+
+    @Override
+    public UserDao findByPhoneNumber(String phoneNumber) {
+        return context.selectFrom(USERS).where(USERS.PHONE_NUMBER.eq(phoneNumber)).fetchAnyInto(UserDao.class);
+    }
 }

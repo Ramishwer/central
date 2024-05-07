@@ -10,6 +10,7 @@ import lombok.*;
 @ToString
 @Builder
 public class PromotionDetailDao extends BaseDao {
+    private String promotionId;
     private String name;
     private String description;
     private String terms;

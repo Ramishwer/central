@@ -12,4 +12,6 @@ public interface PartnerPassbookDetailRepository {
     PartnerPassbookDetailDao findById(Integer id);
     List<PartnerPassbookDetailDao> findAllByIds(List<Integer> ids);
     List<PartnerPassbookDetailDao> findAll();
+
+    PartnerPassbookDetailDao findByPartnerId(Integer id);
 }

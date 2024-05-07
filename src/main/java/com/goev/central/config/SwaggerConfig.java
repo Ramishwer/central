@@ -4,9 +4,13 @@ import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.ExternalDocumentation;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.media.NumberSchema;
+import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import lombok.extern.slf4j.Slf4j;
+import org.joda.time.DateTime;
+import org.springdoc.core.utils.SpringDocUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -16,7 +20,12 @@ import java.util.List;
 @Configuration
 @Slf4j
 public class SwaggerConfig {
-
+    static {
+        NumberSchema schema = new NumberSchema();
+//        schema.setType("int64");
+        schema.setExample(DateTime.now().getMillis());
+        SpringDocUtils.getConfig().replaceWithSchema(DateTime.class, schema);
+    }
 
     @Bean
     public OpenAPI openAPI() {

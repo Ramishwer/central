@@ -18,4 +18,5 @@ public class UserDetailDao extends BaseDao {
     private String phoneNumber;
     private String role;
     private String profileUrl;
+    private Integer userId;
 }

@@ -13,4 +13,6 @@ public interface LocationService {
     LocationDto getLocationDetails(String locationUUID);
 
     Boolean deleteLocation(String locationUUID);
+
+    String getLocationQr(String locationUUID);
 }

@@ -1,6 +1,9 @@
 package com.goev.central.dto.vehicle.asset;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.goev.central.dto.asset.AssetDto;
+import com.goev.central.dto.vehicle.VehicleViewDto;
+import com.goev.central.dto.vehicle.detail.VehicleDto;
 import lombok.*;
 
 @AllArgsConstructor
@@ -12,7 +15,6 @@ import lombok.*;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class VehicleAssetTransferDetailDto {
     private String uuid;
-    private String attributeKey;
-    private String attributeValue;
-    private String name;
+    private AssetDto asset;
+    private String status;
 }

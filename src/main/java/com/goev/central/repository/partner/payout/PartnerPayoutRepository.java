@@ -12,4 +12,6 @@ public interface PartnerPayoutRepository {
     PartnerPayoutDao findById(Integer id);
     List<PartnerPayoutDao> findAllByIds(List<Integer> ids);
     List<PartnerPayoutDao> findAll();
+
+    List<PartnerPayoutDao> findAllByPartnerId(Integer id);
 }

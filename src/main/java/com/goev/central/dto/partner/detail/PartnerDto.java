@@ -2,9 +2,19 @@ package com.goev.central.dto.partner.detail;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.joda.deser.DateTimeDeserializer;
+import com.fasterxml.jackson.datatype.joda.ser.DateTimeSerializer;
+import com.goev.central.dto.booking.BookingDto;
+import com.goev.central.dto.booking.BookingViewDto;
+import com.goev.central.dto.location.LocationDto;
+import com.goev.central.dto.partner.duty.PartnerDutyDto;
+import com.goev.central.dto.partner.duty.PartnerShiftDto;
+import com.goev.central.dto.vehicle.VehicleViewDto;
+import com.goev.central.dto.vehicle.detail.VehicleDto;
 import lombok.*;
-
-import java.util.List;
+import org.joda.time.DateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,19 +24,25 @@ import java.util.List;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PartnerDto {
-    private String email;
-    private String phoneNumber;
-    private String firstName;
-    private String lastName;
     private String uuid;
     private String punchId;
-    private String state;
-    private String fathersName;
-    private String aadhaarCardNumber;
-    private String localAddress;
-    private String permanentAddress;
-    private String profileUrl;
     private String authUUID;
-    private List<PartnerAttributeDto> attributes;
+    private String phoneNumber;
+    private String status;
+    private String subStatus;
+    private String profileUrl;
+    private VehicleViewDto vehicleDetails;
+    private BookingViewDto bookingDetails;
+    private LocationDto locationDetails;
+    private String dutyDetails;
+    @JsonSerialize(using = DateTimeSerializer.class)
+    @JsonDeserialize(using = DateTimeDeserializer.class)
+    private DateTime computedAvailableTime;
+    @JsonSerialize(using = DateTimeSerializer.class)
+    @JsonDeserialize(using = DateTimeDeserializer.class)
+    private DateTime computedShiftEndTime;
+    private PartnerDutyDto partnerDuty ;
+    private PartnerShiftDto partnerShift;
+    private String locationStatus;
 
 }

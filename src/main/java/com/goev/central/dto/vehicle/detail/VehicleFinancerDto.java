@@ -12,5 +12,6 @@ import lombok.*;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class VehicleFinancerDto {
     private String name;
+    private String description;
     private String uuid;
 }

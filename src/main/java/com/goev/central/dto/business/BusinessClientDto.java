@@ -13,4 +13,5 @@ import lombok.*;
 public class BusinessClientDto {
     private String uuid;
     private String name;
+    private String description;
 }

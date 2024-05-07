@@ -8,7 +8,6 @@ import com.goev.lib.dto.ResponseDto;
 import com.goev.lib.dto.StatusDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -37,6 +36,12 @@ public class LocationController {
     public ResponseDto<LocationDto> getLocationDetails(@PathVariable(value = "location-uuid")String locationUUID){
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, locationService.getLocationDetails(locationUUID));
     }
+
+    @GetMapping("/locations/{location-uuid}/qr")
+    public ResponseDto<String> getLocationQr(@PathVariable(value = "location-uuid")String locationUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, locationService.getLocationQr(locationUUID));
+    }
+
 
     @DeleteMapping("/locations/{location-uuid}")
     public ResponseDto<Boolean> deleteLocation(@PathVariable(value = "location-uuid")String locationUUID){

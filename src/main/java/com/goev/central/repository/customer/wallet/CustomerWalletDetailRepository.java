@@ -12,4 +12,6 @@ public interface CustomerWalletDetailRepository {
     CustomerWalletDetailDao findById(Integer id);
     List<CustomerWalletDetailDao> findAllByIds(List<Integer> ids);
     List<CustomerWalletDetailDao> findAll();
+
+    CustomerWalletDetailDao findByCustomerId(Integer id);
 }

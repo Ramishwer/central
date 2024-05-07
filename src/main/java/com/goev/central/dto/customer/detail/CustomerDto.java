@@ -2,7 +2,11 @@ package com.goev.central.dto.customer.detail;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.goev.central.dto.booking.BookingDto;
+import com.goev.central.dto.booking.BookingViewDto;
 import com.goev.central.dto.common.AttributeDto;
+import com.goev.central.dto.partner.detail.PartnerDto;
+import com.goev.central.dto.vehicle.detail.VehicleDto;
 import lombok.*;
 
 import java.util.List;
@@ -15,11 +19,11 @@ import java.util.List;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CustomerDto {
-    private String email;
-    private String phone;
-    private String firstName;
-    private String lastName;
+
     private String uuid;
-    private String state;
-    private List<AttributeDto> attributes;
+    private String phoneNumber;
+    private String profileUrl;
+    private String authUuid;
+    private String status;
+    private List<BookingViewDto> bookingDetails;
 }

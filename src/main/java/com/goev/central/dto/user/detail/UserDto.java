@@ -16,10 +16,9 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDto {
     private String email;
-    private String phone;
-    private String firstName;
-    private String lastName;
+    private String phoneNumber;
+    private String role;
+    private String authUUID;
     private String uuid;
-    private String state;
-    private List<AttributeDto> attributes;
+    private String profileUrl;
 }
