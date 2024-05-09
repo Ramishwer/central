@@ -28,4 +28,5 @@ public class VehicleDetailDao extends BaseDao {
     private String insurancePolicyNumber;
     private String batteryNumber;
     private String hasDuplicateKeys;
+    private String plateNumber;
 }

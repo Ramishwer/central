@@ -161,6 +161,8 @@ public class VehicleDetailServiceImpl implements VehicleDetailService {
         newVehicleDetails.setRegistrationDate(vehicleDto.getRegistrationDate());
         newVehicleDetails.setBatteryNumber(vehicleDto.getBatteryNumber());
         newVehicleDetails.setHasDuplicateKeys(vehicleDto.getHasDuplicateKeys());
+        if(vehicleDto.getVehicle()!=null)
+            newVehicleDetails.setPlateNumber(vehicleDto.getVehicle().getPlateNumber());
 
         if (vehicleDto.getVehicleModel() != null) {
 
@@ -229,6 +231,7 @@ public class VehicleDetailServiceImpl implements VehicleDetailService {
         result.setInsurancePolicyNumber(vehicleDetailDao.getInsurancePolicyNumber());
         result.setOnboardingDate(vehicleDetailDao.getOnboardingDate());
         result.setDeboardingDate(vehicleDetailDao.getDeboardingDate());
+        result.setPlateNumber(vehicleDetailDao.getPlateNumber());
     }
 
     private void setVehicleHomeLocation(VehicleDetailDto result, Integer homeLocationId) {

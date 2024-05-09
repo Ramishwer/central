@@ -54,6 +54,7 @@ public class VehicleDetailDto {
     private DateTime registrationDate;
     private String state;
     private String imageUrl;
+    private String plateNumber;
 
 
 
