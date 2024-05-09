@@ -97,6 +97,8 @@ public class LocationServiceImpl implements LocationService {
         LocationDetailDao locationDetailDao = new LocationDetailDao();
         locationDetailDao.setLocationId(locationDao.getId());
 
+        locationDao.setLatitude(locationDto.getCoordinates().getLatitude().floatValue());
+        locationDao.setLongitude(locationDto.getCoordinates().getLongitude().floatValue());
         if (locationDto.getOwnerDetail() != null)
             locationDetailDao.setOwnerDetails(ApplicationConstants.GSON.toJson(locationDto.getOwnerDetail()));
         locationDetailDao.setAddress(locationDto.getAddress());
@@ -112,15 +114,17 @@ public class LocationServiceImpl implements LocationService {
 
         newLocationDao.setId(locationDao.getId());
         newLocationDao.setUuid(locationDao.getUuid());
-        locationDao = locationRepository.update(newLocationDao);
-        if (locationDao == null)
+        newLocationDao = locationRepository.update(newLocationDao);
+        if (newLocationDao == null)
             throw new ResponseException("Error in updating  location details ");
         LocationDetailDao locationDetailDao = locationDetailRepository.findById(locationDao.getLocationDetailsId());
 
         LocationDetailDao newLocationDetailDao = getLocationDetailDao(locationDto, newLocationDao);
-        newLocationDetailDao.setLocationId(newLocationDetailDao.getLocationId());
+        newLocationDetailDao.setLocationId(locationDetailDao.getLocationId());
         newLocationDetailDao = locationDetailRepository.save(newLocationDetailDao);
         locationDetailRepository.delete(locationDetailDao.getId());
+        newLocationDao.setLocationDetailsId(newLocationDetailDao.getId());
+        newLocationDao = locationRepository.update(newLocationDao);
 
 
         return getLocationDto(newLocationDao, newLocationDetailDao);

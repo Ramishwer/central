@@ -47,6 +47,8 @@ public class VehicleDetailDto {
     private String insurancePolicyNumber;
     private String vinNumber;
     private String motorNumber;
+    private String batteryNumber;
+    private String hasDuplicateKeys;
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime registrationDate;

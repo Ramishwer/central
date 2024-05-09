@@ -18,8 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-
 @Slf4j
 @Service
 @AllArgsConstructor
@@ -157,12 +155,12 @@ public class VehicleDetailServiceImpl implements VehicleDetailService {
     private VehicleDetailDao getVehicleDetailDao(VehicleDetailDto vehicleDto) {
         VehicleDetailDao newVehicleDetails = new VehicleDetailDao();
 
-        if (vehicleDto.getVehicle() != null) {
-            newVehicleDetails.setVinNumber(vehicleDto.getVinNumber());
-            newVehicleDetails.setMotorNumber(vehicleDto.getMotorNumber());
-            newVehicleDetails.setRegistrationDate(vehicleDto.getRegistrationDate());
 
-        }
+        newVehicleDetails.setVinNumber(vehicleDto.getVinNumber());
+        newVehicleDetails.setMotorNumber(vehicleDto.getMotorNumber());
+        newVehicleDetails.setRegistrationDate(vehicleDto.getRegistrationDate());
+        newVehicleDetails.setBatteryNumber(vehicleDto.getBatteryNumber());
+        newVehicleDetails.setHasDuplicateKeys(vehicleDto.getHasDuplicateKeys());
 
         if (vehicleDto.getVehicleModel() != null) {
 
@@ -224,6 +222,8 @@ public class VehicleDetailServiceImpl implements VehicleDetailService {
         result.setState(vehicleDetailDao.getState());
         result.setVinNumber(vehicleDetailDao.getVinNumber());
         result.setMotorNumber(vehicleDetailDao.getMotorNumber());
+        result.setBatteryNumber(vehicleDetailDao.getBatteryNumber());
+        result.setHasDuplicateKeys(vehicleDetailDao.getHasDuplicateKeys());
         result.setRegistrationDate(vehicleDetailDao.getRegistrationDate());
         result.setInsuranceExpiry(vehicleDetailDao.getInsuranceExpiry());
         result.setInsurancePolicyNumber(vehicleDetailDao.getInsurancePolicyNumber());
