@@ -12,7 +12,8 @@ public class AssetDao extends BaseDao {
     private String assetName;
     private String assetDescription;
     private String assetImageUrl;
-    private String assetDetails;
     private String parentType;
+    private String parentName;
     private String serialNo;
+    private Integer assetTypeId;
 }

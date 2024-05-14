@@ -10,14 +10,9 @@ import lombok.*;
 @ToString
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class AssetDto {
+public class AssetTypeDto {
     private String uuid;
-    private String assetName;
-    private String assetDescription;
-    private String assetImageUrl;
-    private AssetTypeDto type;
+    private String name;
+    private String description;
     private String parentType;
-    private String parentName;
-    private String serialNo;
-
 }

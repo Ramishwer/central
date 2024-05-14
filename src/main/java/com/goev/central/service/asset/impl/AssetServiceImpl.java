@@ -2,11 +2,14 @@ package com.goev.central.service.asset.impl;
 
 import com.goev.central.constant.ApplicationConstants;
 import com.goev.central.dao.asset.AssetDao;
+import com.goev.central.dao.asset.AssetTypeDao;
 import com.goev.central.dto.asset.AssetDto;
+import com.goev.central.dto.asset.AssetTypeDto;
 import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.common.QrValueDto;
 import com.goev.central.repository.asset.AssetRepository;
+import com.goev.central.repository.asset.AssetTypeRepository;
 import com.goev.central.service.asset.AssetService;
 import com.goev.lib.exceptions.ResponseException;
 import lombok.AllArgsConstructor;
@@ -24,6 +27,7 @@ import java.util.List;
 public class AssetServiceImpl implements AssetService {
 
     private final AssetRepository assetRepository;
+    private final AssetTypeRepository assetTypeRepository;
 
     @Override
     public PaginatedResponseDto<AssetDto> getAssets() {
@@ -49,26 +53,31 @@ public class AssetServiceImpl implements AssetService {
     }
 
     private AssetDao getAssetDao(AssetDto assetDto) {
+        AssetTypeDao type = assetTypeRepository.findByUUID(assetDto.getType().getUuid());
+
         AssetDao assetDao = new AssetDao();
 
+
         assetDao.setAssetName(assetDto.getAssetName());
-        if (assetDto.getAssetDetails() != null)
-            assetDao.setAssetDetails(ApplicationConstants.GSON.toJson(assetDto.getAssetDetails()));
         assetDao.setAssetDescription(assetDto.getAssetDescription());
         assetDao.setAssetImageUrl(assetDto.getAssetImageUrl());
         assetDao.setParentType(assetDto.getParentType());
         assetDao.setSerialNo(assetDto.getSerialNo());
+        assetDao.setAssetTypeId(type.getId());
         return assetDao;
     }
 
     private AssetDto getAssetDto(AssetDao assetDao) {
+        AssetTypeDao type = assetTypeRepository.findById(assetDao.getAssetTypeId());
+
         return AssetDto.builder()
                 .uuid(assetDao.getUuid())
                 .assetDescription(assetDao.getAssetDescription())
                 .assetName(assetDao.getAssetName())
                 .assetImageUrl(assetDao.getAssetImageUrl())
-                .assetDetails(ApplicationConstants.GSON.fromJson(assetDao.getAssetDetails(), Object.class))
+                .type(AssetTypeDto.builder().parentType(type.getParentType()).description(type.getDescription()).name(type.getName()).uuid(type.getUuid()).build())
                 .parentType(assetDao.getParentType())
+                .parentName(assetDao.getParentName())
                 .serialNo(assetDao.getSerialNo())
                 .build();
     }

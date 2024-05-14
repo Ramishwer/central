@@ -13,6 +13,7 @@ import com.goev.central.dto.partner.duty.PartnerDutyDto;
 import com.goev.central.dto.partner.duty.PartnerShiftDto;
 import com.goev.central.dto.vehicle.VehicleViewDto;
 import com.goev.central.dto.vehicle.detail.VehicleDto;
+import com.goev.lib.dto.LatLongDto;
 import lombok.*;
 import org.joda.time.DateTime;
 
