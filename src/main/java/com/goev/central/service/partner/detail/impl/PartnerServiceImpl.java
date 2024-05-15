@@ -6,6 +6,7 @@ import com.goev.central.dao.partner.detail.PartnerDao;
 import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.partner.PartnerViewDto;
+import com.goev.central.dto.partner.detail.PartnerDto;
 import com.goev.central.repository.partner.detail.PartnerRepository;
 import com.goev.central.service.partner.detail.PartnerService;
 import com.goev.lib.exceptions.ResponseException;
@@ -32,6 +33,11 @@ public class PartnerServiceImpl implements PartnerService {
             throw new ResponseException("No partner found for Id :" + partnerUUID);
         partnerRepository.delete(partner.getId());
         return true;
+    }
+
+    @Override
+    public PaginatedResponseDto<PartnerDto> getPartnerStatus() {
+        return null;
     }
 
     @Override

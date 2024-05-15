@@ -19,7 +19,11 @@ public class BusinessSegmentController {
     private final BusinessSegmentService businessSegmentService;
 
     @GetMapping("/segments")
-    public ResponseDto<PaginatedResponseDto<BusinessSegmentDto>> getSegments(){
+    public ResponseDto<PaginatedResponseDto<BusinessSegmentDto>> getSegments(@RequestParam(value = "count",required = false) Integer count,
+                                                                             @RequestParam(value = "start", required = false) Integer start,
+                                                                             @RequestParam(value = "from", required = false) Long from,
+                                                                             @RequestParam(value = "to", required = false) Long to,
+                                                                             @RequestParam(value = "lastUUID", required = false) String lastElementUUID){
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, businessSegmentService.getSegments());
     }
     @PostMapping("/segments")

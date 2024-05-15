@@ -2,11 +2,7 @@ package com.goev.central.dto.customer.detail;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.goev.central.dto.booking.BookingDto;
 import com.goev.central.dto.booking.BookingViewDto;
-import com.goev.central.dto.common.AttributeDto;
-import com.goev.central.dto.partner.detail.PartnerDto;
-import com.goev.central.dto.vehicle.detail.VehicleDto;
 import lombok.*;
 
 import java.util.List;

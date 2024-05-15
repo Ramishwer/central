@@ -20,7 +20,11 @@ public class BusinessClientController {
     private final BusinessClientService businessClientService;
 
     @GetMapping("/clients")
-    public ResponseDto<PaginatedResponseDto<BusinessClientDto>> getClients(){
+    public ResponseDto<PaginatedResponseDto<BusinessClientDto>> getClients(@RequestParam(value = "count",required = false) Integer count,
+                                                                           @RequestParam(value = "start", required = false) Integer start,
+                                                                           @RequestParam(value = "from", required = false) Long from,
+                                                                           @RequestParam(value = "to", required = false) Long to,
+                                                                           @RequestParam(value = "lastUUID", required = false) String lastElementUUID){
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, businessClientService.getClients());
     }
     @PostMapping("/clients")

@@ -19,11 +19,11 @@ public class CustomerSessionController {
 
     @GetMapping("/customers/{customer-uuid}/sessions")
     public ResponseDto<PaginatedResponseDto<CustomerSessionDto>> getCustomerSessions(@PathVariable(value = "customer-uuid")String customerUUID,
-            @RequestParam("count")Integer count,
-                                                                                 @RequestParam("start")Integer start,
-                                                                                 @RequestParam("from")Long from,
-                                                                                 @RequestParam("to")Long to,
-                                                                                 @RequestParam("lastUUID") String lastElementUUID){
+                                                                                     @RequestParam(value = "count",required = false) Integer count,
+                                                                                     @RequestParam(value = "start", required = false) Integer start,
+                                                                                     @RequestParam(value = "from", required = false) Long from,
+                                                                                     @RequestParam(value = "to", required = false) Long to,
+                                                                                     @RequestParam(value = "lastUUID", required = false) String lastElementUUID){
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, customerSessionService.getCustomerSessions(customerUUID));
     }
 

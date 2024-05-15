@@ -35,15 +35,14 @@ public class PartnerDto {
     private VehicleViewDto vehicleDetails;
     private BookingViewDto bookingDetails;
     private LocationDto locationDetails;
-    private String dutyDetails;
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime computedAvailableTime;
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime computedShiftEndTime;
-    private PartnerDutyDto partnerDuty ;
-    private PartnerShiftDto partnerShift;
+    private PartnerDutyDto dutyDetails ;
+    private PartnerShiftDto shiftDetails;
     private String locationStatus;
 
 }

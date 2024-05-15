@@ -23,4 +23,5 @@ public class BookingViewDto {
     private PartnerViewDto partnerDetails;
     private VehicleViewDto vehicleDetails;
     private CustomerViewDto customerDetails;
+//    private BookingSummaryDto details;
 }
