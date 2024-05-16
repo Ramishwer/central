@@ -135,7 +135,7 @@ public class LocationServiceImpl implements LocationService {
         LocationDao locationDao = locationRepository.findByUUID(locationUUID);
         if (locationDao == null)
             throw new ResponseException("No location found for Id :" + locationUUID);
-        LocationDetailDao locationDetailDao = locationDetailRepository.findById(locationDao.getId());
+        LocationDetailDao locationDetailDao = locationDetailRepository.findById(locationDao.getLocationDetailsId());
         return getLocationDto(locationDao, locationDetailDao);
     }
 
