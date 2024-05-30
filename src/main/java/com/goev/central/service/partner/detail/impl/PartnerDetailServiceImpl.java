@@ -11,6 +11,7 @@ import com.goev.central.dto.business.BusinessSegmentDto;
 import com.goev.central.dto.location.LocationDto;
 import com.goev.central.dto.partner.PartnerViewDto;
 import com.goev.central.dto.partner.detail.PartnerDetailDto;
+import com.goev.central.event.events.PartnerUpdateEvent;
 import com.goev.central.repository.business.BusinessClientRepository;
 import com.goev.central.repository.business.BusinessSegmentRepository;
 import com.goev.central.repository.location.LocationRepository;
@@ -19,9 +20,11 @@ import com.goev.central.repository.partner.detail.PartnerRepository;
 import com.goev.central.service.partner.detail.PartnerDetailService;
 import com.goev.central.utilities.S3Utils;
 import com.goev.lib.dto.LatLongDto;
+import com.goev.lib.event.service.EventProcessor;
 import com.goev.lib.exceptions.ResponseException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -35,6 +38,8 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
     private final BusinessClientRepository businessClientRepository;
     private final BusinessSegmentRepository businessSegmentRepository;
     private final S3Utils s3;
+
+    private final EventProcessor eventProcessor;
 
     @Override
     public PartnerDetailDto createPartner(PartnerDetailDto partnerDto) {
@@ -58,11 +63,17 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
         if (partnerDetailDao == null)
             throw new ResponseException("Error in saving partner details");
 
+        partner.setProfileUrl(partnerDetailDao.getProfileUrl());
         partner.setPartnerDetailsId(partnerDetailDao.getId());
         partner.setViewInfo(ApplicationConstants.GSON.toJson(getPartnerViewDto(partnerDetailDao, partner)));
         partnerRepository.update(partner);
 
-        return getPartnerDetailDto(partnerDetailDao,partner);
+        PartnerUpdateEvent partnerUpdateEvent = new PartnerUpdateEvent();
+        partnerUpdateEvent.setData(partner);
+        partnerUpdateEvent.setExecutionTime(DateTime.now().getMillis());
+        eventProcessor.sendEvent(partnerUpdateEvent);
+
+        return getPartnerDetailDto(partnerDetailDao, partner);
 
 
     }
@@ -102,7 +113,7 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
             throw new ResponseException("No partner details found for Id :" + partnerUUID);
 
 
-        return getPartnerDetailDto(partnerDetailDao,partnerDao);
+        return getPartnerDetailDto(partnerDetailDao, partnerDao);
     }
 
     @Override
@@ -123,27 +134,32 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
         if (partnerDetails == null)
             throw new ResponseException("Error in saving partner details");
 
+        partner.setProfileUrl(partnerDetails.getProfileUrl());
         partner.setPartnerDetailsId(partnerDetails.getId());
         partner.setViewInfo(ApplicationConstants.GSON.toJson(getPartnerViewDto(partnerDetails, partner)));
         partnerRepository.update(partner);
 
-        return getPartnerDetailDto(partnerDetailDao,partner);
+        PartnerUpdateEvent partnerUpdateEvent = new PartnerUpdateEvent();
+        partnerUpdateEvent.setData(partner);
+        partnerUpdateEvent.setExecutionTime(DateTime.now().getMillis());
+        eventProcessor.sendEvent(partnerUpdateEvent);
+
+        return getPartnerDetailDto(partnerDetailDao, partner);
     }
 
 
     private PartnerDetailDao getPartnerDetailDao(PartnerDetailDto partnerDto) {
         PartnerDetailDao newPartnerDetails = new PartnerDetailDao();
 
-        if (partnerDto.getPartner() != null) {
-            newPartnerDetails.setFirstName(partnerDto.getFirstName());
-            newPartnerDetails.setLastName(partnerDto.getLastName());
-            newPartnerDetails.setEmail(partnerDto.getEmail());
-            newPartnerDetails.setAadhaarCardNumber(partnerDto.getAadhaarCardNumber());
-            newPartnerDetails.setProfileUrl(partnerDto.getProfileUrl());
-            newPartnerDetails.setLocalAddress(partnerDto.getLocalAddress());
-            newPartnerDetails.setPermanentAddress(partnerDto.getPermanentAddress());
-            newPartnerDetails.setFathersName(partnerDto.getFathersName());
-        }
+        newPartnerDetails.setFirstName(partnerDto.getFirstName());
+        newPartnerDetails.setLastName(partnerDto.getLastName());
+        newPartnerDetails.setEmail(partnerDto.getEmail());
+        newPartnerDetails.setAadhaarCardNumber(partnerDto.getAadhaarCardNumber());
+        newPartnerDetails.setProfileUrl(partnerDto.getProfileUrl());
+        newPartnerDetails.setLocalAddress(partnerDto.getLocalAddress());
+        newPartnerDetails.setPermanentAddress(partnerDto.getPermanentAddress());
+        newPartnerDetails.setFathersName(partnerDto.getFathersName());
+
 
         if (partnerDto.getBusinessClient() != null) {
 
@@ -170,6 +186,9 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
         }
 
 
+        if (partnerDto.getProfileUrl() != null) {
+            newPartnerDetails.setProfileUrl(s3.getUrlForPath(partnerDto.getProfileUrl(), "profile"));
+        }
         newPartnerDetails.setIsVerified(true);
         newPartnerDetails.setOnboardingDate(partnerDto.getOnboardingDate());
         newPartnerDetails.setDeboardingDate(partnerDto.getDeboardingDate());
@@ -194,12 +213,16 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
         partnerDto.setUuid(partnerDao.getUuid());
         partnerDto.setPhoneNumber(partnerDao.getPhoneNumber());
         partnerDto.setProfileUrl(partnerDao.getProfileUrl());
+
         result.setPartner(partnerDto);
 
 
         if (partnerDetails == null)
             return;
 
+        result.getPartner().setProfileUrl(partnerDetails.getProfileUrl());
+        result.getPartner().setFirstName(partnerDetails.getFirstName());
+        result.getPartner().setLastName(partnerDetails.getLastName());
         result.setState(partnerDetails.getState());
         result.setJoiningDate(partnerDetails.getJoiningDate());
         result.setDlNumber(partnerDetails.getDlNumber());

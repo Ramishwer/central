@@ -17,7 +17,7 @@ public class CustomerWalletTransactionDao extends BaseDao {
     private Integer openingWalletBalance;
     private Integer closingWalletBalance;
     private Integer bookingId;
-    private Integer paymentId;
+    private Integer customerPaymentId;
     private String message;
     private String subtitle;
     private String remark;

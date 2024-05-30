@@ -30,5 +30,11 @@ public class VehicleViewDto {
     private LocationDto homeLocation;
     private VehicleModelDto vehicleModel;
     private String imageUrl;
+    @JsonSerialize(using = DateTimeSerializer.class)
+    @JsonDeserialize(using = DateTimeDeserializer.class)
+    private DateTime onboardingDate;
+    @JsonSerialize(using = DateTimeSerializer.class)
+    @JsonDeserialize(using = DateTimeDeserializer.class)
+    private DateTime deboardingDate;
 
 }

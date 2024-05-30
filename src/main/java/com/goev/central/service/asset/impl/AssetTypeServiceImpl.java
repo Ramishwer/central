@@ -46,21 +46,11 @@ public class AssetTypeServiceImpl implements AssetTypeService {
     }
 
     private AssetTypeDao getAssetTypeDao(AssetTypeDto assetTypeDto) {
-        AssetTypeDao assetTypeDao = new AssetTypeDao();
-
-        assetTypeDao.setName(assetTypeDto.getName());
-        assetTypeDao.setDescription(assetTypeDto.getDescription());
-        assetTypeDao.setParentType(assetTypeDto.getParentType());
-        return assetTypeDao;
+        return AssetTypeDao.fromDto(assetTypeDto);
     }
 
     private AssetTypeDto getAssetTypeDto(AssetTypeDao assetTypeDao) {
-        return AssetTypeDto.builder()
-                .uuid(assetTypeDao.getUuid())
-                .parentType(assetTypeDao.getParentType())
-                .name(assetTypeDao.getName())
-                .description(assetTypeDao.getDescription())
-                .build();
+        return AssetTypeDto.fromDao(assetTypeDao);
     }
 
     @Override

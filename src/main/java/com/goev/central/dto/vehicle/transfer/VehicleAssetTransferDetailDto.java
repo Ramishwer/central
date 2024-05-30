@@ -1,9 +1,7 @@
-package com.goev.central.dto.vehicle.asset;
+package com.goev.central.dto.vehicle.transfer;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.goev.central.dto.asset.AssetDto;
-import com.goev.central.dto.vehicle.VehicleViewDto;
-import com.goev.central.dto.vehicle.detail.VehicleDto;
 import lombok.*;
 
 @AllArgsConstructor

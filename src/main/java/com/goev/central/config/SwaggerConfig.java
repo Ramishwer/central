@@ -22,7 +22,6 @@ import java.util.List;
 public class SwaggerConfig {
     static {
         NumberSchema schema = new NumberSchema();
-//        schema.setType("int64");
         schema.setExample(DateTime.now().getMillis());
         SpringDocUtils.getConfig().replaceWithSchema(DateTime.class, schema);
     }

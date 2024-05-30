@@ -25,7 +25,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
         CustomersRecord customersRecord = context.newRecord(CUSTOMERS, customer);
         customersRecord.store();
         customer.setId(customersRecord.getId());
-        customer.setUuid(customer.getUuid());
+        customer.setUuid(customersRecord.getUuid());
         return customer;
     }
 
@@ -59,5 +59,10 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     @Override
     public List<CustomerDao> findAll() {
         return context.selectFrom(CUSTOMERS).fetchInto(CustomerDao.class);
+    }
+
+    @Override
+    public CustomerDao findByPhoneNumber(String phoneNumber) {
+        return context.selectFrom(CUSTOMERS).where(CUSTOMERS.PHONE_NUMBER.eq(phoneNumber)).fetchAnyInto(CustomerDao.class);
     }
 }

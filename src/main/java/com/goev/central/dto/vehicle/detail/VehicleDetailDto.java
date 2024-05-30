@@ -7,6 +7,8 @@ import com.fasterxml.jackson.datatype.joda.deser.DateTimeDeserializer;
 import com.fasterxml.jackson.datatype.joda.ser.DateTimeSerializer;
 import com.goev.central.dao.vehicle.document.VehicleDocumentDao;
 import com.goev.central.dao.vehicle.document.VehicleDocumentTypeDao;
+import com.goev.central.dto.business.BusinessClientDto;
+import com.goev.central.dto.business.BusinessSegmentDto;
 import com.goev.central.dto.location.LocationDto;
 import com.goev.central.dto.vehicle.VehicleViewDto;
 import com.goev.central.dto.vehicle.document.VehicleDocumentDto;
@@ -34,6 +36,8 @@ public class VehicleDetailDto {
     private VehicleLeasingAgencyDto vehicleLeasingAgency;
     private VehicleFinancerDto vehicleFinancer;
     private VehicleCategoryDto vehicleCategory;
+    private BusinessSegmentDto businessSegment;
+    private BusinessClientDto businessClient;
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime onboardingDate;
@@ -43,7 +47,7 @@ public class VehicleDetailDto {
     private LocationDto homeLocation;
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
-    private DateTime insuranceExpiry ;
+    private DateTime insuranceExpiryDate ;
     private String insurancePolicyNumber;
     private String vinNumber;
     private String motorNumber;

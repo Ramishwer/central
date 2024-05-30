@@ -26,7 +26,7 @@ public class VehicleController {
 
 
     @DeleteMapping("/vehicles/{vehicle-uuid}")
-    public ResponseDto<Boolean> deleteAccount(@PathVariable(value = "vehicle-uuid")String vehicleUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, vehicleService.deleteVehicle(vehicleUUID));
+    public ResponseDto<Boolean> deleteAccount(@PathVariable(value = "vehicle-uuid") String vehicleUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleService.deleteVehicle(vehicleUUID));
     }
 }

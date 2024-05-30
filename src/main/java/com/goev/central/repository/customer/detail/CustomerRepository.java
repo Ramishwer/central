@@ -12,4 +12,6 @@ public interface CustomerRepository {
     CustomerDao findById(Integer id);
     List<CustomerDao> findAllByIds(List<Integer> ids);
     List<CustomerDao> findAll();
+
+    CustomerDao findByPhoneNumber(String phoneNumber);
 }

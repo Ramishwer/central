@@ -3,6 +3,7 @@ package com.goev.central.service.location.impl;
 import com.goev.central.constant.ApplicationConstants;
 import com.goev.central.dao.location.LocationDao;
 import com.goev.central.dao.location.LocationDetailDao;
+import com.goev.central.dto.asset.AssetDto;
 import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.common.QrValueDto;
@@ -159,5 +160,25 @@ public class LocationServiceImpl implements LocationService {
                 .uuid(locationUUID)
                 .name(locationDao.getName())
                 .build());
+    }
+
+    @Override
+    public PaginatedResponseDto<AssetDto> getAssetsForLocations(String locationUUID) {
+        return null;
+    }
+
+    @Override
+    public AssetDto createAssetsForLocation(AssetDto assetDto, String locationUUID) {
+        return null;
+    }
+
+    @Override
+    public List<AssetDto> createBulkAssetsForLocation(List<AssetDto> assetDtoList, String locationUUID) {
+        return null;
+    }
+
+    @Override
+    public Boolean deleteAssetsForLocation(String assetUUID, String locationUUID) {
+        return null;
     }
 }

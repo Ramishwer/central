@@ -54,32 +54,14 @@ public class AssetServiceImpl implements AssetService {
 
     private AssetDao getAssetDao(AssetDto assetDto) {
         AssetTypeDao type = assetTypeRepository.findByUUID(assetDto.getType().getUuid());
-
-        AssetDao assetDao = new AssetDao();
-
-
-        assetDao.setAssetName(assetDto.getAssetName());
-        assetDao.setAssetDescription(assetDto.getAssetDescription());
-        assetDao.setAssetImageUrl(assetDto.getAssetImageUrl());
-        assetDao.setParentType(assetDto.getParentType());
-        assetDao.setSerialNo(assetDto.getSerialNo());
-        assetDao.setAssetTypeId(type.getId());
-        return assetDao;
+       return AssetDao.fromDto(assetDto,type.getId());
     }
 
     private AssetDto getAssetDto(AssetDao assetDao) {
         AssetTypeDao type = assetTypeRepository.findById(assetDao.getAssetTypeId());
-
-        return AssetDto.builder()
-                .uuid(assetDao.getUuid())
-                .assetDescription(assetDao.getAssetDescription())
-                .assetName(assetDao.getAssetName())
-                .assetImageUrl(assetDao.getAssetImageUrl())
-                .type(AssetTypeDto.builder().parentType(type.getParentType()).description(type.getDescription()).name(type.getName()).uuid(type.getUuid()).build())
-                .parentType(assetDao.getParentType())
-                .parentName(assetDao.getParentName())
-                .serialNo(assetDao.getSerialNo())
-                .build();
+        AssetDto assetDto = AssetDto.fromDao(assetDao);
+        assetDto.setType(AssetTypeDto.fromDao(type));
+        return assetDto;
     }
 
     @Override
@@ -88,7 +70,6 @@ public class AssetServiceImpl implements AssetService {
         if (assetDao == null)
             throw new ResponseException("No asset  found for Id :" + assetUUID);
         AssetDao newAssetDao = getAssetDao(assetDto);
-
         newAssetDao.setId(assetDao.getId());
         newAssetDao.setUuid(assetDao.getUuid());
         assetDao = assetRepository.update(newAssetDao);

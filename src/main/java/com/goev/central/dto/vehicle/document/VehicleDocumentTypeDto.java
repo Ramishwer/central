@@ -1,6 +1,9 @@
 package com.goev.central.dto.vehicle.document;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.goev.central.dao.asset.AssetTypeDao;
+import com.goev.central.dao.vehicle.document.VehicleDocumentTypeDao;
+import com.goev.central.dto.asset.AssetTypeDto;
 import lombok.*;
 
 @AllArgsConstructor
@@ -17,4 +20,20 @@ public class VehicleDocumentTypeDto {
     private String label;
     private String groupKey;
     private String groupDescription;
+    private Boolean isMandatory;
+    private Boolean needsVerification;
+
+
+    public static VehicleDocumentTypeDto fromDao(VehicleDocumentTypeDao vehicleDocumentTypeDao) {
+        return VehicleDocumentTypeDto.builder()
+                .s3Key(vehicleDocumentTypeDao.getS3Key())
+                .label(vehicleDocumentTypeDao.getLabel())
+                .name(vehicleDocumentTypeDao.getName())
+                .uuid(vehicleDocumentTypeDao.getUuid())
+                .groupKey(vehicleDocumentTypeDao.getGroupKey())
+                .groupDescription(vehicleDocumentTypeDao.getGroupDescription())
+                .isMandatory(vehicleDocumentTypeDao.getIsMandatory())
+                .needsVerification(vehicleDocumentTypeDao.getNeedsVerification())
+                .build();
+    }
 }

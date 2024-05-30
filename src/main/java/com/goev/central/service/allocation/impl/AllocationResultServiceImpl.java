@@ -30,9 +30,7 @@ public class AllocationResultServiceImpl implements AllocationResultService {
             return result;
 
         for (AllocationResultDao allocationResultDao : allocationResultDaos) {
-            result.getElements().add(AllocationResultDto.builder()
-                    .uuid(allocationResultDao.getUuid())
-                    .build());
+            result.getElements().add(AllocationResultDto.fromDao(allocationResultDao));
         }
         return result;
     }
@@ -42,7 +40,6 @@ public class AllocationResultServiceImpl implements AllocationResultService {
         AllocationResultDao allocationResultDao = allocationResultRepository.findByUUID(allocationResultUUID);
         if (allocationResultDao == null)
             throw new ResponseException("No allocation result found for Id :" + allocationResultUUID);
-        return AllocationResultDto.builder()
-                .uuid(allocationResultDao.getUuid()).build();
+        return AllocationResultDto.fromDao(allocationResultDao);
     }
 }

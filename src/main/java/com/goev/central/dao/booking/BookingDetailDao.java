@@ -14,7 +14,7 @@ public class BookingDetailDao extends BaseDao {
     private Integer customerId;
     private Integer partnerId;
     private Integer vehicleId;
-    private Integer paymentId;
+    private Integer bookingPaymentId;
     private Integer pricingModelId;
     private Integer bookingTypeId;
     private Integer bookingPricingDetailId;

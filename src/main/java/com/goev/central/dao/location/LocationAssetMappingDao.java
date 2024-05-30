@@ -1,4 +1,4 @@
-package com.goev.central.dao.vehicle.asset;
+package com.goev.central.dao.location;
 
 import com.goev.lib.dao.BaseDao;
 import lombok.*;
@@ -8,9 +8,8 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
-public class VehicleAssetTransferDetailDao extends BaseDao {
-    private Integer vehicleId;
-    private Integer vehicleTransferId;
+public class LocationAssetMappingDao extends BaseDao {
+    private Integer locationId;
     private Integer assetId;
     private String status;
 }

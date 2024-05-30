@@ -35,6 +35,8 @@ public class VehicleDocumentTypeServiceImpl implements VehicleDocumentTypeServic
                     .label(vehicleDocumentTypeDao.getLabel())
                     .groupKey(vehicleDocumentTypeDao.getGroupKey())
                     .groupDescription(vehicleDocumentTypeDao.getGroupDescription())
+                    .isMandatory(vehicleDocumentTypeDao.getIsMandatory())
+                    .needsVerification(vehicleDocumentTypeDao.getNeedsVerification())
                     .uuid(vehicleDocumentTypeDao.getUuid())
                     .build());
         }
@@ -44,22 +46,12 @@ public class VehicleDocumentTypeServiceImpl implements VehicleDocumentTypeServic
     @Override
     public VehicleDocumentTypeDto createDocumentType(VehicleDocumentTypeDto vehicleDocumentTypeDto) {
 
-        VehicleDocumentTypeDao vehicleDocumentTypeDao = new VehicleDocumentTypeDao();
-        vehicleDocumentTypeDao.setName(vehicleDocumentTypeDto.getName());
-        vehicleDocumentTypeDao.setGroupDescription(vehicleDocumentTypeDto.getGroupDescription());
-        vehicleDocumentTypeDao.setGroupKey(vehicleDocumentTypeDto.getGroupKey());
-        vehicleDocumentTypeDao.setLabel(vehicleDocumentTypeDto.getLabel());
+        VehicleDocumentTypeDao vehicleDocumentTypeDao = VehicleDocumentTypeDao.fromDto(vehicleDocumentTypeDto);
 
         vehicleDocumentTypeDao = vehicleDocumentTypeRepository.save(vehicleDocumentTypeDao);
         if (vehicleDocumentTypeDao == null)
             throw new ResponseException("Error in saving vehicle documentType");
-        return VehicleDocumentTypeDto.builder()
-                .name(vehicleDocumentTypeDao.getName())
-                .label(vehicleDocumentTypeDao.getLabel())
-                .groupKey(vehicleDocumentTypeDao.getGroupKey())
-                .groupDescription(vehicleDocumentTypeDao.getGroupDescription())
-                .uuid(vehicleDocumentTypeDao.getUuid())
-                .build();
+        return VehicleDocumentTypeDto.fromDao(vehicleDocumentTypeDao);
     }
 
     @Override
@@ -67,24 +59,13 @@ public class VehicleDocumentTypeServiceImpl implements VehicleDocumentTypeServic
         VehicleDocumentTypeDao vehicleDocumentTypeDao = vehicleDocumentTypeRepository.findByUUID(documentTypeUUID);
         if (vehicleDocumentTypeDao == null)
             throw new ResponseException("No vehicle documentType found for Id :" + documentTypeUUID);
-        VehicleDocumentTypeDao newVehicleDocumentTypeDao = new VehicleDocumentTypeDao();
-        newVehicleDocumentTypeDao.setName(vehicleDocumentTypeDto.getName());
-        newVehicleDocumentTypeDao.setLabel(vehicleDocumentTypeDto.getLabel());
-        newVehicleDocumentTypeDao.setGroupKey(vehicleDocumentTypeDto.getGroupKey());
-        newVehicleDocumentTypeDao.setGroupDescription(vehicleDocumentTypeDto.getGroupDescription());
-
+        VehicleDocumentTypeDao newVehicleDocumentTypeDao = VehicleDocumentTypeDao.fromDto(vehicleDocumentTypeDto);
         newVehicleDocumentTypeDao.setId(vehicleDocumentTypeDao.getId());
         newVehicleDocumentTypeDao.setUuid(vehicleDocumentTypeDao.getUuid());
         vehicleDocumentTypeDao = vehicleDocumentTypeRepository.update(newVehicleDocumentTypeDao);
         if (vehicleDocumentTypeDao == null)
             throw new ResponseException("Error in updating details vehicle documentType");
-        return VehicleDocumentTypeDto.builder()
-                .name(vehicleDocumentTypeDao.getName())
-                .label(vehicleDocumentTypeDao.getLabel())
-                .groupKey(vehicleDocumentTypeDao.getGroupKey())
-                .groupDescription(vehicleDocumentTypeDao.getGroupDescription())
-                .uuid(vehicleDocumentTypeDao.getUuid())
-                .build();
+        return VehicleDocumentTypeDto.fromDao(vehicleDocumentTypeDao);
     }
 
     @Override
@@ -92,13 +73,7 @@ public class VehicleDocumentTypeServiceImpl implements VehicleDocumentTypeServic
         VehicleDocumentTypeDao vehicleDocumentTypeDao = vehicleDocumentTypeRepository.findByUUID(documentTypeUUID);
         if (vehicleDocumentTypeDao == null)
             throw new ResponseException("No vehicle documentType found for Id :" + documentTypeUUID);
-        return VehicleDocumentTypeDto.builder()
-                .name(vehicleDocumentTypeDao.getName())
-                .label(vehicleDocumentTypeDao.getLabel())
-                .groupKey(vehicleDocumentTypeDao.getGroupKey())
-                .groupDescription(vehicleDocumentTypeDao.getGroupDescription())
-                .uuid(vehicleDocumentTypeDao.getUuid())
-                .build();
+        return VehicleDocumentTypeDto.fromDao(vehicleDocumentTypeDao);
     }
 
     @Override

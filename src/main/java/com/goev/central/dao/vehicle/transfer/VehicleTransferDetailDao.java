@@ -1,4 +1,4 @@
-package com.goev.central.dao.vehicle.asset;
+package com.goev.central.dao.vehicle.transfer;
 
 import com.goev.lib.dao.BaseDao;
 import lombok.*;

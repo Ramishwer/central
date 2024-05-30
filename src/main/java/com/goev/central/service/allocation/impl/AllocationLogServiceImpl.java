@@ -30,9 +30,7 @@ public class AllocationLogServiceImpl implements AllocationLogService {
             return result;
 
         for (AllocationLogDao allocationLogDao : allocationLogDaos) {
-            result.getElements().add(AllocationLogDto.builder()
-                    .uuid(allocationLogDao.getUuid())
-                    .build());
+            result.getElements().add(AllocationLogDto.fromDao(allocationLogDao));
         }
         return result;
     }
@@ -43,8 +41,7 @@ public class AllocationLogServiceImpl implements AllocationLogService {
         AllocationLogDao allocationLogDao = allocationLogRepository.findByUUID(allocationLogUUID);
         if (allocationLogDao == null)
             throw new ResponseException("No allocation log found for Id :" + allocationLogUUID);
-        return AllocationLogDto.builder()
-                .uuid(allocationLogDao.getUuid()).build();
+        return AllocationLogDto.fromDao(allocationLogDao);
     }
 
 }

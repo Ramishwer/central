@@ -8,13 +8,9 @@ import com.fasterxml.jackson.datatype.joda.deser.DateTimeDeserializer;
 import com.fasterxml.jackson.datatype.joda.ser.DateTimeSerializer;
 import com.goev.central.dto.location.LocationDto;
 import com.goev.central.dto.partner.PartnerViewDto;
-import com.goev.central.dto.partner.detail.PartnerDto;
-import com.goev.central.dto.vehicle.VehicleViewDto;
-import com.goev.central.dto.vehicle.asset.VehicleTransferDto;
+import com.goev.central.dto.vehicle.transfer.VehicleTransferDto;
 import lombok.*;
 import org.joda.time.DateTime;
-
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor

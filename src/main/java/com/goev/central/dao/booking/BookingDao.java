@@ -1,5 +1,6 @@
 package com.goev.central.dao.booking;
 
+import com.goev.central.dto.booking.BookingDto;
 import com.goev.lib.dao.BaseDao;
 import lombok.*;
 
@@ -21,4 +22,9 @@ public class BookingDao extends BaseDao {
     private String customerDetails;
     private String viewInfo;
 
+    public static BookingDao fromDto(BookingDto bookingDto) {
+        BookingDao bookingDao = new BookingDao();
+        bookingDao.setUuid(bookingDto.getUuid());
+        return bookingDao;
+    }
 }

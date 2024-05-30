@@ -34,7 +34,8 @@ public class InterceptorConfig implements WebMvcConfigurer {
                         "/api/v1/status",
                         "/api/v1/session-management/session",
                         "/api/v1/session-management/sessions/**/token",
-                        "/api/v1/session-management/sessions/tokens"
+                        "/api/v1/session-management/sessions/tokens",
+                        "/api/v1/internal/events"
                 );
     }
 }

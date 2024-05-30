@@ -25,4 +25,6 @@ public class CustomerViewDto {
     private String lastName;
     private String profileUrl;
     private String status;
+    private String email;
+    private String preferredLanguage;
 }

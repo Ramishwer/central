@@ -30,9 +30,7 @@ public class BookingServiceImpl implements BookingService {
             return result;
 
         for (BookingDao bookingDao : bookingDaos) {
-            result.getElements().add(BookingDto.builder()
-                    .uuid(bookingDao.getUuid())
-                    .build());
+            result.getElements().add(getBookingDto(bookingDao));
         }
         return result;
     }
@@ -40,12 +38,19 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public BookingDto createBooking(BookingDto bookingDto) {
 
-        BookingDao bookingDao = new BookingDao();
+        BookingDao bookingDao = getBookingDao(bookingDto);
         bookingDao = bookingRepository.save(bookingDao);
         if (bookingDao == null)
-            throw new ResponseException("Error in saving booking booking");
-        return BookingDto.builder()
-                .uuid(bookingDao.getUuid()).build();
+            throw new ResponseException("Error in saving booking");
+        return getBookingDto(bookingDao);
+    }
+
+    private BookingDao getBookingDao(BookingDto bookingDto) {
+        return BookingDao.fromDto(bookingDto);
+    }
+
+    private BookingDto getBookingDto(BookingDao bookingDao) {
+        return BookingDto.fromDao(bookingDao);
     }
 
     @Override
@@ -53,16 +58,14 @@ public class BookingServiceImpl implements BookingService {
         BookingDao bookingDao = bookingRepository.findByUUID(bookingUUID);
         if (bookingDao == null)
             throw new ResponseException("No booking  found for Id :" + bookingUUID);
-        BookingDao newBookingDao = new BookingDao();
-       
+        BookingDao newBookingDao = getBookingDao(bookingDto);
 
         newBookingDao.setId(bookingDao.getId());
         newBookingDao.setUuid(bookingDao.getUuid());
         bookingDao = bookingRepository.update(newBookingDao);
         if (bookingDao == null)
             throw new ResponseException("Error in updating details booking ");
-        return BookingDto.builder()
-                .uuid(bookingDao.getUuid()).build();
+        return getBookingDto(bookingDao);
     }
 
     @Override
@@ -70,8 +73,7 @@ public class BookingServiceImpl implements BookingService {
         BookingDao bookingDao = bookingRepository.findByUUID(bookingUUID);
         if (bookingDao == null)
             throw new ResponseException("No booking  found for Id :" + bookingUUID);
-        return BookingDto.builder()
-                .uuid(bookingDao.getUuid()).build();
+        return getBookingDto(bookingDao);
     }
 
     @Override

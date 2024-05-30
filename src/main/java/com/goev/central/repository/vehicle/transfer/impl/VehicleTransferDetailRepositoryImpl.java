@@ -1,7 +1,7 @@
-package com.goev.central.repository.vehicle.asset.impl;
+package com.goev.central.repository.vehicle.transfer.impl;
 
-import com.goev.central.dao.vehicle.asset.VehicleTransferDetailDao;
-import com.goev.central.repository.vehicle.asset.VehicleTransferDetailRepository;
+import com.goev.central.dao.vehicle.transfer.VehicleTransferDetailDao;
+import com.goev.central.repository.vehicle.transfer.VehicleTransferDetailRepository;
 import com.goev.lib.enums.RecordState;
 import com.goev.record.central.tables.records.VehicleTransferDetailsRecord;
 import lombok.AllArgsConstructor;

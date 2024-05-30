@@ -1,12 +1,18 @@
 package com.goev.central.service.vehicle.detail.impl;
 
 import com.goev.central.constant.ApplicationConstants;
+import com.goev.central.dao.business.BusinessClientDao;
+import com.goev.central.dao.business.BusinessSegmentDao;
 import com.goev.central.dao.location.LocationDao;
 import com.goev.central.dao.vehicle.detail.*;
+import com.goev.central.dto.business.BusinessClientDto;
+import com.goev.central.dto.business.BusinessSegmentDto;
 import com.goev.central.dto.common.QrValueDto;
 import com.goev.central.dto.location.LocationDto;
 import com.goev.central.dto.vehicle.VehicleViewDto;
 import com.goev.central.dto.vehicle.detail.*;
+import com.goev.central.repository.business.BusinessClientRepository;
+import com.goev.central.repository.business.BusinessSegmentRepository;
 import com.goev.central.repository.location.LocationRepository;
 import com.goev.central.repository.vehicle.detail.*;
 import com.goev.central.service.vehicle.detail.VehicleDetailService;
@@ -31,6 +37,8 @@ public class VehicleDetailServiceImpl implements VehicleDetailService {
     private final VehicleFinancerRepository vehicleFinancerRepository;
     private final VehicleModelRepository vehicleModelRepository;
     private final VehicleManufacturerRepository vehicleManufacturerRepository;
+    private final BusinessSegmentRepository businessSegmentRepository;
+    private final BusinessClientRepository businessClientRepository;
     private final S3Utils s3;
 
     @Override
@@ -52,6 +60,7 @@ public class VehicleDetailServiceImpl implements VehicleDetailService {
         if (vehicleDetails == null)
             throw new ResponseException("Error in saving vehicle details");
 
+        vehicle.setImageUrl(vehicleDetails.getImageUrl());
         vehicle.setVehicleDetailsId(vehicleDetails.getId());
         vehicle.setViewInfo(ApplicationConstants.GSON.toJson(getVehicleViewDto(vehicleDetails, vehicle)));
         vehicleRepository.update(vehicle);
@@ -85,6 +94,8 @@ public class VehicleDetailServiceImpl implements VehicleDetailService {
                         .variant(vehicleModel.getVariant())
                         .name(vehicleModel.getName())
                         .build())
+                .onboardingDate(vehicleDetails.getOnboardingDate())
+                .deboardingDate(vehicleDetails.getDeboardingDate())
                 .build();
     }
 
@@ -120,6 +131,7 @@ public class VehicleDetailServiceImpl implements VehicleDetailService {
         if (vehicleDetails == null)
             throw new ResponseException("Error in saving vehicle details");
 
+        vehicle.setImageUrl(vehicleDetails.getImageUrl());
         vehicle.setVehicleDetailsId(vehicleDetails.getId());
         vehicle.setViewInfo(ApplicationConstants.GSON.toJson(getVehicleViewDto(vehicleDetails, vehicle)));
         vehicleRepository.update(vehicle);
@@ -147,6 +159,8 @@ public class VehicleDetailServiceImpl implements VehicleDetailService {
         setVehicleLeasingAgency(result, vehicleDetailDao.getVehicleLeasingAgencyId());
         setVehicleFinancer(result, vehicleDetailDao.getVehicleFinancerId());
         setVehicleModel(result, vehicleDetailDao.getVehicleModelId());
+        setBusinessSegment(result, vehicleDetailDao.getBusinessSegmentId());
+        setBusinessClient(result, vehicleDetailDao.getBusinessClientId());
 
         return result;
     }
@@ -161,7 +175,7 @@ public class VehicleDetailServiceImpl implements VehicleDetailService {
         newVehicleDetails.setRegistrationDate(vehicleDto.getRegistrationDate());
         newVehicleDetails.setBatteryNumber(vehicleDto.getBatteryNumber());
         newVehicleDetails.setHasDuplicateKeys(vehicleDto.getHasDuplicateKeys());
-        if(vehicleDto.getVehicle()!=null)
+        if (vehicleDto.getVehicle() != null)
             newVehicleDetails.setPlateNumber(vehicleDto.getVehicle().getPlateNumber());
 
         if (vehicleDto.getVehicleModel() != null) {
@@ -204,10 +218,27 @@ public class VehicleDetailServiceImpl implements VehicleDetailService {
             newVehicleDetails.setVehicleLeasingAgencyId(vehicleLeasingAgencyDao.getId());
         }
 
+        if (vehicleDto.getBusinessSegment() != null) {
+            BusinessSegmentDao businessSegmentDao = businessSegmentRepository.findByUUID(vehicleDto.getBusinessSegment().getUuid());
+            if (businessSegmentDao == null)
+                throw new ResponseException("No business segment found for Id :" + vehicleDto.getBusinessSegment().getUuid());
+            newVehicleDetails.setBusinessSegmentId(businessSegmentDao.getId());
+        }
 
+        if (vehicleDto.getBusinessClient() != null) {
+            BusinessClientDao businessClientDao = businessClientRepository.findByUUID(vehicleDto.getBusinessClient().getUuid());
+            if (businessClientDao == null)
+                throw new ResponseException("No business client found for Id :" + vehicleDto.getBusinessClient().getUuid());
+            newVehicleDetails.setBusinessClientId(businessClientDao.getId());
+        }
+
+
+        if (vehicleDto.getImageUrl() != null) {
+            newVehicleDetails.setImageUrl(s3.getUrlForPath(vehicleDto.getImageUrl(), "image"));
+        }
         newVehicleDetails.setOnboardingDate(vehicleDto.getOnboardingDate());
         newVehicleDetails.setDeboardingDate(vehicleDto.getDeboardingDate());
-        newVehicleDetails.setInsuranceExpiry(vehicleDto.getInsuranceExpiry());
+        newVehicleDetails.setInsuranceExpiryDate(vehicleDto.getInsuranceExpiryDate());
         newVehicleDetails.setInsurancePolicyNumber(vehicleDto.getInsurancePolicyNumber());
         return newVehicleDetails;
     }
@@ -227,7 +258,7 @@ public class VehicleDetailServiceImpl implements VehicleDetailService {
         result.setBatteryNumber(vehicleDetailDao.getBatteryNumber());
         result.setHasDuplicateKeys(vehicleDetailDao.getHasDuplicateKeys());
         result.setRegistrationDate(vehicleDetailDao.getRegistrationDate());
-        result.setInsuranceExpiry(vehicleDetailDao.getInsuranceExpiry());
+        result.setInsuranceExpiryDate(vehicleDetailDao.getInsuranceExpiryDate());
         result.setInsurancePolicyNumber(vehicleDetailDao.getInsurancePolicyNumber());
         result.setOnboardingDate(vehicleDetailDao.getOnboardingDate());
         result.setDeboardingDate(vehicleDetailDao.getDeboardingDate());
@@ -279,6 +310,26 @@ public class VehicleDetailServiceImpl implements VehicleDetailService {
         result.setVehicleFinancer(VehicleFinancerDto.builder()
                 .uuid(vehicleFinancerDao.getUuid())
                 .name(vehicleFinancerDao.getName())
+                .build());
+    }
+
+    private void setBusinessSegment(VehicleDetailDto result, Integer businessSegmentId) {
+        BusinessSegmentDao businessSegmentDao = businessSegmentRepository.findById(businessSegmentId);
+        if (businessSegmentDao == null)
+            return;
+        result.setBusinessSegment(BusinessSegmentDto.builder()
+                .uuid(businessSegmentDao.getUuid())
+                .name(businessSegmentDao.getName())
+                .build());
+    }
+
+    private void setBusinessClient(VehicleDetailDto result, Integer businessClientId) {
+        BusinessClientDao businessClientDao = businessClientRepository.findById(businessClientId);
+        if (businessClientDao == null)
+            return;
+        result.setBusinessClient(BusinessClientDto.builder()
+                .uuid(businessClientDao.getUuid())
+                .name(businessClientDao.getName())
                 .build());
     }
 

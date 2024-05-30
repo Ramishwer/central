@@ -1,6 +1,6 @@
-package com.goev.central.repository.vehicle.asset;
+package com.goev.central.repository.vehicle.transfer;
 
-import com.goev.central.dao.vehicle.asset.VehicleTransferDetailDao;
+import com.goev.central.dao.vehicle.transfer.VehicleTransferDetailDao;
 
 import java.util.List;
 
