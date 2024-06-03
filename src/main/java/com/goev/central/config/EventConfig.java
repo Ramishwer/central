@@ -20,13 +20,11 @@ import org.springframework.context.annotation.Configuration;
 public class EventConfig {
 
     @Bean
-    public EventProcessor getEventProcessor(EventChannel eventChannel,
-                                            PartnerUpdateEvent partnerUpdateEvent,
-                                            VehicleUpdateEvent vehicleUpdateEvent) {
+    public EventProcessor getEventProcessor(EventChannel eventChannel) {
         SimpleEventProcessor eventProcessor = new SimpleEventProcessor();
 
-        eventProcessor.registerEvents(partnerUpdateEvent);
-        eventProcessor.registerEvents(vehicleUpdateEvent);
+        eventProcessor.registerEvents(new PartnerUpdateEvent());
+        eventProcessor.registerEvents(new VehicleUpdateEvent());
 
 
         eventProcessor.registerTargets(AuthTarget.getTarget(eventChannel));
