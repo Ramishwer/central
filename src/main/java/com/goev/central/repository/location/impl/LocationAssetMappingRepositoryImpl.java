@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 import static com.goev.record.central.tables.LocationAssetMappings.LOCATION_ASSET_MAPPINGS;
+import static com.goev.record.central.tables.PartnerAssetMappings.PARTNER_ASSET_MAPPINGS;
 
 @Repository
 @AllArgsConstructor
@@ -58,22 +59,33 @@ public class LocationAssetMappingRepositoryImpl implements LocationAssetMappingR
 
     @Override
     public List<LocationAssetMappingDao> findAll() {
-        return context.selectFrom(LOCATION_ASSET_MAPPINGS).fetchInto(LocationAssetMappingDao.class);
+        return context.selectFrom(LOCATION_ASSET_MAPPINGS)
+                .fetchInto(LocationAssetMappingDao.class);
     }
 
     @Override
     public List<LocationAssetMappingDao> findAllByLocationId(Integer id) {
-        return context.selectFrom(LOCATION_ASSET_MAPPINGS).where(LOCATION_ASSET_MAPPINGS.LOCATION_ID.eq(id)).fetchInto(LocationAssetMappingDao.class);
+        return context.selectFrom(LOCATION_ASSET_MAPPINGS)
+                .where(LOCATION_ASSET_MAPPINGS.LOCATION_ID.eq(id))
+                .and(LOCATION_ASSET_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
+                .fetchInto(LocationAssetMappingDao.class);
     }
 
     @Override
     public LocationAssetMappingDao findByLocationIdAndAssetId(Integer locationId, Integer assetId) {
-        return context.selectFrom(LOCATION_ASSET_MAPPINGS).where(LOCATION_ASSET_MAPPINGS.LOCATION_ID.eq(locationId)).and(LOCATION_ASSET_MAPPINGS.ASSET_ID.eq(assetId)).fetchOneInto(LocationAssetMappingDao.class);
+        return context.selectFrom(LOCATION_ASSET_MAPPINGS)
+                .where(LOCATION_ASSET_MAPPINGS.LOCATION_ID.eq(locationId))
+                .and(LOCATION_ASSET_MAPPINGS.ASSET_ID.eq(assetId))
+                .and(LOCATION_ASSET_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
+                .fetchOneInto(LocationAssetMappingDao.class);
     }
 
     @Override
     public LocationAssetMappingDao findByAssetId(Integer assetId) {
-        return context.selectFrom(LOCATION_ASSET_MAPPINGS).where(LOCATION_ASSET_MAPPINGS.ASSET_ID.eq(assetId)).fetchOneInto(LocationAssetMappingDao.class);
+        return context.selectFrom(LOCATION_ASSET_MAPPINGS)
+                .where(LOCATION_ASSET_MAPPINGS.ASSET_ID.eq(assetId))
+                .and(LOCATION_ASSET_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
+                .fetchOneInto(LocationAssetMappingDao.class);
 
     }
 }

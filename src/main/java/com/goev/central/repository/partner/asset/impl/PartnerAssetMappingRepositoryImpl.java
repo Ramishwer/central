@@ -48,31 +48,47 @@ public class PartnerAssetMappingRepositoryImpl implements PartnerAssetMappingRep
 
     @Override
     public PartnerAssetMappingDao findById(Integer id) {
-        return context.selectFrom(PARTNER_ASSET_MAPPINGS).where(PARTNER_ASSET_MAPPINGS.ID.eq(id)).fetchAnyInto(PartnerAssetMappingDao.class);
+        return context.selectFrom(PARTNER_ASSET_MAPPINGS)
+                .where(PARTNER_ASSET_MAPPINGS.ID.eq(id))
+                .fetchAnyInto(PartnerAssetMappingDao.class);
     }
 
     @Override
     public List<PartnerAssetMappingDao> findAllByIds(List<Integer> ids) {
-        return context.selectFrom(PARTNER_ASSET_MAPPINGS).where(PARTNER_ASSET_MAPPINGS.ID.in(ids)).fetchInto(PartnerAssetMappingDao.class);
+        return context.selectFrom(PARTNER_ASSET_MAPPINGS)
+                .where(PARTNER_ASSET_MAPPINGS.ID.in(ids))
+                .fetchInto(PartnerAssetMappingDao.class);
     }
 
     @Override
     public List<PartnerAssetMappingDao> findAll() {
-        return context.selectFrom(PARTNER_ASSET_MAPPINGS).fetchInto(PartnerAssetMappingDao.class);
+        return context.selectFrom(PARTNER_ASSET_MAPPINGS)
+                .where(PARTNER_ASSET_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
+                .fetchInto(PartnerAssetMappingDao.class);
     }
 
     @Override
     public List<PartnerAssetMappingDao> findAllByPartnerId(Integer id) {
-        return context.selectFrom(PARTNER_ASSET_MAPPINGS).where(PARTNER_ASSET_MAPPINGS.PARTNER_ID.eq(id)).fetchInto(PartnerAssetMappingDao.class);
+        return context.selectFrom(PARTNER_ASSET_MAPPINGS)
+                .where(PARTNER_ASSET_MAPPINGS.PARTNER_ID.eq(id))
+                .and(PARTNER_ASSET_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
+                .fetchInto(PartnerAssetMappingDao.class);
     }
 
     @Override
-    public PartnerAssetMappingDao findByPartnerIdAndAssetId(Integer partnerId,Integer assetId) {
-        return context.selectFrom(PARTNER_ASSET_MAPPINGS).where(PARTNER_ASSET_MAPPINGS.PARTNER_ID.eq(partnerId)).and(PARTNER_ASSET_MAPPINGS.ASSET_ID.eq(assetId)).fetchOneInto(PartnerAssetMappingDao.class);
+    public PartnerAssetMappingDao findByPartnerIdAndAssetId(Integer partnerId, Integer assetId) {
+        return context.selectFrom(PARTNER_ASSET_MAPPINGS)
+                .where(PARTNER_ASSET_MAPPINGS.PARTNER_ID.eq(partnerId))
+                .and(PARTNER_ASSET_MAPPINGS.ASSET_ID.eq(assetId))
+                .and(PARTNER_ASSET_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
+                .fetchOneInto(PartnerAssetMappingDao.class);
     }
 
     @Override
     public PartnerAssetMappingDao findByAssetId(Integer assetId) {
-        return context.selectFrom(PARTNER_ASSET_MAPPINGS).where(PARTNER_ASSET_MAPPINGS.ASSET_ID.eq(assetId)).fetchOneInto(PartnerAssetMappingDao.class);
+        return context.selectFrom(PARTNER_ASSET_MAPPINGS)
+                .where(PARTNER_ASSET_MAPPINGS.ASSET_ID.eq(assetId))
+                .and(PARTNER_ASSET_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
+                .fetchOneInto(PartnerAssetMappingDao.class);
     }
 }

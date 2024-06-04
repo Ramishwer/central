@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import static com.goev.record.central.tables.LocationAssetMappings.LOCATION_ASSET_MAPPINGS;
 import static com.goev.record.central.tables.VehicleAssetMappings.VEHICLE_ASSET_MAPPINGS;
 
 @Repository
@@ -63,16 +64,26 @@ public class VehicleAssetMappingRepositoryImpl implements VehicleAssetMappingRep
 
     @Override
     public List<VehicleAssetMappingDao> findAllByVehicleId(Integer id) {
-        return context.selectFrom(VEHICLE_ASSET_MAPPINGS).where(VEHICLE_ASSET_MAPPINGS.VEHICLE_ID.eq(id)).fetchInto(VehicleAssetMappingDao.class);
+        return context.selectFrom(VEHICLE_ASSET_MAPPINGS)
+                .where(VEHICLE_ASSET_MAPPINGS.VEHICLE_ID.eq(id))
+                .and(VEHICLE_ASSET_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
+                .fetchInto(VehicleAssetMappingDao.class);
     }
 
     @Override
     public VehicleAssetMappingDao findByVehicleIdAndAssetId(Integer vehicleId,Integer assetId) {
-        return context.selectFrom(VEHICLE_ASSET_MAPPINGS).where(VEHICLE_ASSET_MAPPINGS.VEHICLE_ID.eq(vehicleId)).and(VEHICLE_ASSET_MAPPINGS.ASSET_ID.eq(assetId)).fetchOneInto(VehicleAssetMappingDao.class);
+        return context.selectFrom(VEHICLE_ASSET_MAPPINGS)
+                .where(VEHICLE_ASSET_MAPPINGS.VEHICLE_ID.eq(vehicleId))
+                .and(VEHICLE_ASSET_MAPPINGS.ASSET_ID.eq(assetId))
+                .and(VEHICLE_ASSET_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
+                .fetchOneInto(VehicleAssetMappingDao.class);
     }
 
     @Override
     public VehicleAssetMappingDao findByAssetId(Integer assetId) {
-        return context.selectFrom(VEHICLE_ASSET_MAPPINGS).where(VEHICLE_ASSET_MAPPINGS.ASSET_ID.eq(assetId)).fetchOneInto(VehicleAssetMappingDao.class);
+        return context.selectFrom(VEHICLE_ASSET_MAPPINGS)
+                .where(VEHICLE_ASSET_MAPPINGS.ASSET_ID.eq(assetId))
+                .and(VEHICLE_ASSET_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
+                .fetchOneInto(VehicleAssetMappingDao.class);
     }
 }
