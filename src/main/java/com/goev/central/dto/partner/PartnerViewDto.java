@@ -26,4 +26,13 @@ public class PartnerViewDto {
     private String state;
     private String profileUrl;
     private LocationDto homeLocation;
+
+
+    public static String getPartnerName(PartnerViewDto partnerViewDto) {
+        if (partnerViewDto == null || partnerViewDto.getFirstName() == null)
+            return "";
+        if (partnerViewDto.getLastName() == null)
+            return partnerViewDto.getFirstName();
+        return partnerViewDto.getFirstName() + " " + partnerViewDto.getLastName();
+    }
 }

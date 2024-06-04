@@ -15,4 +15,6 @@ public interface LocationAssetMappingRepository {
 
     List<LocationAssetMappingDao> findAllByLocationId(Integer id);
     LocationAssetMappingDao findByLocationIdAndAssetId(Integer locationId,Integer assetId);
+
+    LocationAssetMappingDao findByAssetId(Integer id);
 }

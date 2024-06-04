@@ -67,7 +67,13 @@ public class LocationAssetMappingRepositoryImpl implements LocationAssetMappingR
     }
 
     @Override
-    public LocationAssetMappingDao findByLocationIdAndAssetId(Integer locationId,Integer assetId) {
+    public LocationAssetMappingDao findByLocationIdAndAssetId(Integer locationId, Integer assetId) {
         return context.selectFrom(LOCATION_ASSET_MAPPINGS).where(LOCATION_ASSET_MAPPINGS.LOCATION_ID.eq(locationId)).and(LOCATION_ASSET_MAPPINGS.ASSET_ID.eq(assetId)).fetchOneInto(LocationAssetMappingDao.class);
+    }
+
+    @Override
+    public LocationAssetMappingDao findByAssetId(Integer assetId) {
+        return context.selectFrom(LOCATION_ASSET_MAPPINGS).where(LOCATION_ASSET_MAPPINGS.ASSET_ID.eq(assetId)).fetchOneInto(LocationAssetMappingDao.class);
+
     }
 }

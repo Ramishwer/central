@@ -79,16 +79,22 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
     }
 
     private PartnerViewDto getPartnerViewDto(PartnerDetailDao partnerDetails, PartnerDao partnerDao) {
-        LocationDao locationDao = locationRepository.findById(partnerDetails.getHomeLocationId());
-        return PartnerViewDto.builder()
+        PartnerViewDto result = PartnerViewDto.builder()
                 .firstName(partnerDetails.getFirstName())
                 .lastName(partnerDetails.getLastName())
                 .punchId(partnerDao.getPunchId())
-                .homeLocation(LocationDto.builder().uuid(locationDao.getUuid()).name(locationDao.getName()).build())
+
                 .profileUrl(partnerDao.getProfileUrl())
                 .phoneNumber(partnerDao.getPhoneNumber())
                 .onboardingDate(partnerDetails.getOnboardingDate())
                 .build();
+        if (partnerDetails.getHomeLocationId() != null) {
+            LocationDao locationDao = locationRepository.findById(partnerDetails.getHomeLocationId());
+            if (locationDao != null) {
+                result.setHomeLocation(LocationDto.builder().uuid(locationDao.getUuid()).name(locationDao.getName()).build());
+            }
+        }
+        return result;
     }
 
     private PartnerDetailDto getPartnerDetailDto(PartnerDetailDao partnerDetails, PartnerDao partner) {

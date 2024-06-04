@@ -70,4 +70,9 @@ public class VehicleAssetMappingRepositoryImpl implements VehicleAssetMappingRep
     public VehicleAssetMappingDao findByVehicleIdAndAssetId(Integer vehicleId,Integer assetId) {
         return context.selectFrom(VEHICLE_ASSET_MAPPINGS).where(VEHICLE_ASSET_MAPPINGS.VEHICLE_ID.eq(vehicleId)).and(VEHICLE_ASSET_MAPPINGS.ASSET_ID.eq(assetId)).fetchOneInto(VehicleAssetMappingDao.class);
     }
+
+    @Override
+    public VehicleAssetMappingDao findByAssetId(Integer assetId) {
+        return context.selectFrom(VEHICLE_ASSET_MAPPINGS).where(VEHICLE_ASSET_MAPPINGS.ASSET_ID.eq(assetId)).fetchOneInto(VehicleAssetMappingDao.class);
+    }
 }

@@ -15,4 +15,7 @@ public interface PartnerAssetMappingRepository {
 
     List<PartnerAssetMappingDao> findAllByPartnerId(Integer id);
     PartnerAssetMappingDao findByPartnerIdAndAssetId(Integer partnerId,Integer assetId);
+
+    PartnerAssetMappingDao findByAssetId(Integer id);
+
 }

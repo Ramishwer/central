@@ -15,4 +15,6 @@ public interface VehicleAssetMappingRepository {
 
     List<VehicleAssetMappingDao> findAllByVehicleId(Integer id);
     VehicleAssetMappingDao findByVehicleIdAndAssetId(Integer vehicleId,Integer assetId);
+
+    VehicleAssetMappingDao findByAssetId(Integer id);
 }

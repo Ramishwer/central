@@ -70,4 +70,9 @@ public class PartnerAssetMappingRepositoryImpl implements PartnerAssetMappingRep
     public PartnerAssetMappingDao findByPartnerIdAndAssetId(Integer partnerId,Integer assetId) {
         return context.selectFrom(PARTNER_ASSET_MAPPINGS).where(PARTNER_ASSET_MAPPINGS.PARTNER_ID.eq(partnerId)).and(PARTNER_ASSET_MAPPINGS.ASSET_ID.eq(assetId)).fetchOneInto(PartnerAssetMappingDao.class);
     }
+
+    @Override
+    public PartnerAssetMappingDao findByAssetId(Integer assetId) {
+        return context.selectFrom(PARTNER_ASSET_MAPPINGS).where(PARTNER_ASSET_MAPPINGS.ASSET_ID.eq(assetId)).fetchOneInto(PartnerAssetMappingDao.class);
+    }
 }

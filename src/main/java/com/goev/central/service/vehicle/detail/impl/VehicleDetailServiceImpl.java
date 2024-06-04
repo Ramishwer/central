@@ -76,27 +76,42 @@ public class VehicleDetailServiceImpl implements VehicleDetailService {
     }
 
     private VehicleViewDto getVehicleViewDto(VehicleDetailDao vehicleDetails, VehicleDao vehicleDao) {
-        LocationDao locationDao = locationRepository.findById(vehicleDetails.getHomeLocationId());
-        VehicleModelDao vehicleModel = vehicleModelRepository.findById(vehicleDetails.getVehicleModelId());
-        VehicleManufacturerDao vehicleManufacturer = vehicleManufacturerRepository.findById(vehicleModel.getManufacturerId());
-
-        return VehicleViewDto.builder()
+        VehicleViewDto result = VehicleViewDto.builder()
                 .plateNumber(vehicleDao.getPlateNumber())
                 .vinNumber(vehicleDetails.getVinNumber())
                 .motorNumber(vehicleDetails.getMotorNumber())
-                .homeLocation(LocationDto.builder().uuid(locationDao.getUuid()).name(locationDao.getName()).build())
                 .imageUrl(vehicleDao.getImageUrl())
-                .vehicleModel(VehicleModelDto.builder()
-                        .manufacturer(VehicleManufacturerDto.builder()
-                                .name(vehicleManufacturer.getName()).build())
-                        .year(vehicleModel.getYear())
-                        .month(vehicleModel.getMonth())
-                        .variant(vehicleModel.getVariant())
-                        .name(vehicleModel.getName())
-                        .build())
                 .onboardingDate(vehicleDetails.getOnboardingDate())
                 .deboardingDate(vehicleDetails.getDeboardingDate())
                 .build();
+
+
+        if (vehicleDetails.getHomeLocationId() != null) {
+            LocationDao locationDao = locationRepository.findById(vehicleDetails.getHomeLocationId());
+
+            if (locationDao != null)
+                result.setHomeLocation(LocationDto.builder().uuid(locationDao.getUuid()).name(locationDao.getName()).build());
+        }
+
+        if (vehicleDetails.getVehicleModelId() != null) {
+            VehicleModelDao vehicleModel = vehicleModelRepository.findById(vehicleDetails.getVehicleModelId());
+            if (vehicleModel != null && vehicleModel.getManufacturerId() != null) {
+                VehicleManufacturerDao vehicleManufacturer = vehicleManufacturerRepository.findById(vehicleModel.getManufacturerId());
+
+                if (vehicleManufacturer != null) {
+                    result.setVehicleModel(VehicleModelDto.builder()
+                            .manufacturer(VehicleManufacturerDto.builder()
+                                    .name(vehicleManufacturer.getName()).build())
+                            .year(vehicleModel.getYear())
+                            .month(vehicleModel.getMonth())
+                            .variant(vehicleModel.getVariant())
+                            .name(vehicleModel.getName())
+                            .build());
+                }
+            }
+        }
+        return result;
+
     }
 
 
