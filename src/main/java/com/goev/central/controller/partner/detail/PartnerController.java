@@ -20,8 +20,10 @@ public class PartnerController {
 
 
     @GetMapping("/partners")
-    public ResponseDto<PaginatedResponseDto<PartnerViewDto>> getPartners() {
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerService.getPartners());
+    public ResponseDto<PaginatedResponseDto<PartnerViewDto>> getPartners(@RequestParam(value = "onboardingStatus", required = false) String onboardingStatus) {
+        if (onboardingStatus == null)
+            return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerService.getPartners());
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerService.getPartners(onboardingStatus));
     }
 
 

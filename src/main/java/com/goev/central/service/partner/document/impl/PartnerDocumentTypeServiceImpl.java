@@ -19,7 +19,7 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class PartnerDocumentTypeServiceImpl implements PartnerDocumentTypeService {
-   
+
     private final PartnerDocumentTypeRepository partnerDocumentTypeRepository;
 
     @Override
@@ -30,13 +30,7 @@ public class PartnerDocumentTypeServiceImpl implements PartnerDocumentTypeServic
             return result;
 
         for (PartnerDocumentTypeDao partnerDocumentTypeDao : partnerDocumentTypeDaos) {
-            result.getElements().add(PartnerDocumentTypeDto.builder()
-                    .name(partnerDocumentTypeDao.getName())
-                    .label(partnerDocumentTypeDao.getLabel())
-                    .groupKey(partnerDocumentTypeDao.getGroupKey())
-                    .groupDescription(partnerDocumentTypeDao.getGroupDescription())
-                    .uuid(partnerDocumentTypeDao.getUuid())
-                    .build());
+            result.getElements().add(PartnerDocumentTypeDto.fromDao(partnerDocumentTypeDao));
         }
         return result;
     }
@@ -44,23 +38,12 @@ public class PartnerDocumentTypeServiceImpl implements PartnerDocumentTypeServic
     @Override
     public PartnerDocumentTypeDto createDocumentType(PartnerDocumentTypeDto partnerDocumentTypeDto) {
 
-        PartnerDocumentTypeDao partnerDocumentTypeDao = new PartnerDocumentTypeDao();
-        partnerDocumentTypeDao.setName(partnerDocumentTypeDto.getName());
-        partnerDocumentTypeDao.setLabel(partnerDocumentTypeDto.getLabel());
-        partnerDocumentTypeDao.setGroupKey(partnerDocumentTypeDto.getGroupKey());
-        partnerDocumentTypeDao.setGroupDescription(partnerDocumentTypeDto.getGroupDescription());
-
+        PartnerDocumentTypeDao partnerDocumentTypeDao = PartnerDocumentTypeDao.fromDto(partnerDocumentTypeDto);
 
         partnerDocumentTypeDao = partnerDocumentTypeRepository.save(partnerDocumentTypeDao);
         if (partnerDocumentTypeDao == null)
             throw new ResponseException("Error in saving partner documentType");
-        return PartnerDocumentTypeDto.builder()
-                .name(partnerDocumentTypeDao.getName())
-                .label(partnerDocumentTypeDao.getLabel())
-                .groupKey(partnerDocumentTypeDao.getGroupKey())
-                .groupDescription(partnerDocumentTypeDao.getGroupDescription())
-                .uuid(partnerDocumentTypeDao.getUuid())
-                .build();
+        return PartnerDocumentTypeDto.fromDao(partnerDocumentTypeDao);
     }
 
     @Override
@@ -68,24 +51,13 @@ public class PartnerDocumentTypeServiceImpl implements PartnerDocumentTypeServic
         PartnerDocumentTypeDao partnerDocumentTypeDao = partnerDocumentTypeRepository.findByUUID(documentTypeUUID);
         if (partnerDocumentTypeDao == null)
             throw new ResponseException("No partner documentType found for Id :" + documentTypeUUID);
-        PartnerDocumentTypeDao newPartnerDocumentTypeDao = new PartnerDocumentTypeDao();
-
-        newPartnerDocumentTypeDao.setName(partnerDocumentTypeDto.getName());
-        newPartnerDocumentTypeDao.setLabel(partnerDocumentTypeDto.getLabel());
-        newPartnerDocumentTypeDao.setGroupKey(partnerDocumentTypeDto.getGroupKey());
-        newPartnerDocumentTypeDao.setGroupDescription(partnerDocumentTypeDto.getGroupDescription());
-
+        PartnerDocumentTypeDao newPartnerDocumentTypeDao = PartnerDocumentTypeDao.fromDto(partnerDocumentTypeDto);
         newPartnerDocumentTypeDao.setId(partnerDocumentTypeDao.getId());
         newPartnerDocumentTypeDao.setUuid(partnerDocumentTypeDao.getUuid());
         partnerDocumentTypeDao = partnerDocumentTypeRepository.update(newPartnerDocumentTypeDao);
         if (partnerDocumentTypeDao == null)
             throw new ResponseException("Error in updating details partner documentType");
-        return PartnerDocumentTypeDto.builder()
-                .name(partnerDocumentTypeDao.getName())
-                .label(partnerDocumentTypeDao.getLabel())
-                .groupKey(partnerDocumentTypeDao.getGroupKey())
-                .groupDescription(partnerDocumentTypeDao.getGroupDescription())
-                .uuid(partnerDocumentTypeDao.getUuid()).build();
+        return PartnerDocumentTypeDto.fromDao(partnerDocumentTypeDao);
     }
 
     @Override
@@ -93,12 +65,7 @@ public class PartnerDocumentTypeServiceImpl implements PartnerDocumentTypeServic
         PartnerDocumentTypeDao partnerDocumentTypeDao = partnerDocumentTypeRepository.findByUUID(documentTypeUUID);
         if (partnerDocumentTypeDao == null)
             throw new ResponseException("No partner documentType found for Id :" + documentTypeUUID);
-        return PartnerDocumentTypeDto.builder()
-                .name(partnerDocumentTypeDao.getName())
-                .label(partnerDocumentTypeDao.getLabel())
-                .groupKey(partnerDocumentTypeDao.getGroupKey())
-                .groupDescription(partnerDocumentTypeDao.getGroupDescription())
-                .uuid(partnerDocumentTypeDao.getUuid()).build();
+        return PartnerDocumentTypeDto.fromDao(partnerDocumentTypeDao);
     }
 
     @Override

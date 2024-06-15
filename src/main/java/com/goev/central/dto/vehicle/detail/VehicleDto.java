@@ -8,6 +8,7 @@ import com.fasterxml.jackson.datatype.joda.deser.DateTimeDeserializer;
 import com.fasterxml.jackson.datatype.joda.ser.DateTimeSerializer;
 import com.goev.central.dto.location.LocationDto;
 import com.goev.central.dto.partner.PartnerViewDto;
+import com.goev.central.dto.vehicle.VehicleViewDto;
 import com.goev.central.dto.vehicle.transfer.VehicleTransferDto;
 import lombok.*;
 import org.joda.time.DateTime;
@@ -27,6 +28,7 @@ public class VehicleDto {
     private PartnerViewDto partnerDetails;
     private VehicleTransferDto vehicleTransferDetails;
     private Integer soc;
+    private Integer dte;
     private String subStatus ;
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
@@ -35,5 +37,6 @@ public class VehicleDto {
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime computedChargingTime ;
     private String locationStatus ;
-    private LocationDto locationId ;
+    private LocationDto locationDetails ;
+    private VehicleViewDto vehicle;
 }

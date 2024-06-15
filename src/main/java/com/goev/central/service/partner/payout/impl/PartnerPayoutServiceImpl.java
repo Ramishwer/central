@@ -5,6 +5,7 @@ import com.goev.central.dao.partner.payout.PartnerPayoutDao;
 import com.goev.central.dao.partner.payout.PartnerPayoutTransactionDao;
 import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
+import com.goev.central.dto.partner.duty.PartnerDutyDto;
 import com.goev.central.dto.partner.payout.PartnerPayoutDto;
 import com.goev.central.dto.partner.payout.PartnerPayoutSummaryDto;
 import com.goev.central.dto.partner.payout.PartnerPayoutTransactionDto;
@@ -29,10 +30,11 @@ public class PartnerPayoutServiceImpl implements PartnerPayoutService {
     private final PartnerPayoutRepository partnerPayoutRepository;
     private final PartnerPayoutTransactionRepository partnerPayoutTransactionRepository;
     private final PartnerRepository partnerRepository;
+
     @Override
-    public PaginatedResponseDto<PartnerPayoutDto> getPayouts(String partnerUUID) {
-        PartnerDao partnerDao  = partnerRepository.findByUUID(partnerUUID);
-        if(partnerDao == null)
+    public PaginatedResponseDto<PartnerPayoutDto> getPayoutsForPartner(String partnerUUID) {
+        PartnerDao partnerDao = partnerRepository.findByUUID(partnerUUID);
+        if (partnerDao == null)
             throw new ResponseException("No partner  found for Id :" + partnerUUID);
 
         PaginatedResponseDto<PartnerPayoutDto> result = PaginatedResponseDto.<PartnerPayoutDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
@@ -50,25 +52,25 @@ public class PartnerPayoutServiceImpl implements PartnerPayoutService {
 
     @Override
     public PartnerPayoutSummaryDto getPayoutSummaryForPayout(String partnerUUID, String partnerPayoutUUID) {
-        PartnerDao partnerDao  = partnerRepository.findByUUID(partnerUUID);
-        if(partnerDao == null)
+        PartnerDao partnerDao = partnerRepository.findByUUID(partnerUUID);
+        if (partnerDao == null)
             throw new ResponseException("No partner  found for Id :" + partnerUUID);
 
-        PartnerPayoutDao partnerPayoutDao  = partnerPayoutRepository.findByUUID(partnerPayoutUUID);
-        if(partnerPayoutDao == null)
+        PartnerPayoutDao partnerPayoutDao = partnerPayoutRepository.findByUUID(partnerPayoutUUID);
+        if (partnerPayoutDao == null)
             throw new ResponseException("No partner payout  found for Id :" + partnerPayoutUUID);
 
-        return new Gson().fromJson(partnerPayoutDao.getPayoutSummary(),PartnerPayoutSummaryDto.class);
+        return new Gson().fromJson(partnerPayoutDao.getPayoutSummary(), PartnerPayoutSummaryDto.class);
     }
 
     @Override
     public PaginatedResponseDto<PartnerPayoutTransactionDto> getAllPartnerTransactionsForPayout(String partnerUUID, String partnerPayoutUUID) {
-        PartnerDao partnerDao  = partnerRepository.findByUUID(partnerUUID);
-        if(partnerDao == null)
+        PartnerDao partnerDao = partnerRepository.findByUUID(partnerUUID);
+        if (partnerDao == null)
             throw new ResponseException("No partner  found for Id :" + partnerUUID);
 
-        PartnerPayoutDao partnerPayoutDao  = partnerPayoutRepository.findByUUID(partnerPayoutUUID);
-        if(partnerPayoutDao == null)
+        PartnerPayoutDao partnerPayoutDao = partnerPayoutRepository.findByUUID(partnerPayoutUUID);
+        if (partnerPayoutDao == null)
             throw new ResponseException("No partner payout  found for Id :" + partnerPayoutUUID);
 
 
@@ -85,6 +87,11 @@ public class PartnerPayoutServiceImpl implements PartnerPayoutService {
         return result;
     }
 
+    @Override
+    public PaginatedResponseDto<PartnerPayoutDto> getPayouts() {
+        PaginatedResponseDto<PartnerPayoutDto> result = PaginatedResponseDto.<PartnerPayoutDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        return result;
+    }
 
 
 }

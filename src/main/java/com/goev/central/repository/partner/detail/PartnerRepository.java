@@ -14,4 +14,6 @@ public interface PartnerRepository {
     List<PartnerDao> findAll();
 
     PartnerDao findByPhoneNumber(String phoneNumber);
+
+    List<PartnerDao> findAllByOnboardingStatus(String onboardingStatus);
 }

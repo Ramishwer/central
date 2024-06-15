@@ -3,6 +3,7 @@ package com.goev.central.config;
 
 import com.goev.central.config.interceptor.ApplicationSourceInterceptor;
 import com.goev.central.config.interceptor.AuthenticationInterceptor;
+import com.goev.central.config.interceptor.BasicAuthenticationInterceptor;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -19,11 +20,12 @@ public class InterceptorConfig implements WebMvcConfigurer {
 
 
     private final AuthenticationInterceptor authenticationInterceptor;
-
+    private final BasicAuthenticationInterceptor basicAuthenticationInterceptor;
     private final ApplicationSourceInterceptor applicationSourceInterceptor;
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(applicationSourceInterceptor);
+        registry.addInterceptor(basicAuthenticationInterceptor).addPathPatterns("/api/v1/internal/events");
         registry.addInterceptor(authenticationInterceptor).addPathPatterns("/**").
                 excludePathPatterns(
                         "/v3/api-docs/**",

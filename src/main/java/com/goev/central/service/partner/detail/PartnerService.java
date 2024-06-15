@@ -10,6 +10,7 @@ import java.util.List;
 public interface PartnerService {
     
     PaginatedResponseDto<PartnerViewDto> getPartners();
+    PaginatedResponseDto<PartnerViewDto> getPartners(String onboardingStatus);
     Boolean deletePartner(String partnerUUID);
 
     PaginatedResponseDto<PartnerDto> getPartnerStatus();

@@ -46,6 +46,10 @@ public class PartnerServiceImpl implements PartnerService {
 
         PaginatedResponseDto<PartnerViewDto> result = PaginatedResponseDto.<PartnerViewDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
         List<PartnerDao> partners = partnerRepository.findAll();
+        return getPartnerViewDtoPaginatedResponseDto(partners, result);
+    }
+
+    private PaginatedResponseDto<PartnerViewDto> getPartnerViewDtoPaginatedResponseDto(List<PartnerDao> partners, PaginatedResponseDto<PartnerViewDto> result) {
         if (CollectionUtils.isEmpty(partners))
             return result;
         for (PartnerDao partner : partners) {
@@ -56,6 +60,13 @@ public class PartnerServiceImpl implements PartnerService {
             result.getElements().add(partnerViewDto);
         }
         return result;
+    }
+
+    @Override
+    public PaginatedResponseDto<PartnerViewDto> getPartners(String onboardingStatus) {
+        PaginatedResponseDto<PartnerViewDto> result = PaginatedResponseDto.<PartnerViewDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        List<PartnerDao> partners = partnerRepository.findAllByOnboardingStatus(onboardingStatus);
+        return getPartnerViewDtoPaginatedResponseDto(partners, result);
     }
 
 }

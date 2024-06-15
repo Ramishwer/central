@@ -3,6 +3,7 @@ package com.goev.central.service.vehicle.document.impl;
 import com.goev.central.dao.vehicle.document.VehicleDocumentTypeDao;
 import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
+import com.goev.central.dto.partner.document.PartnerDocumentTypeDto;
 import com.goev.central.dto.vehicle.document.VehicleDocumentTypeDto;
 import com.goev.central.repository.vehicle.document.VehicleDocumentTypeRepository;
 import com.goev.central.service.vehicle.document.VehicleDocumentTypeService;
@@ -30,15 +31,7 @@ public class VehicleDocumentTypeServiceImpl implements VehicleDocumentTypeServic
             return result;
 
         for (VehicleDocumentTypeDao vehicleDocumentTypeDao : vehicleDocumentTypeDaos) {
-            result.getElements().add(VehicleDocumentTypeDto.builder()
-                    .name(vehicleDocumentTypeDao.getName())
-                    .label(vehicleDocumentTypeDao.getLabel())
-                    .groupKey(vehicleDocumentTypeDao.getGroupKey())
-                    .groupDescription(vehicleDocumentTypeDao.getGroupDescription())
-                    .isMandatory(vehicleDocumentTypeDao.getIsMandatory())
-                    .needsVerification(vehicleDocumentTypeDao.getNeedsVerification())
-                    .uuid(vehicleDocumentTypeDao.getUuid())
-                    .build());
+            result.getElements().add(VehicleDocumentTypeDto.fromDao(vehicleDocumentTypeDao));
         }
         return result;
     }

@@ -60,4 +60,9 @@ public class VehicleTransferDetailRepositoryImpl implements VehicleTransferDetai
     public List<VehicleTransferDetailDao> findAll() {
         return context.selectFrom(VEHICLE_TRANSFER_DETAILS).fetchInto(VehicleTransferDetailDao.class);
     }
+
+    @Override
+    public List<VehicleTransferDetailDao> findAllByVehicleId(Integer vehicleId) {
+        return context.selectFrom(VEHICLE_TRANSFER_DETAILS).where(VEHICLE_TRANSFER_DETAILS.VEHICLE_ID.eq(vehicleId)).fetchInto(VehicleTransferDetailDao.class);
+    }
 }

@@ -28,7 +28,7 @@ public class BookingDetailDto {
     private CustomerViewDto customer;
     private PartnerViewDto partner;
     private VehicleViewDto vehicle;
-    private PaymentDto payment;
+    private BookingPaymentDto payment;
     private PricingModelDto pricingModel;
     private BookingTypeDto bookingType;
     private BookingPricingDetailDto bookingPricingDetail;

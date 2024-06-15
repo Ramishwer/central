@@ -1,6 +1,7 @@
 package com.goev.central.repository.partner.detail.impl;
 
 import com.goev.central.dao.partner.detail.PartnerDao;
+import com.goev.central.enums.partner.PartnerOnboardingStatus;
 import com.goev.central.repository.partner.detail.PartnerRepository;
 import com.goev.lib.enums.RecordState;
 import com.goev.record.central.tables.records.PartnersRecord;
@@ -9,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.goev.record.central.tables.Partners.PARTNERS;
@@ -38,31 +40,57 @@ public class PartnerRepositoryImpl implements PartnerRepository {
 
     @Override
     public void delete(Integer id) {
-        context.update(PARTNERS).set(PARTNERS.STATE, RecordState.DELETED.name()).where(PARTNERS.ID.eq(id)).execute();
+        context.update(PARTNERS).set(PARTNERS.STATE, RecordState.DELETED.name()).where(PARTNERS.ID.eq(id))
+                .and(PARTNERS.IS_ACTIVE.eq(true))
+                .and(PARTNERS.STATE.eq(RecordState.ACTIVE.name()))
+                .execute();
     }
 
     @Override
     public PartnerDao findByUUID(String uuid) {
-        return context.selectFrom(PARTNERS).where(PARTNERS.UUID.eq(uuid)).fetchAnyInto(PartnerDao.class);
+        return context.selectFrom(PARTNERS)
+                .where(PARTNERS.UUID.eq(uuid))
+                .and(PARTNERS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PartnerDao.class);
     }
 
     @Override
     public PartnerDao findById(Integer id) {
-        return context.selectFrom(PARTNERS).where(PARTNERS.ID.eq(id)).fetchAnyInto(PartnerDao.class);
+        return context.selectFrom(PARTNERS)
+                .where(PARTNERS.ID.eq(id))
+                .and(PARTNERS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PartnerDao.class);
     }
 
     @Override
     public List<PartnerDao> findAllByIds(List<Integer> ids) {
-        return context.selectFrom(PARTNERS).where(PARTNERS.ID.in(ids)).fetchInto(PartnerDao.class);
+        return context.selectFrom(PARTNERS)
+                .where(PARTNERS.ID.in(ids))
+                .and(PARTNERS.IS_ACTIVE.eq(true))
+                .fetchInto(PartnerDao.class);
     }
 
     @Override
     public List<PartnerDao> findAll() {
-        return context.selectFrom(PARTNERS).fetchInto(PartnerDao.class);
+        return context.selectFrom(PARTNERS)
+                .where(PARTNERS.IS_ACTIVE.eq(true))
+                .fetchInto(PartnerDao.class);
     }
 
     @Override
     public PartnerDao findByPhoneNumber(String phoneNumber) {
-        return context.selectFrom(PARTNERS).where(PARTNERS.PHONE_NUMBER.eq(phoneNumber)).fetchAnyInto(PartnerDao.class);
+        return context.selectFrom(PARTNERS)
+                .where(PARTNERS.PHONE_NUMBER.eq(phoneNumber))
+                .and(PARTNERS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PartnerDao.class);
+    }
+
+    @Override
+    public List<PartnerDao> findAllByOnboardingStatus(String onboardingStatus) {
+
+        return context.selectFrom(PARTNERS)
+                .where(PARTNERS.ONBOARDING_STATUS.in(onboardingStatus))
+                .and(PARTNERS.IS_ACTIVE.eq(true))
+                .fetchInto(PartnerDao.class);
     }
 }

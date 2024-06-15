@@ -12,4 +12,6 @@ public interface VehicleTransferDetailRepository {
     VehicleTransferDetailDao findById(Integer id);
     List<VehicleTransferDetailDao> findAllByIds(List<Integer> ids);
     List<VehicleTransferDetailDao> findAll();
+
+    List<VehicleTransferDetailDao> findAllByVehicleId(Integer vehicleId);
 }

@@ -1,5 +1,6 @@
 package com.goev.central.controller.partner.payout;
 
+import com.goev.central.dto.partner.duty.PartnerDutyDto;
 import com.goev.lib.dto.ResponseDto;
 import com.goev.lib.dto.StatusDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
@@ -18,11 +19,17 @@ import org.springframework.web.bind.annotation.*;
 public class PartnerPayoutController {
 
     private final PartnerPayoutService partnerPayoutService;
+
+
+    @GetMapping("/partners/payouts")
+    public ResponseDto<PaginatedResponseDto<PartnerPayoutDto>> getPayouts(){
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, partnerPayoutService.getPayouts());
+    }
     @GetMapping("/partners/{partner-uuid}/payouts")
     public ResponseDto<PaginatedResponseDto<PartnerPayoutDto>> getPayoutsForPartner(@PathVariable("partner-uuid")String partnerUUID,
                                                                                     @RequestParam("count")Integer count,
                                                                                     @RequestParam("start")Integer start){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, partnerPayoutService.getPayouts(partnerUUID));
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, partnerPayoutService.getPayoutsForPartner(partnerUUID));
     }
 
     @GetMapping("/partners/{partner-uuid}/payouts/{partner-payout-uuid}/summary")
