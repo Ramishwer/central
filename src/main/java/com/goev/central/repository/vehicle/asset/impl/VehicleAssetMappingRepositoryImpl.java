@@ -2,6 +2,7 @@ package com.goev.central.repository.vehicle.asset.impl;
 
 import com.goev.central.dao.vehicle.asset.VehicleAssetMappingDao;
 import com.goev.central.repository.vehicle.asset.VehicleAssetMappingRepository;
+import com.goev.central.utilities.EventExecutorUtils;
 import com.goev.lib.enums.RecordState;
 import com.goev.record.central.tables.records.VehicleAssetMappingsRecord;
 import lombok.AllArgsConstructor;
@@ -18,6 +19,7 @@ import static com.goev.record.central.tables.VehicleAssetMappings.VEHICLE_ASSET_
 @Slf4j
 public class VehicleAssetMappingRepositoryImpl implements VehicleAssetMappingRepository {
     private final DSLContext context;
+    private final EventExecutorUtils eventExecutor;
 
 
     @Override
@@ -34,6 +36,8 @@ public class VehicleAssetMappingRepositoryImpl implements VehicleAssetMappingRep
         assetMapping.setState(vehicleAssetMappingsRecord.getState());
         assetMapping.setApiSource(vehicleAssetMappingsRecord.getApiSource());
         assetMapping.setNotes(vehicleAssetMappingsRecord.getNotes());
+
+        eventExecutor.fireEvent("VehicleAssetMappingSaveEvent", assetMapping);
         return assetMapping;
     }
 
@@ -51,6 +55,8 @@ public class VehicleAssetMappingRepositoryImpl implements VehicleAssetMappingRep
         assetMapping.setState(vehicleAssetMappingsRecord.getState());
         assetMapping.setApiSource(vehicleAssetMappingsRecord.getApiSource());
         assetMapping.setNotes(vehicleAssetMappingsRecord.getNotes());
+
+        eventExecutor.fireEvent("VehicleAssetMappingUpdateEvent", assetMapping);
         return assetMapping;
     }
 

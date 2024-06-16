@@ -4,7 +4,9 @@ import com.goev.central.dao.partner.payout.PartnerPayoutDao;
 import com.goev.central.event.targets.PartnerTarget;
 import com.goev.lib.event.core.Event;
 import jakarta.annotation.PostConstruct;
+import org.springframework.stereotype.Component;
 
+@Component
 public class PartnerPayoutSaveEvent extends Event<PartnerPayoutDao> {
 
     @Override

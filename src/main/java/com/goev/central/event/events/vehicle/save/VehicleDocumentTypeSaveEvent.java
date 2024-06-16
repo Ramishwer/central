@@ -4,7 +4,9 @@ import com.goev.central.dao.vehicle.document.VehicleDocumentTypeDao;
 import com.goev.central.event.targets.PartnerTarget;
 import com.goev.lib.event.core.Event;
 import jakarta.annotation.PostConstruct;
+import org.springframework.stereotype.Component;
 
+@Component
 public class VehicleDocumentTypeSaveEvent extends Event<VehicleDocumentTypeDao> {
 
     @Override
@@ -15,7 +17,7 @@ public class VehicleDocumentTypeSaveEvent extends Event<VehicleDocumentTypeDao> 
 
     @Override
     public String getName() {
-        return "VehicleAssetTransferDetailUpdateEvent";
+        return "VehicleDocumentTypeSaveEvent";
     }
 
 }

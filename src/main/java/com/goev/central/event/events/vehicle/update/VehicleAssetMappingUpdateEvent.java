@@ -1,11 +1,14 @@
 package com.goev.central.event.events.vehicle.update;
 
+import com.goev.central.dao.vehicle.asset.VehicleAssetMappingDao;
 import com.goev.central.dao.vehicle.transfer.VehicleAssetTransferDetailDao;
 import com.goev.central.event.targets.PartnerTarget;
 import com.goev.lib.event.core.Event;
 import jakarta.annotation.PostConstruct;
+import org.springframework.stereotype.Component;
 
-public class VehicleAssetMappingUpdateEvent extends Event<VehicleAssetTransferDetailDao> {
+@Component
+public class VehicleAssetMappingUpdateEvent extends Event<VehicleAssetMappingDao> {
 
     @Override
     @PostConstruct

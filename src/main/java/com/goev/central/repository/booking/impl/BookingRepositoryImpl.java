@@ -3,6 +3,7 @@ package com.goev.central.repository.booking.impl;
 
 import com.goev.central.dao.booking.BookingDao;
 import com.goev.central.repository.booking.BookingRepository;
+import com.goev.central.utilities.EventExecutorUtils;
 import com.goev.lib.enums.RecordState;
 import com.goev.record.central.tables.records.BookingsRecord;
 import lombok.AllArgsConstructor;
@@ -20,6 +21,7 @@ import static com.goev.record.central.tables.Bookings.BOOKINGS;
 public class BookingRepositoryImpl implements BookingRepository {
 
     private final DSLContext context;
+    private final EventExecutorUtils eventExecutor;
 
     @Override
     public BookingDao save(BookingDao bookingDao) {
@@ -35,6 +37,9 @@ public class BookingRepositoryImpl implements BookingRepository {
         bookingDao.setState(bookingsRecord.getState());
         bookingDao.setApiSource(bookingsRecord.getApiSource());
         bookingDao.setNotes(bookingsRecord.getNotes());
+
+
+        eventExecutor.fireEvent("BookingSaveEvent", bookingDao);
         return bookingDao;
     }
 
@@ -52,6 +57,7 @@ public class BookingRepositoryImpl implements BookingRepository {
         bookingDao.setState(bookingsRecord.getState());
         bookingDao.setApiSource(bookingsRecord.getApiSource());
         bookingDao.setNotes(bookingsRecord.getNotes());
+        eventExecutor.fireEvent("BookingUpdateEvent", bookingDao);
         return bookingDao;
     }
 

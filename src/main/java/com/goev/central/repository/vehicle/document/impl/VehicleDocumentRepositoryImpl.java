@@ -2,6 +2,7 @@ package com.goev.central.repository.vehicle.document.impl;
 
 import com.goev.central.dao.vehicle.document.VehicleDocumentDao;
 import com.goev.central.repository.vehicle.document.VehicleDocumentRepository;
+import com.goev.central.utilities.EventExecutorUtils;
 import com.goev.lib.enums.RecordState;
 import com.goev.record.central.tables.records.VehicleDocumentsRecord;
 import lombok.AllArgsConstructor;
@@ -21,6 +22,7 @@ import static com.goev.record.central.tables.VehicleDocuments.VEHICLE_DOCUMENTS;
 @Slf4j
 public class VehicleDocumentRepositoryImpl implements VehicleDocumentRepository {
     private final DSLContext context;
+    private final EventExecutorUtils eventExecutor;
 
     @Override
     public VehicleDocumentDao save(VehicleDocumentDao vehicleDocument) {
@@ -37,6 +39,7 @@ public class VehicleDocumentRepositoryImpl implements VehicleDocumentRepository 
         vehicleDocument.setApiSource(vehicleDocument.getApiSource());
         vehicleDocument.setNotes(vehicleDocument.getNotes());
 
+        eventExecutor.fireEvent("VehicleDocumentSaveEvent", vehicleDocument);
 
         return vehicleDocument;
     }
@@ -55,6 +58,8 @@ public class VehicleDocumentRepositoryImpl implements VehicleDocumentRepository 
         vehicleDocument.setState(vehiclesDocumentRecord.getState());
         vehicleDocument.setApiSource(vehiclesDocumentRecord.getApiSource());
         vehicleDocument.setNotes(vehiclesDocumentRecord.getNotes());
+
+        eventExecutor.fireEvent("VehicleDocumentUpdateEvent", vehicleDocument);
         return vehicleDocument;
     }
 

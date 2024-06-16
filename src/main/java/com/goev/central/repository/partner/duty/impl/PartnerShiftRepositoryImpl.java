@@ -2,6 +2,7 @@ package com.goev.central.repository.partner.duty.impl;
 
 import com.goev.central.dao.partner.duty.PartnerShiftDao;
 import com.goev.central.repository.partner.duty.PartnerShiftRepository;
+import com.goev.central.utilities.EventExecutorUtils;
 import com.goev.lib.enums.RecordState;
 import com.goev.record.central.tables.records.PartnerShiftsRecord;
 import lombok.AllArgsConstructor;
@@ -19,6 +20,7 @@ import static com.goev.record.central.tables.PartnerShifts.PARTNER_SHIFTS;
 public class PartnerShiftRepositoryImpl implements PartnerShiftRepository {
 
     private final DSLContext context;
+    private final EventExecutorUtils eventExecutor;
 
     @Override
     public PartnerShiftDao save(PartnerShiftDao partnerShiftDao) {
@@ -34,6 +36,8 @@ public class PartnerShiftRepositoryImpl implements PartnerShiftRepository {
         partnerShiftDao.setState(partnerShiftsRecord.getState());
         partnerShiftDao.setApiSource(partnerShiftsRecord.getApiSource());
         partnerShiftDao.setNotes(partnerShiftsRecord.getNotes());
+
+        eventExecutor.fireEvent("PartnerShiftSaveEvent", partnerShiftDao);
         return partnerShiftDao;
     }
 
@@ -51,6 +55,7 @@ public class PartnerShiftRepositoryImpl implements PartnerShiftRepository {
         partnerShiftDao.setState(partnerShiftsRecord.getState());
         partnerShiftDao.setApiSource(partnerShiftsRecord.getApiSource());
         partnerShiftDao.setNotes(partnerShiftsRecord.getNotes());
+        eventExecutor.fireEvent("PartnerShiftUpdateEvent", partnerShiftDao);
         return partnerShiftDao;
     }
 
