@@ -87,4 +87,25 @@ public class RequestContext {
         }
         return userSessionDao;
     }
+
+    public static String getRequestSource() {
+        ServletRequestAttributes requestAttributes = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes());
+        String source = null;
+        if (requestAttributes != null) {
+            HttpServletRequest request = requestAttributes.getRequest();
+            if (request.getAttribute("requestSource") != null)
+                source = (String) request.getAttribute("requestSource");
+        }
+        return source;
+    }
+
+    public static void setRequestSource(String source) {
+        ServletRequestAttributes requestAttributes = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes());
+        if (requestAttributes != null) {
+            HttpServletRequest request = requestAttributes.getRequest();
+            request.setAttribute("requestSource", source);
+        }
+    }
+
+
 }

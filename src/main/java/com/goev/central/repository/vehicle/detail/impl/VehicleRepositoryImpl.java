@@ -4,6 +4,7 @@ import com.goev.central.dao.vehicle.detail.VehicleDao;
 import com.goev.central.dao.vehicle.detail.VehicleDao;
 import com.goev.central.repository.vehicle.detail.VehicleRepository;
 import com.goev.central.utilities.EventExecutorUtils;
+import com.goev.central.utilities.RequestContext;
 import com.goev.lib.enums.RecordState;
 import com.goev.record.central.tables.records.VehiclesRecord;
 import lombok.AllArgsConstructor;
@@ -38,7 +39,8 @@ public class VehicleRepositoryImpl implements VehicleRepository {
         vehicle.setApiSource(vehiclesRecord.getApiSource());
         vehicle.setNotes(vehiclesRecord.getNotes());
 
-        eventExecutor.fireEvent("VehicleSaveEvent", vehicle);
+        if ("API".equals(RequestContext.getRequestSource()))
+            eventExecutor.fireEvent("VehicleSaveEvent", vehicle);
         return vehicle;
     }
 
@@ -57,7 +59,8 @@ public class VehicleRepositoryImpl implements VehicleRepository {
         vehicle.setApiSource(vehiclesRecord.getApiSource());
         vehicle.setNotes(vehiclesRecord.getNotes());
 
-        eventExecutor.fireEvent("VehicleUpdateEvent", vehicle);
+        if ("API".equals(RequestContext.getRequestSource()))
+            eventExecutor.fireEvent("VehicleUpdateEvent", vehicle);
         return vehicle;
     }
 

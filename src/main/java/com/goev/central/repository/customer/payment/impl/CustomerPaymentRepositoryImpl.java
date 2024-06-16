@@ -4,6 +4,7 @@ package com.goev.central.repository.customer.payment.impl;
 import com.goev.central.dao.customer.payment.CustomerPaymentDao;
 import com.goev.central.repository.customer.payment.CustomerPaymentRepository;
 import com.goev.central.utilities.EventExecutorUtils;
+import com.goev.central.utilities.RequestContext;
 import com.goev.lib.enums.RecordState;
 import com.goev.record.central.tables.records.CustomerPaymentsRecord;
 import lombok.AllArgsConstructor;
@@ -38,7 +39,8 @@ public class CustomerPaymentRepositoryImpl implements CustomerPaymentRepository 
         customerPaymentDao.setApiSource(customerPaymentsRecord.getApiSource());
         customerPaymentDao.setNotes(customerPaymentsRecord.getNotes());
 
-        eventExecutor.fireEvent("CustomerPaymentSaveEvent", customerPaymentDao);
+        if ("API".equals(RequestContext.getRequestSource()))
+            eventExecutor.fireEvent("CustomerPaymentSaveEvent", customerPaymentDao);
         return customerPaymentDao;
     }
 
@@ -57,7 +59,8 @@ public class CustomerPaymentRepositoryImpl implements CustomerPaymentRepository 
         customerPaymentDao.setApiSource(customerPaymentsRecord.getApiSource());
         customerPaymentDao.setNotes(customerPaymentsRecord.getNotes());
 
-        eventExecutor.fireEvent("CustomerPaymentUpdateEvent", customerPaymentDao);
+        if ("API".equals(RequestContext.getRequestSource()))
+            eventExecutor.fireEvent("CustomerPaymentUpdateEvent", customerPaymentDao);
         return customerPaymentDao;
     }
 

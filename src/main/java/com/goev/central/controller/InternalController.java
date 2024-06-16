@@ -1,5 +1,6 @@
 package com.goev.central.controller;
 
+import com.goev.central.utilities.RequestContext;
 import com.goev.lib.dto.ResponseDto;
 import com.goev.lib.dto.StatusDto;
 import com.goev.lib.event.service.EventProcessor;
@@ -21,7 +22,7 @@ public class InternalController {
     public ResponseDto<Boolean> receivedEvent(@RequestBody String event, @RequestParam("name") String name) {
 
         log.info("Received Event :{}", event);
-
+        RequestContext.setRequestSource("EVENT");
         return new ResponseDto<>(
                 StatusDto.builder().message("SUCCESS").build(), 200,
                 eventProcessor.receiveEvent(event, name));

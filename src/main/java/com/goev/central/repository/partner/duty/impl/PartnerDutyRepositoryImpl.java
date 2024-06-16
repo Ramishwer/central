@@ -3,6 +3,7 @@ package com.goev.central.repository.partner.duty.impl;
 import com.goev.central.dao.partner.duty.PartnerDutyDao;
 import com.goev.central.repository.partner.duty.PartnerDutyRepository;
 import com.goev.central.utilities.EventExecutorUtils;
+import com.goev.central.utilities.RequestContext;
 import com.goev.lib.enums.RecordState;
 import com.goev.record.central.tables.records.PartnerDutiesRecord;
 import lombok.AllArgsConstructor;
@@ -37,7 +38,8 @@ public class PartnerDutyRepositoryImpl implements PartnerDutyRepository {
         partnerDutyDao.setApiSource(partnerDutiesRecord.getApiSource());
         partnerDutyDao.setNotes(partnerDutiesRecord.getNotes());
 
-        eventExecutor.fireEvent("PartnerDutySaveEvent", partnerDutyDao);
+        if ("API".equals(RequestContext.getRequestSource()))
+            eventExecutor.fireEvent("PartnerDutySaveEvent", partnerDutyDao);
         return partnerDutyDao;
     }
 
@@ -55,7 +57,8 @@ public class PartnerDutyRepositoryImpl implements PartnerDutyRepository {
         partnerDutyDao.setState(partnerDutiesRecord.getState());
         partnerDutyDao.setApiSource(partnerDutiesRecord.getApiSource());
         partnerDutyDao.setNotes(partnerDutiesRecord.getNotes());
-        eventExecutor.fireEvent("PartnerShiftUpdateEvent", partnerDutyDao);
+        if ("API".equals(RequestContext.getRequestSource()))
+            eventExecutor.fireEvent("PartnerShiftUpdateEvent", partnerDutyDao);
         return partnerDutyDao;
     }
 

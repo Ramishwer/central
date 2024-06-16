@@ -24,6 +24,7 @@ public class ApplicationSourceInterceptor implements HandlerInterceptor {
         request.setAttribute("requestUUID", UUID.randomUUID().toString());
         request.setAttribute("applicationUsername", ApplicationConstants.USER_NAME);
         request.setAttribute("applicationPassword", ApplicationConstants.USER_PASSWORD);
+        request.setAttribute("requestSource", "API");
         return true;
     }
 }

@@ -3,6 +3,7 @@ package com.goev.central.repository.customer.detail.impl;
 import com.goev.central.dao.customer.detail.CustomerDao;
 import com.goev.central.repository.customer.detail.CustomerRepository;
 import com.goev.central.utilities.EventExecutorUtils;
+import com.goev.central.utilities.RequestContext;
 import com.goev.lib.enums.RecordState;
 import com.goev.record.central.tables.records.CustomersRecord;
 import lombok.AllArgsConstructor;
@@ -37,7 +38,8 @@ public class CustomerRepositoryImpl implements CustomerRepository {
         customer.setApiSource(customersRecord.getApiSource());
         customer.setNotes(customersRecord.getNotes());
 
-        eventExecutor.fireEvent("CustomerSaveEvent", customer);
+        if ("API".equals(RequestContext.getRequestSource()))
+            eventExecutor.fireEvent("CustomerSaveEvent", customer);
         return customer;
     }
 
@@ -56,7 +58,8 @@ public class CustomerRepositoryImpl implements CustomerRepository {
         customer.setApiSource(customersRecord.getApiSource());
         customer.setNotes(customersRecord.getNotes());
 
-        eventExecutor.fireEvent("CustomerUpdateEvent", customer);
+        if ("API".equals(RequestContext.getRequestSource()))
+            eventExecutor.fireEvent("CustomerUpdateEvent", customer);
         return customer;
     }
 

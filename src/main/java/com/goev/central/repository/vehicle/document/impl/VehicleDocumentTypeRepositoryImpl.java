@@ -3,6 +3,7 @@ package com.goev.central.repository.vehicle.document.impl;
 import com.goev.central.dao.vehicle.document.VehicleDocumentTypeDao;
 import com.goev.central.repository.vehicle.document.VehicleDocumentTypeRepository;
 import com.goev.central.utilities.EventExecutorUtils;
+import com.goev.central.utilities.RequestContext;
 import com.goev.lib.enums.RecordState;
 import com.goev.record.central.tables.records.VehicleDocumentTypesRecord;
 import lombok.AllArgsConstructor;
@@ -36,7 +37,8 @@ public class VehicleDocumentTypeRepositoryImpl implements VehicleDocumentTypeRep
         vehicleDocumentType.setApiSource(vehiclesDocumentTypeRecord.getApiSource());
         vehicleDocumentType.setNotes(vehiclesDocumentTypeRecord.getNotes());
 
-        eventExecutor.fireEvent("VehicleDocumentTypeSaveEvent", vehicleDocumentType);
+        if ("API".equals(RequestContext.getRequestSource()))
+            eventExecutor.fireEvent("VehicleDocumentTypeSaveEvent", vehicleDocumentType);
 
         return vehicleDocumentType;
     }
@@ -55,7 +57,8 @@ public class VehicleDocumentTypeRepositoryImpl implements VehicleDocumentTypeRep
         vehicleDocumentType.setState(vehiclesDocumentTypeRecord.getState());
         vehicleDocumentType.setApiSource(vehiclesDocumentTypeRecord.getApiSource());
         vehicleDocumentType.setNotes(vehiclesDocumentTypeRecord.getNotes());
-        eventExecutor.fireEvent("VehicleDocumentTypeUpdateEvent", vehicleDocumentType);
+        if ("API".equals(RequestContext.getRequestSource()))
+            eventExecutor.fireEvent("VehicleDocumentTypeUpdateEvent", vehicleDocumentType);
         return vehicleDocumentType;
     }
 

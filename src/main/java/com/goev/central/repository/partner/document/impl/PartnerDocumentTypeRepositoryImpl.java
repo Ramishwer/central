@@ -3,6 +3,7 @@ package com.goev.central.repository.partner.document.impl;
 import com.goev.central.dao.partner.document.PartnerDocumentTypeDao;
 import com.goev.central.repository.partner.document.PartnerDocumentTypeRepository;
 import com.goev.central.utilities.EventExecutorUtils;
+import com.goev.central.utilities.RequestContext;
 import com.goev.lib.enums.RecordState;
 import com.goev.record.central.tables.records.PartnerDocumentTypesRecord;
 import lombok.AllArgsConstructor;
@@ -36,7 +37,8 @@ public class PartnerDocumentTypeRepositoryImpl implements PartnerDocumentTypeRep
         partnerDocumentType.setApiSource(partnersDocumentTypeRecord.getApiSource());
         partnerDocumentType.setNotes(partnersDocumentTypeRecord.getNotes());
 
-        eventExecutor.fireEvent("PartnerDocumentTypeSaveEvent", partnerDocumentType);
+        if ("API".equals(RequestContext.getRequestSource()))
+            eventExecutor.fireEvent("PartnerDocumentTypeSaveEvent", partnerDocumentType);
 
         return partnerDocumentType;
     }
@@ -55,7 +57,8 @@ public class PartnerDocumentTypeRepositoryImpl implements PartnerDocumentTypeRep
         partnerDocumentType.setState(partnersDocumentTypeRecord.getState());
         partnerDocumentType.setApiSource(partnersDocumentTypeRecord.getApiSource());
         partnerDocumentType.setNotes(partnersDocumentTypeRecord.getNotes());
-        eventExecutor.fireEvent("PartnerDocumentTypeUpdateEvent", partnerDocumentType);
+        if ("API".equals(RequestContext.getRequestSource()))
+            eventExecutor.fireEvent("PartnerDocumentTypeUpdateEvent", partnerDocumentType);
 
         return partnerDocumentType;
     }

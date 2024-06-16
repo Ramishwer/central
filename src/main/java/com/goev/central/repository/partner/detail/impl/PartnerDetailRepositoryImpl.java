@@ -3,6 +3,7 @@ package com.goev.central.repository.partner.detail.impl;
 import com.goev.central.dao.partner.detail.PartnerDetailDao;
 import com.goev.central.repository.partner.detail.PartnerDetailRepository;
 import com.goev.central.utilities.EventExecutorUtils;
+import com.goev.central.utilities.RequestContext;
 import com.goev.lib.enums.RecordState;
 import com.goev.record.central.tables.records.PartnerDetailsRecord;
 import lombok.AllArgsConstructor;
@@ -36,8 +37,8 @@ public class PartnerDetailRepositoryImpl implements PartnerDetailRepository {
         detail.setState(partnerDetailsRecord.getState());
         detail.setApiSource(partnerDetailsRecord.getApiSource());
         detail.setNotes(partnerDetailsRecord.getNotes());
-
-        eventExecutor.fireEvent("PartnerDetailSaveEvent", detail);
+        if ("API".equals(RequestContext.getRequestSource()))
+            eventExecutor.fireEvent("PartnerDetailSaveEvent", detail);
         return detail;
     }
 
@@ -56,7 +57,8 @@ public class PartnerDetailRepositoryImpl implements PartnerDetailRepository {
         detail.setApiSource(partnerDetailsRecord.getApiSource());
         detail.setNotes(partnerDetailsRecord.getNotes());
 
-        eventExecutor.fireEvent("PartnerDetailUpdateEvent", detail);
+        if ("API".equals(RequestContext.getRequestSource()))
+            eventExecutor.fireEvent("PartnerDetailUpdateEvent", detail);
 
         return detail;
     }

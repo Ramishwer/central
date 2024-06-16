@@ -2,6 +2,8 @@ package com.goev.central.repository.location.impl;
 
 import com.goev.central.dao.location.LocationDao;
 import com.goev.central.repository.location.LocationRepository;
+import com.goev.central.utilities.EventExecutorUtils;
+import com.goev.central.utilities.RequestContext;
 import com.goev.lib.enums.RecordState;
 import com.goev.record.central.tables.records.LocationsRecord;
 import lombok.AllArgsConstructor;
@@ -19,6 +21,7 @@ import static com.goev.record.central.tables.Locations.LOCATIONS;
 public class LocationRepositoryImpl implements LocationRepository {
 
     private final DSLContext context;
+    private final EventExecutorUtils eventExecutor;
 
     @Override
     public LocationDao save(LocationDao location) {
@@ -34,6 +37,9 @@ public class LocationRepositoryImpl implements LocationRepository {
         location.setState(locationsRecord.getState());
         location.setApiSource(locationsRecord.getApiSource());
         location.setNotes(locationsRecord.getNotes());
+
+        if ("API".equals(RequestContext.getRequestSource()))
+            eventExecutor.fireEvent("LocationSaveEvent",location);
         return location;
     }
 
@@ -51,6 +57,8 @@ public class LocationRepositoryImpl implements LocationRepository {
         location.setState(locationsRecord.getState());
         location.setApiSource(locationsRecord.getApiSource());
         location.setNotes(locationsRecord.getNotes());
+        if ("API".equals(RequestContext.getRequestSource()))
+            eventExecutor.fireEvent("LocationUpdateEvent",location);
         return location;
     }
 

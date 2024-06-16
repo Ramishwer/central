@@ -3,6 +3,7 @@ package com.goev.central.repository.asset.impl;
 import com.goev.central.dao.asset.AssetDao;
 import com.goev.central.repository.asset.AssetRepository;
 import com.goev.central.utilities.EventExecutorUtils;
+import com.goev.central.utilities.RequestContext;
 import com.goev.lib.enums.RecordState;
 import com.goev.record.central.tables.records.AssetsRecord;
 import lombok.AllArgsConstructor;
@@ -37,7 +38,8 @@ public class AssetRepositoryImpl implements AssetRepository {
         assetDao.setApiSource(assetsRecord.getApiSource());
         assetDao.setNotes(assetsRecord.getNotes());
 
-        eventExecutor.fireEvent("AssetSaveEvent", assetDao);
+         if ("API".equals(RequestContext.getRequestSource()))
+             eventExecutor.fireEvent("AssetSaveEvent", assetDao);
         return assetDao;
     }
 
@@ -56,7 +58,8 @@ public class AssetRepositoryImpl implements AssetRepository {
         assetDao.setApiSource(assetsRecord.getApiSource());
         assetDao.setNotes(assetsRecord.getNotes());
 
-        eventExecutor.fireEvent("AssetUpdateEvent", assetDao);
+        if ("API".equals(RequestContext.getRequestSource()))
+            eventExecutor.fireEvent("AssetUpdateEvent", assetDao);
         return assetDao;
     }
 
