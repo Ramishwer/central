@@ -54,100 +54,100 @@ public class EventExecutorUtils {
 
         switch (event) {
             case "PartnerSaveEvent" -> {
-                return fireEvent(new PartnerSaveEvent(), (PartnerDao) data);
+                return fireEvent(SpringContext.getBean(PartnerSaveEvent.class), (PartnerDao) data);
             }
             case "PartnerUpdateEvent" -> {
-                return fireEvent(new PartnerUpdateEvent(), (PartnerDao) data);
+                return fireEvent(SpringContext.getBean(PartnerUpdateEvent.class), (PartnerDao) data);
             }
             case "VehicleSaveEvent" -> {
-                return fireEvent(new VehicleSaveEvent(), (VehicleDao) data);
+                return fireEvent(SpringContext.getBean(VehicleSaveEvent.class), (VehicleDao) data);
             }
             case "VehicleUpdateEvent" -> {
-                return fireEvent(new VehicleUpdateEvent(), (VehicleDao) data);
+                return fireEvent(SpringContext.getBean(VehicleUpdateEvent.class), (VehicleDao) data);
             }
             case "BookingSaveEvent" -> {
-                return fireEvent(new BookingSaveEvent(),(BookingDao) data);
+                return fireEvent(SpringContext.getBean(BookingSaveEvent.class),(BookingDao) data);
             }
             case "BookingUpdateEvent" -> {
-                return fireEvent(new BookingUpdateEvent(), (BookingDao) data);
+                return fireEvent(SpringContext.getBean(BookingUpdateEvent.class), (BookingDao) data);
             }
             case "PartnerDutySaveEvent" -> {
-                return fireEvent(new PartnerDutySaveEvent(),(PartnerDutyDao) data);
+                return fireEvent(SpringContext.getBean(PartnerDutySaveEvent.class),(PartnerDutyDao) data);
             }
             case "PartnerDutyUpdateEvent" -> {
-                return fireEvent(new PartnerDutyUpdateEvent(),(PartnerDutyDao) data);
+                return fireEvent(SpringContext.getBean(PartnerDutyUpdateEvent.class),(PartnerDutyDao) data);
             }
             case "PartnerShiftSaveEvent" -> {
-                return fireEvent(new PartnerShiftSaveEvent(),(PartnerShiftDao) data);
+                return fireEvent(SpringContext.getBean(PartnerShiftSaveEvent.class),(PartnerShiftDao) data);
             }
             case "PartnerShiftUpdateEvent" -> {
-                return fireEvent(new PartnerShiftUpdateEvent(),(PartnerShiftDao) data);
+                return fireEvent(SpringContext.getBean(PartnerShiftUpdateEvent.class),(PartnerShiftDao) data);
             }
             case "PartnerDocumentTypeSaveEvent" -> {
-                return fireEvent(new PartnerDocumentTypeSaveEvent(),(PartnerDocumentTypeDao) data);
+                return fireEvent(SpringContext.getBean(PartnerDocumentTypeSaveEvent.class),(PartnerDocumentTypeDao) data);
             }
             case "PartnerDocumentTypeUpdateEvent" -> {
-                return fireEvent(new PartnerDocumentTypeUpdateEvent(),(PartnerDocumentTypeDao) data);
+                return fireEvent(SpringContext.getBean(PartnerDocumentTypeUpdateEvent.class),(PartnerDocumentTypeDao) data);
             }
             case "VehicleDocumentTypeSaveEvent" -> {
-                return fireEvent(new VehicleDocumentTypeSaveEvent(),(VehicleDocumentTypeDao) data);
+                return fireEvent(SpringContext.getBean(VehicleDocumentTypeSaveEvent.class),(VehicleDocumentTypeDao) data);
             }
             case "VehicleDocumentTypeUpdateEvent" -> {
-                return fireEvent(new VehicleDocumentTypeUpdateEvent(),(VehicleDocumentTypeDao) data);
+                return fireEvent(SpringContext.getBean(VehicleDocumentTypeUpdateEvent.class),(VehicleDocumentTypeDao) data);
             }
             case "VehicleDocumentSaveEvent" -> {
-                return fireEvent(new VehicleDocumentSaveEvent(), (VehicleDocumentDao) data);
+                return fireEvent(SpringContext.getBean(VehicleDocumentSaveEvent.class), (VehicleDocumentDao) data);
             }
             case "VehicleDocumentUpdateEvent" -> {
-                return fireEvent(new VehicleDocumentUpdateEvent(),(VehicleDocumentDao) data);
+                return fireEvent(SpringContext.getBean(VehicleDocumentUpdateEvent.class),(VehicleDocumentDao) data);
             }
             case "PartnerDocumentSaveEvent" -> {
-                return fireEvent(new PartnerDocumentSaveEvent(), (PartnerDocumentDao) data);
+                return fireEvent(SpringContext.getBean(PartnerDocumentSaveEvent.class), (PartnerDocumentDao) data);
             }
             case "PartnerDocumentUpdateEvent" -> {
-                return fireEvent(new PartnerDocumentUpdateEvent(), (PartnerDocumentDao) data);
+                return fireEvent(SpringContext.getBean(PartnerDocumentUpdateEvent.class), (PartnerDocumentDao) data);
             }
             case "AssetTypeSaveEvent" -> {
-                return fireEvent(new AssetTypeSaveEvent(), (AssetTypeDao) data);
+                return fireEvent(SpringContext.getBean(AssetTypeSaveEvent.class), (AssetTypeDao) data);
             }
             case "AssetTypeUpdateEvent" -> {
-                return fireEvent(new AssetTypeUpdateEvent(), (AssetTypeDao) data);
+                return fireEvent(SpringContext.getBean(AssetTypeUpdateEvent.class), (AssetTypeDao) data);
             }
             case "VehicleAssetMappingSaveEvent" -> {
-                return fireEvent(new VehicleAssetMappingSaveEvent(), (VehicleAssetMappingDao) data);
+                return fireEvent(SpringContext.getBean(VehicleAssetMappingSaveEvent.class), (VehicleAssetMappingDao) data);
             }
             case "VehicleAssetMappingUpdateEvent" -> {
-                return fireEvent(new VehicleAssetMappingUpdateEvent(), (VehicleAssetMappingDao) data);
+                return fireEvent(SpringContext.getBean(VehicleAssetMappingUpdateEvent.class), (VehicleAssetMappingDao) data);
             }
             case "CustomerSaveEvent" -> {
-                return fireEvent(new CustomerSaveEvent(), (CustomerDao) data);
+                return fireEvent(SpringContext.getBean(CustomerSaveEvent.class), (CustomerDao) data);
             }
             case "CustomerUpdateEvent" -> {
-                return fireEvent(new CustomerUpdateEvent(), (CustomerDao) data);
+                return fireEvent(SpringContext.getBean(CustomerUpdateEvent.class), (CustomerDao) data);
             }
             case "CustomerPaymentSaveEvent" -> {
-                return fireEvent(new CustomerPaymentSaveEvent(), (CustomerPaymentDao) data);
+                return fireEvent(SpringContext.getBean(CustomerPaymentSaveEvent.class), (CustomerPaymentDao) data);
             }
             case "CustomerPaymentUpdateEvent" -> {
-                return fireEvent(new CustomerPaymentUpdateEvent(), (CustomerPaymentDao) data);
+                return fireEvent(SpringContext.getBean(CustomerPaymentUpdateEvent.class), (CustomerPaymentDao) data);
             }
             case "LocationSaveEvent" -> {
-                return fireEvent(new LocationSaveEvent(), (LocationDao) data);
+                return fireEvent(SpringContext.getBean(LocationSaveEvent.class), (LocationDao) data);
             }
             case "LocationUpdateEvent" -> {
-                return fireEvent(new LocationUpdateEvent(), (LocationDao) data);
+                return fireEvent(SpringContext.getBean(LocationUpdateEvent.class), (LocationDao) data);
             }
             case "PartnerDetailSaveEvent" -> {
-                return fireEvent(new PartnerDetailSaveEvent(), (PartnerDetailDao) data);
+                return fireEvent(SpringContext.getBean(PartnerDetailSaveEvent.class), (PartnerDetailDao) data);
             }
             case "PartnerDetailUpdateEvent" -> {
-                return fireEvent(new PartnerDetailUpdateEvent(), (PartnerDetailDao) data);
+                return fireEvent(SpringContext.getBean(PartnerDetailUpdateEvent.class), (PartnerDetailDao) data);
             }
             case "VehicleDetailSaveEvent" -> {
-                return fireEvent(new VehicleDetailSaveEvent(), (VehicleDetailDao) data);
+                return fireEvent(SpringContext.getBean(VehicleDetailSaveEvent.class), (VehicleDetailDao) data);
             }
             case "VehicleDetailUpdateEvent" -> {
-                return fireEvent(new VehicleDetailUpdateEvent(), (VehicleDetailDao) data);
+                return fireEvent(SpringContext.getBean(VehicleDetailUpdateEvent.class), (VehicleDetailDao) data);
             }
 
 
