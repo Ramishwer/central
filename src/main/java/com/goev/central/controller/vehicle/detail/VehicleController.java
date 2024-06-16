@@ -20,8 +20,11 @@ public class VehicleController {
 
 
     @GetMapping("/vehicles")
-    public ResponseDto<PaginatedResponseDto<VehicleViewDto>> getVehicles() {
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleService.getVehicles());
+    public ResponseDto<PaginatedResponseDto<VehicleViewDto>> getVehicles(@RequestParam(value = "onboardingStatus", required = false)String onboardingStatus) {
+        if (onboardingStatus == null)
+            return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200,vehicleService.getVehicles());
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleService.getVehicles(onboardingStatus));
+
     }
 
 

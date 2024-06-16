@@ -6,6 +6,7 @@ import com.goev.central.dao.business.BusinessSegmentDao;
 import com.goev.central.dao.location.LocationDao;
 import com.goev.central.dao.partner.detail.PartnerDao;
 import com.goev.central.dao.partner.detail.PartnerDetailDao;
+import com.goev.central.dto.auth.AuthUserDto;
 import com.goev.central.dto.business.BusinessClientDto;
 import com.goev.central.dto.business.BusinessSegmentDto;
 import com.goev.central.dto.location.LocationDto;
@@ -18,11 +19,14 @@ import com.goev.central.repository.business.BusinessSegmentRepository;
 import com.goev.central.repository.location.LocationRepository;
 import com.goev.central.repository.partner.detail.PartnerDetailRepository;
 import com.goev.central.repository.partner.detail.PartnerRepository;
+import com.goev.central.service.auth.AuthService;
 import com.goev.central.service.partner.detail.PartnerDetailService;
 import com.goev.central.service.partner.document.PartnerDocumentService;
 import com.goev.central.utilities.S3Utils;
+import com.goev.central.utilities.SecretGenerationUtils;
 import com.goev.lib.dto.LatLongDto;
 import com.goev.lib.exceptions.ResponseException;
+import com.goev.lib.utilities.ApplicationContext;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -37,6 +41,7 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
     private final LocationRepository locationRepository;
     private final BusinessClientRepository businessClientRepository;
     private final BusinessSegmentRepository businessSegmentRepository;
+    private final AuthService authService;
 
     private final S3Utils s3;
 
@@ -63,8 +68,13 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
         }
         PartnerDao partnerDao = new PartnerDao();
 
-        partnerDao.setPunchId(partnerDto.getPartner().getPunchId());
+        partnerDao.setPunchId("GOEV-" + SecretGenerationUtils.getCode());
         partnerDao.setPhoneNumber(partnerDto.getPartner().getPhoneNumber());
+        partnerDao.setAuthUuid(authService.createUser(AuthUserDto.builder()
+                .phoneNumber(partnerDto.getPartner().getPhoneNumber())
+                .organizationUUID(ApplicationContext.getOrganizationUUID())
+                .clientUUID(ApplicationConstants.PARTNER_CLIENT_UUID)
+                .build()));
         PartnerDao partner = partnerRepository.save(partnerDao);
 
         if (partner == null)

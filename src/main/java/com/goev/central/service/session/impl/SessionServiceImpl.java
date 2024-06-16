@@ -11,6 +11,7 @@ import com.goev.central.dto.user.authentication.AuthCredentialDto;
 import com.goev.central.dto.user.authentication.AuthCredentialTypeDto;
 import com.goev.central.repository.user.detail.UserRepository;
 import com.goev.central.repository.user.detail.UserSessionRepository;
+import com.goev.central.service.auth.AuthService;
 import com.goev.central.service.session.SessionService;
 import com.goev.central.utilities.RequestContext;
 import com.goev.lib.dto.PasswordCredentialsDto;
@@ -31,32 +32,18 @@ import java.nio.charset.StandardCharsets;
 @AllArgsConstructor
 public class SessionServiceImpl implements SessionService {
 
-    private final RestClient restClient;
     private final UserRepository userRepository;
     private final UserSessionRepository userSessionRepository;
+    private final AuthService authService;
 
     @Override
     public SessionDto createSession(PasswordCredentialsDto credentials) {
         UserDao user = userRepository.findByEmail(credentials.getUsername());
-        if (user == null)
+        if (user == null|| user.getAuthUuid() == null)
             throw new ResponseException("User does not exist");
-        String url = ApplicationConstants.AUTH_URL + "/api/v1/session-management/sessions";
-        HttpHeaders header = new HttpHeaders();
-        header.set(HttpHeaders.AUTHORIZATION, "Basic " + Base64.encodeAsString((ApplicationConstants.CLIENT_ID + ":" + ApplicationConstants.CLIENT_SECRET).getBytes(StandardCharsets.UTF_8)));
-        String response = restClient.post(url, header, AuthCredentialDto.builder()
-                .authCredentialType(AuthCredentialTypeDto.builder()
-                        .name(ApplicationConstants.CREDENTIAL_TYPE_NAME)
-                        .uuid(ApplicationConstants.CREDENTIAL_TYPE_UUID)
-                        .build())
-                .authKey(credentials.getUsername())
-                .authSecret(credentials.getPassword())
-                .authUUID(user.getAuthUuid())
-                .build(), String.class, true);
-        ResponseDto<SessionDto> session = ApplicationConstants.GSON.fromJson(response, new TypeToken<ResponseDto<SessionDto>>() {
-        }.getType());
-        if (session == null || session.getData() == null)
+        SessionDto sessionDto = authService.createSession(credentials,user.getAuthUuid());
+        if (sessionDto == null)
             throw new ResponseException("User does not exist");
-        SessionDto sessionDto = session.getData();
         UserSessionDao sessionDao = new UserSessionDao();
         sessionDao.setAuthSessionUuid(sessionDto.getUuid());
         sessionDao.setUserId(user.getId());
@@ -81,17 +68,10 @@ public class SessionServiceImpl implements SessionService {
             throw new ResponseException("Token Expired");
         if (RequestContext.getRefreshToken() == null)
             throw new ResponseException("Token Expired");
-        String url = ApplicationConstants.AUTH_URL + "/api/v1/session-management/sessions/" + userSessionDao.getAuthSessionUuid() + "/token";
-        HttpHeaders header = new HttpHeaders();
-        header.set(HttpHeaders.AUTHORIZATION, "Basic " + Base64.encodeAsString((ApplicationConstants.CLIENT_ID + ":" + ApplicationConstants.CLIENT_SECRET).getBytes(StandardCharsets.UTF_8)));
-        header.set("Refresh-Token", RequestContext.getRefreshToken());
-        String response = restClient.get(url, header, String.class, true);
-        ResponseDto<SessionDto> session = ApplicationConstants.GSON.fromJson(response, new TypeToken<ResponseDto<SessionDto>>() {
-        }.getType());
-        if (session == null || session.getData() == null)
+        SessionDto sessionDto = authService.refreshSession(userSessionDao);
+        if (sessionDto == null)
             throw new ResponseException("Token Expired");
 
-        SessionDto sessionDto = session.getData();
         UserSessionDao sessionDao = new UserSessionDao();
         sessionDao.setAuthSessionUuid(sessionDto.getUuid());
         sessionDao.setUserId(sessionDao.getUserId());
@@ -132,30 +112,22 @@ public class SessionServiceImpl implements SessionService {
         UserSessionDao userSessionDao = RequestContext.getUserSession();
         if (userSessionDao == null)
             throw new ResponseException("Token Expired");
-        String url = ApplicationConstants.AUTH_URL + "/api/v1/session-management/sessions/" + userSessionDao.getAuthSessionUuid();
-        HttpHeaders header = new HttpHeaders();
-        header.set("Refresh-Token", RequestContext.getRefreshToken());
-        header.set("Authorization", RequestContext.getAccessToken());
-        String response = restClient.delete(url, header, String.class, true);
         userSessionRepository.delete(userSessionDao.getId());
-        return true;
+        return authService.deleteSession(userSessionDao);
+
     }
 
     @Override
     public SessionDto createSession(ExchangeTokenRequestDto token) {
 
-        String url = ApplicationConstants.AUTH_URL + "/api/v1/session-management/sessions/tokens";
-        HttpHeaders header = new HttpHeaders();
-        header.set(HttpHeaders.AUTHORIZATION, "Basic " + Base64.encodeAsString((ApplicationConstants.CLIENT_ID + ":" + ApplicationConstants.CLIENT_SECRET).getBytes(StandardCharsets.UTF_8)));
-        String response = restClient.post(url, header, token, String.class, true);
-        ResponseDto<SessionDto> session = ApplicationConstants.GSON.fromJson(response, new TypeToken<ResponseDto<SessionDto>>() {
-        }.getType());
-        if (session == null || session.getData() == null || session.getData().getAuthUUID() == null)
+        SessionDto sessionDto = authService.createSessionForToken(token);
+        if (sessionDto == null || sessionDto.getAuthUUID() == null)
             throw new ResponseException("User does not exist");
-        UserDao user = userRepository.findByAuthUUID(session.getData().getAuthUUID());
+
+        UserDao user = userRepository.findByAuthUUID(sessionDto.getAuthUUID());
         if (user == null)
             throw new ResponseException("User does not exist");
-        SessionDto sessionDto = session.getData();
+
         UserSessionDao sessionDao = new UserSessionDao();
         sessionDao.setAuthSessionUuid(sessionDto.getUuid());
         sessionDao.setUserId(user.getId());

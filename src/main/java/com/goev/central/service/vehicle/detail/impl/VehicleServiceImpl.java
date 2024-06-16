@@ -3,8 +3,12 @@ package com.goev.central.service.vehicle.detail.impl;
 
 import com.goev.central.constant.ApplicationConstants;
 import com.goev.central.dao.vehicle.detail.VehicleDao;
+import com.goev.central.dao.vehicle.detail.VehicleDao;
+import com.goev.central.dao.vehicle.detail.VehicleDao;
 import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
+import com.goev.central.dto.vehicle.VehicleViewDto;
+import com.goev.central.dto.vehicle.VehicleViewDto;
 import com.goev.central.dto.vehicle.VehicleViewDto;
 import com.goev.central.repository.vehicle.detail.VehicleRepository;
 import com.goev.central.service.vehicle.detail.VehicleService;
@@ -39,9 +43,20 @@ public class VehicleServiceImpl implements VehicleService {
     public PaginatedResponseDto<VehicleViewDto> getVehicles() {
         PaginatedResponseDto<VehicleViewDto> result = PaginatedResponseDto.<VehicleViewDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
         List<VehicleDao> vehicles = vehicleRepository.findAllActive();
+        return getVehicleViewDtoPaginatedResponseDto(vehicles, result);
+    }
+
+    @Override
+    public PaginatedResponseDto<VehicleViewDto> getVehicles(String onboardingStatus) {
+        PaginatedResponseDto<VehicleViewDto> result = PaginatedResponseDto.<VehicleViewDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        List<VehicleDao> vehicles = vehicleRepository.findAllByOnboardingStatus(onboardingStatus);
+        return getVehicleViewDtoPaginatedResponseDto(vehicles, result);
+    }
+
+
+    private PaginatedResponseDto<VehicleViewDto> getVehicleViewDtoPaginatedResponseDto(List<VehicleDao> vehicles, PaginatedResponseDto<VehicleViewDto> result) {
         if (CollectionUtils.isEmpty(vehicles))
             return result;
-
         for (VehicleDao vehicle : vehicles) {
             VehicleViewDto vehicleViewDto = ApplicationConstants.GSON.fromJson(vehicle.getViewInfo(), VehicleViewDto.class);
             if (vehicleViewDto == null)

@@ -15,6 +15,8 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 public class ApplicationConstants {
     public static final Gson GSON = new GsonBuilder().registerTypeAdapter(DateTime.class, new GsonDateTimeSerializer()).create();
+    public static String CLIENT_UUID;
+    public static String PARTNER_CLIENT_UUID ;
     public static String CREDENTIAL_TYPE_NAME;
     public static String CREDENTIAL_TYPE_UUID;
     public static String AWS_ACCESS_KEY_SECRET;

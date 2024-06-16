@@ -3,12 +3,15 @@ package com.goev.central.service.user.detail.impl;
 import com.goev.central.constant.ApplicationConstants;
 import com.goev.central.dao.user.detail.UserDao;
 import com.goev.central.dao.user.detail.UserDetailDao;
+import com.goev.central.dto.auth.AuthUserDto;
 import com.goev.central.dto.user.UserViewDto;
 import com.goev.central.dto.user.detail.UserDetailDto;
 import com.goev.central.repository.user.detail.UserDetailRepository;
 import com.goev.central.repository.user.detail.UserRepository;
+import com.goev.central.service.auth.AuthService;
 import com.goev.central.service.user.detail.UserDetailService;
 import com.goev.lib.exceptions.ResponseException;
+import com.goev.lib.utilities.ApplicationContext;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,6 +23,7 @@ public class UserDetailServiceImpl implements UserDetailService {
 
     private final UserRepository userRepository;
     private final UserDetailRepository userDetailRepository;
+    private final AuthService authService;
 
     @Override
     public UserDetailDto createUser(UserDetailDto userDto) {
@@ -43,6 +47,12 @@ public class UserDetailServiceImpl implements UserDetailService {
             throw new ResponseException("Error in saving user details");
 
         user.setUserDetailsId(userDetails.getId());
+        user.setAuthUuid(authService.createUser(AuthUserDto.builder()
+                        .email(userDetails.getEmail())
+                        .phoneNumber(userDetails.getPhoneNumber())
+                        .organizationUUID(ApplicationContext.getOrganizationUUID())
+                        .clientUUID(ApplicationConstants.CLIENT_UUID)
+                .build()));
         userRepository.update(user);
 
         UserDetailDto result = UserDetailDto.builder().build();
