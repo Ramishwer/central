@@ -1,4 +1,4 @@
-package com.goev.central.dto.user.authentication;
+package com.goev.central.dto.auth;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;

@@ -1,31 +1,21 @@
 package com.goev.central.service.session.impl;
 
-import com.amazonaws.util.Base64;
-import com.goev.central.constant.ApplicationConstants;
 import com.goev.central.dao.user.detail.UserDao;
 import com.goev.central.dao.user.detail.UserSessionDao;
 import com.goev.central.dto.session.ExchangeTokenRequestDto;
 import com.goev.central.dto.session.SessionDetailsDto;
 import com.goev.central.dto.session.SessionDto;
-import com.goev.central.dto.user.authentication.AuthCredentialDto;
-import com.goev.central.dto.user.authentication.AuthCredentialTypeDto;
 import com.goev.central.repository.user.detail.UserRepository;
 import com.goev.central.repository.user.detail.UserSessionRepository;
 import com.goev.central.service.auth.AuthService;
 import com.goev.central.service.session.SessionService;
 import com.goev.central.utilities.RequestContext;
 import com.goev.lib.dto.PasswordCredentialsDto;
-import com.goev.lib.dto.ResponseDto;
 import com.goev.lib.exceptions.ResponseException;
-import com.goev.lib.services.RestClient;
-import com.google.gson.reflect.TypeToken;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
-
-import java.nio.charset.StandardCharsets;
 
 @Slf4j
 @Service
