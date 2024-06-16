@@ -57,13 +57,13 @@ public class BookingInvoicingDetailRepositoryImpl implements BookingInvoicingDet
 
     @Override
     public void delete(Integer id) {
-     context.update(BOOKING_INVOICING_DETAILS)
-     .set(BOOKING_INVOICING_DETAILS.STATE,RecordState.DELETED.name())
-     .where(BOOKING_INVOICING_DETAILS.ID.eq(id))
-     .and(BOOKING_INVOICING_DETAILS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(BOOKING_INVOICING_DETAILS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(BOOKING_INVOICING_DETAILS)
+                .set(BOOKING_INVOICING_DETAILS.STATE, RecordState.DELETED.name())
+                .where(BOOKING_INVOICING_DETAILS.ID.eq(id))
+                .and(BOOKING_INVOICING_DETAILS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(BOOKING_INVOICING_DETAILS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public BookingInvoicingDetailDao findByUUID(String uuid) {

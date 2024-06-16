@@ -56,13 +56,13 @@ public class PartnerShiftRepositoryImpl implements PartnerShiftRepository {
 
     @Override
     public void delete(Integer id) {
-     context.update(PARTNER_SHIFTS)
-     .set(PARTNER_SHIFTS.STATE,RecordState.DELETED.name())
-     .where(PARTNER_SHIFTS.ID.eq(id))
-     .and(PARTNER_SHIFTS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(PARTNER_SHIFTS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(PARTNER_SHIFTS)
+                .set(PARTNER_SHIFTS.STATE, RecordState.DELETED.name())
+                .where(PARTNER_SHIFTS.ID.eq(id))
+                .and(PARTNER_SHIFTS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(PARTNER_SHIFTS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public PartnerShiftDao findByUUID(String uuid) {

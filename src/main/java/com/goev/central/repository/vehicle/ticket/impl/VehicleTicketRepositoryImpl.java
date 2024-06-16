@@ -56,13 +56,13 @@ public class VehicleTicketRepositoryImpl implements VehicleTicketRepository {
 
     @Override
     public void delete(Integer id) {
-     context.update(VEHICLE_TICKETS)
-     .set(VEHICLE_TICKETS.STATE,RecordState.DELETED.name())
-     .where(VEHICLE_TICKETS.ID.eq(id))
-     .and(VEHICLE_TICKETS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(VEHICLE_TICKETS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(VEHICLE_TICKETS)
+                .set(VEHICLE_TICKETS.STATE, RecordState.DELETED.name())
+                .where(VEHICLE_TICKETS.ID.eq(id))
+                .and(VEHICLE_TICKETS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(VEHICLE_TICKETS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public VehicleTicketDao findByUUID(String uuid) {

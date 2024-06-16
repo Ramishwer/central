@@ -55,13 +55,13 @@ public class ShiftConfigurationRepositoryImpl implements ShiftConfigurationRepos
 
     @Override
     public void delete(Integer id) {
-     context.update(SHIFT_CONFIGURATIONS)
-     .set(SHIFT_CONFIGURATIONS.STATE,RecordState.DELETED.name())
-     .where(SHIFT_CONFIGURATIONS.ID.eq(id))
-     .and(SHIFT_CONFIGURATIONS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(SHIFT_CONFIGURATIONS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(SHIFT_CONFIGURATIONS)
+                .set(SHIFT_CONFIGURATIONS.STATE, RecordState.DELETED.name())
+                .where(SHIFT_CONFIGURATIONS.ID.eq(id))
+                .and(SHIFT_CONFIGURATIONS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(SHIFT_CONFIGURATIONS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public ShiftConfigurationDao findByUUID(String uuid) {

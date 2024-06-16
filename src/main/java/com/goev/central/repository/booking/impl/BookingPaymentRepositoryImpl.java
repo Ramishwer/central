@@ -57,13 +57,13 @@ public class BookingPaymentRepositoryImpl implements BookingPaymentRepository {
 
     @Override
     public void delete(Integer id) {
-     context.update(BOOKING_PAYMENTS)
-     .set(BOOKING_PAYMENTS.STATE,RecordState.DELETED.name())
-     .where(BOOKING_PAYMENTS.ID.eq(id))
-     .and(BOOKING_PAYMENTS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(BOOKING_PAYMENTS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(BOOKING_PAYMENTS)
+                .set(BOOKING_PAYMENTS.STATE, RecordState.DELETED.name())
+                .where(BOOKING_PAYMENTS.ID.eq(id))
+                .and(BOOKING_PAYMENTS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(BOOKING_PAYMENTS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public BookingPaymentDao findByUUID(String uuid) {

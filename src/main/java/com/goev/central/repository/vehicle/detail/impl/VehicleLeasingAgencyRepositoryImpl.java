@@ -55,13 +55,13 @@ public class VehicleLeasingAgencyRepositoryImpl implements VehicleLeasingAgencyR
 
     @Override
     public void delete(Integer id) {
-     context.update(VEHICLE_LEASING_AGENCIES)
-     .set(VEHICLE_LEASING_AGENCIES.STATE,RecordState.DELETED.name())
-     .where(VEHICLE_LEASING_AGENCIES.ID.eq(id))
-     .and(VEHICLE_LEASING_AGENCIES.STATE.eq(RecordState.ACTIVE.name()))
-     .and(VEHICLE_LEASING_AGENCIES.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(VEHICLE_LEASING_AGENCIES)
+                .set(VEHICLE_LEASING_AGENCIES.STATE, RecordState.DELETED.name())
+                .where(VEHICLE_LEASING_AGENCIES.ID.eq(id))
+                .and(VEHICLE_LEASING_AGENCIES.STATE.eq(RecordState.ACTIVE.name()))
+                .and(VEHICLE_LEASING_AGENCIES.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public VehicleLeasingAgencyDao findByUUID(String uuid) {

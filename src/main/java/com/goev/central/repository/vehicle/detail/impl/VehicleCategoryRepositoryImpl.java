@@ -55,13 +55,13 @@ public class VehicleCategoryRepositoryImpl implements VehicleCategoryRepository 
 
     @Override
     public void delete(Integer id) {
-     context.update(VEHICLE_CATEGORIES)
-     .set(VEHICLE_CATEGORIES.STATE,RecordState.DELETED.name())
-     .where(VEHICLE_CATEGORIES.ID.eq(id))
-     .and(VEHICLE_CATEGORIES.STATE.eq(RecordState.ACTIVE.name()))
-     .and(VEHICLE_CATEGORIES.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(VEHICLE_CATEGORIES)
+                .set(VEHICLE_CATEGORIES.STATE, RecordState.DELETED.name())
+                .where(VEHICLE_CATEGORIES.ID.eq(id))
+                .and(VEHICLE_CATEGORIES.STATE.eq(RecordState.ACTIVE.name()))
+                .and(VEHICLE_CATEGORIES.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public VehicleCategoryDao findByUUID(String uuid) {

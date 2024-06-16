@@ -55,13 +55,13 @@ public class SystemInstanceRepositoryImpl implements SystemInstanceRepository {
 
     @Override
     public void delete(Integer id) {
-     context.update(SYSTEM_INSTANCES)
-     .set(SYSTEM_INSTANCES.STATE,RecordState.DELETED.name())
-     .where(SYSTEM_INSTANCES.ID.eq(id))
-     .and(SYSTEM_INSTANCES.STATE.eq(RecordState.ACTIVE.name()))
-     .and(SYSTEM_INSTANCES.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(SYSTEM_INSTANCES)
+                .set(SYSTEM_INSTANCES.STATE, RecordState.DELETED.name())
+                .where(SYSTEM_INSTANCES.ID.eq(id))
+                .and(SYSTEM_INSTANCES.STATE.eq(RecordState.ACTIVE.name()))
+                .and(SYSTEM_INSTANCES.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public SystemInstanceDao findByUUID(String uuid) {

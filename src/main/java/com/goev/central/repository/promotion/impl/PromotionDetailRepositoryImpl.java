@@ -55,27 +55,27 @@ public class PromotionDetailRepositoryImpl implements PromotionDetailRepository 
 
     @Override
     public void delete(Integer id) {
-     context.update(PROMOTION_DETAILS)
-     .set(PROMOTION_DETAILS.STATE,RecordState.DELETED.name())
-     .where(PROMOTION_DETAILS.ID.eq(id))
-     .and(PROMOTION_DETAILS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(PROMOTION_DETAILS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(PROMOTION_DETAILS)
+                .set(PROMOTION_DETAILS.STATE, RecordState.DELETED.name())
+                .where(PROMOTION_DETAILS.ID.eq(id))
+                .and(PROMOTION_DETAILS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(PROMOTION_DETAILS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
-     @Override
+    @Override
     public PromotionDetailDao findByUUID(String uuid) {
         return context.selectFrom(PROMOTION_DETAILS).where(PROMOTION_DETAILS.UUID.eq(uuid))
-         .and(PROMOTION_DETAILS.IS_ACTIVE.eq(true))
-        .fetchAnyInto(PromotionDetailDao.class);
-    }  
+                .and(PROMOTION_DETAILS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PromotionDetailDao.class);
+    }
 
     @Override
     public PromotionDetailDao findById(Integer id) {
         return context.selectFrom(PROMOTION_DETAILS).where(PROMOTION_DETAILS.ID.eq(id))
-         .and(PROMOTION_DETAILS.IS_ACTIVE.eq(true))
-        .fetchAnyInto(PromotionDetailDao.class);
-    } 
+                .and(PROMOTION_DETAILS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PromotionDetailDao.class);
+    }
 
     @Override
     public List<PromotionDetailDao> findAllByIds(List<Integer> ids) {

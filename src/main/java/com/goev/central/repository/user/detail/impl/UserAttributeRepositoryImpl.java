@@ -56,13 +56,13 @@ public class UserAttributeRepositoryImpl implements UserAttributeRepository {
 
     @Override
     public void delete(Integer id) {
-     context.update(USER_ATTRIBUTES)
-     .set(USER_ATTRIBUTES.STATE,RecordState.DELETED.name())
-     .where(USER_ATTRIBUTES.ID.eq(id))
-     .and(USER_ATTRIBUTES.STATE.eq(RecordState.ACTIVE.name()))
-     .and(USER_ATTRIBUTES.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(USER_ATTRIBUTES)
+                .set(USER_ATTRIBUTES.STATE, RecordState.DELETED.name())
+                .where(USER_ATTRIBUTES.ID.eq(id))
+                .and(USER_ATTRIBUTES.STATE.eq(RecordState.ACTIVE.name()))
+                .and(USER_ATTRIBUTES.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public UserAttributeDao findByUUID(String uuid) {

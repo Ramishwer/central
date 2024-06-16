@@ -56,13 +56,13 @@ public class PartnerShiftMappingRepositoryImpl implements PartnerShiftMappingRep
 
     @Override
     public void delete(Integer id) {
-     context.update(PARTNER_SHIFT_MAPPINGS)
-     .set(PARTNER_SHIFT_MAPPINGS.STATE,RecordState.DELETED.name())
-     .where(PARTNER_SHIFT_MAPPINGS.ID.eq(id))
-     .and(PARTNER_SHIFT_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(PARTNER_SHIFT_MAPPINGS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(PARTNER_SHIFT_MAPPINGS)
+                .set(PARTNER_SHIFT_MAPPINGS.STATE, RecordState.DELETED.name())
+                .where(PARTNER_SHIFT_MAPPINGS.ID.eq(id))
+                .and(PARTNER_SHIFT_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(PARTNER_SHIFT_MAPPINGS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public PartnerShiftMappingDao findByUUID(String uuid) {

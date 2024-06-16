@@ -57,13 +57,13 @@ public class PricingElementRepositoryImpl implements PricingElementRepository {
 
     @Override
     public void delete(Integer id) {
-     context.update(PRICING_ELEMENTS)
-     .set(PRICING_ELEMENTS.STATE,RecordState.DELETED.name())
-     .where(PRICING_ELEMENTS.ID.eq(id))
-     .and(PRICING_ELEMENTS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(PRICING_ELEMENTS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(PRICING_ELEMENTS)
+                .set(PRICING_ELEMENTS.STATE, RecordState.DELETED.name())
+                .where(PRICING_ELEMENTS.ID.eq(id))
+                .and(PRICING_ELEMENTS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(PRICING_ELEMENTS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public PricingElementDao findByUUID(String uuid) {

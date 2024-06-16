@@ -56,13 +56,13 @@ public class LocationAttributeRepositoryImpl implements LocationAttributeReposit
 
     @Override
     public void delete(Integer id) {
-     context.update(LOCATION_ATTRIBUTES)
-     .set(LOCATION_ATTRIBUTES.STATE,RecordState.DELETED.name())
-     .where(LOCATION_ATTRIBUTES.ID.eq(id))
-     .and(LOCATION_ATTRIBUTES.STATE.eq(RecordState.ACTIVE.name()))
-     .and(LOCATION_ATTRIBUTES.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(LOCATION_ATTRIBUTES)
+                .set(LOCATION_ATTRIBUTES.STATE, RecordState.DELETED.name())
+                .where(LOCATION_ATTRIBUTES.ID.eq(id))
+                .and(LOCATION_ATTRIBUTES.STATE.eq(RecordState.ACTIVE.name()))
+                .and(LOCATION_ATTRIBUTES.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public LocationAttributeDao findByUUID(String uuid) {

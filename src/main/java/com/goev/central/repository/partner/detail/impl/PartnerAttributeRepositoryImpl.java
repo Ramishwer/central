@@ -56,13 +56,13 @@ public class PartnerAttributeRepositoryImpl implements PartnerAttributeRepositor
 
     @Override
     public void delete(Integer id) {
-     context.update(PARTNER_ATTRIBUTES)
-     .set(PARTNER_ATTRIBUTES.STATE,RecordState.DELETED.name())
-     .where(PARTNER_ATTRIBUTES.ID.eq(id))
-     .and(PARTNER_ATTRIBUTES.STATE.eq(RecordState.ACTIVE.name()))
-     .and(PARTNER_ATTRIBUTES.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(PARTNER_ATTRIBUTES)
+                .set(PARTNER_ATTRIBUTES.STATE, RecordState.DELETED.name())
+                .where(PARTNER_ATTRIBUTES.ID.eq(id))
+                .and(PARTNER_ATTRIBUTES.STATE.eq(RecordState.ACTIVE.name()))
+                .and(PARTNER_ATTRIBUTES.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public PartnerAttributeDao findByUUID(String uuid) {

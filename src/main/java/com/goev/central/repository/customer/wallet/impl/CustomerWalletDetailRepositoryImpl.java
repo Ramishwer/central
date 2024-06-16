@@ -56,13 +56,13 @@ public class CustomerWalletDetailRepositoryImpl implements CustomerWalletDetailR
 
     @Override
     public void delete(Integer id) {
-     context.update(CUSTOMER_WALLET_DETAILS)
-     .set(CUSTOMER_WALLET_DETAILS.STATE,RecordState.DELETED.name())
-     .where(CUSTOMER_WALLET_DETAILS.ID.eq(id))
-     .and(CUSTOMER_WALLET_DETAILS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(CUSTOMER_WALLET_DETAILS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(CUSTOMER_WALLET_DETAILS)
+                .set(CUSTOMER_WALLET_DETAILS.STATE, RecordState.DELETED.name())
+                .where(CUSTOMER_WALLET_DETAILS.ID.eq(id))
+                .and(CUSTOMER_WALLET_DETAILS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(CUSTOMER_WALLET_DETAILS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public CustomerWalletDetailDao findByUUID(String uuid) {

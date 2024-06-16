@@ -55,27 +55,27 @@ public class PromotionRegionMappingRepositoryImpl implements PromotionRegionMapp
 
     @Override
     public void delete(Integer id) {
-     context.update(PROMOTION_REGION_MAPPINGS)
-     .set(PROMOTION_REGION_MAPPINGS.STATE,RecordState.DELETED.name())
-     .where(PROMOTION_REGION_MAPPINGS.ID.eq(id))
-     .and(PROMOTION_REGION_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(PROMOTION_REGION_MAPPINGS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(PROMOTION_REGION_MAPPINGS)
+                .set(PROMOTION_REGION_MAPPINGS.STATE, RecordState.DELETED.name())
+                .where(PROMOTION_REGION_MAPPINGS.ID.eq(id))
+                .and(PROMOTION_REGION_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(PROMOTION_REGION_MAPPINGS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
-     @Override
+    @Override
     public PromotionRegionMappingDao findByUUID(String uuid) {
         return context.selectFrom(PROMOTION_REGION_MAPPINGS).where(PROMOTION_REGION_MAPPINGS.UUID.eq(uuid))
-         .and(PROMOTION_REGION_MAPPINGS.IS_ACTIVE.eq(true))
-        .fetchAnyInto(PromotionRegionMappingDao.class);
-    }  
+                .and(PROMOTION_REGION_MAPPINGS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PromotionRegionMappingDao.class);
+    }
 
     @Override
     public PromotionRegionMappingDao findById(Integer id) {
         return context.selectFrom(PROMOTION_REGION_MAPPINGS).where(PROMOTION_REGION_MAPPINGS.ID.eq(id))
-         .and(PROMOTION_REGION_MAPPINGS.IS_ACTIVE.eq(true))
-        .fetchAnyInto(PromotionRegionMappingDao.class);
-    } 
+                .and(PROMOTION_REGION_MAPPINGS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PromotionRegionMappingDao.class);
+    }
 
     @Override
     public List<PromotionRegionMappingDao> findAllByIds(List<Integer> ids) {

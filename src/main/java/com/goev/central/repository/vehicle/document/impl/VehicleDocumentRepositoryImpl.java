@@ -60,13 +60,13 @@ public class VehicleDocumentRepositoryImpl implements VehicleDocumentRepository 
 
     @Override
     public void delete(Integer id) {
-     context.update(VEHICLE_DOCUMENTS)
-     .set(VEHICLE_DOCUMENTS.STATE,RecordState.DELETED.name())
-     .where(VEHICLE_DOCUMENTS.ID.eq(id))
-     .and(VEHICLE_DOCUMENTS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(VEHICLE_DOCUMENTS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(VEHICLE_DOCUMENTS)
+                .set(VEHICLE_DOCUMENTS.STATE, RecordState.DELETED.name())
+                .where(VEHICLE_DOCUMENTS.ID.eq(id))
+                .and(VEHICLE_DOCUMENTS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(VEHICLE_DOCUMENTS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public VehicleDocumentDao findByUUID(String uuid) {

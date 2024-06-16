@@ -56,12 +56,12 @@ public class PartnerAssetMappingRepositoryImpl implements PartnerAssetMappingRep
 
     @Override
     public void delete(Integer id) {
-     context.update(PARTNER_ASSET_MAPPINGS)
-     .set(PARTNER_ASSET_MAPPINGS.STATE,RecordState.DELETED.name())
-     .where(PARTNER_ASSET_MAPPINGS.ID.eq(id))
-     .and(PARTNER_ASSET_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(PARTNER_ASSET_MAPPINGS.IS_ACTIVE.eq(true))
-     .execute();
+        context.update(PARTNER_ASSET_MAPPINGS)
+                .set(PARTNER_ASSET_MAPPINGS.STATE, RecordState.DELETED.name())
+                .where(PARTNER_ASSET_MAPPINGS.ID.eq(id))
+                .and(PARTNER_ASSET_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(PARTNER_ASSET_MAPPINGS.IS_ACTIVE.eq(true))
+                .execute();
     }
 
     @Override

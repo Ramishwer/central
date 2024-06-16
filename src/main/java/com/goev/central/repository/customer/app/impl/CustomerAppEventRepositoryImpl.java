@@ -56,13 +56,13 @@ public class CustomerAppEventRepositoryImpl implements CustomerAppEventRepositor
 
     @Override
     public void delete(Integer id) {
-     context.update(CUSTOMER_APP_EVENTS)
-     .set(CUSTOMER_APP_EVENTS.STATE,RecordState.DELETED.name())
-     .where(CUSTOMER_APP_EVENTS.ID.eq(id))
-     .and(CUSTOMER_APP_EVENTS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(CUSTOMER_APP_EVENTS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(CUSTOMER_APP_EVENTS)
+                .set(CUSTOMER_APP_EVENTS.STATE, RecordState.DELETED.name())
+                .where(CUSTOMER_APP_EVENTS.ID.eq(id))
+                .and(CUSTOMER_APP_EVENTS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(CUSTOMER_APP_EVENTS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public CustomerAppEventDao findByUUID(String uuid) {

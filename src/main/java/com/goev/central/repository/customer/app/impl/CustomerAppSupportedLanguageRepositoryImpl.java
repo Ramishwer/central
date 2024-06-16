@@ -56,13 +56,13 @@ public class CustomerAppSupportedLanguageRepositoryImpl implements CustomerAppSu
 
     @Override
     public void delete(Integer id) {
-     context.update(CUSTOMER_APP_SUPPORTED_LANGUAGES)
-     .set(CUSTOMER_APP_SUPPORTED_LANGUAGES.STATE,RecordState.DELETED.name())
-     .where(CUSTOMER_APP_SUPPORTED_LANGUAGES.ID.eq(id))
-     .and(CUSTOMER_APP_SUPPORTED_LANGUAGES.STATE.eq(RecordState.ACTIVE.name()))
-     .and(CUSTOMER_APP_SUPPORTED_LANGUAGES.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(CUSTOMER_APP_SUPPORTED_LANGUAGES)
+                .set(CUSTOMER_APP_SUPPORTED_LANGUAGES.STATE, RecordState.DELETED.name())
+                .where(CUSTOMER_APP_SUPPORTED_LANGUAGES.ID.eq(id))
+                .and(CUSTOMER_APP_SUPPORTED_LANGUAGES.STATE.eq(RecordState.ACTIVE.name()))
+                .and(CUSTOMER_APP_SUPPORTED_LANGUAGES.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public CustomerAppSupportedLanguageDao findByUUID(String uuid) {

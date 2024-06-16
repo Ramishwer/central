@@ -56,13 +56,13 @@ public class VehicleAssetMappingRepositoryImpl implements VehicleAssetMappingRep
 
     @Override
     public void delete(Integer id) {
-     context.update(VEHICLE_ASSET_MAPPINGS)
-     .set(VEHICLE_ASSET_MAPPINGS.STATE,RecordState.DELETED.name())
-     .where(VEHICLE_ASSET_MAPPINGS.ID.eq(id))
-     .and(VEHICLE_ASSET_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(VEHICLE_ASSET_MAPPINGS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(VEHICLE_ASSET_MAPPINGS)
+                .set(VEHICLE_ASSET_MAPPINGS.STATE, RecordState.DELETED.name())
+                .where(VEHICLE_ASSET_MAPPINGS.ID.eq(id))
+                .and(VEHICLE_ASSET_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(VEHICLE_ASSET_MAPPINGS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public VehicleAssetMappingDao findByUUID(String uuid) {

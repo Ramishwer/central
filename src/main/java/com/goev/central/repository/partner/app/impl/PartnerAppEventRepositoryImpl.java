@@ -55,12 +55,12 @@ public class PartnerAppEventRepositoryImpl implements PartnerAppEventRepository 
 
     @Override
     public void delete(Integer id) {
-     context.update(PARTNER_APP_EVENTS)
-     .set(PARTNER_APP_EVENTS.STATE,RecordState.DELETED.name())
-     .where(PARTNER_APP_EVENTS.ID.eq(id))
-     .and(PARTNER_APP_EVENTS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(PARTNER_APP_EVENTS.IS_ACTIVE.eq(true))
-     .execute();
+        context.update(PARTNER_APP_EVENTS)
+                .set(PARTNER_APP_EVENTS.STATE, RecordState.DELETED.name())
+                .where(PARTNER_APP_EVENTS.ID.eq(id))
+                .and(PARTNER_APP_EVENTS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(PARTNER_APP_EVENTS.IS_ACTIVE.eq(true))
+                .execute();
     }
 
     @Override

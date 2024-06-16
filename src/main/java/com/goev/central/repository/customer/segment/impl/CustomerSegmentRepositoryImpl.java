@@ -56,13 +56,13 @@ public class CustomerSegmentRepositoryImpl implements CustomerSegmentRepository 
 
     @Override
     public void delete(Integer id) {
-     context.update(CUSTOMER_SEGMENTS)
-     .set(CUSTOMER_SEGMENTS.STATE,RecordState.DELETED.name())
-     .where(CUSTOMER_SEGMENTS.ID.eq(id))
-     .and(CUSTOMER_SEGMENTS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(CUSTOMER_SEGMENTS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(CUSTOMER_SEGMENTS)
+                .set(CUSTOMER_SEGMENTS.STATE, RecordState.DELETED.name())
+                .where(CUSTOMER_SEGMENTS.ID.eq(id))
+                .and(CUSTOMER_SEGMENTS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(CUSTOMER_SEGMENTS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public CustomerSegmentDao findByUUID(String uuid) {

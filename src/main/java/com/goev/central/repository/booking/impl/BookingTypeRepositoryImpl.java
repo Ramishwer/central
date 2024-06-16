@@ -57,13 +57,13 @@ public class BookingTypeRepositoryImpl implements BookingTypeRepository {
 
     @Override
     public void delete(Integer id) {
-     context.update(BOOKING_TYPES)
-     .set(BOOKING_TYPES.STATE,RecordState.DELETED.name())
-     .where(BOOKING_TYPES.ID.eq(id))
-     .and(BOOKING_TYPES.STATE.eq(RecordState.ACTIVE.name()))
-     .and(BOOKING_TYPES.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(BOOKING_TYPES)
+                .set(BOOKING_TYPES.STATE, RecordState.DELETED.name())
+                .where(BOOKING_TYPES.ID.eq(id))
+                .and(BOOKING_TYPES.STATE.eq(RecordState.ACTIVE.name()))
+                .and(BOOKING_TYPES.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public BookingTypeDao findByUUID(String uuid) {

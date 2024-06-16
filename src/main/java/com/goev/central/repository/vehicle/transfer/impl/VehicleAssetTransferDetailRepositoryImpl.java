@@ -56,13 +56,13 @@ public class VehicleAssetTransferDetailRepositoryImpl implements VehicleAssetTra
 
     @Override
     public void delete(Integer id) {
-     context.update(VEHICLE_ASSET_TRANSFER_DETAILS)
-     .set(VEHICLE_ASSET_TRANSFER_DETAILS.STATE,RecordState.DELETED.name())
-     .where(VEHICLE_ASSET_TRANSFER_DETAILS.ID.eq(id))
-     .and(VEHICLE_ASSET_TRANSFER_DETAILS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(VEHICLE_ASSET_TRANSFER_DETAILS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(VEHICLE_ASSET_TRANSFER_DETAILS)
+                .set(VEHICLE_ASSET_TRANSFER_DETAILS.STATE, RecordState.DELETED.name())
+                .where(VEHICLE_ASSET_TRANSFER_DETAILS.ID.eq(id))
+                .and(VEHICLE_ASSET_TRANSFER_DETAILS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(VEHICLE_ASSET_TRANSFER_DETAILS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public VehicleAssetTransferDetailDao findByUUID(String uuid) {

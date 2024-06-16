@@ -56,13 +56,13 @@ public class BusinessSegmentRepositoryImpl implements BusinessSegmentRepository 
 
     @Override
     public void delete(Integer id) {
-     context.update(BUSINESS_SEGMENTS)
-     .set(BUSINESS_SEGMENTS.STATE,RecordState.DELETED.name())
-     .where(BUSINESS_SEGMENTS.ID.eq(id))
-     .and(BUSINESS_SEGMENTS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(BUSINESS_SEGMENTS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(BUSINESS_SEGMENTS)
+                .set(BUSINESS_SEGMENTS.STATE, RecordState.DELETED.name())
+                .where(BUSINESS_SEGMENTS.ID.eq(id))
+                .and(BUSINESS_SEGMENTS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(BUSINESS_SEGMENTS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public BusinessSegmentDao findByUUID(String uuid) {

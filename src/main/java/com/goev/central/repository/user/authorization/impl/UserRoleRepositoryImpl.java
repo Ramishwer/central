@@ -56,13 +56,13 @@ public class UserRoleRepositoryImpl implements UserRoleRepository {
 
     @Override
     public void delete(Integer id) {
-     context.update(USER_ROLES)
-     .set(USER_ROLES.STATE,RecordState.DELETED.name())
-     .where(USER_ROLES.ID.eq(id))
-     .and(USER_ROLES.STATE.eq(RecordState.ACTIVE.name()))
-     .and(USER_ROLES.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(USER_ROLES)
+                .set(USER_ROLES.STATE, RecordState.DELETED.name())
+                .where(USER_ROLES.ID.eq(id))
+                .and(USER_ROLES.STATE.eq(RecordState.ACTIVE.name()))
+                .and(USER_ROLES.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public UserRoleDao findByUUID(String uuid) {

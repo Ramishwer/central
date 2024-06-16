@@ -55,12 +55,12 @@ public class RegionTypeRepositoryImpl implements RegionTypeRepository {
 
     @Override
     public void delete(Integer id) {
-     context.update(REGION_TYPES)
-     .set(REGION_TYPES.STATE,RecordState.DELETED.name())
-     .where(REGION_TYPES.ID.eq(id))
-     .and(REGION_TYPES.STATE.eq(RecordState.ACTIVE.name()))
-     .and(REGION_TYPES.IS_ACTIVE.eq(true))
-     .execute();
+        context.update(REGION_TYPES)
+                .set(REGION_TYPES.STATE, RecordState.DELETED.name())
+                .where(REGION_TYPES.ID.eq(id))
+                .and(REGION_TYPES.STATE.eq(RecordState.ACTIVE.name()))
+                .and(REGION_TYPES.IS_ACTIVE.eq(true))
+                .execute();
     }
 
     @Override

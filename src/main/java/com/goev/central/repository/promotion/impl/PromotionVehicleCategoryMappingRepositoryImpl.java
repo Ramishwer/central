@@ -55,26 +55,26 @@ public class PromotionVehicleCategoryMappingRepositoryImpl implements PromotionV
 
     @Override
     public void delete(Integer id) {
-     context.update(PROMOTION_VEHICLE_CATEGORY_MAPPINGS)
-     .set(PROMOTION_VEHICLE_CATEGORY_MAPPINGS.STATE,RecordState.DELETED.name())
-     .where(PROMOTION_VEHICLE_CATEGORY_MAPPINGS.ID.eq(id))
-     .and(PROMOTION_VEHICLE_CATEGORY_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(PROMOTION_VEHICLE_CATEGORY_MAPPINGS.IS_ACTIVE.eq(true))
-     .execute();
+        context.update(PROMOTION_VEHICLE_CATEGORY_MAPPINGS)
+                .set(PROMOTION_VEHICLE_CATEGORY_MAPPINGS.STATE, RecordState.DELETED.name())
+                .where(PROMOTION_VEHICLE_CATEGORY_MAPPINGS.ID.eq(id))
+                .and(PROMOTION_VEHICLE_CATEGORY_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(PROMOTION_VEHICLE_CATEGORY_MAPPINGS.IS_ACTIVE.eq(true))
+                .execute();
     }
 
-     @Override
+    @Override
     public PromotionVehicleCategoryMappingDao findByUUID(String uuid) {
         return context.selectFrom(PROMOTION_VEHICLE_CATEGORY_MAPPINGS).where(PROMOTION_VEHICLE_CATEGORY_MAPPINGS.UUID.eq(uuid))
-         .and(PROMOTION_VEHICLE_CATEGORY_MAPPINGS.IS_ACTIVE.eq(true))
-        .fetchAnyInto(PromotionVehicleCategoryMappingDao.class);
+                .and(PROMOTION_VEHICLE_CATEGORY_MAPPINGS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PromotionVehicleCategoryMappingDao.class);
     }
 
     @Override
     public PromotionVehicleCategoryMappingDao findById(Integer id) {
         return context.selectFrom(PROMOTION_VEHICLE_CATEGORY_MAPPINGS).where(PROMOTION_VEHICLE_CATEGORY_MAPPINGS.ID.eq(id))
-         .and(PROMOTION_VEHICLE_CATEGORY_MAPPINGS.IS_ACTIVE.eq(true))
-        .fetchAnyInto(PromotionVehicleCategoryMappingDao.class);
+                .and(PROMOTION_VEHICLE_CATEGORY_MAPPINGS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PromotionVehicleCategoryMappingDao.class);
     }
 
     @Override

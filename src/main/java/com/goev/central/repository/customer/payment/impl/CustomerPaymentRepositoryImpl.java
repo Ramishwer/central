@@ -57,13 +57,13 @@ public class CustomerPaymentRepositoryImpl implements CustomerPaymentRepository 
 
     @Override
     public void delete(Integer id) {
-     context.update(CUSTOMER_PAYMENTS)
-     .set(CUSTOMER_PAYMENTS.STATE,RecordState.DELETED.name())
-     .where(CUSTOMER_PAYMENTS.ID.eq(id))
-     .and(CUSTOMER_PAYMENTS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(CUSTOMER_PAYMENTS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(CUSTOMER_PAYMENTS)
+                .set(CUSTOMER_PAYMENTS.STATE, RecordState.DELETED.name())
+                .where(CUSTOMER_PAYMENTS.ID.eq(id))
+                .and(CUSTOMER_PAYMENTS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(CUSTOMER_PAYMENTS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public CustomerPaymentDao findByUUID(String uuid) {

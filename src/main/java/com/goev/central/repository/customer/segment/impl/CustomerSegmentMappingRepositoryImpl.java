@@ -56,13 +56,13 @@ public class CustomerSegmentMappingRepositoryImpl implements CustomerSegmentMapp
 
     @Override
     public void delete(Integer id) {
-     context.update(CUSTOMER_SEGMENT_MAPPINGS)
-     .set(CUSTOMER_SEGMENT_MAPPINGS.STATE,RecordState.DELETED.name())
-     .where(CUSTOMER_SEGMENT_MAPPINGS.ID.eq(id))
-     .and(CUSTOMER_SEGMENT_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(CUSTOMER_SEGMENT_MAPPINGS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(CUSTOMER_SEGMENT_MAPPINGS)
+                .set(CUSTOMER_SEGMENT_MAPPINGS.STATE, RecordState.DELETED.name())
+                .where(CUSTOMER_SEGMENT_MAPPINGS.ID.eq(id))
+                .and(CUSTOMER_SEGMENT_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(CUSTOMER_SEGMENT_MAPPINGS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public CustomerSegmentMappingDao findByUUID(String uuid) {

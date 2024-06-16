@@ -56,13 +56,13 @@ public class LocationAssetMappingRepositoryImpl implements LocationAssetMappingR
 
     @Override
     public void delete(Integer id) {
-     context.update(LOCATION_ASSET_MAPPINGS)
-     .set(LOCATION_ASSET_MAPPINGS.STATE,RecordState.DELETED.name())
-     .where(LOCATION_ASSET_MAPPINGS.ID.eq(id))
-     .and(LOCATION_ASSET_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(LOCATION_ASSET_MAPPINGS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(LOCATION_ASSET_MAPPINGS)
+                .set(LOCATION_ASSET_MAPPINGS.STATE, RecordState.DELETED.name())
+                .where(LOCATION_ASSET_MAPPINGS.ID.eq(id))
+                .and(LOCATION_ASSET_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(LOCATION_ASSET_MAPPINGS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public LocationAssetMappingDao findByUUID(String uuid) {

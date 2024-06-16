@@ -55,13 +55,13 @@ public class SystemLogRepositoryImpl implements SystemLogRepository {
 
     @Override
     public void delete(Integer id) {
-     context.update(SYSTEM_LOGS)
-     .set(SYSTEM_LOGS.STATE,RecordState.DELETED.name())
-     .where(SYSTEM_LOGS.ID.eq(id))
-     .and(SYSTEM_LOGS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(SYSTEM_LOGS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(SYSTEM_LOGS)
+                .set(SYSTEM_LOGS.STATE, RecordState.DELETED.name())
+                .where(SYSTEM_LOGS.ID.eq(id))
+                .and(SYSTEM_LOGS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(SYSTEM_LOGS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public SystemLogDao findByUUID(String uuid) {

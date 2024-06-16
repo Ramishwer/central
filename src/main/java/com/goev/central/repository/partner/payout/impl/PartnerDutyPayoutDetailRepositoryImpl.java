@@ -56,13 +56,13 @@ public class PartnerDutyPayoutDetailRepositoryImpl implements PartnerDutyPayoutD
 
     @Override
     public void delete(Integer id) {
-     context.update(PARTNER_DUTY_PAYOUT_DETAILS)
-     .set(PARTNER_DUTY_PAYOUT_DETAILS.STATE,RecordState.DELETED.name())
-     .where(PARTNER_DUTY_PAYOUT_DETAILS.ID.eq(id))
-     .and(PARTNER_DUTY_PAYOUT_DETAILS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(PARTNER_DUTY_PAYOUT_DETAILS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(PARTNER_DUTY_PAYOUT_DETAILS)
+                .set(PARTNER_DUTY_PAYOUT_DETAILS.STATE, RecordState.DELETED.name())
+                .where(PARTNER_DUTY_PAYOUT_DETAILS.ID.eq(id))
+                .and(PARTNER_DUTY_PAYOUT_DETAILS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(PARTNER_DUTY_PAYOUT_DETAILS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public PartnerDutyPayoutDetailDao findByUUID(String uuid) {

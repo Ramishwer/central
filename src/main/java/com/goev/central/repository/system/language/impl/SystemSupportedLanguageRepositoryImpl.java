@@ -55,13 +55,13 @@ public class SystemSupportedLanguageRepositoryImpl implements SystemSupportedLan
 
     @Override
     public void delete(Integer id) {
-     context.update(SYSTEM_SUPPORTED_LANGUAGES)
-     .set(SYSTEM_SUPPORTED_LANGUAGES.STATE,RecordState.DELETED.name())
-     .where(SYSTEM_SUPPORTED_LANGUAGES.ID.eq(id))
-     .and(SYSTEM_SUPPORTED_LANGUAGES.STATE.eq(RecordState.ACTIVE.name()))
-     .and(SYSTEM_SUPPORTED_LANGUAGES.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(SYSTEM_SUPPORTED_LANGUAGES)
+                .set(SYSTEM_SUPPORTED_LANGUAGES.STATE, RecordState.DELETED.name())
+                .where(SYSTEM_SUPPORTED_LANGUAGES.ID.eq(id))
+                .and(SYSTEM_SUPPORTED_LANGUAGES.STATE.eq(RecordState.ACTIVE.name()))
+                .and(SYSTEM_SUPPORTED_LANGUAGES.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public SystemSupportedLanguageDao findByUUID(String uuid) {

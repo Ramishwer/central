@@ -57,13 +57,13 @@ public class BookingTypeRegionMappingRepositoryImpl implements BookingTypeRegion
 
     @Override
     public void delete(Integer id) {
-     context.update(BOOKING_TYPE_REGION_MAPPINGS)
-     .set(BOOKING_TYPE_REGION_MAPPINGS.STATE,RecordState.DELETED.name())
-     .where(BOOKING_TYPE_REGION_MAPPINGS.ID.eq(id))
-     .and(BOOKING_TYPE_REGION_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(BOOKING_TYPE_REGION_MAPPINGS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(BOOKING_TYPE_REGION_MAPPINGS)
+                .set(BOOKING_TYPE_REGION_MAPPINGS.STATE, RecordState.DELETED.name())
+                .where(BOOKING_TYPE_REGION_MAPPINGS.ID.eq(id))
+                .and(BOOKING_TYPE_REGION_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(BOOKING_TYPE_REGION_MAPPINGS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public BookingTypeRegionMappingDao findByUUID(String uuid) {

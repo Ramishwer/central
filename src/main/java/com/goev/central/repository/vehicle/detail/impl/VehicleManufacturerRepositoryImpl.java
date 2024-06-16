@@ -55,13 +55,13 @@ public class VehicleManufacturerRepositoryImpl implements VehicleManufacturerRep
 
     @Override
     public void delete(Integer id) {
-     context.update(VEHICLE_MANUFACTURERS)
-     .set(VEHICLE_MANUFACTURERS.STATE,RecordState.DELETED.name())
-     .where(VEHICLE_MANUFACTURERS.ID.eq(id))
-     .and(VEHICLE_MANUFACTURERS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(VEHICLE_MANUFACTURERS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(VEHICLE_MANUFACTURERS)
+                .set(VEHICLE_MANUFACTURERS.STATE, RecordState.DELETED.name())
+                .where(VEHICLE_MANUFACTURERS.ID.eq(id))
+                .and(VEHICLE_MANUFACTURERS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(VEHICLE_MANUFACTURERS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public VehicleManufacturerDao findByUUID(String uuid) {

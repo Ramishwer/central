@@ -57,13 +57,13 @@ public class PricingModelRepositoryImpl implements PricingModelRepository {
 
     @Override
     public void delete(Integer id) {
-     context.update(PRICING_MODELS)
-     .set(PRICING_MODELS.STATE,RecordState.DELETED.name())
-     .where(PRICING_MODELS.ID.eq(id))
-     .and(PRICING_MODELS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(PRICING_MODELS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(PRICING_MODELS)
+                .set(PRICING_MODELS.STATE, RecordState.DELETED.name())
+                .where(PRICING_MODELS.ID.eq(id))
+                .and(PRICING_MODELS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(PRICING_MODELS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public PricingModelDao findByUUID(String uuid) {

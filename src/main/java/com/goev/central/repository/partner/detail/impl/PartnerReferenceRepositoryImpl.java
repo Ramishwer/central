@@ -56,13 +56,13 @@ public class PartnerReferenceRepositoryImpl implements PartnerReferenceRepositor
 
     @Override
     public void delete(Integer id) {
-     context.update(PARTNER_REFERENCES)
-     .set(PARTNER_REFERENCES.STATE,RecordState.DELETED.name())
-     .where(PARTNER_REFERENCES.ID.eq(id))
-     .and(PARTNER_REFERENCES.STATE.eq(RecordState.ACTIVE.name()))
-     .and(PARTNER_REFERENCES.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(PARTNER_REFERENCES)
+                .set(PARTNER_REFERENCES.STATE, RecordState.DELETED.name())
+                .where(PARTNER_REFERENCES.ID.eq(id))
+                .and(PARTNER_REFERENCES.STATE.eq(RecordState.ACTIVE.name()))
+                .and(PARTNER_REFERENCES.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public PartnerReferenceDao findByUUID(String uuid) {

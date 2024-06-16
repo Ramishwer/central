@@ -56,12 +56,12 @@ public class CustomerRepositoryImpl implements CustomerRepository {
 
     @Override
     public void delete(Integer id) {
-     context.update(CUSTOMERS)
-     .set(CUSTOMERS.STATE,RecordState.DELETED.name())
-     .where(CUSTOMERS.ID.eq(id))
-     .and(CUSTOMERS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(CUSTOMERS.IS_ACTIVE.eq(true))
-     .execute();
+        context.update(CUSTOMERS)
+                .set(CUSTOMERS.STATE, RecordState.DELETED.name())
+                .where(CUSTOMERS.ID.eq(id))
+                .and(CUSTOMERS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(CUSTOMERS.IS_ACTIVE.eq(true))
+                .execute();
     }
 
     @Override

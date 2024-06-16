@@ -56,13 +56,13 @@ public class PartnerBookingPayoutDetailRepositoryImpl implements PartnerBookingP
 
     @Override
     public void delete(Integer id) {
-     context.update(PARTNER_BOOKING_PAYOUT_DETAILS)
-     .set(PARTNER_BOOKING_PAYOUT_DETAILS.STATE,RecordState.DELETED.name())
-     .where(PARTNER_BOOKING_PAYOUT_DETAILS.ID.eq(id))
-     .and(PARTNER_BOOKING_PAYOUT_DETAILS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(PARTNER_BOOKING_PAYOUT_DETAILS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(PARTNER_BOOKING_PAYOUT_DETAILS)
+                .set(PARTNER_BOOKING_PAYOUT_DETAILS.STATE, RecordState.DELETED.name())
+                .where(PARTNER_BOOKING_PAYOUT_DETAILS.ID.eq(id))
+                .and(PARTNER_BOOKING_PAYOUT_DETAILS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(PARTNER_BOOKING_PAYOUT_DETAILS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public PartnerBookingPayoutDetailDao findByUUID(String uuid) {

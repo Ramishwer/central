@@ -55,13 +55,13 @@ public class PartnerAppStringRepositoryImpl implements PartnerAppStringRepositor
 
     @Override
     public void delete(Integer id) {
-     context.update(PARTNER_APP_STRINGS)
-     .set(PARTNER_APP_STRINGS.STATE,RecordState.DELETED.name())
-     .where(PARTNER_APP_STRINGS.ID.eq(id))
-     .and(PARTNER_APP_STRINGS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(PARTNER_APP_STRINGS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(PARTNER_APP_STRINGS)
+                .set(PARTNER_APP_STRINGS.STATE, RecordState.DELETED.name())
+                .where(PARTNER_APP_STRINGS.ID.eq(id))
+                .and(PARTNER_APP_STRINGS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(PARTNER_APP_STRINGS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public PartnerAppStringDao findByUUID(String uuid) {

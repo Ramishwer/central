@@ -58,13 +58,13 @@ public class PartnerDocumentRepositoryImpl implements PartnerDocumentRepository 
 
     @Override
     public void delete(Integer id) {
-     context.update(PARTNER_DOCUMENTS)
-     .set(PARTNER_DOCUMENTS.STATE,RecordState.DELETED.name())
-     .where(PARTNER_DOCUMENTS.ID.eq(id))
-     .and(PARTNER_DOCUMENTS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(PARTNER_DOCUMENTS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(PARTNER_DOCUMENTS)
+                .set(PARTNER_DOCUMENTS.STATE, RecordState.DELETED.name())
+                .where(PARTNER_DOCUMENTS.ID.eq(id))
+                .and(PARTNER_DOCUMENTS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(PARTNER_DOCUMENTS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public PartnerDocumentDao findByUUID(String uuid) {

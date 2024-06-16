@@ -56,13 +56,13 @@ public class PartnerNotificationRepositoryImpl implements PartnerNotificationRep
 
     @Override
     public void delete(Integer id) {
-     context.update(PARTNER_NOTIFICATIONS)
-     .set(PARTNER_NOTIFICATIONS.STATE,RecordState.DELETED.name())
-     .where(PARTNER_NOTIFICATIONS.ID.eq(id))
-     .and(PARTNER_NOTIFICATIONS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(PARTNER_NOTIFICATIONS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(PARTNER_NOTIFICATIONS)
+                .set(PARTNER_NOTIFICATIONS.STATE, RecordState.DELETED.name())
+                .where(PARTNER_NOTIFICATIONS.ID.eq(id))
+                .and(PARTNER_NOTIFICATIONS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(PARTNER_NOTIFICATIONS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public PartnerNotificationDao findByUUID(String uuid) {

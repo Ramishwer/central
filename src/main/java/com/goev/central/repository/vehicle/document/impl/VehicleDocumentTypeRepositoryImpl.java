@@ -61,12 +61,12 @@ public class VehicleDocumentTypeRepositoryImpl implements VehicleDocumentTypeRep
 
     @Override
     public void delete(Integer id) {
-     context.update(VEHICLE_DOCUMENT_TYPES)
-     .set(VEHICLE_DOCUMENT_TYPES.STATE,RecordState.DELETED.name())
-     .where(VEHICLE_DOCUMENT_TYPES.ID.eq(id))
-     .and(VEHICLE_DOCUMENT_TYPES.STATE.eq(RecordState.ACTIVE.name()))
-     .and(VEHICLE_DOCUMENT_TYPES.IS_ACTIVE.eq(true))
-     .execute();
+        context.update(VEHICLE_DOCUMENT_TYPES)
+                .set(VEHICLE_DOCUMENT_TYPES.STATE, RecordState.DELETED.name())
+                .where(VEHICLE_DOCUMENT_TYPES.ID.eq(id))
+                .and(VEHICLE_DOCUMENT_TYPES.STATE.eq(RecordState.ACTIVE.name()))
+                .and(VEHICLE_DOCUMENT_TYPES.IS_ACTIVE.eq(true))
+                .execute();
     }
 
     @Override

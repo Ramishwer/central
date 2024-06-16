@@ -55,13 +55,13 @@ public class UserDetailRepositoryImpl implements UserDetailRepository {
 
     @Override
     public void delete(Integer id) {
-     context.update(USER_DETAILS)
-     .set(USER_DETAILS.STATE,RecordState.DELETED.name())
-     .where(USER_DETAILS.ID.eq(id))
-     .and(USER_DETAILS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(USER_DETAILS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(USER_DETAILS)
+                .set(USER_DETAILS.STATE, RecordState.DELETED.name())
+                .where(USER_DETAILS.ID.eq(id))
+                .and(USER_DETAILS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(USER_DETAILS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public UserDetailDao findByUUID(String uuid) {

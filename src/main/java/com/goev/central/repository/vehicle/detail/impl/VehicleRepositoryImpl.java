@@ -61,13 +61,13 @@ public class VehicleRepositoryImpl implements VehicleRepository {
 
     @Override
     public void delete(Integer id) {
-     context.update(VEHICLES)
-     .set(VEHICLES.STATE,RecordState.DELETED.name())
-     .where(VEHICLES.ID.eq(id))
-     .and(VEHICLES.STATE.eq(RecordState.ACTIVE.name()))
-     .and(VEHICLES.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(VEHICLES)
+                .set(VEHICLES.STATE, RecordState.DELETED.name())
+                .where(VEHICLES.ID.eq(id))
+                .and(VEHICLES.STATE.eq(RecordState.ACTIVE.name()))
+                .and(VEHICLES.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public VehicleDao findByUUID(String uuid) {

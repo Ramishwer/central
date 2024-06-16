@@ -56,12 +56,12 @@ public class CustomerWalletTransactionRepositoryImpl implements CustomerWalletTr
 
     @Override
     public void delete(Integer id) {
-     context.update(CUSTOMER_WALLET_TRANSACTIONS)
-     .set(CUSTOMER_WALLET_TRANSACTIONS.STATE,RecordState.DELETED.name())
-     .where(CUSTOMER_WALLET_TRANSACTIONS.ID.eq(id))
-     .and(CUSTOMER_WALLET_TRANSACTIONS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(CUSTOMER_WALLET_TRANSACTIONS.IS_ACTIVE.eq(true))
-     .execute();
+        context.update(CUSTOMER_WALLET_TRANSACTIONS)
+                .set(CUSTOMER_WALLET_TRANSACTIONS.STATE, RecordState.DELETED.name())
+                .where(CUSTOMER_WALLET_TRANSACTIONS.ID.eq(id))
+                .and(CUSTOMER_WALLET_TRANSACTIONS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(CUSTOMER_WALLET_TRANSACTIONS.IS_ACTIVE.eq(true))
+                .execute();
     }
 
     @Override

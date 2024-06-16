@@ -56,13 +56,13 @@ public class UserPermissionRepositoryImpl implements UserPermissionRepository {
 
     @Override
     public void delete(Integer id) {
-     context.update(USER_PERMISSIONS)
-     .set(USER_PERMISSIONS.STATE,RecordState.DELETED.name())
-     .where(USER_PERMISSIONS.ID.eq(id))
-     .and(USER_PERMISSIONS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(USER_PERMISSIONS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(USER_PERMISSIONS)
+                .set(USER_PERMISSIONS.STATE, RecordState.DELETED.name())
+                .where(USER_PERMISSIONS.ID.eq(id))
+                .and(USER_PERMISSIONS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(USER_PERMISSIONS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public UserPermissionDao findByUUID(String uuid) {

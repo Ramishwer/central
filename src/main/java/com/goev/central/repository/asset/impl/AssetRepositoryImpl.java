@@ -56,13 +56,13 @@ public class AssetRepositoryImpl implements AssetRepository {
 
     @Override
     public void delete(Integer id) {
-     context.update(ASSETS)
-     .set(ASSETS.STATE,RecordState.DELETED.name())
-     .where(ASSETS.ID.eq(id))
-     .and(ASSETS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(ASSETS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(ASSETS)
+                .set(ASSETS.STATE, RecordState.DELETED.name())
+                .where(ASSETS.ID.eq(id))
+                .and(ASSETS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(ASSETS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public AssetDao findByUUID(String uuid) {

@@ -56,13 +56,13 @@ public class CustomerDeviceRepositoryImpl implements CustomerDeviceRepository {
 
     @Override
     public void delete(Integer id) {
-     context.update(CUSTOMER_DEVICES)
-     .set(CUSTOMER_DEVICES.STATE,RecordState.DELETED.name())
-     .where(CUSTOMER_DEVICES.ID.eq(id))
-     .and(CUSTOMER_DEVICES.STATE.eq(RecordState.ACTIVE.name()))
-     .and(CUSTOMER_DEVICES.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(CUSTOMER_DEVICES)
+                .set(CUSTOMER_DEVICES.STATE, RecordState.DELETED.name())
+                .where(CUSTOMER_DEVICES.ID.eq(id))
+                .and(CUSTOMER_DEVICES.STATE.eq(RecordState.ACTIVE.name()))
+                .and(CUSTOMER_DEVICES.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public CustomerDeviceDao findByUUID(String uuid) {

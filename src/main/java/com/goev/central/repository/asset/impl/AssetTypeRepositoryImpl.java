@@ -64,12 +64,12 @@ public class AssetTypeRepositoryImpl implements AssetTypeRepository {
 
     @Override
     public void delete(Integer id) {
-     context.update(ASSET_TYPES)
-     .set(ASSET_TYPES.STATE,RecordState.DELETED.name())
-     .where(ASSET_TYPES.ID.eq(id))
-     .and(ASSET_TYPES.STATE.eq(RecordState.ACTIVE.name()))
-     .and(ASSET_TYPES.IS_ACTIVE.eq(true))
-     .execute();
+        context.update(ASSET_TYPES)
+                .set(ASSET_TYPES.STATE, RecordState.DELETED.name())
+                .where(ASSET_TYPES.ID.eq(id))
+                .and(ASSET_TYPES.STATE.eq(RecordState.ACTIVE.name()))
+                .and(ASSET_TYPES.IS_ACTIVE.eq(true))
+                .execute();
     }
 
     @Override

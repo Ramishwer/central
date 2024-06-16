@@ -57,13 +57,13 @@ public class BookingFeedbackRepositoryImpl implements BookingFeedbackRepository 
 
     @Override
     public void delete(Integer id) {
-     context.update(BOOKING_FEEDBACKS)
-     .set(BOOKING_FEEDBACKS.STATE,RecordState.DELETED.name())
-     .where(BOOKING_FEEDBACKS.ID.eq(id))
-     .and(BOOKING_FEEDBACKS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(BOOKING_FEEDBACKS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(BOOKING_FEEDBACKS)
+                .set(BOOKING_FEEDBACKS.STATE, RecordState.DELETED.name())
+                .where(BOOKING_FEEDBACKS.ID.eq(id))
+                .and(BOOKING_FEEDBACKS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(BOOKING_FEEDBACKS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public BookingFeedbackDao findByUUID(String uuid) {

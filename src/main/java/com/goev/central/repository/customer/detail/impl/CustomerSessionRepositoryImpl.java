@@ -56,13 +56,13 @@ public class CustomerSessionRepositoryImpl implements CustomerSessionRepository 
 
     @Override
     public void delete(Integer id) {
-     context.update(CUSTOMER_SESSIONS)
-     .set(CUSTOMER_SESSIONS.STATE,RecordState.DELETED.name())
-     .where(CUSTOMER_SESSIONS.ID.eq(id))
-     .and(CUSTOMER_SESSIONS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(CUSTOMER_SESSIONS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(CUSTOMER_SESSIONS)
+                .set(CUSTOMER_SESSIONS.STATE, RecordState.DELETED.name())
+                .where(CUSTOMER_SESSIONS.ID.eq(id))
+                .and(CUSTOMER_SESSIONS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(CUSTOMER_SESSIONS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public CustomerSessionDao findByUUID(String uuid) {

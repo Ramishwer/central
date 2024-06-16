@@ -56,13 +56,13 @@ public class ChallanRepositoryImpl implements ChallanRepository {
 
     @Override
     public void delete(Integer id) {
-     context.update(CHALLANS)
-     .set(CHALLANS.STATE,RecordState.DELETED.name())
-     .where(CHALLANS.ID.eq(id))
-     .and(CHALLANS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(CHALLANS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(CHALLANS)
+                .set(CHALLANS.STATE, RecordState.DELETED.name())
+                .where(CHALLANS.ID.eq(id))
+                .and(CHALLANS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(CHALLANS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public ChallanDao findByUUID(String uuid) {

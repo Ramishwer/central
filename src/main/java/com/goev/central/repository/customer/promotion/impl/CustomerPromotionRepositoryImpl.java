@@ -56,13 +56,13 @@ public class CustomerPromotionRepositoryImpl implements CustomerPromotionReposit
 
     @Override
     public void delete(Integer id) {
-     context.update(CUSTOMER_PROMOTIONS)
-     .set(CUSTOMER_PROMOTIONS.STATE,RecordState.DELETED.name())
-     .where(CUSTOMER_PROMOTIONS.ID.eq(id))
-     .and(CUSTOMER_PROMOTIONS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(CUSTOMER_PROMOTIONS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(CUSTOMER_PROMOTIONS)
+                .set(CUSTOMER_PROMOTIONS.STATE, RecordState.DELETED.name())
+                .where(CUSTOMER_PROMOTIONS.ID.eq(id))
+                .and(CUSTOMER_PROMOTIONS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(CUSTOMER_PROMOTIONS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public CustomerPromotionDao findByUUID(String uuid) {

@@ -56,13 +56,13 @@ public class PartnerAppPropertyRepositoryImpl implements PartnerAppPropertyRepos
 
     @Override
     public void delete(Integer id) {
-     context.update(PARTNER_APP_PROPERTIES)
-     .set(PARTNER_APP_PROPERTIES.STATE,RecordState.DELETED.name())
-     .where(PARTNER_APP_PROPERTIES.ID.eq(id))
-     .and(PARTNER_APP_PROPERTIES.STATE.eq(RecordState.ACTIVE.name()))
-     .and(PARTNER_APP_PROPERTIES.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(PARTNER_APP_PROPERTIES)
+                .set(PARTNER_APP_PROPERTIES.STATE, RecordState.DELETED.name())
+                .where(PARTNER_APP_PROPERTIES.ID.eq(id))
+                .and(PARTNER_APP_PROPERTIES.STATE.eq(RecordState.ACTIVE.name()))
+                .and(PARTNER_APP_PROPERTIES.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public PartnerAppPropertyDao findByUUID(String uuid) {

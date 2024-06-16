@@ -56,13 +56,13 @@ public class UserRolePermissionMappingRepositoryImpl implements UserRolePermissi
 
     @Override
     public void delete(Integer id) {
-     context.update(USER_ROLE_PERMISSION_MAPPINGS)
-     .set(USER_ROLE_PERMISSION_MAPPINGS.STATE,RecordState.DELETED.name())
-     .where(USER_ROLE_PERMISSION_MAPPINGS.ID.eq(id))
-     .and(USER_ROLE_PERMISSION_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(USER_ROLE_PERMISSION_MAPPINGS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(USER_ROLE_PERMISSION_MAPPINGS)
+                .set(USER_ROLE_PERMISSION_MAPPINGS.STATE, RecordState.DELETED.name())
+                .where(USER_ROLE_PERMISSION_MAPPINGS.ID.eq(id))
+                .and(USER_ROLE_PERMISSION_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(USER_ROLE_PERMISSION_MAPPINGS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public UserRolePermissionMappingDao findByUUID(String uuid) {

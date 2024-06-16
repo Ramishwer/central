@@ -55,13 +55,13 @@ public class RegionRepositoryImpl implements RegionRepository {
 
     @Override
     public void delete(Integer id) {
-     context.update(REGIONS)
-     .set(REGIONS.STATE,RecordState.DELETED.name())
-     .where(REGIONS.ID.eq(id))
-     .and(REGIONS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(REGIONS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(REGIONS)
+                .set(REGIONS.STATE, RecordState.DELETED.name())
+                .where(REGIONS.ID.eq(id))
+                .and(REGIONS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(REGIONS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public RegionDao findByUUID(String uuid) {

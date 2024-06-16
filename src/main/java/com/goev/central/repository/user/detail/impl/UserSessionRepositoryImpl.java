@@ -56,13 +56,13 @@ public class UserSessionRepositoryImpl implements UserSessionRepository {
 
     @Override
     public void delete(Integer id) {
-     context.update(USER_SESSIONS)
-     .set(USER_SESSIONS.STATE,RecordState.DELETED.name())
-     .where(USER_SESSIONS.ID.eq(id))
-     .and(USER_SESSIONS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(USER_SESSIONS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(USER_SESSIONS)
+                .set(USER_SESSIONS.STATE, RecordState.DELETED.name())
+                .where(USER_SESSIONS.ID.eq(id))
+                .and(USER_SESSIONS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(USER_SESSIONS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public UserSessionDao findByUUID(String uuid) {

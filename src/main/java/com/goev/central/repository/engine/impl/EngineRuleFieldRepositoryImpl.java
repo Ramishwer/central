@@ -56,13 +56,13 @@ public class EngineRuleFieldRepositoryImpl implements EngineRuleFieldRepository 
 
     @Override
     public void delete(Integer id) {
-     context.update(ENGINE_RULE_FIELDS)
-     .set(ENGINE_RULE_FIELDS.STATE,RecordState.DELETED.name())
-     .where(ENGINE_RULE_FIELDS.ID.eq(id))
-     .and(ENGINE_RULE_FIELDS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(ENGINE_RULE_FIELDS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(ENGINE_RULE_FIELDS)
+                .set(ENGINE_RULE_FIELDS.STATE, RecordState.DELETED.name())
+                .where(ENGINE_RULE_FIELDS.ID.eq(id))
+                .and(ENGINE_RULE_FIELDS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(ENGINE_RULE_FIELDS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public EngineRuleFieldDao findByUUID(String uuid) {

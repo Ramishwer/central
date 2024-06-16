@@ -56,13 +56,13 @@ public class PartnerPassbookDetailRepositoryImpl implements PartnerPassbookDetai
 
     @Override
     public void delete(Integer id) {
-     context.update(PARTNER_PASSBOOK_DETAILS)
-     .set(PARTNER_PASSBOOK_DETAILS.STATE,RecordState.DELETED.name())
-     .where(PARTNER_PASSBOOK_DETAILS.ID.eq(id))
-     .and(PARTNER_PASSBOOK_DETAILS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(PARTNER_PASSBOOK_DETAILS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(PARTNER_PASSBOOK_DETAILS)
+                .set(PARTNER_PASSBOOK_DETAILS.STATE, RecordState.DELETED.name())
+                .where(PARTNER_PASSBOOK_DETAILS.ID.eq(id))
+                .and(PARTNER_PASSBOOK_DETAILS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(PARTNER_PASSBOOK_DETAILS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public PartnerPassbookDetailDao findByUUID(String uuid) {

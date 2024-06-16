@@ -56,13 +56,13 @@ public class VariableRepositoryImpl implements VariableRepository {
 
     @Override
     public void delete(Integer id) {
-     context.update(VARIABLES)
-     .set(VARIABLES.STATE,RecordState.DELETED.name())
-     .where(VARIABLES.ID.eq(id))
-     .and(VARIABLES.STATE.eq(RecordState.ACTIVE.name()))
-     .and(VARIABLES.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(VARIABLES)
+                .set(VARIABLES.STATE, RecordState.DELETED.name())
+                .where(VARIABLES.ID.eq(id))
+                .and(VARIABLES.STATE.eq(RecordState.ACTIVE.name()))
+                .and(VARIABLES.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public VariableDao findByUUID(String uuid) {

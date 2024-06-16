@@ -56,13 +56,13 @@ public class PayoutModelRepositoryImpl implements PayoutModelRepository {
 
     @Override
     public void delete(Integer id) {
-     context.update(PAYOUT_MODELS)
-     .set(PAYOUT_MODELS.STATE,RecordState.DELETED.name())
-     .where(PAYOUT_MODELS.ID.eq(id))
-     .and(PAYOUT_MODELS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(PAYOUT_MODELS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(PAYOUT_MODELS)
+                .set(PAYOUT_MODELS.STATE, RecordState.DELETED.name())
+                .where(PAYOUT_MODELS.ID.eq(id))
+                .and(PAYOUT_MODELS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(PAYOUT_MODELS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public PayoutModelDao findByUUID(String uuid) {

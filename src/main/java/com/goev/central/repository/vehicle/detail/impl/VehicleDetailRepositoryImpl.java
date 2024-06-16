@@ -60,12 +60,12 @@ public class VehicleDetailRepositoryImpl implements VehicleDetailRepository {
 
     @Override
     public void delete(Integer id) {
-     context.update(VEHICLE_DETAILS)
-     .set(VEHICLE_DETAILS.STATE,RecordState.DELETED.name())
-     .where(VEHICLE_DETAILS.ID.eq(id))
-     .and(VEHICLE_DETAILS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(VEHICLE_DETAILS.IS_ACTIVE.eq(true))
-     .execute();
+        context.update(VEHICLE_DETAILS)
+                .set(VEHICLE_DETAILS.STATE, RecordState.DELETED.name())
+                .where(VEHICLE_DETAILS.ID.eq(id))
+                .and(VEHICLE_DETAILS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(VEHICLE_DETAILS.IS_ACTIVE.eq(true))
+                .execute();
     }
 
     @Override

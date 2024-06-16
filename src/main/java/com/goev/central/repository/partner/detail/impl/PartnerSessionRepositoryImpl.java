@@ -56,13 +56,13 @@ public class PartnerSessionRepositoryImpl implements PartnerSessionRepository {
 
     @Override
     public void delete(Integer id) {
-     context.update(PARTNER_SESSIONS)
-     .set(PARTNER_SESSIONS.STATE,RecordState.DELETED.name())
-     .where(PARTNER_SESSIONS.ID.eq(id))
-     .and(PARTNER_SESSIONS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(PARTNER_SESSIONS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(PARTNER_SESSIONS)
+                .set(PARTNER_SESSIONS.STATE, RecordState.DELETED.name())
+                .where(PARTNER_SESSIONS.ID.eq(id))
+                .and(PARTNER_SESSIONS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(PARTNER_SESSIONS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public PartnerSessionDao findByUUID(String uuid) {

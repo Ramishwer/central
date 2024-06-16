@@ -56,13 +56,13 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public void delete(Integer id) {
-     context.update(USERS)
-     .set(USERS.STATE,RecordState.DELETED.name())
-     .where(USERS.ID.eq(id))
-     .and(USERS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(USERS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(USERS)
+                .set(USERS.STATE, RecordState.DELETED.name())
+                .where(USERS.ID.eq(id))
+                .and(USERS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(USERS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public UserDao findByUUID(String uuid) {

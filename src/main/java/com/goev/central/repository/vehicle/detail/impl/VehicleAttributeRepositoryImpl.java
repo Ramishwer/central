@@ -56,13 +56,13 @@ public class VehicleAttributeRepositoryImpl implements VehicleAttributeRepositor
 
     @Override
     public void delete(Integer id) {
-     context.update(VEHICLE_ATTRIBUTES)
-     .set(VEHICLE_ATTRIBUTES.STATE,RecordState.DELETED.name())
-     .where(VEHICLE_ATTRIBUTES.ID.eq(id))
-     .and(VEHICLE_ATTRIBUTES.STATE.eq(RecordState.ACTIVE.name()))
-     .and(VEHICLE_ATTRIBUTES.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(VEHICLE_ATTRIBUTES)
+                .set(VEHICLE_ATTRIBUTES.STATE, RecordState.DELETED.name())
+                .where(VEHICLE_ATTRIBUTES.ID.eq(id))
+                .and(VEHICLE_ATTRIBUTES.STATE.eq(RecordState.ACTIVE.name()))
+                .and(VEHICLE_ATTRIBUTES.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public VehicleAttributeDao findByUUID(String uuid) {

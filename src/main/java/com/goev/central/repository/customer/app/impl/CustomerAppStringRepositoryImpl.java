@@ -56,13 +56,13 @@ public class CustomerAppStringRepositoryImpl implements CustomerAppStringReposit
 
     @Override
     public void delete(Integer id) {
-     context.update(CUSTOMER_APP_STRINGS)
-     .set(CUSTOMER_APP_STRINGS.STATE,RecordState.DELETED.name())
-     .where(CUSTOMER_APP_STRINGS.ID.eq(id))
-     .and(CUSTOMER_APP_STRINGS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(CUSTOMER_APP_STRINGS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(CUSTOMER_APP_STRINGS)
+                .set(CUSTOMER_APP_STRINGS.STATE, RecordState.DELETED.name())
+                .where(CUSTOMER_APP_STRINGS.ID.eq(id))
+                .and(CUSTOMER_APP_STRINGS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(CUSTOMER_APP_STRINGS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public CustomerAppStringDao findByUUID(String uuid) {

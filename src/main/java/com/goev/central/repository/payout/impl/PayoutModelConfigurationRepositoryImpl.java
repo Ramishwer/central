@@ -56,13 +56,13 @@ public class PayoutModelConfigurationRepositoryImpl implements PayoutModelConfig
 
     @Override
     public void delete(Integer id) {
-     context.update(PAYOUT_MODEL_CONFIGURATIONS)
-     .set(PAYOUT_MODEL_CONFIGURATIONS.STATE,RecordState.DELETED.name())
-     .where(PAYOUT_MODEL_CONFIGURATIONS.ID.eq(id))
-     .and(PAYOUT_MODEL_CONFIGURATIONS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(PAYOUT_MODEL_CONFIGURATIONS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(PAYOUT_MODEL_CONFIGURATIONS)
+                .set(PAYOUT_MODEL_CONFIGURATIONS.STATE, RecordState.DELETED.name())
+                .where(PAYOUT_MODEL_CONFIGURATIONS.ID.eq(id))
+                .and(PAYOUT_MODEL_CONFIGURATIONS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(PAYOUT_MODEL_CONFIGURATIONS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public PayoutModelConfigurationDao findByUUID(String uuid) {

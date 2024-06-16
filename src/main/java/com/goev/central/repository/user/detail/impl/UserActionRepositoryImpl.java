@@ -56,13 +56,13 @@ public class UserActionRepositoryImpl implements UserActionRepository {
 
     @Override
     public void delete(Integer id) {
-     context.update(USER_ACTIONS)
-     .set(USER_ACTIONS.STATE,RecordState.DELETED.name())
-     .where(USER_ACTIONS.ID.eq(id))
-     .and(USER_ACTIONS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(USER_ACTIONS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(USER_ACTIONS)
+                .set(USER_ACTIONS.STATE, RecordState.DELETED.name())
+                .where(USER_ACTIONS.ID.eq(id))
+                .and(USER_ACTIONS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(USER_ACTIONS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public UserActionDao findByUUID(String uuid) {

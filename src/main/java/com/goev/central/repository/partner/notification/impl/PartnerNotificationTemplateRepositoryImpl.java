@@ -56,13 +56,13 @@ public class PartnerNotificationTemplateRepositoryImpl implements PartnerNotific
 
     @Override
     public void delete(Integer id) {
-     context.update(PARTNER_NOTIFICATION_TEMPLATES)
-     .set(PARTNER_NOTIFICATION_TEMPLATES.STATE,RecordState.DELETED.name())
-     .where(PARTNER_NOTIFICATION_TEMPLATES.ID.eq(id))
-     .and(PARTNER_NOTIFICATION_TEMPLATES.STATE.eq(RecordState.ACTIVE.name()))
-     .and(PARTNER_NOTIFICATION_TEMPLATES.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(PARTNER_NOTIFICATION_TEMPLATES)
+                .set(PARTNER_NOTIFICATION_TEMPLATES.STATE, RecordState.DELETED.name())
+                .where(PARTNER_NOTIFICATION_TEMPLATES.ID.eq(id))
+                .and(PARTNER_NOTIFICATION_TEMPLATES.STATE.eq(RecordState.ACTIVE.name()))
+                .and(PARTNER_NOTIFICATION_TEMPLATES.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public PartnerNotificationTemplateDao findByUUID(String uuid) {

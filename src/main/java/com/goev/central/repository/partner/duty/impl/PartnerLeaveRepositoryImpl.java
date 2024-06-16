@@ -56,13 +56,13 @@ public class PartnerLeaveRepositoryImpl implements PartnerLeaveRepository {
 
     @Override
     public void delete(Integer id) {
-     context.update(PARTNER_LEAVES)
-     .set(PARTNER_LEAVES.STATE,RecordState.DELETED.name())
-     .where(PARTNER_LEAVES.ID.eq(id))
-     .and(PARTNER_LEAVES.STATE.eq(RecordState.ACTIVE.name()))
-     .and(PARTNER_LEAVES.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(PARTNER_LEAVES)
+                .set(PARTNER_LEAVES.STATE, RecordState.DELETED.name())
+                .where(PARTNER_LEAVES.ID.eq(id))
+                .and(PARTNER_LEAVES.STATE.eq(RecordState.ACTIVE.name()))
+                .and(PARTNER_LEAVES.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public PartnerLeaveDao findByUUID(String uuid) {

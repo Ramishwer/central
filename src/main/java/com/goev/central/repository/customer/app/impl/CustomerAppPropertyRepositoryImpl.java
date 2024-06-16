@@ -56,13 +56,13 @@ public class CustomerAppPropertyRepositoryImpl implements CustomerAppPropertyRep
 
     @Override
     public void delete(Integer id) {
-     context.update(CUSTOMER_APP_PROPERTIES)
-     .set(CUSTOMER_APP_PROPERTIES.STATE,RecordState.DELETED.name())
-     .where(CUSTOMER_APP_PROPERTIES.ID.eq(id))
-     .and(CUSTOMER_APP_PROPERTIES.STATE.eq(RecordState.ACTIVE.name()))
-     .and(CUSTOMER_APP_PROPERTIES.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(CUSTOMER_APP_PROPERTIES)
+                .set(CUSTOMER_APP_PROPERTIES.STATE, RecordState.DELETED.name())
+                .where(CUSTOMER_APP_PROPERTIES.ID.eq(id))
+                .and(CUSTOMER_APP_PROPERTIES.STATE.eq(RecordState.ACTIVE.name()))
+                .and(CUSTOMER_APP_PROPERTIES.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public CustomerAppPropertyDao findByUUID(String uuid) {

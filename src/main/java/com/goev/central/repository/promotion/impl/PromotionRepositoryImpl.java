@@ -55,27 +55,27 @@ public class PromotionRepositoryImpl implements PromotionRepository {
 
     @Override
     public void delete(Integer id) {
-     context.update(PROMOTIONS)
-     .set(PROMOTIONS.STATE,RecordState.DELETED.name())
-     .where(PROMOTIONS.ID.eq(id))
-     .and(PROMOTIONS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(PROMOTIONS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(PROMOTIONS)
+                .set(PROMOTIONS.STATE, RecordState.DELETED.name())
+                .where(PROMOTIONS.ID.eq(id))
+                .and(PROMOTIONS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(PROMOTIONS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
-     @Override
+    @Override
     public PromotionDao findByUUID(String uuid) {
         return context.selectFrom(PROMOTIONS).where(PROMOTIONS.UUID.eq(uuid))
-         .and(PROMOTIONS.IS_ACTIVE.eq(true))
-        .fetchAnyInto(PromotionDao.class);
-    }  
+                .and(PROMOTIONS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PromotionDao.class);
+    }
 
     @Override
     public PromotionDao findById(Integer id) {
         return context.selectFrom(PROMOTIONS).where(PROMOTIONS.ID.eq(id))
-         .and(PROMOTIONS.IS_ACTIVE.eq(true))
-        .fetchAnyInto(PromotionDao.class);
-    } 
+                .and(PROMOTIONS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PromotionDao.class);
+    }
 
     @Override
     public List<PromotionDao> findAllByIds(List<Integer> ids) {

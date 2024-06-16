@@ -57,13 +57,13 @@ public class BookingTypeVehicleCategoryMappingRepositoryImpl implements BookingT
 
     @Override
     public void delete(Integer id) {
-     context.update(BOOKING_TYPE_VEHICLE_CATEGORY_MAPPINGS)
-     .set(BOOKING_TYPE_VEHICLE_CATEGORY_MAPPINGS.STATE,RecordState.DELETED.name())
-     .where(BOOKING_TYPE_VEHICLE_CATEGORY_MAPPINGS.ID.eq(id))
-     .and(BOOKING_TYPE_VEHICLE_CATEGORY_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(BOOKING_TYPE_VEHICLE_CATEGORY_MAPPINGS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(BOOKING_TYPE_VEHICLE_CATEGORY_MAPPINGS)
+                .set(BOOKING_TYPE_VEHICLE_CATEGORY_MAPPINGS.STATE, RecordState.DELETED.name())
+                .where(BOOKING_TYPE_VEHICLE_CATEGORY_MAPPINGS.ID.eq(id))
+                .and(BOOKING_TYPE_VEHICLE_CATEGORY_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(BOOKING_TYPE_VEHICLE_CATEGORY_MAPPINGS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public BookingTypeVehicleCategoryMappingDao findByUUID(String uuid) {

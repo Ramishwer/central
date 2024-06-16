@@ -56,13 +56,13 @@ public class PartnerTicketRepositoryImpl implements PartnerTicketRepository {
 
     @Override
     public void delete(Integer id) {
-     context.update(PARTNER_TICKETS)
-     .set(PARTNER_TICKETS.STATE,RecordState.DELETED.name())
-     .where(PARTNER_TICKETS.ID.eq(id))
-     .and(PARTNER_TICKETS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(PARTNER_TICKETS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(PARTNER_TICKETS)
+                .set(PARTNER_TICKETS.STATE, RecordState.DELETED.name())
+                .where(PARTNER_TICKETS.ID.eq(id))
+                .and(PARTNER_TICKETS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(PARTNER_TICKETS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public PartnerTicketDao findByUUID(String uuid) {

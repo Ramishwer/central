@@ -56,13 +56,13 @@ public class PartnerPayoutTransactionRepositoryImpl implements PartnerPayoutTran
 
     @Override
     public void delete(Integer id) {
-     context.update(PARTNER_PAYOUT_TRANSACTIONS)
-     .set(PARTNER_PAYOUT_TRANSACTIONS.STATE,RecordState.DELETED.name())
-     .where(PARTNER_PAYOUT_TRANSACTIONS.ID.eq(id))
-     .and(PARTNER_PAYOUT_TRANSACTIONS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(PARTNER_PAYOUT_TRANSACTIONS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(PARTNER_PAYOUT_TRANSACTIONS)
+                .set(PARTNER_PAYOUT_TRANSACTIONS.STATE, RecordState.DELETED.name())
+                .where(PARTNER_PAYOUT_TRANSACTIONS.ID.eq(id))
+                .and(PARTNER_PAYOUT_TRANSACTIONS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(PARTNER_PAYOUT_TRANSACTIONS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public PartnerPayoutTransactionDao findByUUID(String uuid) {

@@ -56,13 +56,13 @@ public class PayoutElementRepositoryImpl implements PayoutElementRepository {
 
     @Override
     public void delete(Integer id) {
-     context.update(PAYOUT_ELEMENTS)
-     .set(PAYOUT_ELEMENTS.STATE,RecordState.DELETED.name())
-     .where(PAYOUT_ELEMENTS.ID.eq(id))
-     .and(PAYOUT_ELEMENTS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(PAYOUT_ELEMENTS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(PAYOUT_ELEMENTS)
+                .set(PAYOUT_ELEMENTS.STATE, RecordState.DELETED.name())
+                .where(PAYOUT_ELEMENTS.ID.eq(id))
+                .and(PAYOUT_ELEMENTS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(PAYOUT_ELEMENTS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public PayoutElementDao findByUUID(String uuid) {

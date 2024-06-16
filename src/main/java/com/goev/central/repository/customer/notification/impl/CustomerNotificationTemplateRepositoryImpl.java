@@ -56,13 +56,13 @@ public class CustomerNotificationTemplateRepositoryImpl implements CustomerNotif
 
     @Override
     public void delete(Integer id) {
-     context.update(CUSTOMER_NOTIFICATION_TEMPLATES)
-     .set(CUSTOMER_NOTIFICATION_TEMPLATES.STATE,RecordState.DELETED.name())
-     .where(CUSTOMER_NOTIFICATION_TEMPLATES.ID.eq(id))
-     .and(CUSTOMER_NOTIFICATION_TEMPLATES.STATE.eq(RecordState.ACTIVE.name()))
-     .and(CUSTOMER_NOTIFICATION_TEMPLATES.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(CUSTOMER_NOTIFICATION_TEMPLATES)
+                .set(CUSTOMER_NOTIFICATION_TEMPLATES.STATE, RecordState.DELETED.name())
+                .where(CUSTOMER_NOTIFICATION_TEMPLATES.ID.eq(id))
+                .and(CUSTOMER_NOTIFICATION_TEMPLATES.STATE.eq(RecordState.ACTIVE.name()))
+                .and(CUSTOMER_NOTIFICATION_TEMPLATES.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public CustomerNotificationTemplateDao findByUUID(String uuid) {

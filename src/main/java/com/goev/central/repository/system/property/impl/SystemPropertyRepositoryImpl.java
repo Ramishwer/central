@@ -63,13 +63,13 @@ public class SystemPropertyRepositoryImpl implements SystemPropertyRepository {
 
     @Override
     public void delete(Integer id) {
-     context.update(SYSTEM_PROPERTIES)
-     .set(SYSTEM_PROPERTIES.STATE,RecordState.DELETED.name())
-     .where(SYSTEM_PROPERTIES.ID.eq(id))
-     .and(SYSTEM_PROPERTIES.STATE.eq(RecordState.ACTIVE.name()))
-     .and(SYSTEM_PROPERTIES.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(SYSTEM_PROPERTIES)
+                .set(SYSTEM_PROPERTIES.STATE, RecordState.DELETED.name())
+                .where(SYSTEM_PROPERTIES.ID.eq(id))
+                .and(SYSTEM_PROPERTIES.STATE.eq(RecordState.ACTIVE.name()))
+                .and(SYSTEM_PROPERTIES.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public SystemPropertyDao findByUUID(String uuid) {

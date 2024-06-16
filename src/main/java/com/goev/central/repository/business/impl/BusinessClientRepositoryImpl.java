@@ -56,13 +56,13 @@ public class BusinessClientRepositoryImpl implements BusinessClientRepository {
 
     @Override
     public void delete(Integer id) {
-     context.update(BUSINESS_CLIENTS)
-     .set(BUSINESS_CLIENTS.STATE,RecordState.DELETED.name())
-     .where(BUSINESS_CLIENTS.ID.eq(id))
-     .and(BUSINESS_CLIENTS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(BUSINESS_CLIENTS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(BUSINESS_CLIENTS)
+                .set(BUSINESS_CLIENTS.STATE, RecordState.DELETED.name())
+                .where(BUSINESS_CLIENTS.ID.eq(id))
+                .and(BUSINESS_CLIENTS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(BUSINESS_CLIENTS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public BusinessClientDao findByUUID(String uuid) {

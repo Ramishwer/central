@@ -55,13 +55,13 @@ public class VehicleFinancerRepositoryImpl implements VehicleFinancerRepository 
 
     @Override
     public void delete(Integer id) {
-     context.update(VEHICLE_FINANCERS)
-     .set(VEHICLE_FINANCERS.STATE,RecordState.DELETED.name())
-     .where(VEHICLE_FINANCERS.ID.eq(id))
-     .and(VEHICLE_FINANCERS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(VEHICLE_FINANCERS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(VEHICLE_FINANCERS)
+                .set(VEHICLE_FINANCERS.STATE, RecordState.DELETED.name())
+                .where(VEHICLE_FINANCERS.ID.eq(id))
+                .and(VEHICLE_FINANCERS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(VEHICLE_FINANCERS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public VehicleFinancerDao findByUUID(String uuid) {

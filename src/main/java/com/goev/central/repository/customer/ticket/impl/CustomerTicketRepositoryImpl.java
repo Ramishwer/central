@@ -56,13 +56,13 @@ public class CustomerTicketRepositoryImpl implements CustomerTicketRepository {
 
     @Override
     public void delete(Integer id) {
-     context.update(CUSTOMER_TICKETS)
-     .set(CUSTOMER_TICKETS.STATE,RecordState.DELETED.name())
-     .where(CUSTOMER_TICKETS.ID.eq(id))
-     .and(CUSTOMER_TICKETS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(CUSTOMER_TICKETS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(CUSTOMER_TICKETS)
+                .set(CUSTOMER_TICKETS.STATE, RecordState.DELETED.name())
+                .where(CUSTOMER_TICKETS.ID.eq(id))
+                .and(CUSTOMER_TICKETS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(CUSTOMER_TICKETS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public CustomerTicketDao findByUUID(String uuid) {

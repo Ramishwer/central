@@ -55,13 +55,13 @@ public class SystemStringRepositoryImpl implements SystemStringRepository {
 
     @Override
     public void delete(Integer id) {
-     context.update(SYSTEM_STRINGS)
-     .set(SYSTEM_STRINGS.STATE,RecordState.DELETED.name())
-     .where(SYSTEM_STRINGS.ID.eq(id))
-     .and(SYSTEM_STRINGS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(SYSTEM_STRINGS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(SYSTEM_STRINGS)
+                .set(SYSTEM_STRINGS.STATE, RecordState.DELETED.name())
+                .where(SYSTEM_STRINGS.ID.eq(id))
+                .and(SYSTEM_STRINGS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(SYSTEM_STRINGS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public SystemStringDao findByUUID(String uuid) {

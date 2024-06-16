@@ -55,13 +55,13 @@ public class ShiftRepositoryImpl implements ShiftRepository {
 
     @Override
     public void delete(Integer id) {
-     context.update(SHIFTS)
-     .set(SHIFTS.STATE,RecordState.DELETED.name())
-     .where(SHIFTS.ID.eq(id))
-     .and(SHIFTS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(SHIFTS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(SHIFTS)
+                .set(SHIFTS.STATE, RecordState.DELETED.name())
+                .where(SHIFTS.ID.eq(id))
+                .and(SHIFTS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(SHIFTS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public ShiftDao findByUUID(String uuid) {

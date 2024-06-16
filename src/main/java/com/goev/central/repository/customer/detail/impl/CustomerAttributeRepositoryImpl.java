@@ -56,13 +56,13 @@ public class CustomerAttributeRepositoryImpl implements CustomerAttributeReposit
 
     @Override
     public void delete(Integer id) {
-     context.update(CUSTOMER_ATTRIBUTES)
-     .set(CUSTOMER_ATTRIBUTES.STATE,RecordState.DELETED.name())
-     .where(CUSTOMER_ATTRIBUTES.ID.eq(id))
-     .and(CUSTOMER_ATTRIBUTES.STATE.eq(RecordState.ACTIVE.name()))
-     .and(CUSTOMER_ATTRIBUTES.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(CUSTOMER_ATTRIBUTES)
+                .set(CUSTOMER_ATTRIBUTES.STATE, RecordState.DELETED.name())
+                .where(CUSTOMER_ATTRIBUTES.ID.eq(id))
+                .and(CUSTOMER_ATTRIBUTES.STATE.eq(RecordState.ACTIVE.name()))
+                .and(CUSTOMER_ATTRIBUTES.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public CustomerAttributeDao findByUUID(String uuid) {

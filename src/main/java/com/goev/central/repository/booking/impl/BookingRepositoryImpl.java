@@ -57,13 +57,13 @@ public class BookingRepositoryImpl implements BookingRepository {
 
     @Override
     public void delete(Integer id) {
-     context.update(BOOKINGS)
-     .set(BOOKINGS.STATE,RecordState.DELETED.name())
-     .where(BOOKINGS.ID.eq(id))
-     .and(BOOKINGS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(BOOKINGS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(BOOKINGS)
+                .set(BOOKINGS.STATE, RecordState.DELETED.name())
+                .where(BOOKINGS.ID.eq(id))
+                .and(BOOKINGS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(BOOKINGS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public BookingDao findByUUID(String uuid) {

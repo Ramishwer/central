@@ -55,26 +55,26 @@ public class PromotionBookingTypeMappingRepositoryImpl implements PromotionBooki
 
     @Override
     public void delete(Integer id) {
-     context.update(PROMOTION_BOOKING_TYPE_MAPPINGS)
-     .set(PROMOTION_BOOKING_TYPE_MAPPINGS.STATE,RecordState.DELETED.name())
-     .where(PROMOTION_BOOKING_TYPE_MAPPINGS.ID.eq(id))
-     .and(PROMOTION_BOOKING_TYPE_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(PROMOTION_BOOKING_TYPE_MAPPINGS.IS_ACTIVE.eq(true))
-     .execute();
+        context.update(PROMOTION_BOOKING_TYPE_MAPPINGS)
+                .set(PROMOTION_BOOKING_TYPE_MAPPINGS.STATE, RecordState.DELETED.name())
+                .where(PROMOTION_BOOKING_TYPE_MAPPINGS.ID.eq(id))
+                .and(PROMOTION_BOOKING_TYPE_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(PROMOTION_BOOKING_TYPE_MAPPINGS.IS_ACTIVE.eq(true))
+                .execute();
     }
 
-     @Override
+    @Override
     public PromotionBookingTypeMappingDao findByUUID(String uuid) {
         return context.selectFrom(PROMOTION_BOOKING_TYPE_MAPPINGS).where(PROMOTION_BOOKING_TYPE_MAPPINGS.UUID.eq(uuid))
-         .and(PROMOTION_BOOKING_TYPE_MAPPINGS.IS_ACTIVE.eq(true))
-        .fetchAnyInto(PromotionBookingTypeMappingDao.class);
+                .and(PROMOTION_BOOKING_TYPE_MAPPINGS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PromotionBookingTypeMappingDao.class);
     }
 
     @Override
     public PromotionBookingTypeMappingDao findById(Integer id) {
         return context.selectFrom(PROMOTION_BOOKING_TYPE_MAPPINGS).where(PROMOTION_BOOKING_TYPE_MAPPINGS.ID.eq(id))
-         .and(PROMOTION_BOOKING_TYPE_MAPPINGS.IS_ACTIVE.eq(true))
-        .fetchAnyInto(PromotionBookingTypeMappingDao.class);
+                .and(PROMOTION_BOOKING_TYPE_MAPPINGS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PromotionBookingTypeMappingDao.class);
     }
 
     @Override

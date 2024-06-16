@@ -55,13 +55,13 @@ public class PaymentDetailRepositoryImpl implements PaymentDetailRepository {
 
     @Override
     public void delete(Integer id) {
-     context.update(PAYMENT_DETAILS)
-     .set(PAYMENT_DETAILS.STATE,RecordState.DELETED.name())
-     .where(PAYMENT_DETAILS.ID.eq(id))
-     .and(PAYMENT_DETAILS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(PAYMENT_DETAILS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(PAYMENT_DETAILS)
+                .set(PAYMENT_DETAILS.STATE, RecordState.DELETED.name())
+                .where(PAYMENT_DETAILS.ID.eq(id))
+                .and(PAYMENT_DETAILS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(PAYMENT_DETAILS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public PaymentDetailDao findByUUID(String uuid) {

@@ -56,27 +56,27 @@ public class AllocationResultRepositoryImpl implements AllocationResultRepositor
 
     @Override
     public void delete(Integer id) {
-     context.update(ALLOCATION_RESULTS)
-     .set(ALLOCATION_RESULTS.STATE,RecordState.DELETED.name())
-     .where(ALLOCATION_RESULTS.ID.eq(id))
-     .and(ALLOCATION_RESULTS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(ALLOCATION_RESULTS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(ALLOCATION_RESULTS)
+                .set(ALLOCATION_RESULTS.STATE, RecordState.DELETED.name())
+                .where(ALLOCATION_RESULTS.ID.eq(id))
+                .and(ALLOCATION_RESULTS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(ALLOCATION_RESULTS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
-     @Override
+    @Override
     public AllocationResultDao findByUUID(String uuid) {
         return context.selectFrom(ALLOCATION_RESULTS).where(ALLOCATION_RESULTS.UUID.eq(uuid))
-         .and(ALLOCATION_RESULTS.IS_ACTIVE.eq(true))
-        .fetchAnyInto(AllocationResultDao.class);
-    }  
+                .and(ALLOCATION_RESULTS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(AllocationResultDao.class);
+    }
 
     @Override
     public AllocationResultDao findById(Integer id) {
         return context.selectFrom(ALLOCATION_RESULTS).where(ALLOCATION_RESULTS.ID.eq(id))
-         .and(ALLOCATION_RESULTS.IS_ACTIVE.eq(true))
-        .fetchAnyInto(AllocationResultDao.class);
-    } 
+                .and(ALLOCATION_RESULTS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(AllocationResultDao.class);
+    }
 
     @Override
     public List<AllocationResultDao> findAllByIds(List<Integer> ids) {

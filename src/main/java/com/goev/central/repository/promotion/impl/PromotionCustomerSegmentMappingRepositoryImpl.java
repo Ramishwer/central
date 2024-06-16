@@ -55,27 +55,27 @@ public class PromotionCustomerSegmentMappingRepositoryImpl implements PromotionC
 
     @Override
     public void delete(Integer id) {
-     context.update(PROMOTION_CUSTOMER_SEGMENT_MAPPINGS)
-     .set(PROMOTION_CUSTOMER_SEGMENT_MAPPINGS.STATE,RecordState.DELETED.name())
-     .where(PROMOTION_CUSTOMER_SEGMENT_MAPPINGS.ID.eq(id))
-     .and(PROMOTION_CUSTOMER_SEGMENT_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(PROMOTION_CUSTOMER_SEGMENT_MAPPINGS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(PROMOTION_CUSTOMER_SEGMENT_MAPPINGS)
+                .set(PROMOTION_CUSTOMER_SEGMENT_MAPPINGS.STATE, RecordState.DELETED.name())
+                .where(PROMOTION_CUSTOMER_SEGMENT_MAPPINGS.ID.eq(id))
+                .and(PROMOTION_CUSTOMER_SEGMENT_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(PROMOTION_CUSTOMER_SEGMENT_MAPPINGS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
-     @Override
+    @Override
     public PromotionCustomerSegmentMappingDao findByUUID(String uuid) {
         return context.selectFrom(PROMOTION_CUSTOMER_SEGMENT_MAPPINGS).where(PROMOTION_CUSTOMER_SEGMENT_MAPPINGS.UUID.eq(uuid))
-         .and(PROMOTION_CUSTOMER_SEGMENT_MAPPINGS.IS_ACTIVE.eq(true))
-        .fetchAnyInto(PromotionCustomerSegmentMappingDao.class);
-    }  
+                .and(PROMOTION_CUSTOMER_SEGMENT_MAPPINGS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PromotionCustomerSegmentMappingDao.class);
+    }
 
     @Override
     public PromotionCustomerSegmentMappingDao findById(Integer id) {
         return context.selectFrom(PROMOTION_CUSTOMER_SEGMENT_MAPPINGS).where(PROMOTION_CUSTOMER_SEGMENT_MAPPINGS.ID.eq(id))
-         .and(PROMOTION_CUSTOMER_SEGMENT_MAPPINGS.IS_ACTIVE.eq(true))
-        .fetchAnyInto(PromotionCustomerSegmentMappingDao.class);
-    } 
+                .and(PROMOTION_CUSTOMER_SEGMENT_MAPPINGS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PromotionCustomerSegmentMappingDao.class);
+    }
 
     @Override
     public List<PromotionCustomerSegmentMappingDao> findAllByIds(List<Integer> ids) {

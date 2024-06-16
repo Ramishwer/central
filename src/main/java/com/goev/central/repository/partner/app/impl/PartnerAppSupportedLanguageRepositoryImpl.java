@@ -55,13 +55,13 @@ public class PartnerAppSupportedLanguageRepositoryImpl implements PartnerAppSupp
 
     @Override
     public void delete(Integer id) {
-     context.update(PARTNER_APP_SUPPORTED_LANGUAGES)
-     .set(PARTNER_APP_SUPPORTED_LANGUAGES.STATE,RecordState.DELETED.name())
-     .where(PARTNER_APP_SUPPORTED_LANGUAGES.ID.eq(id))
-     .and(PARTNER_APP_SUPPORTED_LANGUAGES.STATE.eq(RecordState.ACTIVE.name()))
-     .and(PARTNER_APP_SUPPORTED_LANGUAGES.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(PARTNER_APP_SUPPORTED_LANGUAGES)
+                .set(PARTNER_APP_SUPPORTED_LANGUAGES.STATE, RecordState.DELETED.name())
+                .where(PARTNER_APP_SUPPORTED_LANGUAGES.ID.eq(id))
+                .and(PARTNER_APP_SUPPORTED_LANGUAGES.STATE.eq(RecordState.ACTIVE.name()))
+                .and(PARTNER_APP_SUPPORTED_LANGUAGES.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public PartnerAppSupportedLanguageDao findByUUID(String uuid) {

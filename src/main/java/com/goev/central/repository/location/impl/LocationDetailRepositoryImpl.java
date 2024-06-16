@@ -56,13 +56,13 @@ public class LocationDetailRepositoryImpl implements LocationDetailRepository {
 
     @Override
     public void delete(Integer id) {
-     context.update(LOCATION_DETAILS)
-     .set(LOCATION_DETAILS.STATE,RecordState.DELETED.name())
-     .where(LOCATION_DETAILS.ID.eq(id))
-     .and(LOCATION_DETAILS.STATE.eq(RecordState.ACTIVE.name()))
-     .and(LOCATION_DETAILS.IS_ACTIVE.eq(true))
-     .execute();
-    } 
+        context.update(LOCATION_DETAILS)
+                .set(LOCATION_DETAILS.STATE, RecordState.DELETED.name())
+                .where(LOCATION_DETAILS.ID.eq(id))
+                .and(LOCATION_DETAILS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(LOCATION_DETAILS.IS_ACTIVE.eq(true))
+                .execute();
+    }
 
     @Override
     public LocationDetailDao findByUUID(String uuid) {
