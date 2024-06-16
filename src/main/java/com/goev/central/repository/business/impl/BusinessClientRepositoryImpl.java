@@ -26,6 +26,14 @@ public class BusinessClientRepositoryImpl implements BusinessClientRepository {
         businessClientsRecord.store();
         client.setId(businessClientsRecord.getId());
         client.setUuid(businessClientsRecord.getUuid());
+        client.setCreatedBy(businessClientsRecord.getCreatedBy());
+        client.setUpdatedBy(businessClientsRecord.getUpdatedBy());
+        client.setCreatedOn(businessClientsRecord.getCreatedOn());
+        client.setUpdatedOn(businessClientsRecord.getUpdatedOn());
+        client.setIsActive(businessClientsRecord.getIsActive());
+        client.setState(businessClientsRecord.getState());
+        client.setApiSource(businessClientsRecord.getApiSource());
+        client.setNotes(businessClientsRecord.getNotes());
         return client;
     }
 
@@ -33,22 +41,41 @@ public class BusinessClientRepositoryImpl implements BusinessClientRepository {
     public BusinessClientDao update(BusinessClientDao client) {
         BusinessClientsRecord businessClientsRecord = context.newRecord(BUSINESS_CLIENTS, client);
         businessClientsRecord.update();
+
+
+        client.setCreatedBy(businessClientsRecord.getCreatedBy());
+        client.setUpdatedBy(businessClientsRecord.getUpdatedBy());
+        client.setCreatedOn(businessClientsRecord.getCreatedOn());
+        client.setUpdatedOn(businessClientsRecord.getUpdatedOn());
+        client.setIsActive(businessClientsRecord.getIsActive());
+        client.setState(businessClientsRecord.getState());
+        client.setApiSource(businessClientsRecord.getApiSource());
+        client.setNotes(businessClientsRecord.getNotes());
         return client;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(BUSINESS_CLIENTS).set(BUSINESS_CLIENTS.STATE, RecordState.DELETED.name()).where(BUSINESS_CLIENTS.ID.eq(id)).execute();
-    }
+     context.update(BUSINESS_CLIENTS)
+     .set(BUSINESS_CLIENTS.STATE,RecordState.DELETED.name())
+     .where(BUSINESS_CLIENTS.ID.eq(id))
+     .and(BUSINESS_CLIENTS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(BUSINESS_CLIENTS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public BusinessClientDao findByUUID(String uuid) {
-        return context.selectFrom(BUSINESS_CLIENTS).where(BUSINESS_CLIENTS.UUID.eq(uuid)).fetchAnyInto(BusinessClientDao.class);
+        return context.selectFrom(BUSINESS_CLIENTS).where(BUSINESS_CLIENTS.UUID.eq(uuid))
+                .and(BUSINESS_CLIENTS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(BusinessClientDao.class);
     }
 
     @Override
     public BusinessClientDao findById(Integer id) {
-        return context.selectFrom(BUSINESS_CLIENTS).where(BUSINESS_CLIENTS.ID.eq(id)).fetchAnyInto(BusinessClientDao.class);
+        return context.selectFrom(BUSINESS_CLIENTS).where(BUSINESS_CLIENTS.ID.eq(id))
+                .and(BUSINESS_CLIENTS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(BusinessClientDao.class);
     }
 
     @Override
@@ -57,7 +84,7 @@ public class BusinessClientRepositoryImpl implements BusinessClientRepository {
     }
 
     @Override
-    public List<BusinessClientDao> findAll() {
+    public List<BusinessClientDao> findAllActive() {
         return context.selectFrom(BUSINESS_CLIENTS).fetchInto(BusinessClientDao.class);
     }
 }

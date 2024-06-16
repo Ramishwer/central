@@ -10,7 +10,6 @@ import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Map;
 
 import static com.goev.record.central.tables.SystemStrings.SYSTEM_STRINGS;
 
@@ -26,6 +25,14 @@ public class SystemStringRepositoryImpl implements SystemStringRepository {
         systemStringsRecord.store();
         string.setId(systemStringsRecord.getId());
         string.setUuid(systemStringsRecord.getUuid());
+        string.setCreatedBy(systemStringsRecord.getCreatedBy());
+        string.setUpdatedBy(systemStringsRecord.getUpdatedBy());
+        string.setCreatedOn(systemStringsRecord.getCreatedOn());
+        string.setUpdatedOn(systemStringsRecord.getUpdatedOn());
+        string.setIsActive(systemStringsRecord.getIsActive());
+        string.setState(systemStringsRecord.getState());
+        string.setApiSource(systemStringsRecord.getApiSource());
+        string.setNotes(systemStringsRecord.getNotes());
         return string;
     }
 
@@ -33,22 +40,41 @@ public class SystemStringRepositoryImpl implements SystemStringRepository {
     public SystemStringDao update(SystemStringDao string) {
         SystemStringsRecord systemStringsRecord = context.newRecord(SYSTEM_STRINGS, string);
         systemStringsRecord.update();
+
+
+        string.setCreatedBy(systemStringsRecord.getCreatedBy());
+        string.setUpdatedBy(systemStringsRecord.getUpdatedBy());
+        string.setCreatedOn(systemStringsRecord.getCreatedOn());
+        string.setUpdatedOn(systemStringsRecord.getUpdatedOn());
+        string.setIsActive(systemStringsRecord.getIsActive());
+        string.setState(systemStringsRecord.getState());
+        string.setApiSource(systemStringsRecord.getApiSource());
+        string.setNotes(systemStringsRecord.getNotes());
         return string;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(SYSTEM_STRINGS).set(SYSTEM_STRINGS.STATE, RecordState.DELETED.name()).where(SYSTEM_STRINGS.ID.eq(id)).execute();
-    }
+     context.update(SYSTEM_STRINGS)
+     .set(SYSTEM_STRINGS.STATE,RecordState.DELETED.name())
+     .where(SYSTEM_STRINGS.ID.eq(id))
+     .and(SYSTEM_STRINGS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(SYSTEM_STRINGS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public SystemStringDao findByUUID(String uuid) {
-        return context.selectFrom(SYSTEM_STRINGS).where(SYSTEM_STRINGS.UUID.eq(uuid)).fetchAnyInto(SystemStringDao.class);
+        return context.selectFrom(SYSTEM_STRINGS).where(SYSTEM_STRINGS.UUID.eq(uuid))
+                .and(SYSTEM_STRINGS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(SystemStringDao.class);
     }
 
     @Override
     public SystemStringDao findById(Integer id) {
-        return context.selectFrom(SYSTEM_STRINGS).where(SYSTEM_STRINGS.ID.eq(id)).fetchAnyInto(SystemStringDao.class);
+        return context.selectFrom(SYSTEM_STRINGS).where(SYSTEM_STRINGS.ID.eq(id))
+                .and(SYSTEM_STRINGS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(SystemStringDao.class);
     }
 
     @Override
@@ -57,7 +83,7 @@ public class SystemStringRepositoryImpl implements SystemStringRepository {
     }
 
     @Override
-    public List<SystemStringDao> findAll() {
+    public List<SystemStringDao> findAllActive() {
         return context.selectFrom(SYSTEM_STRINGS).fetchInto(SystemStringDao.class);
     }
 }

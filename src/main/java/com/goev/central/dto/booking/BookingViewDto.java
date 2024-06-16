@@ -7,7 +7,6 @@ import com.fasterxml.jackson.datatype.joda.deser.DateTimeDeserializer;
 import com.fasterxml.jackson.datatype.joda.ser.DateTimeSerializer;
 import com.goev.central.dto.customer.CustomerViewDto;
 import com.goev.central.dto.partner.PartnerViewDto;
-import com.goev.central.dto.payment.PaymentDto;
 import com.goev.central.dto.vehicle.VehicleViewDto;
 import com.goev.lib.dto.LatLongDto;
 import lombok.*;

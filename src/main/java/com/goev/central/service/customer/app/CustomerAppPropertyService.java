@@ -1,7 +1,7 @@
 package com.goev.central.service.customer.app;
 
-import com.goev.central.dto.customer.app.CustomerAppPropertyDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
+import com.goev.central.dto.customer.app.CustomerAppPropertyDto;
 
 public interface CustomerAppPropertyService {
     PaginatedResponseDto<CustomerAppPropertyDto> getCustomerAppProperties();

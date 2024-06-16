@@ -18,33 +18,33 @@ public class CustomerSegmentController {
     private final CustomerSegmentService customerSegmentService;
 
     @GetMapping("/segments")
-    public ResponseDto<PaginatedResponseDto<CustomerSegmentDto>> getCustomerSegments(@RequestParam(value = "count",required = false) Integer count,
+    public ResponseDto<PaginatedResponseDto<CustomerSegmentDto>> getCustomerSegments(@RequestParam(value = "count", required = false) Integer count,
                                                                                      @RequestParam(value = "start", required = false) Integer start,
                                                                                      @RequestParam(value = "from", required = false) Long from,
                                                                                      @RequestParam(value = "to", required = false) Long to,
-                                                                                     @RequestParam(value = "lastUUID", required = false) String lastElementUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, customerSegmentService.getCustomerSegments());
+                                                                                     @RequestParam(value = "lastUUID", required = false) String lastElementUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, customerSegmentService.getCustomerSegments());
     }
 
-    
 
     @GetMapping("/segments/{segment-uuid}")
-    public ResponseDto<CustomerSegmentDto> getCustomerSegmentDetails(@PathVariable(value = "segment-uuid")String segmentUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, customerSegmentService.getCustomerSegmentDetails(segmentUUID));
+    public ResponseDto<CustomerSegmentDto> getCustomerSegmentDetails(@PathVariable(value = "segment-uuid") String segmentUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, customerSegmentService.getCustomerSegmentDetails(segmentUUID));
     }
 
 
     @PostMapping("/segments")
-    public ResponseDto<CustomerSegmentDto> createCustomerSegment(@RequestBody CustomerSegmentDto customerSegmentDto){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, customerSegmentService.createCustomerSegment(customerSegmentDto));
+    public ResponseDto<CustomerSegmentDto> createCustomerSegment(@RequestBody CustomerSegmentDto customerSegmentDto) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, customerSegmentService.createCustomerSegment(customerSegmentDto));
     }
 
     @PutMapping("/segments/{segment-uuid}")
-    public ResponseDto<CustomerSegmentDto> updateCustomerSegment(@PathVariable(value = "segment-uuid")String segmentUUID, @RequestBody CustomerSegmentDto customerSegmentDto){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, customerSegmentService.updateCustomerSegment(segmentUUID,customerSegmentDto));
+    public ResponseDto<CustomerSegmentDto> updateCustomerSegment(@PathVariable(value = "segment-uuid") String segmentUUID, @RequestBody CustomerSegmentDto customerSegmentDto) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, customerSegmentService.updateCustomerSegment(segmentUUID, customerSegmentDto));
     }
+
     @DeleteMapping("/segments/{segment-uuid}")
-    public ResponseDto<Boolean> deleteCustomerSegment(@PathVariable(value = "segment-uuid")String segmentUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, customerSegmentService.deleteCustomerSegment(segmentUUID));
+    public ResponseDto<Boolean> deleteCustomerSegment(@PathVariable(value = "segment-uuid") String segmentUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, customerSegmentService.deleteCustomerSegment(segmentUUID));
     }
 }

@@ -19,5 +19,5 @@ public class VehicleDocumentDto {
     private String fileName;
     private String description;
     private String status;
-    private Map<String,Object> data;
+    private Map<String, Object> data;
 }

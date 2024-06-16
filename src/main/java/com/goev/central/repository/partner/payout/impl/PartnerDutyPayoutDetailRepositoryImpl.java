@@ -26,6 +26,14 @@ public class PartnerDutyPayoutDetailRepositoryImpl implements PartnerDutyPayoutD
         partnerDutyPayoutDetailsRecord.store();
         partnerDutyPayoutDetail.setId(partnerDutyPayoutDetailsRecord.getId());
         partnerDutyPayoutDetail.setUuid(partnerDutyPayoutDetail.getUuid());
+        partnerDutyPayoutDetail.setCreatedBy(partnerDutyPayoutDetail.getCreatedBy());
+        partnerDutyPayoutDetail.setUpdatedBy(partnerDutyPayoutDetail.getUpdatedBy());
+        partnerDutyPayoutDetail.setCreatedOn(partnerDutyPayoutDetail.getCreatedOn());
+        partnerDutyPayoutDetail.setUpdatedOn(partnerDutyPayoutDetail.getUpdatedOn());
+        partnerDutyPayoutDetail.setIsActive(partnerDutyPayoutDetail.getIsActive());
+        partnerDutyPayoutDetail.setState(partnerDutyPayoutDetail.getState());
+        partnerDutyPayoutDetail.setApiSource(partnerDutyPayoutDetail.getApiSource());
+        partnerDutyPayoutDetail.setNotes(partnerDutyPayoutDetail.getNotes());
         return partnerDutyPayoutDetail;
     }
 
@@ -33,22 +41,41 @@ public class PartnerDutyPayoutDetailRepositoryImpl implements PartnerDutyPayoutD
     public PartnerDutyPayoutDetailDao update(PartnerDutyPayoutDetailDao partnerDutyPayoutDetail) {
         PartnerDutyPayoutDetailsRecord partnerDutyPayoutDetailsRecord = context.newRecord(PARTNER_DUTY_PAYOUT_DETAILS, partnerDutyPayoutDetail);
         partnerDutyPayoutDetailsRecord.update();
+
+
+        partnerDutyPayoutDetail.setCreatedBy(partnerDutyPayoutDetailsRecord.getCreatedBy());
+        partnerDutyPayoutDetail.setUpdatedBy(partnerDutyPayoutDetailsRecord.getUpdatedBy());
+        partnerDutyPayoutDetail.setCreatedOn(partnerDutyPayoutDetailsRecord.getCreatedOn());
+        partnerDutyPayoutDetail.setUpdatedOn(partnerDutyPayoutDetailsRecord.getUpdatedOn());
+        partnerDutyPayoutDetail.setIsActive(partnerDutyPayoutDetailsRecord.getIsActive());
+        partnerDutyPayoutDetail.setState(partnerDutyPayoutDetailsRecord.getState());
+        partnerDutyPayoutDetail.setApiSource(partnerDutyPayoutDetailsRecord.getApiSource());
+        partnerDutyPayoutDetail.setNotes(partnerDutyPayoutDetailsRecord.getNotes());
         return partnerDutyPayoutDetail;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(PARTNER_DUTY_PAYOUT_DETAILS).set(PARTNER_DUTY_PAYOUT_DETAILS.STATE, RecordState.DELETED.name()).where(PARTNER_DUTY_PAYOUT_DETAILS.ID.eq(id)).execute();
-    }
+     context.update(PARTNER_DUTY_PAYOUT_DETAILS)
+     .set(PARTNER_DUTY_PAYOUT_DETAILS.STATE,RecordState.DELETED.name())
+     .where(PARTNER_DUTY_PAYOUT_DETAILS.ID.eq(id))
+     .and(PARTNER_DUTY_PAYOUT_DETAILS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(PARTNER_DUTY_PAYOUT_DETAILS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public PartnerDutyPayoutDetailDao findByUUID(String uuid) {
-        return context.selectFrom(PARTNER_DUTY_PAYOUT_DETAILS).where(PARTNER_DUTY_PAYOUT_DETAILS.UUID.eq(uuid)).fetchAnyInto(PartnerDutyPayoutDetailDao.class);
+        return context.selectFrom(PARTNER_DUTY_PAYOUT_DETAILS).where(PARTNER_DUTY_PAYOUT_DETAILS.UUID.eq(uuid))
+                .and(PARTNER_DUTY_PAYOUT_DETAILS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PartnerDutyPayoutDetailDao.class);
     }
 
     @Override
     public PartnerDutyPayoutDetailDao findById(Integer id) {
-        return context.selectFrom(PARTNER_DUTY_PAYOUT_DETAILS).where(PARTNER_DUTY_PAYOUT_DETAILS.ID.eq(id)).fetchAnyInto(PartnerDutyPayoutDetailDao.class);
+        return context.selectFrom(PARTNER_DUTY_PAYOUT_DETAILS).where(PARTNER_DUTY_PAYOUT_DETAILS.ID.eq(id))
+                .and(PARTNER_DUTY_PAYOUT_DETAILS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PartnerDutyPayoutDetailDao.class);
     }
 
     @Override
@@ -57,7 +84,7 @@ public class PartnerDutyPayoutDetailRepositoryImpl implements PartnerDutyPayoutD
     }
 
     @Override
-    public List<PartnerDutyPayoutDetailDao> findAll() {
+    public List<PartnerDutyPayoutDetailDao> findAllActive() {
         return context.selectFrom(PARTNER_DUTY_PAYOUT_DETAILS).fetchInto(PartnerDutyPayoutDetailDao.class);
     }
 }

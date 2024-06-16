@@ -18,26 +18,27 @@ public class UserPermissionController {
     private final UserPermissionService userPermissionService;
 
     @GetMapping("/permissions")
-    public ResponseDto<PaginatedResponseDto<UserPermissionDto>> getPermissions(){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, userPermissionService.getPermissions());
+    public ResponseDto<PaginatedResponseDto<UserPermissionDto>> getPermissions() {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, userPermissionService.getPermissions());
     }
+
     @PostMapping("/permissions")
-    public ResponseDto<UserPermissionDto> createPermission(@RequestBody UserPermissionDto userPermissionDto){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, userPermissionService.createPermission(userPermissionDto));
+    public ResponseDto<UserPermissionDto> createPermission(@RequestBody UserPermissionDto userPermissionDto) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, userPermissionService.createPermission(userPermissionDto));
     }
 
     @PutMapping("/permissions/{permission-uuid}")
-    public ResponseDto<UserPermissionDto> updatePermission(@PathVariable(value = "permission-uuid")String permissionUUID, @RequestBody UserPermissionDto userPermissionDto){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, userPermissionService.updatePermission(permissionUUID,userPermissionDto));
+    public ResponseDto<UserPermissionDto> updatePermission(@PathVariable(value = "permission-uuid") String permissionUUID, @RequestBody UserPermissionDto userPermissionDto) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, userPermissionService.updatePermission(permissionUUID, userPermissionDto));
     }
 
     @GetMapping("/permissions/{permission-uuid}")
-    public ResponseDto<UserPermissionDto> getPermissionDetails(@PathVariable(value = "permission-uuid")String permissionUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, userPermissionService.getPermissionDetails(permissionUUID));
+    public ResponseDto<UserPermissionDto> getPermissionDetails(@PathVariable(value = "permission-uuid") String permissionUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, userPermissionService.getPermissionDetails(permissionUUID));
     }
 
     @DeleteMapping("/permissions/{permission-uuid}")
-    public ResponseDto<Boolean> deletePermission(@PathVariable(value = "permission-uuid")String permissionUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, userPermissionService.deletePermission(permissionUUID));
+    public ResponseDto<Boolean> deletePermission(@PathVariable(value = "permission-uuid") String permissionUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, userPermissionService.deletePermission(permissionUUID));
     }
 }

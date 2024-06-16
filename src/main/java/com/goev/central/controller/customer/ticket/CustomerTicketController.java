@@ -20,7 +20,7 @@ public class CustomerTicketController {
     @GetMapping("/customers/{customer-uuid}/tickets")
     public ResponseDto<PaginatedResponseDto<CustomerTicketDto>> getCustomerTickets(
             @PathVariable(value = "customer-uuid") String customerUUID,
-            @RequestParam(value = "count",required = false) Integer count,
+            @RequestParam(value = "count", required = false) Integer count,
             @RequestParam(value = "start", required = false) Integer start,
             @RequestParam(value = "from", required = false) Long from,
             @RequestParam(value = "to", required = false) Long to,

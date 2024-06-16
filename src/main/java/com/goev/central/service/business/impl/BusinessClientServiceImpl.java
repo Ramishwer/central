@@ -1,15 +1,14 @@
 package com.goev.central.service.business.impl;
 
 import com.goev.central.dao.business.BusinessClientDao;
+import com.goev.central.dto.business.BusinessClientDto;
 import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
-import com.goev.central.dto.business.BusinessClientDto;
 import com.goev.central.repository.business.BusinessClientRepository;
 import com.goev.central.service.business.BusinessClientService;
 import com.goev.lib.exceptions.ResponseException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -26,7 +25,7 @@ public class BusinessClientServiceImpl implements BusinessClientService {
     @Override
     public PaginatedResponseDto<BusinessClientDto> getClients() {
         PaginatedResponseDto<BusinessClientDto> result = PaginatedResponseDto.<BusinessClientDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
-        List<BusinessClientDao> businessClientDaos = businessClientRepository.findAll();
+        List<BusinessClientDao> businessClientDaos = businessClientRepository.findAllActive();
         if (CollectionUtils.isEmpty(businessClientDaos))
             return result;
 
@@ -54,7 +53,7 @@ public class BusinessClientServiceImpl implements BusinessClientService {
         return getBusinessClientDto(businessClientDao);
     }
 
-    private  BusinessClientDao getBusinessClientDao(BusinessClientDto businessClientDto) {
+    private BusinessClientDao getBusinessClientDao(BusinessClientDto businessClientDto) {
         BusinessClientDao businessClientDao = new BusinessClientDao();
         businessClientDao.setName(businessClientDto.getName());
         businessClientDao.setDescription(businessClientDto.getDescription());

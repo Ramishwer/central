@@ -2,7 +2,6 @@ package com.goev.central.dao.booking;
 
 import com.goev.lib.dao.BaseDao;
 import lombok.*;
-import org.joda.time.DateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor

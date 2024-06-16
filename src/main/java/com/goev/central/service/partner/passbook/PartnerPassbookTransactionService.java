@@ -5,5 +5,6 @@ import com.goev.central.dto.partner.passbook.PartnerPassbookTransactionDto;
 
 public interface PartnerPassbookTransactionService {
     PaginatedResponseDto<PartnerPassbookTransactionDto> getPartnerPassbookTransactions(String partnerUUID);
+
     PartnerPassbookTransactionDto getPartnerPassbookTransactionDetails(String partnerUUID, String partnerPassbookTransactionUUID);
 }

@@ -25,7 +25,7 @@ public class PartnerDeviceServiceImpl implements PartnerDeviceService {
     @Override
     public PaginatedResponseDto<PartnerDeviceDto> getPartnerDevices(String partnerUUID) {
         PaginatedResponseDto<PartnerDeviceDto> result = PaginatedResponseDto.<PartnerDeviceDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
-        List<PartnerDeviceDao> partnerDeviceDaos = partnerDeviceRepository.findAll();
+        List<PartnerDeviceDao> partnerDeviceDaos = partnerDeviceRepository.findAllActive();
         if (CollectionUtils.isEmpty(partnerDeviceDaos))
             return result;
 

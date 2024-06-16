@@ -36,13 +36,14 @@ public class PartnerDocumentServiceImpl implements PartnerDocumentService {
     private final PartnerDocumentTypeRepository partnerDocumentTypeRepository;
     private final PartnerRepository partnerRepository;
     private final S3Utils s3;
+
     @Override
     public PaginatedResponseDto<PartnerDocumentDto> getDocuments(String partnerUUID) {
         PartnerDao partnerDao = partnerRepository.findByUUID(partnerUUID);
         if (partnerDao == null)
             throw new ResponseException("No partner found for id :" + partnerUUID);
 
-        List<PartnerDocumentTypeDao> activeDocumentTypes = partnerDocumentTypeRepository.findAll();
+        List<PartnerDocumentTypeDao> activeDocumentTypes = partnerDocumentTypeRepository.findAllActive();
         if (CollectionUtils.isEmpty(activeDocumentTypes))
             return PaginatedResponseDto.<PartnerDocumentDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
 
@@ -70,7 +71,7 @@ public class PartnerDocumentServiceImpl implements PartnerDocumentService {
         if (partnerDocumentTypeDao == null || partnerDocumentTypeDao.getId() == null)
             throw new ResponseException("Error in saving partner document: Invalid Document Type");
 
-        partnerDocumentDao.setUrl(s3.getUrlForPath(partnerDocumentDto.getUrl(),partnerDocumentTypeDao.getS3Key()));
+        partnerDocumentDao.setUrl(s3.getUrlForPath(partnerDocumentDto.getUrl(), partnerDocumentTypeDao.getS3Key()));
         partnerDocumentDao.setStatus(partnerDocumentDto.getStatus());
         partnerDocumentDao.setDescription(partnerDocumentDto.getDescription());
         partnerDocumentDao.setFileName(partnerDocumentDto.getFileName());
@@ -116,7 +117,7 @@ public class PartnerDocumentServiceImpl implements PartnerDocumentService {
         newPartnerDocumentDao.setPartnerDocumentTypeId(partnerDocumentTypeDao.getId());
         newPartnerDocumentDao.setFileName(partnerDocumentDto.getFileName());
         newPartnerDocumentDao.setDescription(partnerDocumentDto.getDescription());
-        newPartnerDocumentDao.setUrl(s3.getUrlForPath(partnerDocumentDto.getUrl(),partnerDocumentTypeDao.getS3Key()));
+        newPartnerDocumentDao.setUrl(s3.getUrlForPath(partnerDocumentDto.getUrl(), partnerDocumentTypeDao.getS3Key()));
         newPartnerDocumentDao.setStatus(DocumentStatus.UPLOADED.name());
         newPartnerDocumentDao.setPartnerId(partnerDao.getId());
         partnerDocumentRepository.delete(partnerDocumentDao.getId());
@@ -198,16 +199,47 @@ public class PartnerDocumentServiceImpl implements PartnerDocumentService {
 
         List<PartnerDocumentDto> result = new ArrayList<>();
         for (PartnerDocumentDto partnerDocumentDto : partnerDocumentDtoList) {
-            if(partnerDocumentDto.getUrl()==null)
+            if (partnerDocumentDto.getUrl() == null)
                 continue;
-            if(partnerDocumentDto.getUuid()!=null){
-                result.add(updateDocument(partnerUUID,partnerDocumentDto.getUuid(),partnerDocumentDto));
-            }else{
-                result.add(createDocument(partnerUUID,partnerDocumentDto));
+            if (partnerDocumentDto.getUuid() != null) {
+                result.add(updateDocument(partnerUUID, partnerDocumentDto.getUuid(), partnerDocumentDto));
+            } else {
+                result.add(createDocument(partnerUUID, partnerDocumentDto));
             }
 
         }
         return result;
+    }
+
+
+    @Override
+    public DocumentStatus isAllMandatoryDocumentsUploaded(Integer partnerId) {
+        List<PartnerDocumentTypeDao> activeDocumentTypes = partnerDocumentTypeRepository.findAllActive();
+        if (CollectionUtils.isEmpty(activeDocumentTypes))
+            return DocumentStatus.APPROVED;
+
+        List<PartnerDocumentTypeDao> mandatoryDocuments = activeDocumentTypes.stream().filter(PartnerDocumentTypeDao::getIsMandatory).toList();
+        Map<Integer, PartnerDocumentTypeDao> documentTypeIdToDocumentTypeMap = mandatoryDocuments.stream()
+                .collect(Collectors.toMap(PartnerDocumentTypeDao::getId, Function.identity()));
+        List<Integer> activeDocumentTypeIds = mandatoryDocuments.stream().map(PartnerDocumentTypeDao::getId).toList();
+        Map<Integer, PartnerDocumentDao> existingDocumentMap = partnerDocumentRepository.getExistingDocumentMap(partnerId, activeDocumentTypeIds);
+
+        List<PartnerDocumentDto> partnerDocumentDtoList = PartnerDetailDto.getPartnerDocumentDtoList(documentTypeIdToDocumentTypeMap, existingDocumentMap);
+
+        List<PartnerDocumentDto> pendingDocuments = partnerDocumentDtoList.stream().filter(x -> DocumentStatus.PENDING.name().equals(x.getStatus())).toList();
+        List<PartnerDocumentDto> uploadedDocuments = partnerDocumentDtoList.stream().filter(x -> DocumentStatus.UPLOADED.name().equals(x.getStatus())).toList();
+        List<PartnerDocumentDto> rejectedDocuments = partnerDocumentDtoList.stream().filter(x -> DocumentStatus.REJECTED.name().equals(x.getStatus())).toList();
+
+        if (!CollectionUtils.isEmpty(pendingDocuments))
+            return DocumentStatus.PENDING;
+
+        if (!CollectionUtils.isEmpty(rejectedDocuments))
+            return DocumentStatus.REJECTED;
+
+        if (!CollectionUtils.isEmpty(uploadedDocuments))
+            return DocumentStatus.UPLOADED;
+
+        return DocumentStatus.APPROVED;
     }
 
 }

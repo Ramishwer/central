@@ -1,6 +1,3 @@
-
-
-
 package com.goev.central.dao.customer.ticket;
 
 import com.goev.lib.dao.BaseDao;

@@ -25,7 +25,7 @@ public class PaymentModelConfigurationServiceImpl implements PayoutModelConfigur
     @Override
     public PaginatedResponseDto<PayoutModelConfigurationDto> getPayoutModelConfigurations(String customerUUID) {
         PaginatedResponseDto<PayoutModelConfigurationDto> result = PaginatedResponseDto.<PayoutModelConfigurationDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
-        List<PayoutModelConfigurationDao> payoutModelConfigurationDaos = payoutModelConfigurationRepository.findAll();
+        List<PayoutModelConfigurationDao> payoutModelConfigurationDaos = payoutModelConfigurationRepository.findAllActive();
         if (CollectionUtils.isEmpty(payoutModelConfigurationDaos))
             return result;
 
@@ -54,7 +54,7 @@ public class PaymentModelConfigurationServiceImpl implements PayoutModelConfigur
         if (payoutModelConfigurationDao == null)
             throw new ResponseException("No payoutModelConfiguration  found for Id :" + payoutModelConfigurationUUID);
         PayoutModelConfigurationDao newPayoutModelConfigurationDao = new PayoutModelConfigurationDao();
-       
+
 
         newPayoutModelConfigurationDao.setId(payoutModelConfigurationDao.getId());
         newPayoutModelConfigurationDao.setUuid(payoutModelConfigurationDao.getUuid());

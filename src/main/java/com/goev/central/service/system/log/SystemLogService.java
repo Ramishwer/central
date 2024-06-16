@@ -5,6 +5,7 @@ import com.goev.central.dto.system.log.SystemLogDto;
 
 public interface SystemLogService {
     PaginatedResponseDto<SystemLogDto> getSystemLogs();
+
     SystemLogDto getSystemLogDetails(String systemLogUUID);
 
 }

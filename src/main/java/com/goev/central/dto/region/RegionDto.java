@@ -2,8 +2,6 @@ package com.goev.central.dto.region;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.goev.central.dto.payout.PayoutModelDto;
-import com.goev.central.dto.shift.ShiftDto;
 import lombok.*;
 
 @AllArgsConstructor

@@ -3,10 +3,8 @@ package com.goev.central.controller;
 import com.goev.central.utilities.StorageUtils;
 import com.goev.lib.dto.ResponseDto;
 import com.goev.lib.dto.StatusDto;
-import com.goev.lib.enums.ErrorCodes;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,9 +21,9 @@ public class FileController {
 
     @PostMapping(value = "/files")
     public ResponseDto<String> uploadFile(@RequestParam("file") MultipartFile file) {
-            return new ResponseDto<>(
-                    StatusDto.builder().message("SUCCESS").build(),200,
-                    storageUtils.store(file)
-            );
+        return new ResponseDto<>(
+                StatusDto.builder().message("SUCCESS").build(), 200,
+                storageUtils.store(file)
+        );
     }
 }

@@ -3,7 +3,6 @@ package com.goev.central.dto.customer.ticket;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.goev.central.dto.customer.CustomerViewDto;
-import com.goev.central.dto.customer.detail.CustomerDto;
 import lombok.*;
 
 @AllArgsConstructor

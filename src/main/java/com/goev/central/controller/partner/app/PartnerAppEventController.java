@@ -20,11 +20,11 @@ public class PartnerAppEventController {
 
     @GetMapping("/partners/{partner-uuid}/app-events")
     public ResponseDto<PaginatedResponseDto<PartnerAppEventDto>> getPartnerAppEvents(@PathVariable("partner-uuid") String partnerUUID,
-                                                                                       @RequestParam("count") Integer count,
-                                                                                       @RequestParam("start") Integer start,
-                                                                                       @RequestParam("from") Long from,
-                                                                                       @RequestParam("to") Long to,
-                                                                                       @RequestParam("lastUUID") String lastElementUUID) {
+                                                                                     @RequestParam("count") Integer count,
+                                                                                     @RequestParam("start") Integer start,
+                                                                                     @RequestParam("from") Long from,
+                                                                                     @RequestParam("to") Long to,
+                                                                                     @RequestParam("lastUUID") String lastElementUUID) {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerAppEventService.getPartnerAppEvents(partnerUUID));
     }
 

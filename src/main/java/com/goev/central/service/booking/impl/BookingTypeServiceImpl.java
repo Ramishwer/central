@@ -25,7 +25,7 @@ public class BookingTypeServiceImpl implements BookingTypeService {
     @Override
     public PaginatedResponseDto<BookingTypeDto> getBookingTypes() {
         PaginatedResponseDto<BookingTypeDto> result = PaginatedResponseDto.<BookingTypeDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
-        List<BookingTypeDao> bookingTypeDaos = bookingTypeRepository.findAll();
+        List<BookingTypeDao> bookingTypeDaos = bookingTypeRepository.findAllActive();
         if (CollectionUtils.isEmpty(bookingTypeDaos))
             return result;
 
@@ -54,7 +54,7 @@ public class BookingTypeServiceImpl implements BookingTypeService {
         if (bookingTypeDao == null)
             throw new ResponseException("No bookingType  found for Id :" + bookingTypeUUID);
         BookingTypeDao newBookingTypeDao = new BookingTypeDao();
-       
+
 
         newBookingTypeDao.setId(bookingTypeDao.getId());
         newBookingTypeDao.setUuid(bookingTypeDao.getUuid());

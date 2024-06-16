@@ -26,6 +26,14 @@ public class AllocationLogRepositoryImpl implements AllocationLogRepository {
         allocationLogsRecord.store();
         client.setId(allocationLogsRecord.getId());
         client.setUuid(allocationLogsRecord.getUuid());
+        client.setCreatedBy(allocationLogsRecord.getCreatedBy());
+        client.setUpdatedBy(allocationLogsRecord.getUpdatedBy());
+        client.setCreatedOn(allocationLogsRecord.getCreatedOn());
+        client.setUpdatedOn(allocationLogsRecord.getUpdatedOn());
+        client.setIsActive(allocationLogsRecord.getIsActive());
+        client.setState(allocationLogsRecord.getState());
+        client.setApiSource(allocationLogsRecord.getApiSource());
+        client.setNotes(allocationLogsRecord.getNotes());
         return client;
     }
 
@@ -33,23 +41,42 @@ public class AllocationLogRepositoryImpl implements AllocationLogRepository {
     public AllocationLogDao update(AllocationLogDao client) {
         AllocationLogsRecord allocationLogsRecord = context.newRecord(ALLOCATION_LOGS, client);
         allocationLogsRecord.update();
+
+
+        client.setCreatedBy(allocationLogsRecord.getCreatedBy());
+        client.setUpdatedBy(allocationLogsRecord.getUpdatedBy());
+        client.setCreatedOn(allocationLogsRecord.getCreatedOn());
+        client.setUpdatedOn(allocationLogsRecord.getUpdatedOn());
+        client.setIsActive(allocationLogsRecord.getIsActive());
+        client.setState(allocationLogsRecord.getState());
+        client.setApiSource(allocationLogsRecord.getApiSource());
+        client.setNotes(allocationLogsRecord.getNotes());
         return client;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(ALLOCATION_LOGS).set(ALLOCATION_LOGS.STATE, RecordState.DELETED.name()).where(ALLOCATION_LOGS.ID.eq(id)).execute();
-    }
+     context.update(ALLOCATION_LOGS)
+     .set(ALLOCATION_LOGS.STATE,RecordState.DELETED.name())
+     .where(ALLOCATION_LOGS.ID.eq(id))
+     .and(ALLOCATION_LOGS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(ALLOCATION_LOGS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
-    @Override
+     @Override
     public AllocationLogDao findByUUID(String uuid) {
-        return context.selectFrom(ALLOCATION_LOGS).where(ALLOCATION_LOGS.UUID.eq(uuid)).fetchAnyInto(AllocationLogDao.class);
-    }
+        return context.selectFrom(ALLOCATION_LOGS).where(ALLOCATION_LOGS.UUID.eq(uuid))
+         .and(ALLOCATION_LOGS.IS_ACTIVE.eq(true))
+        .fetchAnyInto(AllocationLogDao.class);
+    }  
 
     @Override
     public AllocationLogDao findById(Integer id) {
-        return context.selectFrom(ALLOCATION_LOGS).where(ALLOCATION_LOGS.ID.eq(id)).fetchAnyInto(AllocationLogDao.class);
-    }
+        return context.selectFrom(ALLOCATION_LOGS).where(ALLOCATION_LOGS.ID.eq(id))
+         .and(ALLOCATION_LOGS.IS_ACTIVE.eq(true))
+        .fetchAnyInto(AllocationLogDao.class);
+    } 
 
     @Override
     public List<AllocationLogDao> findAllByIds(List<Integer> ids) {
@@ -57,7 +84,7 @@ public class AllocationLogRepositoryImpl implements AllocationLogRepository {
     }
 
     @Override
-    public List<AllocationLogDao> findAll() {
+    public List<AllocationLogDao> findAllActive() {
         return context.selectFrom(ALLOCATION_LOGS).fetchInto(AllocationLogDao.class);
     }
 }

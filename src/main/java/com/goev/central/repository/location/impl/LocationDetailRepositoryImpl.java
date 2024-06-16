@@ -26,6 +26,14 @@ public class LocationDetailRepositoryImpl implements LocationDetailRepository {
         locationDetailsRecord.store();
         locationDetail.setId(locationDetailsRecord.getId());
         locationDetail.setUuid(locationDetailsRecord.getUuid());
+        locationDetail.setCreatedBy(locationDetailsRecord.getCreatedBy());
+        locationDetail.setUpdatedBy(locationDetailsRecord.getUpdatedBy());
+        locationDetail.setCreatedOn(locationDetailsRecord.getCreatedOn());
+        locationDetail.setUpdatedOn(locationDetailsRecord.getUpdatedOn());
+        locationDetail.setIsActive(locationDetailsRecord.getIsActive());
+        locationDetail.setState(locationDetailsRecord.getState());
+        locationDetail.setApiSource(locationDetailsRecord.getApiSource());
+        locationDetail.setNotes(locationDetailsRecord.getNotes());
         return locationDetail;
     }
 
@@ -33,22 +41,41 @@ public class LocationDetailRepositoryImpl implements LocationDetailRepository {
     public LocationDetailDao update(LocationDetailDao locationDetail) {
         LocationDetailsRecord locationDetailsRecord = context.newRecord(LOCATION_DETAILS, locationDetail);
         locationDetailsRecord.update();
+
+
+        locationDetail.setCreatedBy(locationDetailsRecord.getCreatedBy());
+        locationDetail.setUpdatedBy(locationDetailsRecord.getUpdatedBy());
+        locationDetail.setCreatedOn(locationDetailsRecord.getCreatedOn());
+        locationDetail.setUpdatedOn(locationDetailsRecord.getUpdatedOn());
+        locationDetail.setIsActive(locationDetailsRecord.getIsActive());
+        locationDetail.setState(locationDetailsRecord.getState());
+        locationDetail.setApiSource(locationDetailsRecord.getApiSource());
+        locationDetail.setNotes(locationDetailsRecord.getNotes());
         return locationDetail;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(LOCATION_DETAILS).set(LOCATION_DETAILS.STATE, RecordState.DELETED.name()).where(LOCATION_DETAILS.ID.eq(id)).execute();
-    }
+     context.update(LOCATION_DETAILS)
+     .set(LOCATION_DETAILS.STATE,RecordState.DELETED.name())
+     .where(LOCATION_DETAILS.ID.eq(id))
+     .and(LOCATION_DETAILS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(LOCATION_DETAILS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public LocationDetailDao findByUUID(String uuid) {
-        return context.selectFrom(LOCATION_DETAILS).where(LOCATION_DETAILS.UUID.eq(uuid)).fetchAnyInto(LocationDetailDao.class);
+        return context.selectFrom(LOCATION_DETAILS).where(LOCATION_DETAILS.UUID.eq(uuid))
+                .and(LOCATION_DETAILS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(LocationDetailDao.class);
     }
 
     @Override
     public LocationDetailDao findById(Integer id) {
-        return context.selectFrom(LOCATION_DETAILS).where(LOCATION_DETAILS.ID.eq(id)).fetchAnyInto(LocationDetailDao.class);
+        return context.selectFrom(LOCATION_DETAILS).where(LOCATION_DETAILS.ID.eq(id))
+                .and(LOCATION_DETAILS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(LocationDetailDao.class);
     }
 
     @Override
@@ -57,7 +84,7 @@ public class LocationDetailRepositoryImpl implements LocationDetailRepository {
     }
 
     @Override
-    public List<LocationDetailDao> findAll() {
+    public List<LocationDetailDao> findAllActive() {
         return context.selectFrom(LOCATION_DETAILS).fetchInto(LocationDetailDao.class);
     }
 }

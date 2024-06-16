@@ -1,8 +1,8 @@
 package com.goev.central.repository.partner.app.impl;
 
-import com.goev.lib.enums.RecordState;
 import com.goev.central.dao.partner.app.PartnerAppEventDao;
 import com.goev.central.repository.partner.app.PartnerAppEventRepository;
+import com.goev.lib.enums.RecordState;
 import com.goev.record.central.tables.records.PartnerAppEventsRecord;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +25,14 @@ public class PartnerAppEventRepositoryImpl implements PartnerAppEventRepository 
         partnerAppEventsRecord.store();
         partnerAppEvent.setId(partnerAppEventsRecord.getId());
         partnerAppEvent.setUuid(partnerAppEventsRecord.getUuid());
+        partnerAppEvent.setCreatedBy(partnerAppEventsRecord.getCreatedBy());
+        partnerAppEvent.setUpdatedBy(partnerAppEventsRecord.getUpdatedBy());
+        partnerAppEvent.setCreatedOn(partnerAppEventsRecord.getCreatedOn());
+        partnerAppEvent.setUpdatedOn(partnerAppEventsRecord.getUpdatedOn());
+        partnerAppEvent.setIsActive(partnerAppEventsRecord.getIsActive());
+        partnerAppEvent.setState(partnerAppEventsRecord.getState());
+        partnerAppEvent.setApiSource(partnerAppEventsRecord.getApiSource());
+        partnerAppEvent.setNotes(partnerAppEventsRecord.getNotes());
         return partnerAppEvent;
     }
 
@@ -32,22 +40,41 @@ public class PartnerAppEventRepositoryImpl implements PartnerAppEventRepository 
     public PartnerAppEventDao update(PartnerAppEventDao partnerAppEvent) {
         PartnerAppEventsRecord partnerAppEventsRecord = context.newRecord(PARTNER_APP_EVENTS, partnerAppEvent);
         partnerAppEventsRecord.update();
+
+
+        partnerAppEvent.setCreatedBy(partnerAppEventsRecord.getCreatedBy());
+        partnerAppEvent.setUpdatedBy(partnerAppEventsRecord.getUpdatedBy());
+        partnerAppEvent.setCreatedOn(partnerAppEventsRecord.getCreatedOn());
+        partnerAppEvent.setUpdatedOn(partnerAppEventsRecord.getUpdatedOn());
+        partnerAppEvent.setIsActive(partnerAppEventsRecord.getIsActive());
+        partnerAppEvent.setState(partnerAppEventsRecord.getState());
+        partnerAppEvent.setApiSource(partnerAppEventsRecord.getApiSource());
+        partnerAppEvent.setNotes(partnerAppEventsRecord.getNotes());
         return partnerAppEvent;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(PARTNER_APP_EVENTS).set(PARTNER_APP_EVENTS.STATE, RecordState.DELETED.name()).where(PARTNER_APP_EVENTS.ID.eq(id)).execute();
+     context.update(PARTNER_APP_EVENTS)
+     .set(PARTNER_APP_EVENTS.STATE,RecordState.DELETED.name())
+     .where(PARTNER_APP_EVENTS.ID.eq(id))
+     .and(PARTNER_APP_EVENTS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(PARTNER_APP_EVENTS.IS_ACTIVE.eq(true))
+     .execute();
     }
 
     @Override
     public PartnerAppEventDao findByUUID(String uuid) {
-        return context.selectFrom(PARTNER_APP_EVENTS).where(PARTNER_APP_EVENTS.UUID.eq(uuid)).fetchAnyInto(PartnerAppEventDao.class);
+        return context.selectFrom(PARTNER_APP_EVENTS).where(PARTNER_APP_EVENTS.UUID.eq(uuid))
+                .and(PARTNER_APP_EVENTS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PartnerAppEventDao.class);
     }
 
     @Override
     public PartnerAppEventDao findById(Integer id) {
-        return context.selectFrom(PARTNER_APP_EVENTS).where(PARTNER_APP_EVENTS.ID.eq(id)).fetchAnyInto(PartnerAppEventDao.class);
+        return context.selectFrom(PARTNER_APP_EVENTS).where(PARTNER_APP_EVENTS.ID.eq(id))
+                .and(PARTNER_APP_EVENTS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PartnerAppEventDao.class);
     }
 
     @Override
@@ -56,7 +83,7 @@ public class PartnerAppEventRepositoryImpl implements PartnerAppEventRepository 
     }
 
     @Override
-    public List<PartnerAppEventDao> findAll() {
+    public List<PartnerAppEventDao> findAllActive() {
         return context.selectFrom(PARTNER_APP_EVENTS).fetchInto(PartnerAppEventDao.class);
     }
 

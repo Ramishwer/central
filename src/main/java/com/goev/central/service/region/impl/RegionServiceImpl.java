@@ -25,7 +25,7 @@ public class RegionServiceImpl implements RegionService {
     @Override
     public PaginatedResponseDto<RegionDto> getRegions() {
         PaginatedResponseDto<RegionDto> result = PaginatedResponseDto.<RegionDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
-        List<RegionDao> regionDaos = regionRepository.findAll();
+        List<RegionDao> regionDaos = regionRepository.findAllActive();
         if (CollectionUtils.isEmpty(regionDaos))
             return result;
 
@@ -54,7 +54,7 @@ public class RegionServiceImpl implements RegionService {
         if (regionDao == null)
             throw new ResponseException("No region  found for Id :" + regionUUID);
         RegionDao newRegionDao = new RegionDao();
-       
+
 
         newRegionDao.setId(regionDao.getId());
         newRegionDao.setUuid(regionDao.getUuid());

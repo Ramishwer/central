@@ -22,13 +22,15 @@ public class PartnerDao extends BaseDao {
     private String dutyDetails;
     private Integer partnerDetailsId;
     private String profileUrl;
+    private String onboardingStatus;
 
     private String subStatus;
     private DateTime computedAvailableTime;
     private DateTime computedShiftEndTime;
-    private Integer partnerDutyId ;
+    private Integer partnerDutyId;
     private Integer partnerShiftId;
     private String locationStatus;
     private Integer locationId;
     private String viewInfo;
+
 }

@@ -1,7 +1,6 @@
 package com.goev.central.service.partner.payout;
 
 import com.goev.central.dto.common.PaginatedResponseDto;
-import com.goev.central.dto.partner.duty.PartnerDutyDto;
 import com.goev.central.dto.partner.payout.PartnerPayoutDto;
 import com.goev.central.dto.partner.payout.PartnerPayoutSummaryDto;
 import com.goev.central.dto.partner.payout.PartnerPayoutTransactionDto;

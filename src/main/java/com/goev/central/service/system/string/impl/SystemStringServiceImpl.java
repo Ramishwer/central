@@ -25,7 +25,7 @@ public class SystemStringServiceImpl implements SystemStringService {
     @Override
     public PaginatedResponseDto<SystemStringDto> getSystemStrings() {
         PaginatedResponseDto<SystemStringDto> result = PaginatedResponseDto.<SystemStringDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
-        List<SystemStringDao> systemStringDaos = systemStringRepository.findAll();
+        List<SystemStringDao> systemStringDaos = systemStringRepository.findAllActive();
         if (CollectionUtils.isEmpty(systemStringDaos))
             return result;
 
@@ -54,7 +54,7 @@ public class SystemStringServiceImpl implements SystemStringService {
         if (systemStringDao == null)
             throw new ResponseException("No systemString  found for Id :" + systemStringUUID);
         SystemStringDao newSystemStringDao = new SystemStringDao();
-       
+
 
         newSystemStringDao.setId(systemStringDao.getId());
         newSystemStringDao.setUuid(systemStringDao.getUuid());

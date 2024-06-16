@@ -18,25 +18,24 @@ public class UserSessionController {
     private final UserSessionService userSessionService;
 
     @GetMapping("/users/{user-uuid}/sessions")
-    public ResponseDto<PaginatedResponseDto<UserSessionDto>> getUserSessions(@PathVariable(value = "user-uuid")String userUUID,
-            @RequestParam("count")Integer count,
-                                                                                 @RequestParam("start")Integer start,
-                                                                                 @RequestParam("from")Long from,
-                                                                                 @RequestParam("to")Long to,
-                                                                                 @RequestParam("lastUUID") String lastElementUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, userSessionService.getUserSessions(userUUID));
+    public ResponseDto<PaginatedResponseDto<UserSessionDto>> getUserSessions(@PathVariable(value = "user-uuid") String userUUID,
+                                                                             @RequestParam("count") Integer count,
+                                                                             @RequestParam("start") Integer start,
+                                                                             @RequestParam("from") Long from,
+                                                                             @RequestParam("to") Long to,
+                                                                             @RequestParam("lastUUID") String lastElementUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, userSessionService.getUserSessions(userUUID));
     }
 
-    
 
     @GetMapping("/users/{user-uuid}/sessions/{session-uuid}")
-    public ResponseDto<UserSessionDto> getUserSessionDetails(@PathVariable(value = "user-uuid")String userUUID,
-                                                                   @PathVariable(value = "session-uuid")String sessionUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, userSessionService.getUserSessionDetails(userUUID,sessionUUID));
+    public ResponseDto<UserSessionDto> getUserSessionDetails(@PathVariable(value = "user-uuid") String userUUID,
+                                                             @PathVariable(value = "session-uuid") String sessionUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, userSessionService.getUserSessionDetails(userUUID, sessionUUID));
     }
-    
+
     @DeleteMapping("/users/{user-uuid}/sessions/{session-uuid}")
-    public ResponseDto<Boolean> deleteUserSession(@PathVariable(value = "user-uuid")String userUUID,@PathVariable(value = "session-uuid")String sessionUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, userSessionService.deleteUserSession(userUUID,sessionUUID));
+    public ResponseDto<Boolean> deleteUserSession(@PathVariable(value = "user-uuid") String userUUID, @PathVariable(value = "session-uuid") String sessionUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, userSessionService.deleteUserSession(userUUID, sessionUUID));
     }
 }

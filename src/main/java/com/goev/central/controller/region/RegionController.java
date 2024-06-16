@@ -18,26 +18,27 @@ public class RegionController {
     private final RegionService regionService;
 
     @GetMapping("/regions")
-    public ResponseDto<PaginatedResponseDto<RegionDto>> getRegions(){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, regionService.getRegions());
+    public ResponseDto<PaginatedResponseDto<RegionDto>> getRegions() {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, regionService.getRegions());
     }
+
     @PostMapping("/regions")
-    public ResponseDto<RegionDto> createRegion(@RequestBody RegionDto regionDto){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, regionService.createRegion(regionDto));
+    public ResponseDto<RegionDto> createRegion(@RequestBody RegionDto regionDto) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, regionService.createRegion(regionDto));
     }
 
     @PutMapping("/regions/{region-uuid}")
-    public ResponseDto<RegionDto> updateRegion(@PathVariable(value = "region-uuid")String regionUUID, @RequestBody RegionDto regionDto){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, regionService.updateRegion(regionUUID,regionDto));
+    public ResponseDto<RegionDto> updateRegion(@PathVariable(value = "region-uuid") String regionUUID, @RequestBody RegionDto regionDto) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, regionService.updateRegion(regionUUID, regionDto));
     }
 
     @GetMapping("/regions/{region-uuid}")
-    public ResponseDto<RegionDto> getRegionDetails(@PathVariable(value = "region-uuid")String regionUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, regionService.getRegionDetails(regionUUID));
+    public ResponseDto<RegionDto> getRegionDetails(@PathVariable(value = "region-uuid") String regionUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, regionService.getRegionDetails(regionUUID));
     }
 
     @DeleteMapping("/regions/{region-uuid}")
-    public ResponseDto<Boolean> deleteRegion(@PathVariable(value = "region-uuid")String regionUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, regionService.deleteRegion(regionUUID));
+    public ResponseDto<Boolean> deleteRegion(@PathVariable(value = "region-uuid") String regionUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, regionService.deleteRegion(regionUUID));
     }
 }

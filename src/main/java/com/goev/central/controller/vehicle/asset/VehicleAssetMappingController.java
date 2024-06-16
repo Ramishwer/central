@@ -2,9 +2,7 @@ package com.goev.central.controller.vehicle.asset;
 
 import com.goev.central.dto.asset.AssetDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
-import com.goev.central.dto.vehicle.VehicleViewDto;
 import com.goev.central.service.vehicle.asset.VehicleAssetMappingService;
-import com.goev.central.service.vehicle.detail.VehicleService;
 import com.goev.lib.dto.ResponseDto;
 import com.goev.lib.dto.StatusDto;
 import lombok.AllArgsConstructor;

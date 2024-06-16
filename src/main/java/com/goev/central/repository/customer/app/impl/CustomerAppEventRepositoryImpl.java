@@ -26,6 +26,14 @@ public class CustomerAppEventRepositoryImpl implements CustomerAppEventRepositor
         customerAppEventsRecord.store();
         customerAppEvent.setId(customerAppEventsRecord.getId());
         customerAppEvent.setUuid(customerAppEvent.getUuid());
+        customerAppEvent.setCreatedBy(customerAppEvent.getCreatedBy());
+        customerAppEvent.setUpdatedBy(customerAppEvent.getUpdatedBy());
+        customerAppEvent.setCreatedOn(customerAppEvent.getCreatedOn());
+        customerAppEvent.setUpdatedOn(customerAppEvent.getUpdatedOn());
+        customerAppEvent.setIsActive(customerAppEvent.getIsActive());
+        customerAppEvent.setState(customerAppEvent.getState());
+        customerAppEvent.setApiSource(customerAppEvent.getApiSource());
+        customerAppEvent.setNotes(customerAppEvent.getNotes());
         return customerAppEvent;
     }
 
@@ -33,22 +41,41 @@ public class CustomerAppEventRepositoryImpl implements CustomerAppEventRepositor
     public CustomerAppEventDao update(CustomerAppEventDao customerAppEvent) {
         CustomerAppEventsRecord customerAppEventsRecord = context.newRecord(CUSTOMER_APP_EVENTS, customerAppEvent);
         customerAppEventsRecord.update();
+
+
+        customerAppEvent.setCreatedBy(customerAppEventsRecord.getCreatedBy());
+        customerAppEvent.setUpdatedBy(customerAppEventsRecord.getUpdatedBy());
+        customerAppEvent.setCreatedOn(customerAppEventsRecord.getCreatedOn());
+        customerAppEvent.setUpdatedOn(customerAppEventsRecord.getUpdatedOn());
+        customerAppEvent.setIsActive(customerAppEventsRecord.getIsActive());
+        customerAppEvent.setState(customerAppEventsRecord.getState());
+        customerAppEvent.setApiSource(customerAppEventsRecord.getApiSource());
+        customerAppEvent.setNotes(customerAppEventsRecord.getNotes());
         return customerAppEvent;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(CUSTOMER_APP_EVENTS).set(CUSTOMER_APP_EVENTS.STATE, RecordState.DELETED.name()).where(CUSTOMER_APP_EVENTS.ID.eq(id)).execute();
-    }
+     context.update(CUSTOMER_APP_EVENTS)
+     .set(CUSTOMER_APP_EVENTS.STATE,RecordState.DELETED.name())
+     .where(CUSTOMER_APP_EVENTS.ID.eq(id))
+     .and(CUSTOMER_APP_EVENTS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(CUSTOMER_APP_EVENTS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public CustomerAppEventDao findByUUID(String uuid) {
-        return context.selectFrom(CUSTOMER_APP_EVENTS).where(CUSTOMER_APP_EVENTS.UUID.eq(uuid)).fetchAnyInto(CustomerAppEventDao.class);
+        return context.selectFrom(CUSTOMER_APP_EVENTS).where(CUSTOMER_APP_EVENTS.UUID.eq(uuid))
+                .and(CUSTOMER_APP_EVENTS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(CustomerAppEventDao.class);
     }
 
     @Override
     public CustomerAppEventDao findById(Integer id) {
-        return context.selectFrom(CUSTOMER_APP_EVENTS).where(CUSTOMER_APP_EVENTS.ID.eq(id)).fetchAnyInto(CustomerAppEventDao.class);
+        return context.selectFrom(CUSTOMER_APP_EVENTS).where(CUSTOMER_APP_EVENTS.ID.eq(id))
+                .and(CUSTOMER_APP_EVENTS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(CustomerAppEventDao.class);
     }
 
     @Override
@@ -57,7 +84,7 @@ public class CustomerAppEventRepositoryImpl implements CustomerAppEventRepositor
     }
 
     @Override
-    public List<CustomerAppEventDao> findAll() {
+    public List<CustomerAppEventDao> findAllActive() {
         return context.selectFrom(CUSTOMER_APP_EVENTS).fetchInto(CustomerAppEventDao.class);
     }
 }

@@ -145,10 +145,10 @@ public class PartnerAccountServiceImpl implements PartnerAccountService {
 
         List<PartnerAccountDto> result = new ArrayList<>();
         for (PartnerAccountDto partnerAccountDto : partnerAccountDtoList) {
-            if(partnerAccountDto.getUuid()!=null){
-                result.add(updateAccount(partnerUUID,partnerAccountDto.getUuid(),partnerAccountDto));
-            }else{
-                result.add(createAccount(partnerUUID,partnerAccountDto));
+            if (partnerAccountDto.getUuid() != null) {
+                result.add(updateAccount(partnerUUID, partnerAccountDto.getUuid(), partnerAccountDto));
+            } else {
+                result.add(createAccount(partnerUUID, partnerAccountDto));
             }
 
         }

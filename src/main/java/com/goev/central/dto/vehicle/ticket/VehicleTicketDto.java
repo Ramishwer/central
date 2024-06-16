@@ -2,7 +2,6 @@ package com.goev.central.dto.vehicle.ticket;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.goev.central.dto.vehicle.VehicleViewDto;
-import com.goev.central.dto.vehicle.detail.VehicleDto;
 import lombok.*;
 
 

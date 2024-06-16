@@ -26,6 +26,14 @@ public class PartnerAssetMappingRepositoryImpl implements PartnerAssetMappingRep
         partnerAssetMappingsRecord.store();
         assetMapping.setId(partnerAssetMappingsRecord.getId());
         assetMapping.setUuid(partnerAssetMappingsRecord.getUuid());
+        assetMapping.setCreatedBy(partnerAssetMappingsRecord.getCreatedBy());
+        assetMapping.setUpdatedBy(partnerAssetMappingsRecord.getUpdatedBy());
+        assetMapping.setCreatedOn(partnerAssetMappingsRecord.getCreatedOn());
+        assetMapping.setUpdatedOn(partnerAssetMappingsRecord.getUpdatedOn());
+        assetMapping.setIsActive(partnerAssetMappingsRecord.getIsActive());
+        assetMapping.setState(partnerAssetMappingsRecord.getState());
+        assetMapping.setApiSource(partnerAssetMappingsRecord.getApiSource());
+        assetMapping.setNotes(partnerAssetMappingsRecord.getNotes());
         return assetMapping;
     }
 
@@ -33,17 +41,34 @@ public class PartnerAssetMappingRepositoryImpl implements PartnerAssetMappingRep
     public PartnerAssetMappingDao update(PartnerAssetMappingDao assetMapping) {
         PartnerAssetMappingsRecord partnerAssetMappingsRecord = context.newRecord(PARTNER_ASSET_MAPPINGS, assetMapping);
         partnerAssetMappingsRecord.update();
+
+
+        assetMapping.setCreatedBy(partnerAssetMappingsRecord.getCreatedBy());
+        assetMapping.setUpdatedBy(partnerAssetMappingsRecord.getUpdatedBy());
+        assetMapping.setCreatedOn(partnerAssetMappingsRecord.getCreatedOn());
+        assetMapping.setUpdatedOn(partnerAssetMappingsRecord.getUpdatedOn());
+        assetMapping.setIsActive(partnerAssetMappingsRecord.getIsActive());
+        assetMapping.setState(partnerAssetMappingsRecord.getState());
+        assetMapping.setApiSource(partnerAssetMappingsRecord.getApiSource());
+        assetMapping.setNotes(partnerAssetMappingsRecord.getNotes());
         return assetMapping;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(PARTNER_ASSET_MAPPINGS).set(PARTNER_ASSET_MAPPINGS.STATE, RecordState.DELETED.name()).where(PARTNER_ASSET_MAPPINGS.ID.eq(id)).execute();
+     context.update(PARTNER_ASSET_MAPPINGS)
+     .set(PARTNER_ASSET_MAPPINGS.STATE,RecordState.DELETED.name())
+     .where(PARTNER_ASSET_MAPPINGS.ID.eq(id))
+     .and(PARTNER_ASSET_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(PARTNER_ASSET_MAPPINGS.IS_ACTIVE.eq(true))
+     .execute();
     }
 
     @Override
     public PartnerAssetMappingDao findByUUID(String uuid) {
-        return context.selectFrom(PARTNER_ASSET_MAPPINGS).where(PARTNER_ASSET_MAPPINGS.UUID.eq(uuid)).fetchAnyInto(PartnerAssetMappingDao.class);
+        return context.selectFrom(PARTNER_ASSET_MAPPINGS).where(PARTNER_ASSET_MAPPINGS.UUID.eq(uuid))
+                .and(PARTNER_ASSET_MAPPINGS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PartnerAssetMappingDao.class);
     }
 
     @Override
@@ -61,7 +86,7 @@ public class PartnerAssetMappingRepositoryImpl implements PartnerAssetMappingRep
     }
 
     @Override
-    public List<PartnerAssetMappingDao> findAll() {
+    public List<PartnerAssetMappingDao> findAllActive() {
         return context.selectFrom(PARTNER_ASSET_MAPPINGS)
                 .where(PARTNER_ASSET_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
                 .fetchInto(PartnerAssetMappingDao.class);

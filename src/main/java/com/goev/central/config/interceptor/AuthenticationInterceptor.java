@@ -36,7 +36,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         String token = request.getHeader("Authorization");
 
         if (token == null) {
-            throw new ResponseException(401,"Invalid Access Token");
+            throw new ResponseException(401, "Invalid Access Token");
         }
         /** Code to Authenticate */
 
@@ -44,7 +44,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         UserSessionDao userSessionDao = userSessionRepository.findByUUID(RequestContext.getSessionUUID());
 
         if (userSessionDao == null)
-            throw new ResponseException(401,"Invalid Session UUID");
+            throw new ResponseException(401, "Invalid Session UUID");
 
         try {
             String url = ApplicationConstants.AUTH_URL + "/api/v1/session-management/sessions/" + userSessionDao.getAuthSessionUuid();
@@ -54,16 +54,16 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             ResponseDto<SessionDetailsDto> session = ApplicationConstants.GSON.fromJson(responseStr, new TypeToken<ResponseDto<SessionDetailsDto>>() {
             }.getType());
             SessionDetailsDto sessionDto = session.getData();
-            if (sessionDto==null || sessionDto.getDetails() == null) {
-                throw new ResponseException(401,"Token Expired");
+            if (sessionDto == null || sessionDto.getDetails() == null) {
+                throw new ResponseException(401, "Token Expired");
             }
             request.setAttribute("authSessionUUID", sessionDto.getDetails().getUuid());
             request.setAttribute("authUUID", sessionDto.getDetails().getAuthUUID());
-            request.setAttribute("organizationUUID",sessionDto.getDetails().getOrganizationUUID());
-            request.setAttribute("userSession",userSessionDao);
+            request.setAttribute("organizationUUID", sessionDto.getDetails().getOrganizationUUID());
+            request.setAttribute("userSession", userSessionDao);
         } catch (Exception e) {
-            log.error("Error in checking token :",e);
-            throw new ResponseException(401,"Invalid Token");
+            log.error("Error in checking token :", e);
+            throw new ResponseException(401, "Invalid Token");
         }
 
 

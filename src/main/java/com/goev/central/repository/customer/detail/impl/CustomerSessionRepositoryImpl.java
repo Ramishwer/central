@@ -26,6 +26,14 @@ public class CustomerSessionRepositoryImpl implements CustomerSessionRepository 
         customerSessionsRecord.store();
         customerSession.setId(customerSessionsRecord.getId());
         customerSession.setUuid(customerSession.getUuid());
+        customerSession.setCreatedBy(customerSession.getCreatedBy());
+        customerSession.setUpdatedBy(customerSession.getUpdatedBy());
+        customerSession.setCreatedOn(customerSession.getCreatedOn());
+        customerSession.setUpdatedOn(customerSession.getUpdatedOn());
+        customerSession.setIsActive(customerSession.getIsActive());
+        customerSession.setState(customerSession.getState());
+        customerSession.setApiSource(customerSession.getApiSource());
+        customerSession.setNotes(customerSession.getNotes());
         return customerSession;
     }
 
@@ -33,22 +41,41 @@ public class CustomerSessionRepositoryImpl implements CustomerSessionRepository 
     public CustomerSessionDao update(CustomerSessionDao customerSession) {
         CustomerSessionsRecord customerSessionsRecord = context.newRecord(CUSTOMER_SESSIONS, customerSession);
         customerSessionsRecord.update();
+
+
+        customerSession.setCreatedBy(customerSessionsRecord.getCreatedBy());
+        customerSession.setUpdatedBy(customerSessionsRecord.getUpdatedBy());
+        customerSession.setCreatedOn(customerSessionsRecord.getCreatedOn());
+        customerSession.setUpdatedOn(customerSessionsRecord.getUpdatedOn());
+        customerSession.setIsActive(customerSessionsRecord.getIsActive());
+        customerSession.setState(customerSessionsRecord.getState());
+        customerSession.setApiSource(customerSessionsRecord.getApiSource());
+        customerSession.setNotes(customerSessionsRecord.getNotes());
         return customerSession;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(CUSTOMER_SESSIONS).set(CUSTOMER_SESSIONS.STATE, RecordState.DELETED.name()).where(CUSTOMER_SESSIONS.ID.eq(id)).execute();
-    }
+     context.update(CUSTOMER_SESSIONS)
+     .set(CUSTOMER_SESSIONS.STATE,RecordState.DELETED.name())
+     .where(CUSTOMER_SESSIONS.ID.eq(id))
+     .and(CUSTOMER_SESSIONS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(CUSTOMER_SESSIONS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public CustomerSessionDao findByUUID(String uuid) {
-        return context.selectFrom(CUSTOMER_SESSIONS).where(CUSTOMER_SESSIONS.UUID.eq(uuid)).fetchAnyInto(CustomerSessionDao.class);
+        return context.selectFrom(CUSTOMER_SESSIONS).where(CUSTOMER_SESSIONS.UUID.eq(uuid))
+                .and(CUSTOMER_SESSIONS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(CustomerSessionDao.class);
     }
 
     @Override
     public CustomerSessionDao findById(Integer id) {
-        return context.selectFrom(CUSTOMER_SESSIONS).where(CUSTOMER_SESSIONS.ID.eq(id)).fetchAnyInto(CustomerSessionDao.class);
+        return context.selectFrom(CUSTOMER_SESSIONS).where(CUSTOMER_SESSIONS.ID.eq(id))
+                .and(CUSTOMER_SESSIONS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(CustomerSessionDao.class);
     }
 
     @Override
@@ -57,7 +84,7 @@ public class CustomerSessionRepositoryImpl implements CustomerSessionRepository 
     }
 
     @Override
-    public List<CustomerSessionDao> findAll() {
+    public List<CustomerSessionDao> findAllActive() {
         return context.selectFrom(CUSTOMER_SESSIONS).fetchInto(CustomerSessionDao.class);
     }
 }

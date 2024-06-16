@@ -28,6 +28,16 @@ public class VehicleDocumentRepositoryImpl implements VehicleDocumentRepository 
         vehiclesDocumentRecord.store();
         vehicleDocument.setId(vehiclesDocumentRecord.getId());
         vehicleDocument.setUuid(vehicleDocument.getUuid());
+        vehicleDocument.setCreatedBy(vehicleDocument.getCreatedBy());
+        vehicleDocument.setUpdatedBy(vehicleDocument.getUpdatedBy());
+        vehicleDocument.setCreatedOn(vehicleDocument.getCreatedOn());
+        vehicleDocument.setUpdatedOn(vehicleDocument.getUpdatedOn());
+        vehicleDocument.setIsActive(vehicleDocument.getIsActive());
+        vehicleDocument.setState(vehicleDocument.getState());
+        vehicleDocument.setApiSource(vehicleDocument.getApiSource());
+        vehicleDocument.setNotes(vehicleDocument.getNotes());
+
+
         return vehicleDocument;
     }
 
@@ -35,22 +45,41 @@ public class VehicleDocumentRepositoryImpl implements VehicleDocumentRepository 
     public VehicleDocumentDao update(VehicleDocumentDao vehicleDocument) {
         VehicleDocumentsRecord vehiclesDocumentRecord = context.newRecord(VEHICLE_DOCUMENTS, vehicleDocument);
         vehiclesDocumentRecord.update();
+
+
+        vehicleDocument.setCreatedBy(vehiclesDocumentRecord.getCreatedBy());
+        vehicleDocument.setUpdatedBy(vehiclesDocumentRecord.getUpdatedBy());
+        vehicleDocument.setCreatedOn(vehiclesDocumentRecord.getCreatedOn());
+        vehicleDocument.setUpdatedOn(vehiclesDocumentRecord.getUpdatedOn());
+        vehicleDocument.setIsActive(vehiclesDocumentRecord.getIsActive());
+        vehicleDocument.setState(vehiclesDocumentRecord.getState());
+        vehicleDocument.setApiSource(vehiclesDocumentRecord.getApiSource());
+        vehicleDocument.setNotes(vehiclesDocumentRecord.getNotes());
         return vehicleDocument;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(VEHICLE_DOCUMENTS).set(VEHICLE_DOCUMENTS.STATE, RecordState.DELETED.name()).where(VEHICLE_DOCUMENTS.ID.eq(id)).execute();
-    }
+     context.update(VEHICLE_DOCUMENTS)
+     .set(VEHICLE_DOCUMENTS.STATE,RecordState.DELETED.name())
+     .where(VEHICLE_DOCUMENTS.ID.eq(id))
+     .and(VEHICLE_DOCUMENTS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(VEHICLE_DOCUMENTS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public VehicleDocumentDao findByUUID(String uuid) {
-        return context.selectFrom(VEHICLE_DOCUMENTS).where(VEHICLE_DOCUMENTS.UUID.eq(uuid)).fetchAnyInto(VehicleDocumentDao.class);
+        return context.selectFrom(VEHICLE_DOCUMENTS).where(VEHICLE_DOCUMENTS.UUID.eq(uuid))
+                .and(VEHICLE_DOCUMENTS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(VehicleDocumentDao.class);
     }
 
     @Override
     public VehicleDocumentDao findById(Integer id) {
-        return context.selectFrom(VEHICLE_DOCUMENTS).where(VEHICLE_DOCUMENTS.ID.eq(id)).fetchAnyInto(VehicleDocumentDao.class);
+        return context.selectFrom(VEHICLE_DOCUMENTS).where(VEHICLE_DOCUMENTS.ID.eq(id))
+                .and(VEHICLE_DOCUMENTS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(VehicleDocumentDao.class);
     }
 
     @Override

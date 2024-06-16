@@ -10,7 +10,6 @@ import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Map;
 
 import static com.goev.record.central.tables.PromotionDetails.PROMOTION_DETAILS;
 
@@ -26,6 +25,14 @@ public class PromotionDetailRepositoryImpl implements PromotionDetailRepository 
         promotionDetailsRecord.store();
         log.setId(promotionDetailsRecord.getId());
         log.setUuid(promotionDetailsRecord.getUuid());
+        log.setCreatedBy(promotionDetailsRecord.getCreatedBy());
+        log.setUpdatedBy(promotionDetailsRecord.getUpdatedBy());
+        log.setCreatedOn(promotionDetailsRecord.getCreatedOn());
+        log.setUpdatedOn(promotionDetailsRecord.getUpdatedOn());
+        log.setIsActive(promotionDetailsRecord.getIsActive());
+        log.setState(promotionDetailsRecord.getState());
+        log.setApiSource(promotionDetailsRecord.getApiSource());
+        log.setNotes(promotionDetailsRecord.getNotes());
         return log;
     }
 
@@ -33,23 +40,42 @@ public class PromotionDetailRepositoryImpl implements PromotionDetailRepository 
     public PromotionDetailDao update(PromotionDetailDao log) {
         PromotionDetailsRecord promotionDetailsRecord = context.newRecord(PROMOTION_DETAILS, log);
         promotionDetailsRecord.update();
+
+
+        log.setCreatedBy(promotionDetailsRecord.getCreatedBy());
+        log.setUpdatedBy(promotionDetailsRecord.getUpdatedBy());
+        log.setCreatedOn(promotionDetailsRecord.getCreatedOn());
+        log.setUpdatedOn(promotionDetailsRecord.getUpdatedOn());
+        log.setIsActive(promotionDetailsRecord.getIsActive());
+        log.setState(promotionDetailsRecord.getState());
+        log.setApiSource(promotionDetailsRecord.getApiSource());
+        log.setNotes(promotionDetailsRecord.getNotes());
         return log;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(PROMOTION_DETAILS).set(PROMOTION_DETAILS.STATE, RecordState.DELETED.name()).where(PROMOTION_DETAILS.ID.eq(id)).execute();
-    }
+     context.update(PROMOTION_DETAILS)
+     .set(PROMOTION_DETAILS.STATE,RecordState.DELETED.name())
+     .where(PROMOTION_DETAILS.ID.eq(id))
+     .and(PROMOTION_DETAILS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(PROMOTION_DETAILS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
-    @Override
+     @Override
     public PromotionDetailDao findByUUID(String uuid) {
-        return context.selectFrom(PROMOTION_DETAILS).where(PROMOTION_DETAILS.UUID.eq(uuid)).fetchAnyInto(PromotionDetailDao.class);
-    }
+        return context.selectFrom(PROMOTION_DETAILS).where(PROMOTION_DETAILS.UUID.eq(uuid))
+         .and(PROMOTION_DETAILS.IS_ACTIVE.eq(true))
+        .fetchAnyInto(PromotionDetailDao.class);
+    }  
 
     @Override
     public PromotionDetailDao findById(Integer id) {
-        return context.selectFrom(PROMOTION_DETAILS).where(PROMOTION_DETAILS.ID.eq(id)).fetchAnyInto(PromotionDetailDao.class);
-    }
+        return context.selectFrom(PROMOTION_DETAILS).where(PROMOTION_DETAILS.ID.eq(id))
+         .and(PROMOTION_DETAILS.IS_ACTIVE.eq(true))
+        .fetchAnyInto(PromotionDetailDao.class);
+    } 
 
     @Override
     public List<PromotionDetailDao> findAllByIds(List<Integer> ids) {
@@ -57,7 +83,7 @@ public class PromotionDetailRepositoryImpl implements PromotionDetailRepository 
     }
 
     @Override
-    public List<PromotionDetailDao> findAll() {
+    public List<PromotionDetailDao> findAllActive() {
         return context.selectFrom(PROMOTION_DETAILS).fetchInto(PromotionDetailDao.class);
     }
 }

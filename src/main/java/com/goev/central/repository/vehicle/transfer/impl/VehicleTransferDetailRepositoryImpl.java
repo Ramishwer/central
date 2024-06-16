@@ -26,6 +26,14 @@ public class VehicleTransferDetailRepositoryImpl implements VehicleTransferDetai
         vehicleTransferDetailsRecord.store();
         transferDetail.setId(vehicleTransferDetailsRecord.getId());
         transferDetail.setUuid(vehicleTransferDetailsRecord.getUuid());
+        transferDetail.setCreatedBy(vehicleTransferDetailsRecord.getCreatedBy());
+        transferDetail.setUpdatedBy(vehicleTransferDetailsRecord.getUpdatedBy());
+        transferDetail.setCreatedOn(vehicleTransferDetailsRecord.getCreatedOn());
+        transferDetail.setUpdatedOn(vehicleTransferDetailsRecord.getUpdatedOn());
+        transferDetail.setIsActive(vehicleTransferDetailsRecord.getIsActive());
+        transferDetail.setState(vehicleTransferDetailsRecord.getState());
+        transferDetail.setApiSource(vehicleTransferDetailsRecord.getApiSource());
+        transferDetail.setNotes(vehicleTransferDetailsRecord.getNotes());
         return transferDetail;
     }
 
@@ -33,22 +41,41 @@ public class VehicleTransferDetailRepositoryImpl implements VehicleTransferDetai
     public VehicleTransferDetailDao update(VehicleTransferDetailDao transferDetail) {
         VehicleTransferDetailsRecord vehicleTransferDetailsRecord = context.newRecord(VEHICLE_TRANSFER_DETAILS, transferDetail);
         vehicleTransferDetailsRecord.update();
+
+
+        transferDetail.setCreatedBy(vehicleTransferDetailsRecord.getCreatedBy());
+        transferDetail.setUpdatedBy(vehicleTransferDetailsRecord.getUpdatedBy());
+        transferDetail.setCreatedOn(vehicleTransferDetailsRecord.getCreatedOn());
+        transferDetail.setUpdatedOn(vehicleTransferDetailsRecord.getUpdatedOn());
+        transferDetail.setIsActive(vehicleTransferDetailsRecord.getIsActive());
+        transferDetail.setState(vehicleTransferDetailsRecord.getState());
+        transferDetail.setApiSource(vehicleTransferDetailsRecord.getApiSource());
+        transferDetail.setNotes(vehicleTransferDetailsRecord.getNotes());
         return transferDetail;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(VEHICLE_TRANSFER_DETAILS).set(VEHICLE_TRANSFER_DETAILS.STATE, RecordState.DELETED.name()).where(VEHICLE_TRANSFER_DETAILS.ID.eq(id)).execute();
-    }
+     context.update(VEHICLE_TRANSFER_DETAILS)
+     .set(VEHICLE_TRANSFER_DETAILS.STATE,RecordState.DELETED.name())
+     .where(VEHICLE_TRANSFER_DETAILS.ID.eq(id))
+     .and(VEHICLE_TRANSFER_DETAILS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(VEHICLE_TRANSFER_DETAILS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public VehicleTransferDetailDao findByUUID(String uuid) {
-        return context.selectFrom(VEHICLE_TRANSFER_DETAILS).where(VEHICLE_TRANSFER_DETAILS.UUID.eq(uuid)).fetchAnyInto(VehicleTransferDetailDao.class);
+        return context.selectFrom(VEHICLE_TRANSFER_DETAILS).where(VEHICLE_TRANSFER_DETAILS.UUID.eq(uuid))
+                .and(VEHICLE_TRANSFER_DETAILS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(VehicleTransferDetailDao.class);
     }
 
     @Override
     public VehicleTransferDetailDao findById(Integer id) {
-        return context.selectFrom(VEHICLE_TRANSFER_DETAILS).where(VEHICLE_TRANSFER_DETAILS.ID.eq(id)).fetchAnyInto(VehicleTransferDetailDao.class);
+        return context.selectFrom(VEHICLE_TRANSFER_DETAILS).where(VEHICLE_TRANSFER_DETAILS.ID.eq(id))
+                .and(VEHICLE_TRANSFER_DETAILS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(VehicleTransferDetailDao.class);
     }
 
     @Override
@@ -57,7 +84,7 @@ public class VehicleTransferDetailRepositoryImpl implements VehicleTransferDetai
     }
 
     @Override
-    public List<VehicleTransferDetailDao> findAll() {
+    public List<VehicleTransferDetailDao> findAllActive() {
         return context.selectFrom(VEHICLE_TRANSFER_DETAILS).fetchInto(VehicleTransferDetailDao.class);
     }
 

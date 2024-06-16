@@ -25,7 +25,7 @@ public class ChallanServiceImpl implements ChallanService {
     @Override
     public PaginatedResponseDto<ChallanDto> getChallans() {
         PaginatedResponseDto<ChallanDto> result = PaginatedResponseDto.<ChallanDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
-        List<ChallanDao> challanDaos = challanRepository.findAll();
+        List<ChallanDao> challanDaos = challanRepository.findAllActive();
         if (CollectionUtils.isEmpty(challanDaos))
             return result;
 
@@ -54,7 +54,7 @@ public class ChallanServiceImpl implements ChallanService {
         if (challanDao == null)
             throw new ResponseException("No challan  found for Id :" + challanUUID);
         ChallanDao newChallanDao = new ChallanDao();
-       
+
 
         newChallanDao.setId(challanDao.getId());
         newChallanDao.setUuid(challanDao.getUuid());

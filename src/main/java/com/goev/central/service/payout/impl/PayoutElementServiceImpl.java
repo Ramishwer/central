@@ -25,7 +25,7 @@ public class PayoutElementServiceImpl implements PayoutElementService {
     @Override
     public PaginatedResponseDto<PayoutElementDto> getPayoutElements() {
         PaginatedResponseDto<PayoutElementDto> result = PaginatedResponseDto.<PayoutElementDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
-        List<PayoutElementDao> payoutElementDaos = payoutElementRepository.findAll();
+        List<PayoutElementDao> payoutElementDaos = payoutElementRepository.findAllActive();
         if (CollectionUtils.isEmpty(payoutElementDaos))
             return result;
 
@@ -54,7 +54,7 @@ public class PayoutElementServiceImpl implements PayoutElementService {
         if (payoutElementDao == null)
             throw new ResponseException("No payoutElement  found for Id :" + payoutElementUUID);
         PayoutElementDao newPayoutElementDao = new PayoutElementDao();
-       
+
 
         newPayoutElementDao.setId(payoutElementDao.getId());
         newPayoutElementDao.setUuid(payoutElementDao.getUuid());

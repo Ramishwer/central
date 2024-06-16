@@ -2,8 +2,6 @@ package com.goev.central.dto.customer.notification;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.goev.central.dto.partner.detail.PartnerDto;
-import com.goev.central.dto.vehicle.detail.VehicleDto;
 import lombok.*;
 
 @AllArgsConstructor

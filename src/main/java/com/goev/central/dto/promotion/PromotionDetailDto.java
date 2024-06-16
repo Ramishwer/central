@@ -2,7 +2,6 @@ package com.goev.central.dto.promotion;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.goev.central.dto.region.RegionTypeDto;
 import lombok.*;
 
 @AllArgsConstructor

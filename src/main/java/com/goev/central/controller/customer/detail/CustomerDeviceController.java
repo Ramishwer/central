@@ -18,25 +18,24 @@ public class CustomerDeviceController {
     private final CustomerDeviceService customerDeviceService;
 
     @GetMapping("/customers/{customer-uuid}/devices")
-    public ResponseDto<PaginatedResponseDto<CustomerDeviceDto>> getCustomerDevices(@PathVariable(value = "customer-uuid")String customerUUID,
-                                                                                   @RequestParam(value = "count",required = false) Integer count,
+    public ResponseDto<PaginatedResponseDto<CustomerDeviceDto>> getCustomerDevices(@PathVariable(value = "customer-uuid") String customerUUID,
+                                                                                   @RequestParam(value = "count", required = false) Integer count,
                                                                                    @RequestParam(value = "start", required = false) Integer start,
                                                                                    @RequestParam(value = "from", required = false) Long from,
                                                                                    @RequestParam(value = "to", required = false) Long to,
-                                                                                   @RequestParam(value = "lastUUID", required = false) String lastElementUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, customerDeviceService.getCustomerDevices(customerUUID));
+                                                                                   @RequestParam(value = "lastUUID", required = false) String lastElementUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, customerDeviceService.getCustomerDevices(customerUUID));
     }
 
-    
 
     @GetMapping("/customers/{customer-uuid}/devices/{device-uuid}")
-    public ResponseDto<CustomerDeviceDto> getCustomerDeviceDetails(@PathVariable(value = "customer-uuid")String customerUUID,
-                                                                   @PathVariable(value = "device-uuid")String deviceUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, customerDeviceService.getCustomerDeviceDetails(customerUUID,deviceUUID));
+    public ResponseDto<CustomerDeviceDto> getCustomerDeviceDetails(@PathVariable(value = "customer-uuid") String customerUUID,
+                                                                   @PathVariable(value = "device-uuid") String deviceUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, customerDeviceService.getCustomerDeviceDetails(customerUUID, deviceUUID));
     }
 
     @DeleteMapping("/customers/{customer-uuid}/devices/{device-uuid}")
-    public ResponseDto<Boolean> deleteCustomerDevice(@PathVariable(value = "customer-uuid")String customerUUID,@PathVariable(value = "device-uuid")String deviceUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, customerDeviceService.deleteCustomerDevice(customerUUID,deviceUUID));
+    public ResponseDto<Boolean> deleteCustomerDevice(@PathVariable(value = "customer-uuid") String customerUUID, @PathVariable(value = "device-uuid") String deviceUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, customerDeviceService.deleteCustomerDevice(customerUUID, deviceUUID));
     }
 }

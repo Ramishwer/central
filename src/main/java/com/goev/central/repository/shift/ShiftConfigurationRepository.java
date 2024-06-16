@@ -6,10 +6,16 @@ import java.util.List;
 
 public interface ShiftConfigurationRepository {
     ShiftConfigurationDao save(ShiftConfigurationDao partner);
+
     ShiftConfigurationDao update(ShiftConfigurationDao partner);
+
     void delete(Integer id);
+
     ShiftConfigurationDao findByUUID(String uuid);
+
     ShiftConfigurationDao findById(Integer id);
+
     List<ShiftConfigurationDao> findAllByIds(List<Integer> ids);
-    List<ShiftConfigurationDao> findAll();
+
+    List<ShiftConfigurationDao> findAllActive();
 }

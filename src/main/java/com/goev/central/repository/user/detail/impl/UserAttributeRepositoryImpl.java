@@ -26,6 +26,14 @@ public class UserAttributeRepositoryImpl implements UserAttributeRepository {
         userAttributesRecord.store();
         attribute.setId(userAttributesRecord.getId());
         attribute.setUuid(userAttributesRecord.getUuid());
+        attribute.setCreatedBy(userAttributesRecord.getCreatedBy());
+        attribute.setUpdatedBy(userAttributesRecord.getUpdatedBy());
+        attribute.setCreatedOn(userAttributesRecord.getCreatedOn());
+        attribute.setUpdatedOn(userAttributesRecord.getUpdatedOn());
+        attribute.setIsActive(userAttributesRecord.getIsActive());
+        attribute.setState(userAttributesRecord.getState());
+        attribute.setApiSource(userAttributesRecord.getApiSource());
+        attribute.setNotes(userAttributesRecord.getNotes());
         return attribute;
     }
 
@@ -33,22 +41,41 @@ public class UserAttributeRepositoryImpl implements UserAttributeRepository {
     public UserAttributeDao update(UserAttributeDao attribute) {
         UserAttributesRecord userAttributesRecord = context.newRecord(USER_ATTRIBUTES, attribute);
         userAttributesRecord.update();
+
+
+        attribute.setCreatedBy(userAttributesRecord.getCreatedBy());
+        attribute.setUpdatedBy(userAttributesRecord.getUpdatedBy());
+        attribute.setCreatedOn(userAttributesRecord.getCreatedOn());
+        attribute.setUpdatedOn(userAttributesRecord.getUpdatedOn());
+        attribute.setIsActive(userAttributesRecord.getIsActive());
+        attribute.setState(userAttributesRecord.getState());
+        attribute.setApiSource(userAttributesRecord.getApiSource());
+        attribute.setNotes(userAttributesRecord.getNotes());
         return attribute;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(USER_ATTRIBUTES).set(USER_ATTRIBUTES.STATE, RecordState.DELETED.name()).where(USER_ATTRIBUTES.ID.eq(id)).execute();
-    }
+     context.update(USER_ATTRIBUTES)
+     .set(USER_ATTRIBUTES.STATE,RecordState.DELETED.name())
+     .where(USER_ATTRIBUTES.ID.eq(id))
+     .and(USER_ATTRIBUTES.STATE.eq(RecordState.ACTIVE.name()))
+     .and(USER_ATTRIBUTES.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public UserAttributeDao findByUUID(String uuid) {
-        return context.selectFrom(USER_ATTRIBUTES).where(USER_ATTRIBUTES.UUID.eq(uuid)).fetchAnyInto(UserAttributeDao.class);
+        return context.selectFrom(USER_ATTRIBUTES).where(USER_ATTRIBUTES.UUID.eq(uuid))
+                .and(USER_ATTRIBUTES.IS_ACTIVE.eq(true))
+                .fetchAnyInto(UserAttributeDao.class);
     }
 
     @Override
     public UserAttributeDao findById(Integer id) {
-        return context.selectFrom(USER_ATTRIBUTES).where(USER_ATTRIBUTES.ID.eq(id)).fetchAnyInto(UserAttributeDao.class);
+        return context.selectFrom(USER_ATTRIBUTES).where(USER_ATTRIBUTES.ID.eq(id))
+                .and(USER_ATTRIBUTES.IS_ACTIVE.eq(true))
+                .fetchAnyInto(UserAttributeDao.class);
     }
 
     @Override
@@ -57,7 +84,7 @@ public class UserAttributeRepositoryImpl implements UserAttributeRepository {
     }
 
     @Override
-    public List<UserAttributeDao> findAll() {
+    public List<UserAttributeDao> findAllActive() {
         return context.selectFrom(USER_ATTRIBUTES).fetchInto(UserAttributeDao.class);
     }
 }

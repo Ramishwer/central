@@ -26,6 +26,14 @@ public class CustomerAppStringRepositoryImpl implements CustomerAppStringReposit
         customerAppStringsRecord.store();
         customerAppString.setId(customerAppStringsRecord.getId());
         customerAppString.setUuid(customerAppString.getUuid());
+        customerAppString.setCreatedBy(customerAppString.getCreatedBy());
+        customerAppString.setUpdatedBy(customerAppString.getUpdatedBy());
+        customerAppString.setCreatedOn(customerAppString.getCreatedOn());
+        customerAppString.setUpdatedOn(customerAppString.getUpdatedOn());
+        customerAppString.setIsActive(customerAppString.getIsActive());
+        customerAppString.setState(customerAppString.getState());
+        customerAppString.setApiSource(customerAppString.getApiSource());
+        customerAppString.setNotes(customerAppString.getNotes());
         return customerAppString;
     }
 
@@ -33,22 +41,41 @@ public class CustomerAppStringRepositoryImpl implements CustomerAppStringReposit
     public CustomerAppStringDao update(CustomerAppStringDao customerAppString) {
         CustomerAppStringsRecord customerAppStringsRecord = context.newRecord(CUSTOMER_APP_STRINGS, customerAppString);
         customerAppStringsRecord.update();
+
+
+        customerAppString.setCreatedBy(customerAppStringsRecord.getCreatedBy());
+        customerAppString.setUpdatedBy(customerAppStringsRecord.getUpdatedBy());
+        customerAppString.setCreatedOn(customerAppStringsRecord.getCreatedOn());
+        customerAppString.setUpdatedOn(customerAppStringsRecord.getUpdatedOn());
+        customerAppString.setIsActive(customerAppStringsRecord.getIsActive());
+        customerAppString.setState(customerAppStringsRecord.getState());
+        customerAppString.setApiSource(customerAppStringsRecord.getApiSource());
+        customerAppString.setNotes(customerAppStringsRecord.getNotes());
         return customerAppString;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(CUSTOMER_APP_STRINGS).set(CUSTOMER_APP_STRINGS.STATE, RecordState.DELETED.name()).where(CUSTOMER_APP_STRINGS.ID.eq(id)).execute();
-    }
+     context.update(CUSTOMER_APP_STRINGS)
+     .set(CUSTOMER_APP_STRINGS.STATE,RecordState.DELETED.name())
+     .where(CUSTOMER_APP_STRINGS.ID.eq(id))
+     .and(CUSTOMER_APP_STRINGS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(CUSTOMER_APP_STRINGS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public CustomerAppStringDao findByUUID(String uuid) {
-        return context.selectFrom(CUSTOMER_APP_STRINGS).where(CUSTOMER_APP_STRINGS.UUID.eq(uuid)).fetchAnyInto(CustomerAppStringDao.class);
+        return context.selectFrom(CUSTOMER_APP_STRINGS).where(CUSTOMER_APP_STRINGS.UUID.eq(uuid))
+                .and(CUSTOMER_APP_STRINGS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(CustomerAppStringDao.class);
     }
 
     @Override
     public CustomerAppStringDao findById(Integer id) {
-        return context.selectFrom(CUSTOMER_APP_STRINGS).where(CUSTOMER_APP_STRINGS.ID.eq(id)).fetchAnyInto(CustomerAppStringDao.class);
+        return context.selectFrom(CUSTOMER_APP_STRINGS).where(CUSTOMER_APP_STRINGS.ID.eq(id))
+                .and(CUSTOMER_APP_STRINGS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(CustomerAppStringDao.class);
     }
 
     @Override
@@ -57,7 +84,7 @@ public class CustomerAppStringRepositoryImpl implements CustomerAppStringReposit
     }
 
     @Override
-    public List<CustomerAppStringDao> findAll() {
+    public List<CustomerAppStringDao> findAllActive() {
         return context.selectFrom(CUSTOMER_APP_STRINGS).fetchInto(CustomerAppStringDao.class);
     }
 }

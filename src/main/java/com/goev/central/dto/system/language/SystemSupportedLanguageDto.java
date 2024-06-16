@@ -2,7 +2,6 @@ package com.goev.central.dto.system.language;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.goev.lib.dao.BaseDao;
 import lombok.*;
 
 @AllArgsConstructor

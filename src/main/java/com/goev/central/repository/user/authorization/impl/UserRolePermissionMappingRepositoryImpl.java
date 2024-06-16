@@ -26,6 +26,14 @@ public class UserRolePermissionMappingRepositoryImpl implements UserRolePermissi
         userRolePermissionMappingsRecord.store();
         assetTransferDetail.setId(userRolePermissionMappingsRecord.getId());
         assetTransferDetail.setUuid(userRolePermissionMappingsRecord.getUuid());
+        assetTransferDetail.setCreatedBy(userRolePermissionMappingsRecord.getCreatedBy());
+        assetTransferDetail.setUpdatedBy(userRolePermissionMappingsRecord.getUpdatedBy());
+        assetTransferDetail.setCreatedOn(userRolePermissionMappingsRecord.getCreatedOn());
+        assetTransferDetail.setUpdatedOn(userRolePermissionMappingsRecord.getUpdatedOn());
+        assetTransferDetail.setIsActive(userRolePermissionMappingsRecord.getIsActive());
+        assetTransferDetail.setState(userRolePermissionMappingsRecord.getState());
+        assetTransferDetail.setApiSource(userRolePermissionMappingsRecord.getApiSource());
+        assetTransferDetail.setNotes(userRolePermissionMappingsRecord.getNotes());
         return assetTransferDetail;
     }
 
@@ -33,22 +41,41 @@ public class UserRolePermissionMappingRepositoryImpl implements UserRolePermissi
     public UserRolePermissionMappingDao update(UserRolePermissionMappingDao assetTransferDetail) {
         UserRolePermissionMappingsRecord userRolePermissionMappingsRecord = context.newRecord(USER_ROLE_PERMISSION_MAPPINGS, assetTransferDetail);
         userRolePermissionMappingsRecord.update();
+
+
+        assetTransferDetail.setCreatedBy(userRolePermissionMappingsRecord.getCreatedBy());
+        assetTransferDetail.setUpdatedBy(userRolePermissionMappingsRecord.getUpdatedBy());
+        assetTransferDetail.setCreatedOn(userRolePermissionMappingsRecord.getCreatedOn());
+        assetTransferDetail.setUpdatedOn(userRolePermissionMappingsRecord.getUpdatedOn());
+        assetTransferDetail.setIsActive(userRolePermissionMappingsRecord.getIsActive());
+        assetTransferDetail.setState(userRolePermissionMappingsRecord.getState());
+        assetTransferDetail.setApiSource(userRolePermissionMappingsRecord.getApiSource());
+        assetTransferDetail.setNotes(userRolePermissionMappingsRecord.getNotes());
         return assetTransferDetail;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(USER_ROLE_PERMISSION_MAPPINGS).set(USER_ROLE_PERMISSION_MAPPINGS.STATE, RecordState.DELETED.name()).where(USER_ROLE_PERMISSION_MAPPINGS.ID.eq(id)).execute();
-    }
+     context.update(USER_ROLE_PERMISSION_MAPPINGS)
+     .set(USER_ROLE_PERMISSION_MAPPINGS.STATE,RecordState.DELETED.name())
+     .where(USER_ROLE_PERMISSION_MAPPINGS.ID.eq(id))
+     .and(USER_ROLE_PERMISSION_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(USER_ROLE_PERMISSION_MAPPINGS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public UserRolePermissionMappingDao findByUUID(String uuid) {
-        return context.selectFrom(USER_ROLE_PERMISSION_MAPPINGS).where(USER_ROLE_PERMISSION_MAPPINGS.UUID.eq(uuid)).fetchAnyInto(UserRolePermissionMappingDao.class);
+        return context.selectFrom(USER_ROLE_PERMISSION_MAPPINGS).where(USER_ROLE_PERMISSION_MAPPINGS.UUID.eq(uuid))
+                .and(USER_ROLE_PERMISSION_MAPPINGS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(UserRolePermissionMappingDao.class);
     }
 
     @Override
     public UserRolePermissionMappingDao findById(Integer id) {
-        return context.selectFrom(USER_ROLE_PERMISSION_MAPPINGS).where(USER_ROLE_PERMISSION_MAPPINGS.ID.eq(id)).fetchAnyInto(UserRolePermissionMappingDao.class);
+        return context.selectFrom(USER_ROLE_PERMISSION_MAPPINGS).where(USER_ROLE_PERMISSION_MAPPINGS.ID.eq(id))
+                .and(USER_ROLE_PERMISSION_MAPPINGS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(UserRolePermissionMappingDao.class);
     }
 
     @Override
@@ -57,7 +84,7 @@ public class UserRolePermissionMappingRepositoryImpl implements UserRolePermissi
     }
 
     @Override
-    public List<UserRolePermissionMappingDao> findAll() {
+    public List<UserRolePermissionMappingDao> findAllActive() {
         return context.selectFrom(USER_ROLE_PERMISSION_MAPPINGS).fetchInto(UserRolePermissionMappingDao.class);
     }
 }

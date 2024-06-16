@@ -18,11 +18,11 @@ public class AssetTypeController {
     private final AssetTypeService assetTypeService;
 
     @GetMapping("/asset-types")
-    public ResponseDto<PaginatedResponseDto<AssetTypeDto>> getAssetTypes(@RequestParam(value = "count",required = false) Integer count,
-                                                                 @RequestParam(value = "start", required = false) Integer start,
-                                                                 @RequestParam(value = "from", required = false) Long from,
-                                                                 @RequestParam(value = "to", required = false) Long to,
-                                                                 @RequestParam(value = "lastUUID", required = false) String lastElementUUID) {
+    public ResponseDto<PaginatedResponseDto<AssetTypeDto>> getAssetTypes(@RequestParam(value = "count", required = false) Integer count,
+                                                                         @RequestParam(value = "start", required = false) Integer start,
+                                                                         @RequestParam(value = "from", required = false) Long from,
+                                                                         @RequestParam(value = "to", required = false) Long to,
+                                                                         @RequestParam(value = "lastUUID", required = false) String lastElementUUID) {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, assetTypeService.getAssetTypes());
     }
 

@@ -26,6 +26,14 @@ public class PayoutModelConfigurationRepositoryImpl implements PayoutModelConfig
         payoutModelConfigurationsRecord.store();
         payoutModelConfiguration.setId(payoutModelConfigurationsRecord.getId());
         payoutModelConfiguration.setUuid(payoutModelConfiguration.getUuid());
+        payoutModelConfiguration.setCreatedBy(payoutModelConfiguration.getCreatedBy());
+        payoutModelConfiguration.setUpdatedBy(payoutModelConfiguration.getUpdatedBy());
+        payoutModelConfiguration.setCreatedOn(payoutModelConfiguration.getCreatedOn());
+        payoutModelConfiguration.setUpdatedOn(payoutModelConfiguration.getUpdatedOn());
+        payoutModelConfiguration.setIsActive(payoutModelConfiguration.getIsActive());
+        payoutModelConfiguration.setState(payoutModelConfiguration.getState());
+        payoutModelConfiguration.setApiSource(payoutModelConfiguration.getApiSource());
+        payoutModelConfiguration.setNotes(payoutModelConfiguration.getNotes());
         return payoutModelConfiguration;
     }
 
@@ -33,22 +41,41 @@ public class PayoutModelConfigurationRepositoryImpl implements PayoutModelConfig
     public PayoutModelConfigurationDao update(PayoutModelConfigurationDao payoutModelConfiguration) {
         PayoutModelConfigurationsRecord payoutModelConfigurationsRecord = context.newRecord(PAYOUT_MODEL_CONFIGURATIONS, payoutModelConfiguration);
         payoutModelConfigurationsRecord.update();
+
+
+        payoutModelConfiguration.setCreatedBy(payoutModelConfigurationsRecord.getCreatedBy());
+        payoutModelConfiguration.setUpdatedBy(payoutModelConfigurationsRecord.getUpdatedBy());
+        payoutModelConfiguration.setCreatedOn(payoutModelConfigurationsRecord.getCreatedOn());
+        payoutModelConfiguration.setUpdatedOn(payoutModelConfigurationsRecord.getUpdatedOn());
+        payoutModelConfiguration.setIsActive(payoutModelConfigurationsRecord.getIsActive());
+        payoutModelConfiguration.setState(payoutModelConfigurationsRecord.getState());
+        payoutModelConfiguration.setApiSource(payoutModelConfigurationsRecord.getApiSource());
+        payoutModelConfiguration.setNotes(payoutModelConfigurationsRecord.getNotes());
         return payoutModelConfiguration;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(PAYOUT_MODEL_CONFIGURATIONS).set(PAYOUT_MODEL_CONFIGURATIONS.STATE, RecordState.DELETED.name()).where(PAYOUT_MODEL_CONFIGURATIONS.ID.eq(id)).execute();
-    }
+     context.update(PAYOUT_MODEL_CONFIGURATIONS)
+     .set(PAYOUT_MODEL_CONFIGURATIONS.STATE,RecordState.DELETED.name())
+     .where(PAYOUT_MODEL_CONFIGURATIONS.ID.eq(id))
+     .and(PAYOUT_MODEL_CONFIGURATIONS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(PAYOUT_MODEL_CONFIGURATIONS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public PayoutModelConfigurationDao findByUUID(String uuid) {
-        return context.selectFrom(PAYOUT_MODEL_CONFIGURATIONS).where(PAYOUT_MODEL_CONFIGURATIONS.UUID.eq(uuid)).fetchAnyInto(PayoutModelConfigurationDao.class);
+        return context.selectFrom(PAYOUT_MODEL_CONFIGURATIONS).where(PAYOUT_MODEL_CONFIGURATIONS.UUID.eq(uuid))
+                .and(PAYOUT_MODEL_CONFIGURATIONS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PayoutModelConfigurationDao.class);
     }
 
     @Override
     public PayoutModelConfigurationDao findById(Integer id) {
-        return context.selectFrom(PAYOUT_MODEL_CONFIGURATIONS).where(PAYOUT_MODEL_CONFIGURATIONS.ID.eq(id)).fetchAnyInto(PayoutModelConfigurationDao.class);
+        return context.selectFrom(PAYOUT_MODEL_CONFIGURATIONS).where(PAYOUT_MODEL_CONFIGURATIONS.ID.eq(id))
+                .and(PAYOUT_MODEL_CONFIGURATIONS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PayoutModelConfigurationDao.class);
     }
 
     @Override
@@ -57,7 +84,7 @@ public class PayoutModelConfigurationRepositoryImpl implements PayoutModelConfig
     }
 
     @Override
-    public List<PayoutModelConfigurationDao> findAll() {
+    public List<PayoutModelConfigurationDao> findAllActive() {
         return context.selectFrom(PAYOUT_MODEL_CONFIGURATIONS).fetchInto(PayoutModelConfigurationDao.class);
     }
 }

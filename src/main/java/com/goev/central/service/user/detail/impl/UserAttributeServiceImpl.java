@@ -25,7 +25,7 @@ public class UserAttributeServiceImpl implements UserAttributeService {
     @Override
     public PaginatedResponseDto<UserAttributeDto> getUserAttributes(String userUUID) {
         PaginatedResponseDto<UserAttributeDto> result = PaginatedResponseDto.<UserAttributeDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
-        List<UserAttributeDao> userAttributeDaos = userAttributeRepository.findAll();
+        List<UserAttributeDao> userAttributeDaos = userAttributeRepository.findAllActive();
         if (CollectionUtils.isEmpty(userAttributeDaos))
             return result;
 
@@ -54,7 +54,7 @@ public class UserAttributeServiceImpl implements UserAttributeService {
         if (userAttributeDao == null)
             throw new ResponseException("No userAttribute  found for Id :" + userAttributeUUID);
         UserAttributeDao newUserAttributeDao = new UserAttributeDao();
-       
+
 
         newUserAttributeDao.setId(userAttributeDao.getId());
         newUserAttributeDao.setUuid(userAttributeDao.getUuid());

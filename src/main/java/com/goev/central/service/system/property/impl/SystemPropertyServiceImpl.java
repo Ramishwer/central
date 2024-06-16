@@ -25,7 +25,7 @@ public class SystemPropertyServiceImpl implements SystemPropertyService {
     @Override
     public PaginatedResponseDto<SystemPropertyDto> getSystemProperties() {
         PaginatedResponseDto<SystemPropertyDto> result = PaginatedResponseDto.<SystemPropertyDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
-        List<SystemPropertyDao> systemPropertyDaos = systemPropertyRepository.findAll();
+        List<SystemPropertyDao> systemPropertyDaos = systemPropertyRepository.findAllActive();
         if (CollectionUtils.isEmpty(systemPropertyDaos))
             return result;
 
@@ -54,7 +54,7 @@ public class SystemPropertyServiceImpl implements SystemPropertyService {
         if (systemPropertyDao == null)
             throw new ResponseException("No systemProperty  found for Id :" + systemPropertyUUID);
         SystemPropertyDao newSystemPropertyDao = new SystemPropertyDao();
-       
+
 
         newSystemPropertyDao.setId(systemPropertyDao.getId());
         newSystemPropertyDao.setUuid(systemPropertyDao.getUuid());

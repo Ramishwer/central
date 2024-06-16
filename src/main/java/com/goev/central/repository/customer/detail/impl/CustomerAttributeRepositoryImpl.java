@@ -26,6 +26,14 @@ public class CustomerAttributeRepositoryImpl implements CustomerAttributeReposit
         customerAttributesRecord.store();
         customerAttribute.setId(customerAttributesRecord.getId());
         customerAttribute.setUuid(customerAttribute.getUuid());
+        customerAttribute.setCreatedBy(customerAttribute.getCreatedBy());
+        customerAttribute.setUpdatedBy(customerAttribute.getUpdatedBy());
+        customerAttribute.setCreatedOn(customerAttribute.getCreatedOn());
+        customerAttribute.setUpdatedOn(customerAttribute.getUpdatedOn());
+        customerAttribute.setIsActive(customerAttribute.getIsActive());
+        customerAttribute.setState(customerAttribute.getState());
+        customerAttribute.setApiSource(customerAttribute.getApiSource());
+        customerAttribute.setNotes(customerAttribute.getNotes());
         return customerAttribute;
     }
 
@@ -33,22 +41,41 @@ public class CustomerAttributeRepositoryImpl implements CustomerAttributeReposit
     public CustomerAttributeDao update(CustomerAttributeDao customerAttribute) {
         CustomerAttributesRecord customerAttributesRecord = context.newRecord(CUSTOMER_ATTRIBUTES, customerAttribute);
         customerAttributesRecord.update();
+
+
+        customerAttribute.setCreatedBy(customerAttributesRecord.getCreatedBy());
+        customerAttribute.setUpdatedBy(customerAttributesRecord.getUpdatedBy());
+        customerAttribute.setCreatedOn(customerAttributesRecord.getCreatedOn());
+        customerAttribute.setUpdatedOn(customerAttributesRecord.getUpdatedOn());
+        customerAttribute.setIsActive(customerAttributesRecord.getIsActive());
+        customerAttribute.setState(customerAttributesRecord.getState());
+        customerAttribute.setApiSource(customerAttributesRecord.getApiSource());
+        customerAttribute.setNotes(customerAttributesRecord.getNotes());
         return customerAttribute;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(CUSTOMER_ATTRIBUTES).set(CUSTOMER_ATTRIBUTES.STATE, RecordState.DELETED.name()).where(CUSTOMER_ATTRIBUTES.ID.eq(id)).execute();
-    }
+     context.update(CUSTOMER_ATTRIBUTES)
+     .set(CUSTOMER_ATTRIBUTES.STATE,RecordState.DELETED.name())
+     .where(CUSTOMER_ATTRIBUTES.ID.eq(id))
+     .and(CUSTOMER_ATTRIBUTES.STATE.eq(RecordState.ACTIVE.name()))
+     .and(CUSTOMER_ATTRIBUTES.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public CustomerAttributeDao findByUUID(String uuid) {
-        return context.selectFrom(CUSTOMER_ATTRIBUTES).where(CUSTOMER_ATTRIBUTES.UUID.eq(uuid)).fetchAnyInto(CustomerAttributeDao.class);
+        return context.selectFrom(CUSTOMER_ATTRIBUTES).where(CUSTOMER_ATTRIBUTES.UUID.eq(uuid))
+                .and(CUSTOMER_ATTRIBUTES.IS_ACTIVE.eq(true))
+                .fetchAnyInto(CustomerAttributeDao.class);
     }
 
     @Override
     public CustomerAttributeDao findById(Integer id) {
-        return context.selectFrom(CUSTOMER_ATTRIBUTES).where(CUSTOMER_ATTRIBUTES.ID.eq(id)).fetchAnyInto(CustomerAttributeDao.class);
+        return context.selectFrom(CUSTOMER_ATTRIBUTES).where(CUSTOMER_ATTRIBUTES.ID.eq(id))
+                .and(CUSTOMER_ATTRIBUTES.IS_ACTIVE.eq(true))
+                .fetchAnyInto(CustomerAttributeDao.class);
     }
 
     @Override
@@ -57,7 +84,7 @@ public class CustomerAttributeRepositoryImpl implements CustomerAttributeReposit
     }
 
     @Override
-    public List<CustomerAttributeDao> findAll() {
+    public List<CustomerAttributeDao> findAllActive() {
         return context.selectFrom(CUSTOMER_ATTRIBUTES).fetchInto(CustomerAttributeDao.class);
     }
 }

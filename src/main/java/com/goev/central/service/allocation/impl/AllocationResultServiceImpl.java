@@ -25,7 +25,7 @@ public class AllocationResultServiceImpl implements AllocationResultService {
     @Override
     public PaginatedResponseDto<AllocationResultDto> getAllocationResults() {
         PaginatedResponseDto<AllocationResultDto> result = PaginatedResponseDto.<AllocationResultDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
-        List<AllocationResultDao> allocationResultDaos = allocationResultRepository.findAll();
+        List<AllocationResultDao> allocationResultDaos = allocationResultRepository.findAllActive();
         if (CollectionUtils.isEmpty(allocationResultDaos))
             return result;
 

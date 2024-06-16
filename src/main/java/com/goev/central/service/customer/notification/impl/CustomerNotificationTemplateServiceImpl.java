@@ -1,9 +1,9 @@
 package com.goev.central.service.customer.notification.impl;
 
 import com.goev.central.dao.customer.notification.CustomerNotificationTemplateDao;
-import com.goev.central.dto.customer.notification.CustomerNotificationTemplateDto;
 import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
+import com.goev.central.dto.customer.notification.CustomerNotificationTemplateDto;
 import com.goev.central.repository.customer.notification.CustomerNotificationTemplateRepository;
 import com.goev.central.service.customer.notification.CustomerNotificationTemplateService;
 import com.goev.lib.exceptions.ResponseException;
@@ -25,7 +25,7 @@ public class CustomerNotificationTemplateServiceImpl implements CustomerNotifica
     @Override
     public PaginatedResponseDto<CustomerNotificationTemplateDto> getCustomerNotificationTemplates() {
         PaginatedResponseDto<CustomerNotificationTemplateDto> result = PaginatedResponseDto.<CustomerNotificationTemplateDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
-        List<CustomerNotificationTemplateDao> customerNotificationTemplateDaos = customerNotificationTemplateRepository.findAll();
+        List<CustomerNotificationTemplateDao> customerNotificationTemplateDaos = customerNotificationTemplateRepository.findAllActive();
         if (CollectionUtils.isEmpty(customerNotificationTemplateDaos))
             return result;
 
@@ -54,7 +54,7 @@ public class CustomerNotificationTemplateServiceImpl implements CustomerNotifica
         if (customerNotificationTemplateDao == null)
             throw new ResponseException("No customerNotificationTemplate  found for Id :" + customerNotificationTemplateUUID);
         CustomerNotificationTemplateDao newCustomerNotificationTemplateDao = new CustomerNotificationTemplateDao();
-       
+
 
         newCustomerNotificationTemplateDao.setId(customerNotificationTemplateDao.getId());
         newCustomerNotificationTemplateDao.setUuid(customerNotificationTemplateDao.getUuid());

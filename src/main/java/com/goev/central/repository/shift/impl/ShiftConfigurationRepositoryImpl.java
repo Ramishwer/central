@@ -25,6 +25,14 @@ public class ShiftConfigurationRepositoryImpl implements ShiftConfigurationRepos
         shiftConfigurationsRecord.store();
         log.setId(shiftConfigurationsRecord.getId());
         log.setUuid(shiftConfigurationsRecord.getUuid());
+        log.setCreatedBy(shiftConfigurationsRecord.getCreatedBy());
+        log.setUpdatedBy(shiftConfigurationsRecord.getUpdatedBy());
+        log.setCreatedOn(shiftConfigurationsRecord.getCreatedOn());
+        log.setUpdatedOn(shiftConfigurationsRecord.getUpdatedOn());
+        log.setIsActive(shiftConfigurationsRecord.getIsActive());
+        log.setState(shiftConfigurationsRecord.getState());
+        log.setApiSource(shiftConfigurationsRecord.getApiSource());
+        log.setNotes(shiftConfigurationsRecord.getNotes());
         return log;
     }
 
@@ -32,22 +40,41 @@ public class ShiftConfigurationRepositoryImpl implements ShiftConfigurationRepos
     public ShiftConfigurationDao update(ShiftConfigurationDao log) {
         ShiftConfigurationsRecord shiftConfigurationsRecord = context.newRecord(SHIFT_CONFIGURATIONS, log);
         shiftConfigurationsRecord.update();
+
+
+        log.setCreatedBy(shiftConfigurationsRecord.getCreatedBy());
+        log.setUpdatedBy(shiftConfigurationsRecord.getUpdatedBy());
+        log.setCreatedOn(shiftConfigurationsRecord.getCreatedOn());
+        log.setUpdatedOn(shiftConfigurationsRecord.getUpdatedOn());
+        log.setIsActive(shiftConfigurationsRecord.getIsActive());
+        log.setState(shiftConfigurationsRecord.getState());
+        log.setApiSource(shiftConfigurationsRecord.getApiSource());
+        log.setNotes(shiftConfigurationsRecord.getNotes());
         return log;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(SHIFT_CONFIGURATIONS).set(SHIFT_CONFIGURATIONS.STATE, RecordState.DELETED.name()).where(SHIFT_CONFIGURATIONS.ID.eq(id)).execute();
-    }
+     context.update(SHIFT_CONFIGURATIONS)
+     .set(SHIFT_CONFIGURATIONS.STATE,RecordState.DELETED.name())
+     .where(SHIFT_CONFIGURATIONS.ID.eq(id))
+     .and(SHIFT_CONFIGURATIONS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(SHIFT_CONFIGURATIONS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public ShiftConfigurationDao findByUUID(String uuid) {
-        return context.selectFrom(SHIFT_CONFIGURATIONS).where(SHIFT_CONFIGURATIONS.UUID.eq(uuid)).fetchAnyInto(ShiftConfigurationDao.class);
+        return context.selectFrom(SHIFT_CONFIGURATIONS).where(SHIFT_CONFIGURATIONS.UUID.eq(uuid))
+                .and(SHIFT_CONFIGURATIONS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(ShiftConfigurationDao.class);
     }
 
     @Override
     public ShiftConfigurationDao findById(Integer id) {
-        return context.selectFrom(SHIFT_CONFIGURATIONS).where(SHIFT_CONFIGURATIONS.ID.eq(id)).fetchAnyInto(ShiftConfigurationDao.class);
+        return context.selectFrom(SHIFT_CONFIGURATIONS).where(SHIFT_CONFIGURATIONS.ID.eq(id))
+                .and(SHIFT_CONFIGURATIONS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(ShiftConfigurationDao.class);
     }
 
     @Override
@@ -56,7 +83,7 @@ public class ShiftConfigurationRepositoryImpl implements ShiftConfigurationRepos
     }
 
     @Override
-    public List<ShiftConfigurationDao> findAll() {
+    public List<ShiftConfigurationDao> findAllActive() {
         return context.selectFrom(SHIFT_CONFIGURATIONS).fetchInto(ShiftConfigurationDao.class);
     }
 }

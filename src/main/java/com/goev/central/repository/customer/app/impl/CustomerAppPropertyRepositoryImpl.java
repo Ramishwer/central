@@ -26,6 +26,14 @@ public class CustomerAppPropertyRepositoryImpl implements CustomerAppPropertyRep
         customerAppPropertiesRecord.store();
         customerAppProperty.setId(customerAppPropertiesRecord.getId());
         customerAppProperty.setUuid(customerAppProperty.getUuid());
+        customerAppProperty.setCreatedBy(customerAppProperty.getCreatedBy());
+        customerAppProperty.setUpdatedBy(customerAppProperty.getUpdatedBy());
+        customerAppProperty.setCreatedOn(customerAppProperty.getCreatedOn());
+        customerAppProperty.setUpdatedOn(customerAppProperty.getUpdatedOn());
+        customerAppProperty.setIsActive(customerAppProperty.getIsActive());
+        customerAppProperty.setState(customerAppProperty.getState());
+        customerAppProperty.setApiSource(customerAppProperty.getApiSource());
+        customerAppProperty.setNotes(customerAppProperty.getNotes());
         return customerAppProperty;
     }
 
@@ -33,22 +41,41 @@ public class CustomerAppPropertyRepositoryImpl implements CustomerAppPropertyRep
     public CustomerAppPropertyDao update(CustomerAppPropertyDao customerAppProperty) {
         CustomerAppPropertiesRecord customerAppPropertiesRecord = context.newRecord(CUSTOMER_APP_PROPERTIES, customerAppProperty);
         customerAppPropertiesRecord.update();
+
+
+        customerAppProperty.setCreatedBy(customerAppPropertiesRecord.getCreatedBy());
+        customerAppProperty.setUpdatedBy(customerAppPropertiesRecord.getUpdatedBy());
+        customerAppProperty.setCreatedOn(customerAppPropertiesRecord.getCreatedOn());
+        customerAppProperty.setUpdatedOn(customerAppPropertiesRecord.getUpdatedOn());
+        customerAppProperty.setIsActive(customerAppPropertiesRecord.getIsActive());
+        customerAppProperty.setState(customerAppPropertiesRecord.getState());
+        customerAppProperty.setApiSource(customerAppPropertiesRecord.getApiSource());
+        customerAppProperty.setNotes(customerAppPropertiesRecord.getNotes());
         return customerAppProperty;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(CUSTOMER_APP_PROPERTIES).set(CUSTOMER_APP_PROPERTIES.STATE, RecordState.DELETED.name()).where(CUSTOMER_APP_PROPERTIES.ID.eq(id)).execute();
-    }
+     context.update(CUSTOMER_APP_PROPERTIES)
+     .set(CUSTOMER_APP_PROPERTIES.STATE,RecordState.DELETED.name())
+     .where(CUSTOMER_APP_PROPERTIES.ID.eq(id))
+     .and(CUSTOMER_APP_PROPERTIES.STATE.eq(RecordState.ACTIVE.name()))
+     .and(CUSTOMER_APP_PROPERTIES.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public CustomerAppPropertyDao findByUUID(String uuid) {
-        return context.selectFrom(CUSTOMER_APP_PROPERTIES).where(CUSTOMER_APP_PROPERTIES.UUID.eq(uuid)).fetchAnyInto(CustomerAppPropertyDao.class);
+        return context.selectFrom(CUSTOMER_APP_PROPERTIES).where(CUSTOMER_APP_PROPERTIES.UUID.eq(uuid))
+                .and(CUSTOMER_APP_PROPERTIES.IS_ACTIVE.eq(true))
+                .fetchAnyInto(CustomerAppPropertyDao.class);
     }
 
     @Override
     public CustomerAppPropertyDao findById(Integer id) {
-        return context.selectFrom(CUSTOMER_APP_PROPERTIES).where(CUSTOMER_APP_PROPERTIES.ID.eq(id)).fetchAnyInto(CustomerAppPropertyDao.class);
+        return context.selectFrom(CUSTOMER_APP_PROPERTIES).where(CUSTOMER_APP_PROPERTIES.ID.eq(id))
+                .and(CUSTOMER_APP_PROPERTIES.IS_ACTIVE.eq(true))
+                .fetchAnyInto(CustomerAppPropertyDao.class);
     }
 
     @Override
@@ -57,7 +84,7 @@ public class CustomerAppPropertyRepositoryImpl implements CustomerAppPropertyRep
     }
 
     @Override
-    public List<CustomerAppPropertyDao> findAll() {
+    public List<CustomerAppPropertyDao> findAllActive() {
         return context.selectFrom(CUSTOMER_APP_PROPERTIES).fetchInto(CustomerAppPropertyDao.class);
     }
 }

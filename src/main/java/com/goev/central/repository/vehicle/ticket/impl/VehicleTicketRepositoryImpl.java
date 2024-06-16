@@ -26,6 +26,14 @@ public class VehicleTicketRepositoryImpl implements VehicleTicketRepository {
         vehicleTicketsRecord.store();
         vehicleTicket.setId(vehicleTicketsRecord.getId());
         vehicleTicket.setUuid(vehicleTicket.getUuid());
+        vehicleTicket.setCreatedBy(vehicleTicket.getCreatedBy());
+        vehicleTicket.setUpdatedBy(vehicleTicket.getUpdatedBy());
+        vehicleTicket.setCreatedOn(vehicleTicket.getCreatedOn());
+        vehicleTicket.setUpdatedOn(vehicleTicket.getUpdatedOn());
+        vehicleTicket.setIsActive(vehicleTicket.getIsActive());
+        vehicleTicket.setState(vehicleTicket.getState());
+        vehicleTicket.setApiSource(vehicleTicket.getApiSource());
+        vehicleTicket.setNotes(vehicleTicket.getNotes());
         return vehicleTicket;
     }
 
@@ -33,22 +41,41 @@ public class VehicleTicketRepositoryImpl implements VehicleTicketRepository {
     public VehicleTicketDao update(VehicleTicketDao vehicleTicket) {
         VehicleTicketsRecord vehicleTicketsRecord = context.newRecord(VEHICLE_TICKETS, vehicleTicket);
         vehicleTicketsRecord.update();
+
+
+        vehicleTicket.setCreatedBy(vehicleTicketsRecord.getCreatedBy());
+        vehicleTicket.setUpdatedBy(vehicleTicketsRecord.getUpdatedBy());
+        vehicleTicket.setCreatedOn(vehicleTicketsRecord.getCreatedOn());
+        vehicleTicket.setUpdatedOn(vehicleTicketsRecord.getUpdatedOn());
+        vehicleTicket.setIsActive(vehicleTicketsRecord.getIsActive());
+        vehicleTicket.setState(vehicleTicketsRecord.getState());
+        vehicleTicket.setApiSource(vehicleTicketsRecord.getApiSource());
+        vehicleTicket.setNotes(vehicleTicketsRecord.getNotes());
         return vehicleTicket;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(VEHICLE_TICKETS).set(VEHICLE_TICKETS.STATE, RecordState.DELETED.name()).where(VEHICLE_TICKETS.ID.eq(id)).execute();
-    }
+     context.update(VEHICLE_TICKETS)
+     .set(VEHICLE_TICKETS.STATE,RecordState.DELETED.name())
+     .where(VEHICLE_TICKETS.ID.eq(id))
+     .and(VEHICLE_TICKETS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(VEHICLE_TICKETS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public VehicleTicketDao findByUUID(String uuid) {
-        return context.selectFrom(VEHICLE_TICKETS).where(VEHICLE_TICKETS.UUID.eq(uuid)).fetchAnyInto(VehicleTicketDao.class);
+        return context.selectFrom(VEHICLE_TICKETS).where(VEHICLE_TICKETS.UUID.eq(uuid))
+                .and(VEHICLE_TICKETS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(VehicleTicketDao.class);
     }
 
     @Override
     public VehicleTicketDao findById(Integer id) {
-        return context.selectFrom(VEHICLE_TICKETS).where(VEHICLE_TICKETS.ID.eq(id)).fetchAnyInto(VehicleTicketDao.class);
+        return context.selectFrom(VEHICLE_TICKETS).where(VEHICLE_TICKETS.ID.eq(id))
+                .and(VEHICLE_TICKETS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(VehicleTicketDao.class);
     }
 
     @Override
@@ -57,7 +84,7 @@ public class VehicleTicketRepositoryImpl implements VehicleTicketRepository {
     }
 
     @Override
-    public List<VehicleTicketDao> findAll() {
+    public List<VehicleTicketDao> findAllActive() {
         return context.selectFrom(VEHICLE_TICKETS).fetchInto(VehicleTicketDao.class);
     }
 }

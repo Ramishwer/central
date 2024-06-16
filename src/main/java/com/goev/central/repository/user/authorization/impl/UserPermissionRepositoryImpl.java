@@ -26,6 +26,14 @@ public class UserPermissionRepositoryImpl implements UserPermissionRepository {
         userPermissionsRecord.store();
         assetTransferDetail.setId(userPermissionsRecord.getId());
         assetTransferDetail.setUuid(userPermissionsRecord.getUuid());
+        assetTransferDetail.setCreatedBy(userPermissionsRecord.getCreatedBy());
+        assetTransferDetail.setUpdatedBy(userPermissionsRecord.getUpdatedBy());
+        assetTransferDetail.setCreatedOn(userPermissionsRecord.getCreatedOn());
+        assetTransferDetail.setUpdatedOn(userPermissionsRecord.getUpdatedOn());
+        assetTransferDetail.setIsActive(userPermissionsRecord.getIsActive());
+        assetTransferDetail.setState(userPermissionsRecord.getState());
+        assetTransferDetail.setApiSource(userPermissionsRecord.getApiSource());
+        assetTransferDetail.setNotes(userPermissionsRecord.getNotes());
         return assetTransferDetail;
     }
 
@@ -33,22 +41,41 @@ public class UserPermissionRepositoryImpl implements UserPermissionRepository {
     public UserPermissionDao update(UserPermissionDao assetTransferDetail) {
         UserPermissionsRecord userPermissionsRecord = context.newRecord(USER_PERMISSIONS, assetTransferDetail);
         userPermissionsRecord.update();
+
+
+        assetTransferDetail.setCreatedBy(userPermissionsRecord.getCreatedBy());
+        assetTransferDetail.setUpdatedBy(userPermissionsRecord.getUpdatedBy());
+        assetTransferDetail.setCreatedOn(userPermissionsRecord.getCreatedOn());
+        assetTransferDetail.setUpdatedOn(userPermissionsRecord.getUpdatedOn());
+        assetTransferDetail.setIsActive(userPermissionsRecord.getIsActive());
+        assetTransferDetail.setState(userPermissionsRecord.getState());
+        assetTransferDetail.setApiSource(userPermissionsRecord.getApiSource());
+        assetTransferDetail.setNotes(userPermissionsRecord.getNotes());
         return assetTransferDetail;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(USER_PERMISSIONS).set(USER_PERMISSIONS.STATE, RecordState.DELETED.name()).where(USER_PERMISSIONS.ID.eq(id)).execute();
-    }
+     context.update(USER_PERMISSIONS)
+     .set(USER_PERMISSIONS.STATE,RecordState.DELETED.name())
+     .where(USER_PERMISSIONS.ID.eq(id))
+     .and(USER_PERMISSIONS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(USER_PERMISSIONS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public UserPermissionDao findByUUID(String uuid) {
-        return context.selectFrom(USER_PERMISSIONS).where(USER_PERMISSIONS.UUID.eq(uuid)).fetchAnyInto(UserPermissionDao.class);
+        return context.selectFrom(USER_PERMISSIONS).where(USER_PERMISSIONS.UUID.eq(uuid))
+                .and(USER_PERMISSIONS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(UserPermissionDao.class);
     }
 
     @Override
     public UserPermissionDao findById(Integer id) {
-        return context.selectFrom(USER_PERMISSIONS).where(USER_PERMISSIONS.ID.eq(id)).fetchAnyInto(UserPermissionDao.class);
+        return context.selectFrom(USER_PERMISSIONS).where(USER_PERMISSIONS.ID.eq(id))
+                .and(USER_PERMISSIONS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(UserPermissionDao.class);
     }
 
     @Override
@@ -57,7 +84,7 @@ public class UserPermissionRepositoryImpl implements UserPermissionRepository {
     }
 
     @Override
-    public List<UserPermissionDao> findAll() {
+    public List<UserPermissionDao> findAllActive() {
         return context.selectFrom(USER_PERMISSIONS).fetchInto(UserPermissionDao.class);
     }
 }

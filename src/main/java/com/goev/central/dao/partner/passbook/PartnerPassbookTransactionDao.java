@@ -1,6 +1,3 @@
-
-
-
 package com.goev.central.dao.partner.passbook;
 
 import com.goev.lib.dao.BaseDao;

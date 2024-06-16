@@ -25,6 +25,14 @@ public class VehicleLeasingAgencyRepositoryImpl implements VehicleLeasingAgencyR
         vehicleLeasingAgenciesRecord.store();
         agency.setId(vehicleLeasingAgenciesRecord.getId());
         agency.setUuid(vehicleLeasingAgenciesRecord.getUuid());
+        agency.setCreatedBy(vehicleLeasingAgenciesRecord.getCreatedBy());
+        agency.setUpdatedBy(vehicleLeasingAgenciesRecord.getUpdatedBy());
+        agency.setCreatedOn(vehicleLeasingAgenciesRecord.getCreatedOn());
+        agency.setUpdatedOn(vehicleLeasingAgenciesRecord.getUpdatedOn());
+        agency.setIsActive(vehicleLeasingAgenciesRecord.getIsActive());
+        agency.setState(vehicleLeasingAgenciesRecord.getState());
+        agency.setApiSource(vehicleLeasingAgenciesRecord.getApiSource());
+        agency.setNotes(vehicleLeasingAgenciesRecord.getNotes());
         return agency;
     }
 
@@ -32,22 +40,41 @@ public class VehicleLeasingAgencyRepositoryImpl implements VehicleLeasingAgencyR
     public VehicleLeasingAgencyDao update(VehicleLeasingAgencyDao agency) {
         VehicleLeasingAgenciesRecord vehicleLeasingAgenciesRecord = context.newRecord(VEHICLE_LEASING_AGENCIES, agency);
         vehicleLeasingAgenciesRecord.update();
+
+
+        agency.setCreatedBy(vehicleLeasingAgenciesRecord.getCreatedBy());
+        agency.setUpdatedBy(vehicleLeasingAgenciesRecord.getUpdatedBy());
+        agency.setCreatedOn(vehicleLeasingAgenciesRecord.getCreatedOn());
+        agency.setUpdatedOn(vehicleLeasingAgenciesRecord.getUpdatedOn());
+        agency.setIsActive(vehicleLeasingAgenciesRecord.getIsActive());
+        agency.setState(vehicleLeasingAgenciesRecord.getState());
+        agency.setApiSource(vehicleLeasingAgenciesRecord.getApiSource());
+        agency.setNotes(vehicleLeasingAgenciesRecord.getNotes());
         return agency;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(VEHICLE_LEASING_AGENCIES).set(VEHICLE_LEASING_AGENCIES.STATE, RecordState.DELETED.name()).where(VEHICLE_LEASING_AGENCIES.ID.eq(id)).execute();
-    }
+     context.update(VEHICLE_LEASING_AGENCIES)
+     .set(VEHICLE_LEASING_AGENCIES.STATE,RecordState.DELETED.name())
+     .where(VEHICLE_LEASING_AGENCIES.ID.eq(id))
+     .and(VEHICLE_LEASING_AGENCIES.STATE.eq(RecordState.ACTIVE.name()))
+     .and(VEHICLE_LEASING_AGENCIES.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public VehicleLeasingAgencyDao findByUUID(String uuid) {
-        return context.selectFrom(VEHICLE_LEASING_AGENCIES).where(VEHICLE_LEASING_AGENCIES.UUID.eq(uuid)).fetchAnyInto(VehicleLeasingAgencyDao.class);
+        return context.selectFrom(VEHICLE_LEASING_AGENCIES).where(VEHICLE_LEASING_AGENCIES.UUID.eq(uuid))
+                .and(VEHICLE_LEASING_AGENCIES.IS_ACTIVE.eq(true))
+                .fetchAnyInto(VehicleLeasingAgencyDao.class);
     }
 
     @Override
     public VehicleLeasingAgencyDao findById(Integer id) {
-        return context.selectFrom(VEHICLE_LEASING_AGENCIES).where(VEHICLE_LEASING_AGENCIES.ID.eq(id)).fetchAnyInto(VehicleLeasingAgencyDao.class);
+        return context.selectFrom(VEHICLE_LEASING_AGENCIES).where(VEHICLE_LEASING_AGENCIES.ID.eq(id))
+                .and(VEHICLE_LEASING_AGENCIES.IS_ACTIVE.eq(true))
+                .fetchAnyInto(VehicleLeasingAgencyDao.class);
     }
 
     @Override
@@ -56,7 +83,7 @@ public class VehicleLeasingAgencyRepositoryImpl implements VehicleLeasingAgencyR
     }
 
     @Override
-    public List<VehicleLeasingAgencyDao> findAll() {
+    public List<VehicleLeasingAgencyDao> findAllActive() {
         return context.selectFrom(VEHICLE_LEASING_AGENCIES).fetchInto(VehicleLeasingAgencyDao.class);
     }
 }

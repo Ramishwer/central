@@ -18,33 +18,33 @@ public class CustomerNotificationTemplateController {
     private final CustomerNotificationTemplateService customerNotificationTemplateService;
 
     @GetMapping("/notification-templates")
-    public ResponseDto<PaginatedResponseDto<CustomerNotificationTemplateDto>> getCustomerNotificationTemplates(@RequestParam(value = "count",required = false) Integer count,
+    public ResponseDto<PaginatedResponseDto<CustomerNotificationTemplateDto>> getCustomerNotificationTemplates(@RequestParam(value = "count", required = false) Integer count,
                                                                                                                @RequestParam(value = "start", required = false) Integer start,
                                                                                                                @RequestParam(value = "from", required = false) Long from,
                                                                                                                @RequestParam(value = "to", required = false) Long to,
-                                                                                                               @RequestParam(value = "lastUUID", required = false) String lastElementUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, customerNotificationTemplateService.getCustomerNotificationTemplates());
+                                                                                                               @RequestParam(value = "lastUUID", required = false) String lastElementUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, customerNotificationTemplateService.getCustomerNotificationTemplates());
     }
 
-    
 
     @GetMapping("/notification-templates/{template-uuid}")
-    public ResponseDto<CustomerNotificationTemplateDto> getCustomerNotificationTemplateDetails(@PathVariable(value = "template-uuid")String notificationTemplateUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, customerNotificationTemplateService.getCustomerNotificationTemplateDetails(notificationTemplateUUID));
+    public ResponseDto<CustomerNotificationTemplateDto> getCustomerNotificationTemplateDetails(@PathVariable(value = "template-uuid") String notificationTemplateUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, customerNotificationTemplateService.getCustomerNotificationTemplateDetails(notificationTemplateUUID));
     }
 
 
     @PostMapping("/notification-templates")
-    public ResponseDto<CustomerNotificationTemplateDto> createCustomerNotificationTemplate(@RequestBody CustomerNotificationTemplateDto customerNotificationTemplateDto){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, customerNotificationTemplateService.createCustomerNotificationTemplate(customerNotificationTemplateDto));
+    public ResponseDto<CustomerNotificationTemplateDto> createCustomerNotificationTemplate(@RequestBody CustomerNotificationTemplateDto customerNotificationTemplateDto) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, customerNotificationTemplateService.createCustomerNotificationTemplate(customerNotificationTemplateDto));
     }
 
     @PutMapping("/notification-templates/{template-uuid}")
-    public ResponseDto<CustomerNotificationTemplateDto> updateCustomerNotificationTemplate(@PathVariable(value = "template-uuid")String notificationTemplateUUID, @RequestBody CustomerNotificationTemplateDto customerNotificationTemplateDto){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, customerNotificationTemplateService.updateCustomerNotificationTemplate(notificationTemplateUUID,customerNotificationTemplateDto));
+    public ResponseDto<CustomerNotificationTemplateDto> updateCustomerNotificationTemplate(@PathVariable(value = "template-uuid") String notificationTemplateUUID, @RequestBody CustomerNotificationTemplateDto customerNotificationTemplateDto) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, customerNotificationTemplateService.updateCustomerNotificationTemplate(notificationTemplateUUID, customerNotificationTemplateDto));
     }
+
     @DeleteMapping("/notification-templates/{template-uuid}")
-    public ResponseDto<Boolean> deleteCustomerNotificationTemplate(@PathVariable(value = "template-uuid")String notificationTemplateUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, customerNotificationTemplateService.deleteCustomerNotificationTemplate(notificationTemplateUUID));
+    public ResponseDto<Boolean> deleteCustomerNotificationTemplate(@PathVariable(value = "template-uuid") String notificationTemplateUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, customerNotificationTemplateService.deleteCustomerNotificationTemplate(notificationTemplateUUID));
     }
 }

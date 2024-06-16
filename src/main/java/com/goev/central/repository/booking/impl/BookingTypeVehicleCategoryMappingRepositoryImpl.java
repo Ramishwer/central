@@ -1,9 +1,9 @@
 package com.goev.central.repository.booking.impl;
 
 
-import com.goev.lib.enums.RecordState;
 import com.goev.central.dao.booking.BookingTypeVehicleCategoryMappingDao;
 import com.goev.central.repository.booking.BookingTypeVehicleCategoryMappingRepository;
+import com.goev.lib.enums.RecordState;
 import com.goev.record.central.tables.records.BookingTypeVehicleCategoryMappingsRecord;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +27,14 @@ public class BookingTypeVehicleCategoryMappingRepositoryImpl implements BookingT
         bookingTypeVehicleCategoryMappingsRecord.store();
         bookingTypeVehicleCategoryMappingDao.setId(bookingTypeVehicleCategoryMappingsRecord.getId());
         bookingTypeVehicleCategoryMappingDao.setUuid(bookingTypeVehicleCategoryMappingsRecord.getUuid());
+        bookingTypeVehicleCategoryMappingDao.setCreatedBy(bookingTypeVehicleCategoryMappingsRecord.getCreatedBy());
+        bookingTypeVehicleCategoryMappingDao.setUpdatedBy(bookingTypeVehicleCategoryMappingsRecord.getUpdatedBy());
+        bookingTypeVehicleCategoryMappingDao.setCreatedOn(bookingTypeVehicleCategoryMappingsRecord.getCreatedOn());
+        bookingTypeVehicleCategoryMappingDao.setUpdatedOn(bookingTypeVehicleCategoryMappingsRecord.getUpdatedOn());
+        bookingTypeVehicleCategoryMappingDao.setIsActive(bookingTypeVehicleCategoryMappingsRecord.getIsActive());
+        bookingTypeVehicleCategoryMappingDao.setState(bookingTypeVehicleCategoryMappingsRecord.getState());
+        bookingTypeVehicleCategoryMappingDao.setApiSource(bookingTypeVehicleCategoryMappingsRecord.getApiSource());
+        bookingTypeVehicleCategoryMappingDao.setNotes(bookingTypeVehicleCategoryMappingsRecord.getNotes());
         return bookingTypeVehicleCategoryMappingDao;
     }
 
@@ -34,22 +42,41 @@ public class BookingTypeVehicleCategoryMappingRepositoryImpl implements BookingT
     public BookingTypeVehicleCategoryMappingDao update(BookingTypeVehicleCategoryMappingDao bookingTypeVehicleCategoryMappingDao) {
         BookingTypeVehicleCategoryMappingsRecord bookingTypeVehicleCategoryMappingsRecord = context.newRecord(BOOKING_TYPE_VEHICLE_CATEGORY_MAPPINGS, bookingTypeVehicleCategoryMappingDao);
         bookingTypeVehicleCategoryMappingsRecord.update();
+
+
+        bookingTypeVehicleCategoryMappingDao.setCreatedBy(bookingTypeVehicleCategoryMappingsRecord.getCreatedBy());
+        bookingTypeVehicleCategoryMappingDao.setUpdatedBy(bookingTypeVehicleCategoryMappingsRecord.getUpdatedBy());
+        bookingTypeVehicleCategoryMappingDao.setCreatedOn(bookingTypeVehicleCategoryMappingsRecord.getCreatedOn());
+        bookingTypeVehicleCategoryMappingDao.setUpdatedOn(bookingTypeVehicleCategoryMappingsRecord.getUpdatedOn());
+        bookingTypeVehicleCategoryMappingDao.setIsActive(bookingTypeVehicleCategoryMappingsRecord.getIsActive());
+        bookingTypeVehicleCategoryMappingDao.setState(bookingTypeVehicleCategoryMappingsRecord.getState());
+        bookingTypeVehicleCategoryMappingDao.setApiSource(bookingTypeVehicleCategoryMappingsRecord.getApiSource());
+        bookingTypeVehicleCategoryMappingDao.setNotes(bookingTypeVehicleCategoryMappingsRecord.getNotes());
         return bookingTypeVehicleCategoryMappingDao;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(BOOKING_TYPE_VEHICLE_CATEGORY_MAPPINGS).set(BOOKING_TYPE_VEHICLE_CATEGORY_MAPPINGS.STATE, RecordState.DELETED.name()).where(BOOKING_TYPE_VEHICLE_CATEGORY_MAPPINGS.ID.eq(id)).execute();
-    }
+     context.update(BOOKING_TYPE_VEHICLE_CATEGORY_MAPPINGS)
+     .set(BOOKING_TYPE_VEHICLE_CATEGORY_MAPPINGS.STATE,RecordState.DELETED.name())
+     .where(BOOKING_TYPE_VEHICLE_CATEGORY_MAPPINGS.ID.eq(id))
+     .and(BOOKING_TYPE_VEHICLE_CATEGORY_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(BOOKING_TYPE_VEHICLE_CATEGORY_MAPPINGS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public BookingTypeVehicleCategoryMappingDao findByUUID(String uuid) {
-        return context.selectFrom(BOOKING_TYPE_VEHICLE_CATEGORY_MAPPINGS).where(BOOKING_TYPE_VEHICLE_CATEGORY_MAPPINGS.UUID.eq(uuid)).fetchAnyInto(BookingTypeVehicleCategoryMappingDao.class);
+        return context.selectFrom(BOOKING_TYPE_VEHICLE_CATEGORY_MAPPINGS).where(BOOKING_TYPE_VEHICLE_CATEGORY_MAPPINGS.UUID.eq(uuid))
+                .and(BOOKING_TYPE_VEHICLE_CATEGORY_MAPPINGS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(BookingTypeVehicleCategoryMappingDao.class);
     }
 
     @Override
     public BookingTypeVehicleCategoryMappingDao findById(Integer id) {
-        return context.selectFrom(BOOKING_TYPE_VEHICLE_CATEGORY_MAPPINGS).where(BOOKING_TYPE_VEHICLE_CATEGORY_MAPPINGS.ID.eq(id)).fetchAnyInto(BookingTypeVehicleCategoryMappingDao.class);
+        return context.selectFrom(BOOKING_TYPE_VEHICLE_CATEGORY_MAPPINGS).where(BOOKING_TYPE_VEHICLE_CATEGORY_MAPPINGS.ID.eq(id))
+                .and(BOOKING_TYPE_VEHICLE_CATEGORY_MAPPINGS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(BookingTypeVehicleCategoryMappingDao.class);
     }
 
     @Override
@@ -58,7 +85,7 @@ public class BookingTypeVehicleCategoryMappingRepositoryImpl implements BookingT
     }
 
     @Override
-    public List<BookingTypeVehicleCategoryMappingDao> findAll() {
+    public List<BookingTypeVehicleCategoryMappingDao> findAllActive() {
         return context.selectFrom(BOOKING_TYPE_VEHICLE_CATEGORY_MAPPINGS).fetchInto(BookingTypeVehicleCategoryMappingDao.class);
     }
 }

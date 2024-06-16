@@ -4,10 +4,8 @@ package com.goev.central.utilities;
 import com.goev.central.dao.system.property.SystemPropertyDao;
 import com.goev.central.repository.system.property.SystemPropertyRepository;
 import com.goev.lib.enums.PropertyTypes;
-
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 

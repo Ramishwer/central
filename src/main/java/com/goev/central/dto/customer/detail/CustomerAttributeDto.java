@@ -1,7 +1,6 @@
 package com.goev.central.dto.customer.detail;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.goev.central.dto.customer.CustomerViewDto;
 import lombok.*;
 
 @AllArgsConstructor

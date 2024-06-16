@@ -1,7 +1,6 @@
 package com.goev.central.controller.user.detail;
 
 import com.goev.central.dto.user.detail.UserDetailDto;
-import com.goev.central.dto.vehicle.detail.VehicleDetailDto;
 import com.goev.central.service.user.detail.UserDetailService;
 import com.goev.lib.dto.ResponseDto;
 import com.goev.lib.dto.StatusDto;
@@ -30,7 +29,7 @@ public class UserDetailController {
 
     @PutMapping("/users/{vehicle-uuid}/details")
     public ResponseDto<UserDetailDto> updateVehicle(@PathVariable(value = "user-uuid") String userUUID, @RequestBody UserDetailDto userDetailDto) {
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, userDetailService.updateUser(userUUID,userDetailDto));
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, userDetailService.updateUser(userUUID, userDetailDto));
     }
 
 }

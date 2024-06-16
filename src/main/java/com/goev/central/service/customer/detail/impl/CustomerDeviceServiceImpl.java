@@ -25,7 +25,7 @@ public class CustomerDeviceServiceImpl implements CustomerDeviceService {
     @Override
     public PaginatedResponseDto<CustomerDeviceDto> getCustomerDevices(String customerUUID) {
         PaginatedResponseDto<CustomerDeviceDto> result = PaginatedResponseDto.<CustomerDeviceDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
-        List<CustomerDeviceDao> customerDeviceDaos = customerDeviceRepository.findAll();
+        List<CustomerDeviceDao> customerDeviceDaos = customerDeviceRepository.findAllActive();
         if (CollectionUtils.isEmpty(customerDeviceDaos))
             return result;
 

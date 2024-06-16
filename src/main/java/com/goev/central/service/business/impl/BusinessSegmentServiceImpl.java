@@ -1,15 +1,14 @@
 package com.goev.central.service.business.impl;
 
 import com.goev.central.dao.business.BusinessSegmentDao;
+import com.goev.central.dto.business.BusinessSegmentDto;
 import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
-import com.goev.central.dto.business.BusinessSegmentDto;
 import com.goev.central.repository.business.BusinessSegmentRepository;
 import com.goev.central.service.business.BusinessSegmentService;
 import com.goev.lib.exceptions.ResponseException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -26,7 +25,7 @@ public class BusinessSegmentServiceImpl implements BusinessSegmentService {
     @Override
     public PaginatedResponseDto<BusinessSegmentDto> getSegments() {
         PaginatedResponseDto<BusinessSegmentDto> result = PaginatedResponseDto.<BusinessSegmentDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
-        List<BusinessSegmentDao> businessSegmentDaos = businessSegmentRepository.findAll();
+        List<BusinessSegmentDao> businessSegmentDaos = businessSegmentRepository.findAllActive();
         if (CollectionUtils.isEmpty(businessSegmentDaos))
             return result;
 

@@ -26,6 +26,14 @@ public class PayoutModelRepositoryImpl implements PayoutModelRepository {
         payoutModelsRecord.store();
         payoutModel.setId(payoutModelsRecord.getId());
         payoutModel.setUuid(payoutModel.getUuid());
+        payoutModel.setCreatedBy(payoutModel.getCreatedBy());
+        payoutModel.setUpdatedBy(payoutModel.getUpdatedBy());
+        payoutModel.setCreatedOn(payoutModel.getCreatedOn());
+        payoutModel.setUpdatedOn(payoutModel.getUpdatedOn());
+        payoutModel.setIsActive(payoutModel.getIsActive());
+        payoutModel.setState(payoutModel.getState());
+        payoutModel.setApiSource(payoutModel.getApiSource());
+        payoutModel.setNotes(payoutModel.getNotes());
         return payoutModel;
     }
 
@@ -33,22 +41,41 @@ public class PayoutModelRepositoryImpl implements PayoutModelRepository {
     public PayoutModelDao update(PayoutModelDao payoutModel) {
         PayoutModelsRecord payoutModelsRecord = context.newRecord(PAYOUT_MODELS, payoutModel);
         payoutModelsRecord.update();
+
+
+        payoutModel.setCreatedBy(payoutModelsRecord.getCreatedBy());
+        payoutModel.setUpdatedBy(payoutModelsRecord.getUpdatedBy());
+        payoutModel.setCreatedOn(payoutModelsRecord.getCreatedOn());
+        payoutModel.setUpdatedOn(payoutModelsRecord.getUpdatedOn());
+        payoutModel.setIsActive(payoutModelsRecord.getIsActive());
+        payoutModel.setState(payoutModelsRecord.getState());
+        payoutModel.setApiSource(payoutModelsRecord.getApiSource());
+        payoutModel.setNotes(payoutModelsRecord.getNotes());
         return payoutModel;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(PAYOUT_MODELS).set(PAYOUT_MODELS.STATE, RecordState.DELETED.name()).where(PAYOUT_MODELS.ID.eq(id)).execute();
-    }
+     context.update(PAYOUT_MODELS)
+     .set(PAYOUT_MODELS.STATE,RecordState.DELETED.name())
+     .where(PAYOUT_MODELS.ID.eq(id))
+     .and(PAYOUT_MODELS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(PAYOUT_MODELS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public PayoutModelDao findByUUID(String uuid) {
-        return context.selectFrom(PAYOUT_MODELS).where(PAYOUT_MODELS.UUID.eq(uuid)).fetchAnyInto(PayoutModelDao.class);
+        return context.selectFrom(PAYOUT_MODELS).where(PAYOUT_MODELS.UUID.eq(uuid))
+                .and(PAYOUT_MODELS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PayoutModelDao.class);
     }
 
     @Override
     public PayoutModelDao findById(Integer id) {
-        return context.selectFrom(PAYOUT_MODELS).where(PAYOUT_MODELS.ID.eq(id)).fetchAnyInto(PayoutModelDao.class);
+        return context.selectFrom(PAYOUT_MODELS).where(PAYOUT_MODELS.ID.eq(id))
+                .and(PAYOUT_MODELS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PayoutModelDao.class);
     }
 
     @Override
@@ -57,7 +84,7 @@ public class PayoutModelRepositoryImpl implements PayoutModelRepository {
     }
 
     @Override
-    public List<PayoutModelDao> findAll() {
+    public List<PayoutModelDao> findAllActive() {
         return context.selectFrom(PAYOUT_MODELS).fetchInto(PayoutModelDao.class);
     }
 }

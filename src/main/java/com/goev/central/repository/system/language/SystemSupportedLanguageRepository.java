@@ -6,10 +6,16 @@ import java.util.List;
 
 public interface SystemSupportedLanguageRepository {
     SystemSupportedLanguageDao save(SystemSupportedLanguageDao language);
+
     SystemSupportedLanguageDao update(SystemSupportedLanguageDao language);
+
     void delete(Integer id);
+
     SystemSupportedLanguageDao findByUUID(String uuid);
+
     SystemSupportedLanguageDao findById(Integer id);
+
     List<SystemSupportedLanguageDao> findAllByIds(List<Integer> ids);
-    List<SystemSupportedLanguageDao> findAll();
+
+    List<SystemSupportedLanguageDao> findAllActive();
 }

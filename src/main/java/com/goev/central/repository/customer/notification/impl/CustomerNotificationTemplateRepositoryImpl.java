@@ -26,6 +26,14 @@ public class CustomerNotificationTemplateRepositoryImpl implements CustomerNotif
         customerNotificationTemplatesRecord.store();
         customerNotificationTemplate.setId(customerNotificationTemplatesRecord.getId());
         customerNotificationTemplate.setUuid(customerNotificationTemplate.getUuid());
+        customerNotificationTemplate.setCreatedBy(customerNotificationTemplate.getCreatedBy());
+        customerNotificationTemplate.setUpdatedBy(customerNotificationTemplate.getUpdatedBy());
+        customerNotificationTemplate.setCreatedOn(customerNotificationTemplate.getCreatedOn());
+        customerNotificationTemplate.setUpdatedOn(customerNotificationTemplate.getUpdatedOn());
+        customerNotificationTemplate.setIsActive(customerNotificationTemplate.getIsActive());
+        customerNotificationTemplate.setState(customerNotificationTemplate.getState());
+        customerNotificationTemplate.setApiSource(customerNotificationTemplate.getApiSource());
+        customerNotificationTemplate.setNotes(customerNotificationTemplate.getNotes());
         return customerNotificationTemplate;
     }
 
@@ -33,22 +41,41 @@ public class CustomerNotificationTemplateRepositoryImpl implements CustomerNotif
     public CustomerNotificationTemplateDao update(CustomerNotificationTemplateDao customerNotificationTemplate) {
         CustomerNotificationTemplatesRecord customerNotificationTemplatesRecord = context.newRecord(CUSTOMER_NOTIFICATION_TEMPLATES, customerNotificationTemplate);
         customerNotificationTemplatesRecord.update();
+
+
+        customerNotificationTemplate.setCreatedBy(customerNotificationTemplatesRecord.getCreatedBy());
+        customerNotificationTemplate.setUpdatedBy(customerNotificationTemplatesRecord.getUpdatedBy());
+        customerNotificationTemplate.setCreatedOn(customerNotificationTemplatesRecord.getCreatedOn());
+        customerNotificationTemplate.setUpdatedOn(customerNotificationTemplatesRecord.getUpdatedOn());
+        customerNotificationTemplate.setIsActive(customerNotificationTemplatesRecord.getIsActive());
+        customerNotificationTemplate.setState(customerNotificationTemplatesRecord.getState());
+        customerNotificationTemplate.setApiSource(customerNotificationTemplatesRecord.getApiSource());
+        customerNotificationTemplate.setNotes(customerNotificationTemplatesRecord.getNotes());
         return customerNotificationTemplate;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(CUSTOMER_NOTIFICATION_TEMPLATES).set(CUSTOMER_NOTIFICATION_TEMPLATES.STATE, RecordState.DELETED.name()).where(CUSTOMER_NOTIFICATION_TEMPLATES.ID.eq(id)).execute();
-    }
+     context.update(CUSTOMER_NOTIFICATION_TEMPLATES)
+     .set(CUSTOMER_NOTIFICATION_TEMPLATES.STATE,RecordState.DELETED.name())
+     .where(CUSTOMER_NOTIFICATION_TEMPLATES.ID.eq(id))
+     .and(CUSTOMER_NOTIFICATION_TEMPLATES.STATE.eq(RecordState.ACTIVE.name()))
+     .and(CUSTOMER_NOTIFICATION_TEMPLATES.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public CustomerNotificationTemplateDao findByUUID(String uuid) {
-        return context.selectFrom(CUSTOMER_NOTIFICATION_TEMPLATES).where(CUSTOMER_NOTIFICATION_TEMPLATES.UUID.eq(uuid)).fetchAnyInto(CustomerNotificationTemplateDao.class);
+        return context.selectFrom(CUSTOMER_NOTIFICATION_TEMPLATES).where(CUSTOMER_NOTIFICATION_TEMPLATES.UUID.eq(uuid))
+                .and(CUSTOMER_NOTIFICATION_TEMPLATES.IS_ACTIVE.eq(true))
+                .fetchAnyInto(CustomerNotificationTemplateDao.class);
     }
 
     @Override
     public CustomerNotificationTemplateDao findById(Integer id) {
-        return context.selectFrom(CUSTOMER_NOTIFICATION_TEMPLATES).where(CUSTOMER_NOTIFICATION_TEMPLATES.ID.eq(id)).fetchAnyInto(CustomerNotificationTemplateDao.class);
+        return context.selectFrom(CUSTOMER_NOTIFICATION_TEMPLATES).where(CUSTOMER_NOTIFICATION_TEMPLATES.ID.eq(id))
+                .and(CUSTOMER_NOTIFICATION_TEMPLATES.IS_ACTIVE.eq(true))
+                .fetchAnyInto(CustomerNotificationTemplateDao.class);
     }
 
     @Override
@@ -57,7 +84,7 @@ public class CustomerNotificationTemplateRepositoryImpl implements CustomerNotif
     }
 
     @Override
-    public List<CustomerNotificationTemplateDao> findAll() {
+    public List<CustomerNotificationTemplateDao> findAllActive() {
         return context.selectFrom(CUSTOMER_NOTIFICATION_TEMPLATES).fetchInto(CustomerNotificationTemplateDao.class);
     }
 }

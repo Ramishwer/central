@@ -26,6 +26,14 @@ public class BusinessSegmentRepositoryImpl implements BusinessSegmentRepository 
         businessSegmentsRecord.store();
         segment.setId(businessSegmentsRecord.getId());
         segment.setUuid(businessSegmentsRecord.getUuid());
+        segment.setCreatedBy(businessSegmentsRecord.getCreatedBy());
+        segment.setUpdatedBy(businessSegmentsRecord.getUpdatedBy());
+        segment.setCreatedOn(businessSegmentsRecord.getCreatedOn());
+        segment.setUpdatedOn(businessSegmentsRecord.getUpdatedOn());
+        segment.setIsActive(businessSegmentsRecord.getIsActive());
+        segment.setState(businessSegmentsRecord.getState());
+        segment.setApiSource(businessSegmentsRecord.getApiSource());
+        segment.setNotes(businessSegmentsRecord.getNotes());
         return segment;
     }
 
@@ -33,22 +41,41 @@ public class BusinessSegmentRepositoryImpl implements BusinessSegmentRepository 
     public BusinessSegmentDao update(BusinessSegmentDao segment) {
         BusinessSegmentsRecord businessSegmentsRecord = context.newRecord(BUSINESS_SEGMENTS, segment);
         businessSegmentsRecord.update();
+
+
+        segment.setCreatedBy(businessSegmentsRecord.getCreatedBy());
+        segment.setUpdatedBy(businessSegmentsRecord.getUpdatedBy());
+        segment.setCreatedOn(businessSegmentsRecord.getCreatedOn());
+        segment.setUpdatedOn(businessSegmentsRecord.getUpdatedOn());
+        segment.setIsActive(businessSegmentsRecord.getIsActive());
+        segment.setState(businessSegmentsRecord.getState());
+        segment.setApiSource(businessSegmentsRecord.getApiSource());
+        segment.setNotes(businessSegmentsRecord.getNotes());
         return segment;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(BUSINESS_SEGMENTS).set(BUSINESS_SEGMENTS.STATE, RecordState.DELETED.name()).where(BUSINESS_SEGMENTS.ID.eq(id)).execute();
-    }
+     context.update(BUSINESS_SEGMENTS)
+     .set(BUSINESS_SEGMENTS.STATE,RecordState.DELETED.name())
+     .where(BUSINESS_SEGMENTS.ID.eq(id))
+     .and(BUSINESS_SEGMENTS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(BUSINESS_SEGMENTS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public BusinessSegmentDao findByUUID(String uuid) {
-        return context.selectFrom(BUSINESS_SEGMENTS).where(BUSINESS_SEGMENTS.UUID.eq(uuid)).fetchAnyInto(BusinessSegmentDao.class);
+        return context.selectFrom(BUSINESS_SEGMENTS).where(BUSINESS_SEGMENTS.UUID.eq(uuid))
+                .and(BUSINESS_SEGMENTS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(BusinessSegmentDao.class);
     }
 
     @Override
     public BusinessSegmentDao findById(Integer id) {
-        return context.selectFrom(BUSINESS_SEGMENTS).where(BUSINESS_SEGMENTS.ID.eq(id)).fetchAnyInto(BusinessSegmentDao.class);
+        return context.selectFrom(BUSINESS_SEGMENTS).where(BUSINESS_SEGMENTS.ID.eq(id))
+                .and(BUSINESS_SEGMENTS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(BusinessSegmentDao.class);
     }
 
     @Override
@@ -57,7 +84,7 @@ public class BusinessSegmentRepositoryImpl implements BusinessSegmentRepository 
     }
 
     @Override
-    public List<BusinessSegmentDao> findAll() {
+    public List<BusinessSegmentDao> findAllActive() {
         return context.selectFrom(BUSINESS_SEGMENTS).fetchInto(BusinessSegmentDao.class);
     }
 }

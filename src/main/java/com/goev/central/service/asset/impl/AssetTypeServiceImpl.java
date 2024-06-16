@@ -25,7 +25,7 @@ public class AssetTypeServiceImpl implements AssetTypeService {
     @Override
     public PaginatedResponseDto<AssetTypeDto> getAssetTypes() {
         PaginatedResponseDto<AssetTypeDto> result = PaginatedResponseDto.<AssetTypeDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
-        List<AssetTypeDao> assetTypeDaos = assetTypeRepository.findAll();
+        List<AssetTypeDao> assetTypeDaos = assetTypeRepository.findAllActive();
         if (CollectionUtils.isEmpty(assetTypeDaos))
             return result;
 

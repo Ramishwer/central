@@ -11,20 +11,20 @@ import com.goev.central.dto.business.BusinessSegmentDto;
 import com.goev.central.dto.location.LocationDto;
 import com.goev.central.dto.partner.PartnerViewDto;
 import com.goev.central.dto.partner.detail.PartnerDetailDto;
-import com.goev.central.event.events.PartnerUpdateEvent;
+import com.goev.central.enums.DocumentStatus;
+import com.goev.central.enums.partner.PartnerOnboardingStatus;
 import com.goev.central.repository.business.BusinessClientRepository;
 import com.goev.central.repository.business.BusinessSegmentRepository;
 import com.goev.central.repository.location.LocationRepository;
 import com.goev.central.repository.partner.detail.PartnerDetailRepository;
 import com.goev.central.repository.partner.detail.PartnerRepository;
 import com.goev.central.service.partner.detail.PartnerDetailService;
+import com.goev.central.service.partner.document.PartnerDocumentService;
 import com.goev.central.utilities.S3Utils;
 import com.goev.lib.dto.LatLongDto;
-import com.goev.lib.event.service.EventProcessor;
 import com.goev.lib.exceptions.ResponseException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -37,16 +37,29 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
     private final LocationRepository locationRepository;
     private final BusinessClientRepository businessClientRepository;
     private final BusinessSegmentRepository businessSegmentRepository;
+
     private final S3Utils s3;
 
-    private final EventProcessor eventProcessor;
+    private final PartnerDocumentService partnerDocumentService;
 
     @Override
     public PartnerDetailDto createPartner(PartnerDetailDto partnerDto) {
-        PartnerDao existingPartner = partnerRepository.findByPhoneNumber(partnerDto.getPartner().getPhoneNumber());
 
-        if (existingPartner != null) {
-            throw new ResponseException("Error in saving partner: Partner with Phone Number :" + partnerDto.getPartner().getPhoneNumber() + " already exist");
+        if (partnerDto.getAadhaarCardNumber() == null)
+            throw new ResponseException("No aadhaar card number present");
+
+
+        PartnerDetailDao existingPartnerDetail = partnerDetailRepository.findByAadhaarCardNumber(partnerDto.getAadhaarCardNumber());
+
+        if (existingPartnerDetail != null) {
+            throw new ResponseException("Error in saving partner: Partner with Aadhaar :" + partnerDto.getAadhaarCardNumber() + " already exist");
+        }
+
+
+        PartnerDao existingPartnerDao = partnerRepository.findByPhoneNumber(partnerDto.getPartner().getPhoneNumber());
+
+        if (existingPartnerDao != null) {
+            throw new ResponseException("Error in saving partner: Partner with phone number :" + partnerDto.getPartner().getPhoneNumber() + " already exist");
         }
         PartnerDao partnerDao = new PartnerDao();
 
@@ -63,15 +76,11 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
         if (partnerDetailDao == null)
             throw new ResponseException("Error in saving partner details");
 
+        partner.setOnboardingStatus(getOnboardingStatus(partnerDao, partnerDetailDao));
         partner.setProfileUrl(partnerDetailDao.getProfileUrl());
         partner.setPartnerDetailsId(partnerDetailDao.getId());
         partner.setViewInfo(ApplicationConstants.GSON.toJson(getPartnerViewDto(partnerDetailDao, partner)));
         partnerRepository.update(partner);
-
-        PartnerUpdateEvent partnerUpdateEvent = new PartnerUpdateEvent();
-        partnerUpdateEvent.setData(partner);
-        partnerUpdateEvent.setExecutionTime(DateTime.now().getMillis());
-        eventProcessor.sendEvent(partnerUpdateEvent);
 
         return getPartnerDetailDto(partnerDetailDao, partner);
 
@@ -140,17 +149,39 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
         if (partnerDetails == null)
             throw new ResponseException("Error in saving partner details");
 
+        partner.setOnboardingStatus(getOnboardingStatus(partner, partnerDetailDao));
         partner.setProfileUrl(partnerDetails.getProfileUrl());
         partner.setPartnerDetailsId(partnerDetails.getId());
         partner.setViewInfo(ApplicationConstants.GSON.toJson(getPartnerViewDto(partnerDetails, partner)));
         partnerRepository.update(partner);
 
-        PartnerUpdateEvent partnerUpdateEvent = new PartnerUpdateEvent();
-        partnerUpdateEvent.setData(partner);
-        partnerUpdateEvent.setExecutionTime(DateTime.now().getMillis());
-        eventProcessor.sendEvent(partnerUpdateEvent);
-
         return getPartnerDetailDto(partnerDetailDao, partner);
+    }
+
+    private String getOnboardingStatus(PartnerDao partner, PartnerDetailDao partnerDetailDao) {
+
+        if (partner.getProfileUrl() == null)
+            return PartnerOnboardingStatus.PENDING.name();
+
+        if (partnerDetailDao.getHomeLocationId() == null)
+            return PartnerOnboardingStatus.PENDING.name();
+
+        if (partnerDetailDao.getFirstName() == null)
+            return PartnerOnboardingStatus.PENDING.name();
+        if (partnerDetailDao.getLastName() == null)
+            return PartnerOnboardingStatus.PENDING.name();
+
+        DocumentStatus documentStatus = partnerDocumentService.isAllMandatoryDocumentsUploaded(partner.getId());
+
+        if (DocumentStatus.PENDING.equals(documentStatus) || DocumentStatus.REJECTED.equals(documentStatus))
+            return PartnerOnboardingStatus.PENDING.name();
+
+        if (DocumentStatus.UPLOADED.equals(documentStatus))
+            return PartnerOnboardingStatus.PENDING_APPROVAL.name();
+
+        if (DocumentStatus.APPROVED.equals(documentStatus))
+            return PartnerOnboardingStatus.ONBOARDED.name();
+        return PartnerOnboardingStatus.PENDING.name();
     }
 
 

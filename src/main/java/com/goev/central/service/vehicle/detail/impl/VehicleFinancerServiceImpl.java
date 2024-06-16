@@ -32,7 +32,7 @@ public class VehicleFinancerServiceImpl implements VehicleFinancerService {
     @Override
     public PaginatedResponseDto<VehicleFinancerDto> getFinancers() {
         PaginatedResponseDto<VehicleFinancerDto> result = PaginatedResponseDto.<VehicleFinancerDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
-        List<VehicleFinancerDao> vehicleFinancerDaos = vehicleFinancerRepository.findAll();
+        List<VehicleFinancerDao> vehicleFinancerDaos = vehicleFinancerRepository.findAllActive();
         if (CollectionUtils.isEmpty(vehicleFinancerDaos))
             return result;
 

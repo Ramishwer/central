@@ -1,9 +1,9 @@
 package com.goev.central.repository.booking.impl;
 
 
-import com.goev.lib.enums.RecordState;
 import com.goev.central.dao.booking.BookingInvoicingDetailDao;
 import com.goev.central.repository.booking.BookingInvoicingDetailRepository;
+import com.goev.lib.enums.RecordState;
 import com.goev.record.central.tables.records.BookingInvoicingDetailsRecord;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +27,14 @@ public class BookingInvoicingDetailRepositoryImpl implements BookingInvoicingDet
         bookingInvoicingDetailsRecord.store();
         bookingInvoicingDetailDao.setId(bookingInvoicingDetailsRecord.getId());
         bookingInvoicingDetailDao.setUuid(bookingInvoicingDetailsRecord.getUuid());
+        bookingInvoicingDetailDao.setCreatedBy(bookingInvoicingDetailsRecord.getCreatedBy());
+        bookingInvoicingDetailDao.setUpdatedBy(bookingInvoicingDetailsRecord.getUpdatedBy());
+        bookingInvoicingDetailDao.setCreatedOn(bookingInvoicingDetailsRecord.getCreatedOn());
+        bookingInvoicingDetailDao.setUpdatedOn(bookingInvoicingDetailsRecord.getUpdatedOn());
+        bookingInvoicingDetailDao.setIsActive(bookingInvoicingDetailsRecord.getIsActive());
+        bookingInvoicingDetailDao.setState(bookingInvoicingDetailsRecord.getState());
+        bookingInvoicingDetailDao.setApiSource(bookingInvoicingDetailsRecord.getApiSource());
+        bookingInvoicingDetailDao.setNotes(bookingInvoicingDetailsRecord.getNotes());
         return bookingInvoicingDetailDao;
     }
 
@@ -34,22 +42,41 @@ public class BookingInvoicingDetailRepositoryImpl implements BookingInvoicingDet
     public BookingInvoicingDetailDao update(BookingInvoicingDetailDao bookingInvoicingDetailDao) {
         BookingInvoicingDetailsRecord bookingInvoicingDetailsRecord = context.newRecord(BOOKING_INVOICING_DETAILS, bookingInvoicingDetailDao);
         bookingInvoicingDetailsRecord.update();
+
+
+        bookingInvoicingDetailDao.setCreatedBy(bookingInvoicingDetailsRecord.getCreatedBy());
+        bookingInvoicingDetailDao.setUpdatedBy(bookingInvoicingDetailsRecord.getUpdatedBy());
+        bookingInvoicingDetailDao.setCreatedOn(bookingInvoicingDetailsRecord.getCreatedOn());
+        bookingInvoicingDetailDao.setUpdatedOn(bookingInvoicingDetailsRecord.getUpdatedOn());
+        bookingInvoicingDetailDao.setIsActive(bookingInvoicingDetailsRecord.getIsActive());
+        bookingInvoicingDetailDao.setState(bookingInvoicingDetailsRecord.getState());
+        bookingInvoicingDetailDao.setApiSource(bookingInvoicingDetailsRecord.getApiSource());
+        bookingInvoicingDetailDao.setNotes(bookingInvoicingDetailsRecord.getNotes());
         return bookingInvoicingDetailDao;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(BOOKING_INVOICING_DETAILS).set(BOOKING_INVOICING_DETAILS.STATE, RecordState.DELETED.name()).where(BOOKING_INVOICING_DETAILS.ID.eq(id)).execute();
-    }
+     context.update(BOOKING_INVOICING_DETAILS)
+     .set(BOOKING_INVOICING_DETAILS.STATE,RecordState.DELETED.name())
+     .where(BOOKING_INVOICING_DETAILS.ID.eq(id))
+     .and(BOOKING_INVOICING_DETAILS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(BOOKING_INVOICING_DETAILS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public BookingInvoicingDetailDao findByUUID(String uuid) {
-        return context.selectFrom(BOOKING_INVOICING_DETAILS).where(BOOKING_INVOICING_DETAILS.UUID.eq(uuid)).fetchAnyInto(BookingInvoicingDetailDao.class);
+        return context.selectFrom(BOOKING_INVOICING_DETAILS).where(BOOKING_INVOICING_DETAILS.UUID.eq(uuid))
+                .and(BOOKING_INVOICING_DETAILS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(BookingInvoicingDetailDao.class);
     }
 
     @Override
     public BookingInvoicingDetailDao findById(Integer id) {
-        return context.selectFrom(BOOKING_INVOICING_DETAILS).where(BOOKING_INVOICING_DETAILS.ID.eq(id)).fetchAnyInto(BookingInvoicingDetailDao.class);
+        return context.selectFrom(BOOKING_INVOICING_DETAILS).where(BOOKING_INVOICING_DETAILS.ID.eq(id))
+                .and(BOOKING_INVOICING_DETAILS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(BookingInvoicingDetailDao.class);
     }
 
     @Override
@@ -58,7 +85,7 @@ public class BookingInvoicingDetailRepositoryImpl implements BookingInvoicingDet
     }
 
     @Override
-    public List<BookingInvoicingDetailDao> findAll() {
+    public List<BookingInvoicingDetailDao> findAllActive() {
         return context.selectFrom(BOOKING_INVOICING_DETAILS).fetchInto(BookingInvoicingDetailDao.class);
     }
 }

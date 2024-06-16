@@ -26,6 +26,14 @@ public class EngineRuleFieldRepositoryImpl implements EngineRuleFieldRepository 
         engineRuleFieldsRecord.store();
         engineRuleField.setId(engineRuleFieldsRecord.getId());
         engineRuleField.setUuid(engineRuleField.getUuid());
+        engineRuleField.setCreatedBy(engineRuleField.getCreatedBy());
+        engineRuleField.setUpdatedBy(engineRuleField.getUpdatedBy());
+        engineRuleField.setCreatedOn(engineRuleField.getCreatedOn());
+        engineRuleField.setUpdatedOn(engineRuleField.getUpdatedOn());
+        engineRuleField.setIsActive(engineRuleField.getIsActive());
+        engineRuleField.setState(engineRuleField.getState());
+        engineRuleField.setApiSource(engineRuleField.getApiSource());
+        engineRuleField.setNotes(engineRuleField.getNotes());
         return engineRuleField;
     }
 
@@ -33,22 +41,41 @@ public class EngineRuleFieldRepositoryImpl implements EngineRuleFieldRepository 
     public EngineRuleFieldDao update(EngineRuleFieldDao engineRuleField) {
         EngineRuleFieldsRecord engineRuleFieldsRecord = context.newRecord(ENGINE_RULE_FIELDS, engineRuleField);
         engineRuleFieldsRecord.update();
+
+
+        engineRuleField.setCreatedBy(engineRuleFieldsRecord.getCreatedBy());
+        engineRuleField.setUpdatedBy(engineRuleFieldsRecord.getUpdatedBy());
+        engineRuleField.setCreatedOn(engineRuleFieldsRecord.getCreatedOn());
+        engineRuleField.setUpdatedOn(engineRuleFieldsRecord.getUpdatedOn());
+        engineRuleField.setIsActive(engineRuleFieldsRecord.getIsActive());
+        engineRuleField.setState(engineRuleFieldsRecord.getState());
+        engineRuleField.setApiSource(engineRuleFieldsRecord.getApiSource());
+        engineRuleField.setNotes(engineRuleFieldsRecord.getNotes());
         return engineRuleField;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(ENGINE_RULE_FIELDS).set(ENGINE_RULE_FIELDS.STATE, RecordState.DELETED.name()).where(ENGINE_RULE_FIELDS.ID.eq(id)).execute();
-    }
+     context.update(ENGINE_RULE_FIELDS)
+     .set(ENGINE_RULE_FIELDS.STATE,RecordState.DELETED.name())
+     .where(ENGINE_RULE_FIELDS.ID.eq(id))
+     .and(ENGINE_RULE_FIELDS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(ENGINE_RULE_FIELDS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public EngineRuleFieldDao findByUUID(String uuid) {
-        return context.selectFrom(ENGINE_RULE_FIELDS).where(ENGINE_RULE_FIELDS.UUID.eq(uuid)).fetchAnyInto(EngineRuleFieldDao.class);
+        return context.selectFrom(ENGINE_RULE_FIELDS).where(ENGINE_RULE_FIELDS.UUID.eq(uuid))
+                .and(ENGINE_RULE_FIELDS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(EngineRuleFieldDao.class);
     }
 
     @Override
     public EngineRuleFieldDao findById(Integer id) {
-        return context.selectFrom(ENGINE_RULE_FIELDS).where(ENGINE_RULE_FIELDS.ID.eq(id)).fetchAnyInto(EngineRuleFieldDao.class);
+        return context.selectFrom(ENGINE_RULE_FIELDS).where(ENGINE_RULE_FIELDS.ID.eq(id))
+                .and(ENGINE_RULE_FIELDS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(EngineRuleFieldDao.class);
     }
 
     @Override
@@ -57,7 +84,7 @@ public class EngineRuleFieldRepositoryImpl implements EngineRuleFieldRepository 
     }
 
     @Override
-    public List<EngineRuleFieldDao> findAll() {
+    public List<EngineRuleFieldDao> findAllActive() {
         return context.selectFrom(ENGINE_RULE_FIELDS).fetchInto(EngineRuleFieldDao.class);
     }
 }

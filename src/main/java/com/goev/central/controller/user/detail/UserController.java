@@ -2,7 +2,6 @@ package com.goev.central.controller.user.detail;
 
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.user.UserViewDto;
-import com.goev.central.dto.user.detail.UserDto;
 import com.goev.central.service.user.detail.UserService;
 import com.goev.lib.dto.ResponseDto;
 import com.goev.lib.dto.StatusDto;
@@ -27,7 +26,7 @@ public class UserController {
 
 
     @DeleteMapping("/users/{user-uuid}")
-    public ResponseDto<Boolean> deleteAccount(@PathVariable(value = "user-uuid")String userUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, userService.deleteUser(userUUID));
+    public ResponseDto<Boolean> deleteAccount(@PathVariable(value = "user-uuid") String userUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, userService.deleteUser(userUUID));
     }
 }

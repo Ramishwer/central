@@ -6,10 +6,16 @@ import java.util.List;
 
 public interface EngineRuleRepository {
     EngineRuleDao save(EngineRuleDao partner);
+
     EngineRuleDao update(EngineRuleDao partner);
+
     void delete(Integer id);
+
     EngineRuleDao findByUUID(String uuid);
+
     EngineRuleDao findById(Integer id);
+
     List<EngineRuleDao> findAllByIds(List<Integer> ids);
-    List<EngineRuleDao> findAll();
+
+    List<EngineRuleDao> findAllActive();
 }

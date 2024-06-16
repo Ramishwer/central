@@ -10,7 +10,6 @@ import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Map;
 
 import static com.goev.record.central.tables.PromotionVehicleCategoryMappings.PROMOTION_VEHICLE_CATEGORY_MAPPINGS;
 
@@ -26,6 +25,14 @@ public class PromotionVehicleCategoryMappingRepositoryImpl implements PromotionV
         promotionVehicleCategoryMappingsRecord.store();
         log.setId(promotionVehicleCategoryMappingsRecord.getId());
         log.setUuid(promotionVehicleCategoryMappingsRecord.getUuid());
+        log.setCreatedBy(promotionVehicleCategoryMappingsRecord.getCreatedBy());
+        log.setUpdatedBy(promotionVehicleCategoryMappingsRecord.getUpdatedBy());
+        log.setCreatedOn(promotionVehicleCategoryMappingsRecord.getCreatedOn());
+        log.setUpdatedOn(promotionVehicleCategoryMappingsRecord.getUpdatedOn());
+        log.setIsActive(promotionVehicleCategoryMappingsRecord.getIsActive());
+        log.setState(promotionVehicleCategoryMappingsRecord.getState());
+        log.setApiSource(promotionVehicleCategoryMappingsRecord.getApiSource());
+        log.setNotes(promotionVehicleCategoryMappingsRecord.getNotes());
         return log;
     }
 
@@ -33,22 +40,41 @@ public class PromotionVehicleCategoryMappingRepositoryImpl implements PromotionV
     public PromotionVehicleCategoryMappingDao update(PromotionVehicleCategoryMappingDao log) {
         PromotionVehicleCategoryMappingsRecord promotionVehicleCategoryMappingsRecord = context.newRecord(PROMOTION_VEHICLE_CATEGORY_MAPPINGS, log);
         promotionVehicleCategoryMappingsRecord.update();
+
+
+        log.setCreatedBy(promotionVehicleCategoryMappingsRecord.getCreatedBy());
+        log.setUpdatedBy(promotionVehicleCategoryMappingsRecord.getUpdatedBy());
+        log.setCreatedOn(promotionVehicleCategoryMappingsRecord.getCreatedOn());
+        log.setUpdatedOn(promotionVehicleCategoryMappingsRecord.getUpdatedOn());
+        log.setIsActive(promotionVehicleCategoryMappingsRecord.getIsActive());
+        log.setState(promotionVehicleCategoryMappingsRecord.getState());
+        log.setApiSource(promotionVehicleCategoryMappingsRecord.getApiSource());
+        log.setNotes(promotionVehicleCategoryMappingsRecord.getNotes());
         return log;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(PROMOTION_VEHICLE_CATEGORY_MAPPINGS).set(PROMOTION_VEHICLE_CATEGORY_MAPPINGS.STATE, RecordState.DELETED.name()).where(PROMOTION_VEHICLE_CATEGORY_MAPPINGS.ID.eq(id)).execute();
+     context.update(PROMOTION_VEHICLE_CATEGORY_MAPPINGS)
+     .set(PROMOTION_VEHICLE_CATEGORY_MAPPINGS.STATE,RecordState.DELETED.name())
+     .where(PROMOTION_VEHICLE_CATEGORY_MAPPINGS.ID.eq(id))
+     .and(PROMOTION_VEHICLE_CATEGORY_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(PROMOTION_VEHICLE_CATEGORY_MAPPINGS.IS_ACTIVE.eq(true))
+     .execute();
     }
 
-    @Override
+     @Override
     public PromotionVehicleCategoryMappingDao findByUUID(String uuid) {
-        return context.selectFrom(PROMOTION_VEHICLE_CATEGORY_MAPPINGS).where(PROMOTION_VEHICLE_CATEGORY_MAPPINGS.UUID.eq(uuid)).fetchAnyInto(PromotionVehicleCategoryMappingDao.class);
+        return context.selectFrom(PROMOTION_VEHICLE_CATEGORY_MAPPINGS).where(PROMOTION_VEHICLE_CATEGORY_MAPPINGS.UUID.eq(uuid))
+         .and(PROMOTION_VEHICLE_CATEGORY_MAPPINGS.IS_ACTIVE.eq(true))
+        .fetchAnyInto(PromotionVehicleCategoryMappingDao.class);
     }
 
     @Override
     public PromotionVehicleCategoryMappingDao findById(Integer id) {
-        return context.selectFrom(PROMOTION_VEHICLE_CATEGORY_MAPPINGS).where(PROMOTION_VEHICLE_CATEGORY_MAPPINGS.ID.eq(id)).fetchAnyInto(PromotionVehicleCategoryMappingDao.class);
+        return context.selectFrom(PROMOTION_VEHICLE_CATEGORY_MAPPINGS).where(PROMOTION_VEHICLE_CATEGORY_MAPPINGS.ID.eq(id))
+         .and(PROMOTION_VEHICLE_CATEGORY_MAPPINGS.IS_ACTIVE.eq(true))
+        .fetchAnyInto(PromotionVehicleCategoryMappingDao.class);
     }
 
     @Override
@@ -57,7 +83,7 @@ public class PromotionVehicleCategoryMappingRepositoryImpl implements PromotionV
     }
 
     @Override
-    public List<PromotionVehicleCategoryMappingDao> findAll() {
+    public List<PromotionVehicleCategoryMappingDao> findAllActive() {
         return context.selectFrom(PROMOTION_VEHICLE_CATEGORY_MAPPINGS).fetchInto(PromotionVehicleCategoryMappingDao.class);
     }
 }

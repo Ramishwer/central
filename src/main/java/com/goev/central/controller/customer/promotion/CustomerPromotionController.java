@@ -18,30 +18,29 @@ public class CustomerPromotionController {
     private final CustomerPromotionService customerPromotionService;
 
     @GetMapping("/customer/{customer-uuid}/promotions")
-    public ResponseDto<PaginatedResponseDto<CustomerPromotionDto>> getCustomerPromotions(@PathVariable(value = "customer-uuid")String customerUUID,
-                                                                                         @RequestParam(value = "count",required = false) Integer count,
+    public ResponseDto<PaginatedResponseDto<CustomerPromotionDto>> getCustomerPromotions(@PathVariable(value = "customer-uuid") String customerUUID,
+                                                                                         @RequestParam(value = "count", required = false) Integer count,
                                                                                          @RequestParam(value = "start", required = false) Integer start,
                                                                                          @RequestParam(value = "from", required = false) Long from,
                                                                                          @RequestParam(value = "to", required = false) Long to,
-                                                                                         @RequestParam(value = "lastUUID", required = false) String lastElementUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, customerPromotionService.getCustomerPromotions(customerUUID));
+                                                                                         @RequestParam(value = "lastUUID", required = false) String lastElementUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, customerPromotionService.getCustomerPromotions(customerUUID));
     }
 
-    
 
     @GetMapping("/customer/{customer-uuid}/promotions/{promotion-uuid}")
-    public ResponseDto<CustomerPromotionDto> getCustomerPromotionDetails(@PathVariable(value = "customer-uuid")String customerUUID,@PathVariable(value = "promotion-uuid")String promotionUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, customerPromotionService.getCustomerPromotionDetails(customerUUID,promotionUUID));
+    public ResponseDto<CustomerPromotionDto> getCustomerPromotionDetails(@PathVariable(value = "customer-uuid") String customerUUID, @PathVariable(value = "promotion-uuid") String promotionUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, customerPromotionService.getCustomerPromotionDetails(customerUUID, promotionUUID));
     }
 
 
     @PostMapping("/customer/{customer-uuid}/promotions")
-    public ResponseDto<CustomerPromotionDto> createCustomerPromotion(@PathVariable(value = "customer-uuid")String customerUUID,@RequestBody CustomerPromotionDto customerPromotionDto){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, customerPromotionService.createCustomerPromotion(customerUUID,customerPromotionDto));
+    public ResponseDto<CustomerPromotionDto> createCustomerPromotion(@PathVariable(value = "customer-uuid") String customerUUID, @RequestBody CustomerPromotionDto customerPromotionDto) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, customerPromotionService.createCustomerPromotion(customerUUID, customerPromotionDto));
     }
-    
+
     @DeleteMapping("/customer/{customer-uuid}/promotions/{promotion-uuid}")
-    public ResponseDto<Boolean> deleteCustomerPromotion(@PathVariable(value = "customer-uuid")String customerUUID,@PathVariable(value = "promotion-uuid")String promotionUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, customerPromotionService.deleteCustomerPromotion(customerUUID,promotionUUID));
+    public ResponseDto<Boolean> deleteCustomerPromotion(@PathVariable(value = "customer-uuid") String customerUUID, @PathVariable(value = "promotion-uuid") String promotionUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, customerPromotionService.deleteCustomerPromotion(customerUUID, promotionUUID));
     }
 }

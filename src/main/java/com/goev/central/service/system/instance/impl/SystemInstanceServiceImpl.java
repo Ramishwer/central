@@ -1,9 +1,9 @@
 package com.goev.central.service.system.instance.impl;
 
 import com.goev.central.dao.system.instance.SystemInstanceDao;
-import com.goev.central.dto.system.instance.SystemInstanceDto;
 import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
+import com.goev.central.dto.system.instance.SystemInstanceDto;
 import com.goev.central.repository.system.instance.SystemInstanceRepository;
 import com.goev.central.service.system.instance.SystemInstanceService;
 import com.goev.lib.exceptions.ResponseException;
@@ -25,7 +25,7 @@ public class SystemInstanceServiceImpl implements SystemInstanceService {
     @Override
     public PaginatedResponseDto<SystemInstanceDto> getSystemInstances() {
         PaginatedResponseDto<SystemInstanceDto> result = PaginatedResponseDto.<SystemInstanceDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
-        List<SystemInstanceDao> systemInstanceDaos = systemInstanceRepository.findAll();
+        List<SystemInstanceDao> systemInstanceDaos = systemInstanceRepository.findAllActive();
         if (CollectionUtils.isEmpty(systemInstanceDaos))
             return result;
 

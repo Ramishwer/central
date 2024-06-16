@@ -25,7 +25,7 @@ public class PartnerNotificationServiceImpl implements PartnerNotificationServic
     @Override
     public PaginatedResponseDto<PartnerNotificationDto> getPartnerNotifications(String partnerUUID) {
         PaginatedResponseDto<PartnerNotificationDto> result = PaginatedResponseDto.<PartnerNotificationDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
-        List<PartnerNotificationDao> partnerNotificationDaos = partnerNotificationRepository.findAll();
+        List<PartnerNotificationDao> partnerNotificationDaos = partnerNotificationRepository.findAllActive();
         if (CollectionUtils.isEmpty(partnerNotificationDaos))
             return result;
 
@@ -39,7 +39,7 @@ public class PartnerNotificationServiceImpl implements PartnerNotificationServic
 
 
     @Override
-    public PartnerNotificationDto getPartnerNotificationDetails(String partnerUUID,String partnerNotificationUUID) {
+    public PartnerNotificationDto getPartnerNotificationDetails(String partnerUUID, String partnerNotificationUUID) {
         PartnerNotificationDao partnerNotificationDao = partnerNotificationRepository.findByUUID(partnerNotificationUUID);
         if (partnerNotificationDao == null)
             throw new ResponseException("No partnerNotification  found for Id :" + partnerNotificationUUID);

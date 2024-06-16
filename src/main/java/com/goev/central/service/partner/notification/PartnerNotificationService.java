@@ -5,7 +5,7 @@ import com.goev.central.dto.partner.notification.PartnerNotificationDto;
 
 public interface PartnerNotificationService {
     PaginatedResponseDto<PartnerNotificationDto> getPartnerNotifications(String partnerUUID);
-    
+
     PartnerNotificationDto getPartnerNotificationDetails(String partnerUUID, String partnerNotificationUUID);
 
 }

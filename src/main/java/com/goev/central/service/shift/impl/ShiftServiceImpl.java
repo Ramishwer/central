@@ -25,7 +25,7 @@ public class ShiftServiceImpl implements ShiftService {
     @Override
     public PaginatedResponseDto<ShiftDto> getShifts() {
         PaginatedResponseDto<ShiftDto> result = PaginatedResponseDto.<ShiftDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
-        List<ShiftDao> shiftDaos = shiftRepository.findAll();
+        List<ShiftDao> shiftDaos = shiftRepository.findAllActive();
         if (CollectionUtils.isEmpty(shiftDaos))
             return result;
 
@@ -54,7 +54,7 @@ public class ShiftServiceImpl implements ShiftService {
         if (shiftDao == null)
             throw new ResponseException("No shift  found for Id :" + shiftUUID);
         ShiftDao newShiftDao = new ShiftDao();
-       
+
 
         newShiftDao.setId(shiftDao.getId());
         newShiftDao.setUuid(shiftDao.getUuid());

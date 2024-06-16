@@ -26,6 +26,14 @@ public class CustomerNotificationRepositoryImpl implements CustomerNotificationR
         customerNotificationsRecord.store();
         customerNotification.setId(customerNotificationsRecord.getId());
         customerNotification.setUuid(customerNotification.getUuid());
+        customerNotification.setCreatedBy(customerNotification.getCreatedBy());
+        customerNotification.setUpdatedBy(customerNotification.getUpdatedBy());
+        customerNotification.setCreatedOn(customerNotification.getCreatedOn());
+        customerNotification.setUpdatedOn(customerNotification.getUpdatedOn());
+        customerNotification.setIsActive(customerNotification.getIsActive());
+        customerNotification.setState(customerNotification.getState());
+        customerNotification.setApiSource(customerNotification.getApiSource());
+        customerNotification.setNotes(customerNotification.getNotes());
         return customerNotification;
     }
 
@@ -33,22 +41,41 @@ public class CustomerNotificationRepositoryImpl implements CustomerNotificationR
     public CustomerNotificationDao update(CustomerNotificationDao customerNotification) {
         CustomerNotificationsRecord customerNotificationsRecord = context.newRecord(CUSTOMER_NOTIFICATIONS, customerNotification);
         customerNotificationsRecord.update();
+
+
+        customerNotification.setCreatedBy(customerNotificationsRecord.getCreatedBy());
+        customerNotification.setUpdatedBy(customerNotificationsRecord.getUpdatedBy());
+        customerNotification.setCreatedOn(customerNotificationsRecord.getCreatedOn());
+        customerNotification.setUpdatedOn(customerNotificationsRecord.getUpdatedOn());
+        customerNotification.setIsActive(customerNotificationsRecord.getIsActive());
+        customerNotification.setState(customerNotificationsRecord.getState());
+        customerNotification.setApiSource(customerNotificationsRecord.getApiSource());
+        customerNotification.setNotes(customerNotificationsRecord.getNotes());
         return customerNotification;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(CUSTOMER_NOTIFICATIONS).set(CUSTOMER_NOTIFICATIONS.STATE, RecordState.DELETED.name()).where(CUSTOMER_NOTIFICATIONS.ID.eq(id)).execute();
-    }
+     context.update(CUSTOMER_NOTIFICATIONS)
+     .set(CUSTOMER_NOTIFICATIONS.STATE,RecordState.DELETED.name())
+     .where(CUSTOMER_NOTIFICATIONS.ID.eq(id))
+     .and(CUSTOMER_NOTIFICATIONS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(CUSTOMER_NOTIFICATIONS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public CustomerNotificationDao findByUUID(String uuid) {
-        return context.selectFrom(CUSTOMER_NOTIFICATIONS).where(CUSTOMER_NOTIFICATIONS.UUID.eq(uuid)).fetchAnyInto(CustomerNotificationDao.class);
+        return context.selectFrom(CUSTOMER_NOTIFICATIONS).where(CUSTOMER_NOTIFICATIONS.UUID.eq(uuid))
+                .and(CUSTOMER_NOTIFICATIONS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(CustomerNotificationDao.class);
     }
 
     @Override
     public CustomerNotificationDao findById(Integer id) {
-        return context.selectFrom(CUSTOMER_NOTIFICATIONS).where(CUSTOMER_NOTIFICATIONS.ID.eq(id)).fetchAnyInto(CustomerNotificationDao.class);
+        return context.selectFrom(CUSTOMER_NOTIFICATIONS).where(CUSTOMER_NOTIFICATIONS.ID.eq(id))
+                .and(CUSTOMER_NOTIFICATIONS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(CustomerNotificationDao.class);
     }
 
     @Override
@@ -57,7 +84,7 @@ public class CustomerNotificationRepositoryImpl implements CustomerNotificationR
     }
 
     @Override
-    public List<CustomerNotificationDao> findAll() {
+    public List<CustomerNotificationDao> findAllActive() {
         return context.selectFrom(CUSTOMER_NOTIFICATIONS).fetchInto(CustomerNotificationDao.class);
     }
 }

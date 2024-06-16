@@ -26,6 +26,14 @@ public class PartnerLeaveRepositoryImpl implements PartnerLeaveRepository {
         partnerLeavesRecord.store();
         partnerLeaveDao.setId(partnerLeavesRecord.getId());
         partnerLeaveDao.setUuid(partnerLeavesRecord.getUuid());
+        partnerLeaveDao.setCreatedBy(partnerLeavesRecord.getCreatedBy());
+        partnerLeaveDao.setUpdatedBy(partnerLeavesRecord.getUpdatedBy());
+        partnerLeaveDao.setCreatedOn(partnerLeavesRecord.getCreatedOn());
+        partnerLeaveDao.setUpdatedOn(partnerLeavesRecord.getUpdatedOn());
+        partnerLeaveDao.setIsActive(partnerLeavesRecord.getIsActive());
+        partnerLeaveDao.setState(partnerLeavesRecord.getState());
+        partnerLeaveDao.setApiSource(partnerLeavesRecord.getApiSource());
+        partnerLeaveDao.setNotes(partnerLeavesRecord.getNotes());
         return partnerLeaveDao;
     }
 
@@ -33,22 +41,41 @@ public class PartnerLeaveRepositoryImpl implements PartnerLeaveRepository {
     public PartnerLeaveDao update(PartnerLeaveDao partnerLeaveDao) {
         PartnerLeavesRecord partnerLeavesRecord = context.newRecord(PARTNER_LEAVES, partnerLeaveDao);
         partnerLeavesRecord.update();
+
+
+        partnerLeaveDao.setCreatedBy(partnerLeavesRecord.getCreatedBy());
+        partnerLeaveDao.setUpdatedBy(partnerLeavesRecord.getUpdatedBy());
+        partnerLeaveDao.setCreatedOn(partnerLeavesRecord.getCreatedOn());
+        partnerLeaveDao.setUpdatedOn(partnerLeavesRecord.getUpdatedOn());
+        partnerLeaveDao.setIsActive(partnerLeavesRecord.getIsActive());
+        partnerLeaveDao.setState(partnerLeavesRecord.getState());
+        partnerLeaveDao.setApiSource(partnerLeavesRecord.getApiSource());
+        partnerLeaveDao.setNotes(partnerLeavesRecord.getNotes());
         return partnerLeaveDao;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(PARTNER_LEAVES).set(PARTNER_LEAVES.STATE, RecordState.DELETED.name()).where(PARTNER_LEAVES.ID.eq(id)).execute();
-    }
+     context.update(PARTNER_LEAVES)
+     .set(PARTNER_LEAVES.STATE,RecordState.DELETED.name())
+     .where(PARTNER_LEAVES.ID.eq(id))
+     .and(PARTNER_LEAVES.STATE.eq(RecordState.ACTIVE.name()))
+     .and(PARTNER_LEAVES.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public PartnerLeaveDao findByUUID(String uuid) {
-        return context.selectFrom(PARTNER_LEAVES).where(PARTNER_LEAVES.UUID.eq(uuid)).fetchAnyInto(PartnerLeaveDao.class);
+        return context.selectFrom(PARTNER_LEAVES).where(PARTNER_LEAVES.UUID.eq(uuid))
+                .and(PARTNER_LEAVES.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PartnerLeaveDao.class);
     }
 
     @Override
     public PartnerLeaveDao findById(Integer id) {
-        return context.selectFrom(PARTNER_LEAVES).where(PARTNER_LEAVES.ID.eq(id)).fetchAnyInto(PartnerLeaveDao.class);
+        return context.selectFrom(PARTNER_LEAVES).where(PARTNER_LEAVES.ID.eq(id))
+                .and(PARTNER_LEAVES.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PartnerLeaveDao.class);
     }
 
     @Override
@@ -57,9 +84,10 @@ public class PartnerLeaveRepositoryImpl implements PartnerLeaveRepository {
     }
 
     @Override
-    public List<PartnerLeaveDao> findAll() {
+    public List<PartnerLeaveDao> findAllActive() {
         return context.selectFrom(PARTNER_LEAVES).fetchInto(PartnerLeaveDao.class);
     }
+
     @Override
     public List<PartnerLeaveDao> findAllByPartnerId(Integer id) {
         return context.selectFrom(PARTNER_LEAVES).where(PARTNER_LEAVES.PARTNER_ID.eq(id)).fetchInto(PartnerLeaveDao.class);

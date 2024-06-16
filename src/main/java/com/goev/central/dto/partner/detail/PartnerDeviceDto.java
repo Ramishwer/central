@@ -1,7 +1,6 @@
 package com.goev.central.dto.partner.detail;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.goev.central.dto.partner.PartnerViewDto;
 import lombok.*;
 
 @AllArgsConstructor

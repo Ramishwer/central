@@ -25,7 +25,7 @@ public class PartnerAppPropertyServiceImpl implements PartnerAppPropertyService 
     @Override
     public PaginatedResponseDto<PartnerAppPropertyDto> getPartnerAppProperties() {
         PaginatedResponseDto<PartnerAppPropertyDto> result = PaginatedResponseDto.<PartnerAppPropertyDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
-        List<PartnerAppPropertyDao> partnerAppPropertyDaos = partnerAppPropertyRepository.findAll();
+        List<PartnerAppPropertyDao> partnerAppPropertyDaos = partnerAppPropertyRepository.findAllActive();
         if (CollectionUtils.isEmpty(partnerAppPropertyDaos))
             return result;
 
@@ -54,7 +54,7 @@ public class PartnerAppPropertyServiceImpl implements PartnerAppPropertyService 
         if (partnerAppPropertyDao == null)
             throw new ResponseException("No partnerAppProperty  found for Id :" + partnerAppPropertyUUID);
         PartnerAppPropertyDao newPartnerAppPropertyDao = new PartnerAppPropertyDao();
-       
+
 
         newPartnerAppPropertyDao.setId(partnerAppPropertyDao.getId());
         newPartnerAppPropertyDao.setUuid(partnerAppPropertyDao.getUuid());

@@ -26,6 +26,14 @@ public class CustomerSegmentMappingRepositoryImpl implements CustomerSegmentMapp
         customerSegmentMappingsRecord.store();
         customerSegmentMapping.setId(customerSegmentMappingsRecord.getId());
         customerSegmentMapping.setUuid(customerSegmentMapping.getUuid());
+        customerSegmentMapping.setCreatedBy(customerSegmentMapping.getCreatedBy());
+        customerSegmentMapping.setUpdatedBy(customerSegmentMapping.getUpdatedBy());
+        customerSegmentMapping.setCreatedOn(customerSegmentMapping.getCreatedOn());
+        customerSegmentMapping.setUpdatedOn(customerSegmentMapping.getUpdatedOn());
+        customerSegmentMapping.setIsActive(customerSegmentMapping.getIsActive());
+        customerSegmentMapping.setState(customerSegmentMapping.getState());
+        customerSegmentMapping.setApiSource(customerSegmentMapping.getApiSource());
+        customerSegmentMapping.setNotes(customerSegmentMapping.getNotes());
         return customerSegmentMapping;
     }
 
@@ -33,22 +41,41 @@ public class CustomerSegmentMappingRepositoryImpl implements CustomerSegmentMapp
     public CustomerSegmentMappingDao update(CustomerSegmentMappingDao customerSegmentMapping) {
         CustomerSegmentMappingsRecord customerSegmentMappingsRecord = context.newRecord(CUSTOMER_SEGMENT_MAPPINGS, customerSegmentMapping);
         customerSegmentMappingsRecord.update();
+
+
+        customerSegmentMapping.setCreatedBy(customerSegmentMappingsRecord.getCreatedBy());
+        customerSegmentMapping.setUpdatedBy(customerSegmentMappingsRecord.getUpdatedBy());
+        customerSegmentMapping.setCreatedOn(customerSegmentMappingsRecord.getCreatedOn());
+        customerSegmentMapping.setUpdatedOn(customerSegmentMappingsRecord.getUpdatedOn());
+        customerSegmentMapping.setIsActive(customerSegmentMappingsRecord.getIsActive());
+        customerSegmentMapping.setState(customerSegmentMappingsRecord.getState());
+        customerSegmentMapping.setApiSource(customerSegmentMappingsRecord.getApiSource());
+        customerSegmentMapping.setNotes(customerSegmentMappingsRecord.getNotes());
         return customerSegmentMapping;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(CUSTOMER_SEGMENT_MAPPINGS).set(CUSTOMER_SEGMENT_MAPPINGS.STATE, RecordState.DELETED.name()).where(CUSTOMER_SEGMENT_MAPPINGS.ID.eq(id)).execute();
-    }
+     context.update(CUSTOMER_SEGMENT_MAPPINGS)
+     .set(CUSTOMER_SEGMENT_MAPPINGS.STATE,RecordState.DELETED.name())
+     .where(CUSTOMER_SEGMENT_MAPPINGS.ID.eq(id))
+     .and(CUSTOMER_SEGMENT_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(CUSTOMER_SEGMENT_MAPPINGS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public CustomerSegmentMappingDao findByUUID(String uuid) {
-        return context.selectFrom(CUSTOMER_SEGMENT_MAPPINGS).where(CUSTOMER_SEGMENT_MAPPINGS.UUID.eq(uuid)).fetchAnyInto(CustomerSegmentMappingDao.class);
+        return context.selectFrom(CUSTOMER_SEGMENT_MAPPINGS).where(CUSTOMER_SEGMENT_MAPPINGS.UUID.eq(uuid))
+                .and(CUSTOMER_SEGMENT_MAPPINGS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(CustomerSegmentMappingDao.class);
     }
 
     @Override
     public CustomerSegmentMappingDao findById(Integer id) {
-        return context.selectFrom(CUSTOMER_SEGMENT_MAPPINGS).where(CUSTOMER_SEGMENT_MAPPINGS.ID.eq(id)).fetchAnyInto(CustomerSegmentMappingDao.class);
+        return context.selectFrom(CUSTOMER_SEGMENT_MAPPINGS).where(CUSTOMER_SEGMENT_MAPPINGS.ID.eq(id))
+                .and(CUSTOMER_SEGMENT_MAPPINGS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(CustomerSegmentMappingDao.class);
     }
 
     @Override
@@ -57,7 +84,7 @@ public class CustomerSegmentMappingRepositoryImpl implements CustomerSegmentMapp
     }
 
     @Override
-    public List<CustomerSegmentMappingDao> findAll() {
+    public List<CustomerSegmentMappingDao> findAllActive() {
         return context.selectFrom(CUSTOMER_SEGMENT_MAPPINGS).fetchInto(CustomerSegmentMappingDao.class);
     }
 }

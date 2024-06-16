@@ -18,26 +18,27 @@ public class VehicleFinancerController {
     private final VehicleFinancerService vehicleFinancerService;
 
     @GetMapping("/financers")
-    public ResponseDto<PaginatedResponseDto<VehicleFinancerDto>> getFinancers(){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, vehicleFinancerService.getFinancers());
+    public ResponseDto<PaginatedResponseDto<VehicleFinancerDto>> getFinancers() {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleFinancerService.getFinancers());
     }
+
     @PostMapping("/financers")
-    public ResponseDto<VehicleFinancerDto> createFinancer(@RequestBody VehicleFinancerDto vehicleFinancerDto){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, vehicleFinancerService.createFinancer(vehicleFinancerDto));
+    public ResponseDto<VehicleFinancerDto> createFinancer(@RequestBody VehicleFinancerDto vehicleFinancerDto) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleFinancerService.createFinancer(vehicleFinancerDto));
     }
 
     @PutMapping("/financers/{financer-uuid}")
-    public ResponseDto<VehicleFinancerDto> updateFinancer(@PathVariable(value = "financer-uuid")String financerUUID, @RequestBody VehicleFinancerDto vehicleFinancerDto){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, vehicleFinancerService.updateFinancer(financerUUID,vehicleFinancerDto));
+    public ResponseDto<VehicleFinancerDto> updateFinancer(@PathVariable(value = "financer-uuid") String financerUUID, @RequestBody VehicleFinancerDto vehicleFinancerDto) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleFinancerService.updateFinancer(financerUUID, vehicleFinancerDto));
     }
 
     @GetMapping("/financers/{financer-uuid}")
-    public ResponseDto<VehicleFinancerDto> getFinancerDetails(@PathVariable(value = "financer-uuid")String financerUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, vehicleFinancerService.getFinancerDetails(financerUUID));
+    public ResponseDto<VehicleFinancerDto> getFinancerDetails(@PathVariable(value = "financer-uuid") String financerUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleFinancerService.getFinancerDetails(financerUUID));
     }
 
     @DeleteMapping("/financers/{financer-uuid}")
-    public ResponseDto<Boolean> deleteFinancer(@PathVariable(value = "financer-uuid")String financerUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, vehicleFinancerService.deleteFinancer(financerUUID));
+    public ResponseDto<Boolean> deleteFinancer(@PathVariable(value = "financer-uuid") String financerUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleFinancerService.deleteFinancer(financerUUID));
     }
 }

@@ -18,33 +18,33 @@ public class PayoutModelController {
     private final PayoutModelService payoutModelService;
 
     @GetMapping("/payout-models")
-    public ResponseDto<PaginatedResponseDto<PayoutModelDto>> getPayoutModels(@RequestParam("count")Integer count,
-                                                                                 @RequestParam("start")Integer start,
-                                                                                 @RequestParam("from")Long from,
-                                                                                 @RequestParam("to")Long to,
-                                                                                 @RequestParam("lastUUID") String lastElementUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, payoutModelService.getPayoutModels());
+    public ResponseDto<PaginatedResponseDto<PayoutModelDto>> getPayoutModels(@RequestParam("count") Integer count,
+                                                                             @RequestParam("start") Integer start,
+                                                                             @RequestParam("from") Long from,
+                                                                             @RequestParam("to") Long to,
+                                                                             @RequestParam("lastUUID") String lastElementUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, payoutModelService.getPayoutModels());
     }
 
-    
 
     @GetMapping("/payout-models/{model-uuid}")
-    public ResponseDto<PayoutModelDto> getPayoutModelDetails(@PathVariable(value = "model-uuid")String modelUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, payoutModelService.getPayoutModelDetails(modelUUID));
+    public ResponseDto<PayoutModelDto> getPayoutModelDetails(@PathVariable(value = "model-uuid") String modelUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, payoutModelService.getPayoutModelDetails(modelUUID));
     }
 
 
     @PostMapping("/payout-models")
-    public ResponseDto<PayoutModelDto> createPayoutModel(@RequestBody PayoutModelDto payoutModelDto){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, payoutModelService.createPayoutModel(payoutModelDto));
+    public ResponseDto<PayoutModelDto> createPayoutModel(@RequestBody PayoutModelDto payoutModelDto) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, payoutModelService.createPayoutModel(payoutModelDto));
     }
 
     @PutMapping("/payout-models/{model-uuid}")
-    public ResponseDto<PayoutModelDto> updatePayoutModel(@PathVariable(value = "model-uuid")String modelUUID, @RequestBody PayoutModelDto payoutModelDto){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, payoutModelService.updatePayoutModel(modelUUID,payoutModelDto));
+    public ResponseDto<PayoutModelDto> updatePayoutModel(@PathVariable(value = "model-uuid") String modelUUID, @RequestBody PayoutModelDto payoutModelDto) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, payoutModelService.updatePayoutModel(modelUUID, payoutModelDto));
     }
+
     @DeleteMapping("/payout-models/{model-uuid}")
-    public ResponseDto<Boolean> deletePayoutModel(@PathVariable(value = "model-uuid")String modelUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, payoutModelService.deletePayoutModel(modelUUID));
+    public ResponseDto<Boolean> deletePayoutModel(@PathVariable(value = "model-uuid") String modelUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, payoutModelService.deletePayoutModel(modelUUID));
     }
 }

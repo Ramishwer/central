@@ -1,7 +1,6 @@
 package com.goev.central.controller.partner;
 
 import com.goev.central.dto.common.PaginatedResponseDto;
-import com.goev.central.dto.partner.PartnerViewDto;
 import com.goev.central.dto.partner.detail.PartnerDto;
 import com.goev.central.service.partner.detail.PartnerService;
 import com.goev.lib.dto.ResponseDto;

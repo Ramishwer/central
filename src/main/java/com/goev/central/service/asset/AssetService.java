@@ -12,6 +12,7 @@ public interface AssetService {
     AssetDto updateAsset(String assetUUID, AssetDto assetDto);
 
     AssetDto getAssetDetails(String assetUUID);
+
     String getAssetQr(String assetUUID);
 
     Boolean deleteAsset(String assetUUID);

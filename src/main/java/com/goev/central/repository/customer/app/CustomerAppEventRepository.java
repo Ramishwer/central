@@ -6,10 +6,16 @@ import java.util.List;
 
 public interface CustomerAppEventRepository {
     CustomerAppEventDao save(CustomerAppEventDao event);
+
     CustomerAppEventDao update(CustomerAppEventDao event);
+
     void delete(Integer id);
+
     CustomerAppEventDao findByUUID(String uuid);
+
     CustomerAppEventDao findById(Integer id);
+
     List<CustomerAppEventDao> findAllByIds(List<Integer> ids);
-    List<CustomerAppEventDao> findAll();
+
+    List<CustomerAppEventDao> findAllActive();
 }

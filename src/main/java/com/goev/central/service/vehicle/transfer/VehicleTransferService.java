@@ -5,5 +5,6 @@ import com.goev.central.dto.vehicle.transfer.VehicleTransferDto;
 
 public interface VehicleTransferService {
     PaginatedResponseDto<VehicleTransferDto> getTransfersForVehicle(String vehicleUUID);
+
     PaginatedResponseDto<VehicleTransferDto> getTransfers();
 }

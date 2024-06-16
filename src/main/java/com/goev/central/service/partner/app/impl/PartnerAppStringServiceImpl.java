@@ -25,7 +25,7 @@ public class PartnerAppStringServiceImpl implements PartnerAppStringService {
     @Override
     public PaginatedResponseDto<PartnerAppStringDto> getPartnerAppStrings() {
         PaginatedResponseDto<PartnerAppStringDto> result = PaginatedResponseDto.<PartnerAppStringDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
-        List<PartnerAppStringDao> partnerAppStringDaos = partnerAppStringRepository.findAll();
+        List<PartnerAppStringDao> partnerAppStringDaos = partnerAppStringRepository.findAllActive();
         if (CollectionUtils.isEmpty(partnerAppStringDaos))
             return result;
 
@@ -54,7 +54,7 @@ public class PartnerAppStringServiceImpl implements PartnerAppStringService {
         if (partnerAppStringDao == null)
             throw new ResponseException("No partnerAppString  found for Id :" + partnerAppStringUUID);
         PartnerAppStringDao newPartnerAppStringDao = new PartnerAppStringDao();
-       
+
 
         newPartnerAppStringDao.setId(partnerAppStringDao.getId());
         newPartnerAppStringDao.setUuid(partnerAppStringDao.getUuid());

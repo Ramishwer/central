@@ -26,6 +26,14 @@ public class PartnerPassbookTransactionRepositoryImpl implements PartnerPassbook
         partnerPassbookTransactionsRecord.store();
         partnerPassbookTransaction.setId(partnerPassbookTransactionsRecord.getId());
         partnerPassbookTransaction.setUuid(partnerPassbookTransaction.getUuid());
+        partnerPassbookTransaction.setCreatedBy(partnerPassbookTransaction.getCreatedBy());
+        partnerPassbookTransaction.setUpdatedBy(partnerPassbookTransaction.getUpdatedBy());
+        partnerPassbookTransaction.setCreatedOn(partnerPassbookTransaction.getCreatedOn());
+        partnerPassbookTransaction.setUpdatedOn(partnerPassbookTransaction.getUpdatedOn());
+        partnerPassbookTransaction.setIsActive(partnerPassbookTransaction.getIsActive());
+        partnerPassbookTransaction.setState(partnerPassbookTransaction.getState());
+        partnerPassbookTransaction.setApiSource(partnerPassbookTransaction.getApiSource());
+        partnerPassbookTransaction.setNotes(partnerPassbookTransaction.getNotes());
         return partnerPassbookTransaction;
     }
 
@@ -33,22 +41,41 @@ public class PartnerPassbookTransactionRepositoryImpl implements PartnerPassbook
     public PartnerPassbookTransactionDao update(PartnerPassbookTransactionDao partnerPassbookTransaction) {
         PartnerPassbookTransactionsRecord partnerPassbookTransactionsRecord = context.newRecord(PARTNER_PASSBOOK_TRANSACTIONS, partnerPassbookTransaction);
         partnerPassbookTransactionsRecord.update();
+
+
+        partnerPassbookTransaction.setCreatedBy(partnerPassbookTransactionsRecord.getCreatedBy());
+        partnerPassbookTransaction.setUpdatedBy(partnerPassbookTransactionsRecord.getUpdatedBy());
+        partnerPassbookTransaction.setCreatedOn(partnerPassbookTransactionsRecord.getCreatedOn());
+        partnerPassbookTransaction.setUpdatedOn(partnerPassbookTransactionsRecord.getUpdatedOn());
+        partnerPassbookTransaction.setIsActive(partnerPassbookTransactionsRecord.getIsActive());
+        partnerPassbookTransaction.setState(partnerPassbookTransactionsRecord.getState());
+        partnerPassbookTransaction.setApiSource(partnerPassbookTransactionsRecord.getApiSource());
+        partnerPassbookTransaction.setNotes(partnerPassbookTransactionsRecord.getNotes());
         return partnerPassbookTransaction;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(PARTNER_PASSBOOK_TRANSACTIONS).set(PARTNER_PASSBOOK_TRANSACTIONS.STATE, RecordState.DELETED.name()).where(PARTNER_PASSBOOK_TRANSACTIONS.ID.eq(id)).execute();
-    }
+     context.update(PARTNER_PASSBOOK_TRANSACTIONS)
+     .set(PARTNER_PASSBOOK_TRANSACTIONS.STATE,RecordState.DELETED.name())
+     .where(PARTNER_PASSBOOK_TRANSACTIONS.ID.eq(id))
+     .and(PARTNER_PASSBOOK_TRANSACTIONS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(PARTNER_PASSBOOK_TRANSACTIONS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public PartnerPassbookTransactionDao findByUUID(String uuid) {
-        return context.selectFrom(PARTNER_PASSBOOK_TRANSACTIONS).where(PARTNER_PASSBOOK_TRANSACTIONS.UUID.eq(uuid)).fetchAnyInto(PartnerPassbookTransactionDao.class);
+        return context.selectFrom(PARTNER_PASSBOOK_TRANSACTIONS).where(PARTNER_PASSBOOK_TRANSACTIONS.UUID.eq(uuid))
+                .and(PARTNER_PASSBOOK_TRANSACTIONS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PartnerPassbookTransactionDao.class);
     }
 
     @Override
     public PartnerPassbookTransactionDao findById(Integer id) {
-        return context.selectFrom(PARTNER_PASSBOOK_TRANSACTIONS).where(PARTNER_PASSBOOK_TRANSACTIONS.ID.eq(id)).fetchAnyInto(PartnerPassbookTransactionDao.class);
+        return context.selectFrom(PARTNER_PASSBOOK_TRANSACTIONS).where(PARTNER_PASSBOOK_TRANSACTIONS.ID.eq(id))
+                .and(PARTNER_PASSBOOK_TRANSACTIONS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PartnerPassbookTransactionDao.class);
     }
 
     @Override
@@ -57,7 +84,7 @@ public class PartnerPassbookTransactionRepositoryImpl implements PartnerPassbook
     }
 
     @Override
-    public List<PartnerPassbookTransactionDao> findAll() {
+    public List<PartnerPassbookTransactionDao> findAllActive() {
         return context.selectFrom(PARTNER_PASSBOOK_TRANSACTIONS).fetchInto(PartnerPassbookTransactionDao.class);
     }
 }

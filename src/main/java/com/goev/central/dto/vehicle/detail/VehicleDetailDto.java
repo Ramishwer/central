@@ -47,7 +47,7 @@ public class VehicleDetailDto {
     private LocationDto homeLocation;
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
-    private DateTime insuranceExpiryDate ;
+    private DateTime insuranceExpiryDate;
     private String insurancePolicyNumber;
     private String vinNumber;
     private String motorNumber;
@@ -59,8 +59,6 @@ public class VehicleDetailDto {
     private String state;
     private String imageUrl;
     private String plateNumber;
-
-
 
 
     public static List<VehicleDocumentDto> getVehicleDocumentDtoList(Map<Integer, VehicleDocumentTypeDao> documentTypeIdToDocumentTypeMap, Map<Integer, VehicleDocumentDao> existingDocumentMap) {

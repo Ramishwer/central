@@ -1,19 +1,16 @@
 package com.goev.central.service.vehicle.asset.impl;
 
 
-import com.goev.central.constant.ApplicationConstants;
 import com.goev.central.dao.asset.AssetDao;
 import com.goev.central.dao.vehicle.asset.VehicleAssetMappingDao;
 import com.goev.central.dao.vehicle.detail.VehicleDao;
 import com.goev.central.dto.asset.AssetDto;
 import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
-import com.goev.central.dto.vehicle.VehicleViewDto;
 import com.goev.central.repository.asset.AssetRepository;
 import com.goev.central.repository.vehicle.asset.VehicleAssetMappingRepository;
 import com.goev.central.repository.vehicle.detail.VehicleRepository;
 import com.goev.central.service.vehicle.asset.VehicleAssetMappingService;
-import com.goev.central.service.vehicle.detail.VehicleService;
 import com.goev.lib.exceptions.ResponseException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

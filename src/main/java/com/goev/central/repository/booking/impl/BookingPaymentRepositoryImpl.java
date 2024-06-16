@@ -27,6 +27,14 @@ public class BookingPaymentRepositoryImpl implements BookingPaymentRepository {
         bookingPaymentsRecord.store();
         bookingPaymentDao.setId(bookingPaymentsRecord.getId());
         bookingPaymentDao.setUuid(bookingPaymentsRecord.getUuid());
+        bookingPaymentDao.setCreatedBy(bookingPaymentsRecord.getCreatedBy());
+        bookingPaymentDao.setUpdatedBy(bookingPaymentsRecord.getUpdatedBy());
+        bookingPaymentDao.setCreatedOn(bookingPaymentsRecord.getCreatedOn());
+        bookingPaymentDao.setUpdatedOn(bookingPaymentsRecord.getUpdatedOn());
+        bookingPaymentDao.setIsActive(bookingPaymentsRecord.getIsActive());
+        bookingPaymentDao.setState(bookingPaymentsRecord.getState());
+        bookingPaymentDao.setApiSource(bookingPaymentsRecord.getApiSource());
+        bookingPaymentDao.setNotes(bookingPaymentsRecord.getNotes());
         return bookingPaymentDao;
     }
 
@@ -34,22 +42,41 @@ public class BookingPaymentRepositoryImpl implements BookingPaymentRepository {
     public BookingPaymentDao update(BookingPaymentDao bookingPaymentDao) {
         BookingPaymentsRecord bookingPaymentsRecord = context.newRecord(BOOKING_PAYMENTS, bookingPaymentDao);
         bookingPaymentsRecord.update();
+
+
+        bookingPaymentDao.setCreatedBy(bookingPaymentsRecord.getCreatedBy());
+        bookingPaymentDao.setUpdatedBy(bookingPaymentsRecord.getUpdatedBy());
+        bookingPaymentDao.setCreatedOn(bookingPaymentsRecord.getCreatedOn());
+        bookingPaymentDao.setUpdatedOn(bookingPaymentsRecord.getUpdatedOn());
+        bookingPaymentDao.setIsActive(bookingPaymentsRecord.getIsActive());
+        bookingPaymentDao.setState(bookingPaymentsRecord.getState());
+        bookingPaymentDao.setApiSource(bookingPaymentsRecord.getApiSource());
+        bookingPaymentDao.setNotes(bookingPaymentsRecord.getNotes());
         return bookingPaymentDao;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(BOOKING_PAYMENTS).set(BOOKING_PAYMENTS.STATE, RecordState.DELETED.name()).where(BOOKING_PAYMENTS.ID.eq(id)).execute();
-    }
+     context.update(BOOKING_PAYMENTS)
+     .set(BOOKING_PAYMENTS.STATE,RecordState.DELETED.name())
+     .where(BOOKING_PAYMENTS.ID.eq(id))
+     .and(BOOKING_PAYMENTS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(BOOKING_PAYMENTS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public BookingPaymentDao findByUUID(String uuid) {
-        return context.selectFrom(BOOKING_PAYMENTS).where(BOOKING_PAYMENTS.UUID.eq(uuid)).fetchAnyInto(BookingPaymentDao.class);
+        return context.selectFrom(BOOKING_PAYMENTS).where(BOOKING_PAYMENTS.UUID.eq(uuid))
+                .and(BOOKING_PAYMENTS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(BookingPaymentDao.class);
     }
 
     @Override
     public BookingPaymentDao findById(Integer id) {
-        return context.selectFrom(BOOKING_PAYMENTS).where(BOOKING_PAYMENTS.ID.eq(id)).fetchAnyInto(BookingPaymentDao.class);
+        return context.selectFrom(BOOKING_PAYMENTS).where(BOOKING_PAYMENTS.ID.eq(id))
+                .and(BOOKING_PAYMENTS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(BookingPaymentDao.class);
     }
 
     @Override
@@ -58,7 +85,7 @@ public class BookingPaymentRepositoryImpl implements BookingPaymentRepository {
     }
 
     @Override
-    public List<BookingPaymentDao> findAll() {
+    public List<BookingPaymentDao> findAllActive() {
         return context.selectFrom(BOOKING_PAYMENTS).fetchInto(BookingPaymentDao.class);
     }
 }

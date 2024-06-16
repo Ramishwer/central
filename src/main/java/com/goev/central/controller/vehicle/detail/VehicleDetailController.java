@@ -23,8 +23,8 @@ public class VehicleDetailController {
     }
 
     @PutMapping("/vehicles/{vehicle-uuid}/details")
-    public ResponseDto<VehicleDetailDto> updateVehicle(@PathVariable(value = "vehicle-uuid") String vehicleUUID,@RequestBody VehicleDetailDto vehicleDetailDto) {
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleDetailService.updateVehicle(vehicleUUID,vehicleDetailDto));
+    public ResponseDto<VehicleDetailDto> updateVehicle(@PathVariable(value = "vehicle-uuid") String vehicleUUID, @RequestBody VehicleDetailDto vehicleDetailDto) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleDetailService.updateVehicle(vehicleUUID, vehicleDetailDto));
     }
 
     @GetMapping("/vehicles/{vehicle-uuid}/details")

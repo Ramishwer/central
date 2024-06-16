@@ -26,6 +26,14 @@ public class CustomerPromotionRepositoryImpl implements CustomerPromotionReposit
         customerPromotionsRecord.store();
         customerPromotion.setId(customerPromotionsRecord.getId());
         customerPromotion.setUuid(customerPromotion.getUuid());
+        customerPromotion.setCreatedBy(customerPromotion.getCreatedBy());
+        customerPromotion.setUpdatedBy(customerPromotion.getUpdatedBy());
+        customerPromotion.setCreatedOn(customerPromotion.getCreatedOn());
+        customerPromotion.setUpdatedOn(customerPromotion.getUpdatedOn());
+        customerPromotion.setIsActive(customerPromotion.getIsActive());
+        customerPromotion.setState(customerPromotion.getState());
+        customerPromotion.setApiSource(customerPromotion.getApiSource());
+        customerPromotion.setNotes(customerPromotion.getNotes());
         return customerPromotion;
     }
 
@@ -33,22 +41,41 @@ public class CustomerPromotionRepositoryImpl implements CustomerPromotionReposit
     public CustomerPromotionDao update(CustomerPromotionDao customerPromotion) {
         CustomerPromotionsRecord customerPromotionsRecord = context.newRecord(CUSTOMER_PROMOTIONS, customerPromotion);
         customerPromotionsRecord.update();
+
+
+        customerPromotion.setCreatedBy(customerPromotionsRecord.getCreatedBy());
+        customerPromotion.setUpdatedBy(customerPromotionsRecord.getUpdatedBy());
+        customerPromotion.setCreatedOn(customerPromotionsRecord.getCreatedOn());
+        customerPromotion.setUpdatedOn(customerPromotionsRecord.getUpdatedOn());
+        customerPromotion.setIsActive(customerPromotionsRecord.getIsActive());
+        customerPromotion.setState(customerPromotionsRecord.getState());
+        customerPromotion.setApiSource(customerPromotionsRecord.getApiSource());
+        customerPromotion.setNotes(customerPromotionsRecord.getNotes());
         return customerPromotion;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(CUSTOMER_PROMOTIONS).set(CUSTOMER_PROMOTIONS.STATE, RecordState.DELETED.name()).where(CUSTOMER_PROMOTIONS.ID.eq(id)).execute();
-    }
+     context.update(CUSTOMER_PROMOTIONS)
+     .set(CUSTOMER_PROMOTIONS.STATE,RecordState.DELETED.name())
+     .where(CUSTOMER_PROMOTIONS.ID.eq(id))
+     .and(CUSTOMER_PROMOTIONS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(CUSTOMER_PROMOTIONS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public CustomerPromotionDao findByUUID(String uuid) {
-        return context.selectFrom(CUSTOMER_PROMOTIONS).where(CUSTOMER_PROMOTIONS.UUID.eq(uuid)).fetchAnyInto(CustomerPromotionDao.class);
+        return context.selectFrom(CUSTOMER_PROMOTIONS).where(CUSTOMER_PROMOTIONS.UUID.eq(uuid))
+                .and(CUSTOMER_PROMOTIONS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(CustomerPromotionDao.class);
     }
 
     @Override
     public CustomerPromotionDao findById(Integer id) {
-        return context.selectFrom(CUSTOMER_PROMOTIONS).where(CUSTOMER_PROMOTIONS.ID.eq(id)).fetchAnyInto(CustomerPromotionDao.class);
+        return context.selectFrom(CUSTOMER_PROMOTIONS).where(CUSTOMER_PROMOTIONS.ID.eq(id))
+                .and(CUSTOMER_PROMOTIONS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(CustomerPromotionDao.class);
     }
 
     @Override
@@ -57,7 +84,7 @@ public class CustomerPromotionRepositoryImpl implements CustomerPromotionReposit
     }
 
     @Override
-    public List<CustomerPromotionDao> findAll() {
+    public List<CustomerPromotionDao> findAllActive() {
         return context.selectFrom(CUSTOMER_PROMOTIONS).fetchInto(CustomerPromotionDao.class);
     }
 }

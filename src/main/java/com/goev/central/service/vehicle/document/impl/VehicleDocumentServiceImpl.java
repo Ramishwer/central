@@ -1,12 +1,10 @@
 package com.goev.central.service.vehicle.document.impl;
 
 import com.goev.central.dao.vehicle.detail.VehicleDao;
-import com.goev.central.dao.vehicle.detail.VehicleDao;
 import com.goev.central.dao.vehicle.document.VehicleDocumentDao;
 import com.goev.central.dao.vehicle.document.VehicleDocumentTypeDao;
 import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
-import com.goev.central.dto.vehicle.document.VehicleDocumentDto;
 import com.goev.central.dto.vehicle.detail.VehicleDetailDto;
 import com.goev.central.dto.vehicle.document.VehicleDocumentDto;
 import com.goev.central.dto.vehicle.document.VehicleDocumentTypeDto;
@@ -45,7 +43,7 @@ public class VehicleDocumentServiceImpl implements VehicleDocumentService {
         if (vehicleDao == null)
             throw new ResponseException("No vehicle found for id :" + vehicleUUID);
 
-        List<VehicleDocumentTypeDao> activeDocumentTypes = vehicleDocumentTypeRepository.findAll();
+        List<VehicleDocumentTypeDao> activeDocumentTypes = vehicleDocumentTypeRepository.findAllActive();
         if (CollectionUtils.isEmpty(activeDocumentTypes))
             return PaginatedResponseDto.<VehicleDocumentDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
 
@@ -74,7 +72,7 @@ public class VehicleDocumentServiceImpl implements VehicleDocumentService {
         if (vehicleDocumentTypeDao == null || vehicleDocumentTypeDao.getId() == null)
             throw new ResponseException("Error in saving vehicle document: Invalid Document Type");
 
-        vehicleDocumentDao.setUrl(s3.getUrlForPath(vehicleDocumentDto.getUrl(),vehicleDocumentTypeDao.getS3Key()));
+        vehicleDocumentDao.setUrl(s3.getUrlForPath(vehicleDocumentDto.getUrl(), vehicleDocumentTypeDao.getS3Key()));
         vehicleDocumentDao.setStatus(vehicleDocumentDto.getStatus());
         vehicleDocumentDao.setDescription(vehicleDocumentDto.getDescription());
         vehicleDocumentDao.setFileName(vehicleDocumentDto.getFileName());
@@ -121,7 +119,7 @@ public class VehicleDocumentServiceImpl implements VehicleDocumentService {
         newVehicleDocumentDao.setVehicleDocumentTypeId(vehicleDocumentTypeDao.getId());
         newVehicleDocumentDao.setFileName(vehicleDocumentDto.getFileName());
         newVehicleDocumentDao.setDescription(vehicleDocumentDto.getDescription());
-        newVehicleDocumentDao.setUrl(s3.getUrlForPath(vehicleDocumentDto.getUrl(),vehicleDocumentTypeDao.getS3Key()));
+        newVehicleDocumentDao.setUrl(s3.getUrlForPath(vehicleDocumentDto.getUrl(), vehicleDocumentTypeDao.getS3Key()));
         newVehicleDocumentDao.setStatus(DocumentStatus.UPLOADED.name());
         newVehicleDocumentDao.setVehicleId(vehicleDao.getId());
         vehicleDocumentRepository.delete(vehicleDocumentDao.getId());
@@ -203,16 +201,47 @@ public class VehicleDocumentServiceImpl implements VehicleDocumentService {
 
         List<VehicleDocumentDto> result = new ArrayList<>();
         for (VehicleDocumentDto vehicleDocumentDto : vehicleDocumentDtoList) {
-            if(vehicleDocumentDto.getUrl()==null)
+            if (vehicleDocumentDto.getUrl() == null)
                 continue;
-            if(vehicleDocumentDto.getUuid()!=null){
-                result.add(updateDocument(vehicleUUID,vehicleDocumentDto.getUuid(),vehicleDocumentDto));
-            }else{
-                result.add(createDocument(vehicleUUID,vehicleDocumentDto));
+            if (vehicleDocumentDto.getUuid() != null) {
+                result.add(updateDocument(vehicleUUID, vehicleDocumentDto.getUuid(), vehicleDocumentDto));
+            } else {
+                result.add(createDocument(vehicleUUID, vehicleDocumentDto));
             }
 
         }
         return result;
+    }
+
+
+    @Override
+    public DocumentStatus isAllMandatoryDocumentsUploaded(Integer vehicleId) {
+        List<VehicleDocumentTypeDao> activeDocumentTypes = vehicleDocumentTypeRepository.findAllActive();
+        if (CollectionUtils.isEmpty(activeDocumentTypes))
+            return DocumentStatus.APPROVED;
+
+        List<VehicleDocumentTypeDao> mandatoryDocuments = activeDocumentTypes.stream().filter(VehicleDocumentTypeDao::getIsMandatory).toList();
+        Map<Integer, VehicleDocumentTypeDao> documentTypeIdToDocumentTypeMap = mandatoryDocuments.stream()
+                .collect(Collectors.toMap(VehicleDocumentTypeDao::getId, Function.identity()));
+        List<Integer> activeDocumentTypeIds = mandatoryDocuments.stream().map(VehicleDocumentTypeDao::getId).toList();
+        Map<Integer, VehicleDocumentDao> existingDocumentMap = vehicleDocumentRepository.getExistingDocumentMap(vehicleId, activeDocumentTypeIds);
+
+        List<VehicleDocumentDto> vehicleDocumentDtoList = VehicleDetailDto.getVehicleDocumentDtoList(documentTypeIdToDocumentTypeMap, existingDocumentMap);
+
+        List<VehicleDocumentDto> pendingDocuments = vehicleDocumentDtoList.stream().filter(x -> DocumentStatus.PENDING.name().equals(x.getStatus())).toList();
+        List<VehicleDocumentDto> uploadedDocuments = vehicleDocumentDtoList.stream().filter(x -> DocumentStatus.UPLOADED.name().equals(x.getStatus())).toList();
+        List<VehicleDocumentDto> rejectedDocuments = vehicleDocumentDtoList.stream().filter(x -> DocumentStatus.REJECTED.name().equals(x.getStatus())).toList();
+
+        if (!CollectionUtils.isEmpty(pendingDocuments))
+            return DocumentStatus.PENDING;
+
+        if (!CollectionUtils.isEmpty(rejectedDocuments))
+            return DocumentStatus.REJECTED;
+
+        if (!CollectionUtils.isEmpty(uploadedDocuments))
+            return DocumentStatus.UPLOADED;
+
+        return DocumentStatus.APPROVED;
     }
 
 }

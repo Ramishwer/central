@@ -33,6 +33,14 @@ public class SystemPropertyRepositoryImpl implements SystemPropertyRepository {
         systemPropertiesRecord.store();
         property.setId(systemPropertiesRecord.getId());
         property.setUuid(systemPropertiesRecord.getUuid());
+        property.setCreatedBy(systemPropertiesRecord.getCreatedBy());
+        property.setUpdatedBy(systemPropertiesRecord.getUpdatedBy());
+        property.setCreatedOn(systemPropertiesRecord.getCreatedOn());
+        property.setUpdatedOn(systemPropertiesRecord.getUpdatedOn());
+        property.setIsActive(systemPropertiesRecord.getIsActive());
+        property.setState(systemPropertiesRecord.getState());
+        property.setApiSource(systemPropertiesRecord.getApiSource());
+        property.setNotes(systemPropertiesRecord.getNotes());
         return property;
     }
 
@@ -40,22 +48,41 @@ public class SystemPropertyRepositoryImpl implements SystemPropertyRepository {
     public SystemPropertyDao update(SystemPropertyDao property) {
         SystemPropertiesRecord systemPropertiesRecord = context.newRecord(SYSTEM_PROPERTIES, property);
         systemPropertiesRecord.update();
+
+
+        property.setCreatedBy(systemPropertiesRecord.getCreatedBy());
+        property.setUpdatedBy(systemPropertiesRecord.getUpdatedBy());
+        property.setCreatedOn(systemPropertiesRecord.getCreatedOn());
+        property.setUpdatedOn(systemPropertiesRecord.getUpdatedOn());
+        property.setIsActive(systemPropertiesRecord.getIsActive());
+        property.setState(systemPropertiesRecord.getState());
+        property.setApiSource(systemPropertiesRecord.getApiSource());
+        property.setNotes(systemPropertiesRecord.getNotes());
         return property;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(SYSTEM_PROPERTIES).set(SYSTEM_PROPERTIES.STATE, RecordState.DELETED.name()).where(SYSTEM_PROPERTIES.ID.eq(id)).execute();
-    }
+     context.update(SYSTEM_PROPERTIES)
+     .set(SYSTEM_PROPERTIES.STATE,RecordState.DELETED.name())
+     .where(SYSTEM_PROPERTIES.ID.eq(id))
+     .and(SYSTEM_PROPERTIES.STATE.eq(RecordState.ACTIVE.name()))
+     .and(SYSTEM_PROPERTIES.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public SystemPropertyDao findByUUID(String uuid) {
-        return context.selectFrom(SYSTEM_PROPERTIES).where(SYSTEM_PROPERTIES.UUID.eq(uuid)).fetchAnyInto(SystemPropertyDao.class);
+        return context.selectFrom(SYSTEM_PROPERTIES).where(SYSTEM_PROPERTIES.UUID.eq(uuid))
+                .and(SYSTEM_PROPERTIES.IS_ACTIVE.eq(true))
+                .fetchAnyInto(SystemPropertyDao.class);
     }
 
     @Override
     public SystemPropertyDao findById(Integer id) {
-        return context.selectFrom(SYSTEM_PROPERTIES).where(SYSTEM_PROPERTIES.ID.eq(id)).fetchAnyInto(SystemPropertyDao.class);
+        return context.selectFrom(SYSTEM_PROPERTIES).where(SYSTEM_PROPERTIES.ID.eq(id))
+                .and(SYSTEM_PROPERTIES.IS_ACTIVE.eq(true))
+                .fetchAnyInto(SystemPropertyDao.class);
     }
 
     @Override
@@ -64,7 +91,7 @@ public class SystemPropertyRepositoryImpl implements SystemPropertyRepository {
     }
 
     @Override
-    public List<SystemPropertyDao> findAll() {
+    public List<SystemPropertyDao> findAllActive() {
         return context.selectFrom(SYSTEM_PROPERTIES).fetchInto(SystemPropertyDao.class);
     }
 }

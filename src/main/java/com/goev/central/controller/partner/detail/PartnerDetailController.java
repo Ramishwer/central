@@ -23,8 +23,8 @@ public class PartnerDetailController {
     }
 
     @PutMapping("/partners/{partner-uuid}/details")
-    public ResponseDto<PartnerDetailDto> updatePartner(@PathVariable(value = "partner-uuid") String partnerUUID,@RequestBody PartnerDetailDto partnerDetailDto) {
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerDetailService.updatePartner(partnerUUID,partnerDetailDto));
+    public ResponseDto<PartnerDetailDto> updatePartner(@PathVariable(value = "partner-uuid") String partnerUUID, @RequestBody PartnerDetailDto partnerDetailDto) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerDetailService.updatePartner(partnerUUID, partnerDetailDto));
     }
 
     @GetMapping("/partners/{partner-uuid}/details")

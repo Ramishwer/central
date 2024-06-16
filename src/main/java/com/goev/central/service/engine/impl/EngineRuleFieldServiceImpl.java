@@ -25,7 +25,7 @@ public class EngineRuleFieldServiceImpl implements EngineRuleFieldService {
     @Override
     public PaginatedResponseDto<EngineRuleFieldDto> getEngineRuleFields() {
         PaginatedResponseDto<EngineRuleFieldDto> result = PaginatedResponseDto.<EngineRuleFieldDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
-        List<EngineRuleFieldDao> engineRuleFieldDaos = engineRuleFieldRepository.findAll();
+        List<EngineRuleFieldDao> engineRuleFieldDaos = engineRuleFieldRepository.findAllActive();
         if (CollectionUtils.isEmpty(engineRuleFieldDaos))
             return result;
 
@@ -54,7 +54,7 @@ public class EngineRuleFieldServiceImpl implements EngineRuleFieldService {
         if (engineRuleFieldDao == null)
             throw new ResponseException("No engineRuleField  found for Id :" + engineRuleFieldUUID);
         EngineRuleFieldDao newEngineRuleFieldDao = new EngineRuleFieldDao();
-       
+
 
         newEngineRuleFieldDao.setId(engineRuleFieldDao.getId());
         newEngineRuleFieldDao.setUuid(engineRuleFieldDao.getUuid());

@@ -25,7 +25,7 @@ public class PartnerAppSupportedLanguageServiceImpl implements PartnerAppSupport
     @Override
     public PaginatedResponseDto<PartnerAppSupportedLanguageDto> getPartnerAppSupportedLanguages() {
         PaginatedResponseDto<PartnerAppSupportedLanguageDto> result = PaginatedResponseDto.<PartnerAppSupportedLanguageDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
-        List<PartnerAppSupportedLanguageDao> partnerAppSupportedLanguageDaos = partnerAppSupportedLanguageRepository.findAll();
+        List<PartnerAppSupportedLanguageDao> partnerAppSupportedLanguageDaos = partnerAppSupportedLanguageRepository.findAllActive();
         if (CollectionUtils.isEmpty(partnerAppSupportedLanguageDaos))
             return result;
 
@@ -54,7 +54,7 @@ public class PartnerAppSupportedLanguageServiceImpl implements PartnerAppSupport
         if (partnerAppSupportedLanguageDao == null)
             throw new ResponseException("No partnerAppSupportedLanguage  found for Id :" + partnerAppSupportedLanguageUUID);
         PartnerAppSupportedLanguageDao newPartnerAppSupportedLanguageDao = new PartnerAppSupportedLanguageDao();
-       
+
 
         newPartnerAppSupportedLanguageDao.setId(partnerAppSupportedLanguageDao.getId());
         newPartnerAppSupportedLanguageDao.setUuid(partnerAppSupportedLanguageDao.getUuid());

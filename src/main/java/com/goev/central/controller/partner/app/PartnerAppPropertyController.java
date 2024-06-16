@@ -18,33 +18,33 @@ public class PartnerAppPropertyController {
     private final PartnerAppPropertyService partnerAppPropertyService;
 
     @GetMapping("/app/properties")
-    public ResponseDto<PaginatedResponseDto<PartnerAppPropertyDto>> getPartnerAppProperties(@RequestParam("count")Integer count,
-                                                                                 @RequestParam("start")Integer start,
-                                                                                 @RequestParam("from")Long from,
-                                                                                 @RequestParam("to")Long to,
-                                                                                 @RequestParam("lastUUID") String lastElementUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, partnerAppPropertyService.getPartnerAppProperties());
+    public ResponseDto<PaginatedResponseDto<PartnerAppPropertyDto>> getPartnerAppProperties(@RequestParam("count") Integer count,
+                                                                                            @RequestParam("start") Integer start,
+                                                                                            @RequestParam("from") Long from,
+                                                                                            @RequestParam("to") Long to,
+                                                                                            @RequestParam("lastUUID") String lastElementUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerAppPropertyService.getPartnerAppProperties());
     }
 
-    
 
     @GetMapping("/app/properties/{app-property-uuid}")
-    public ResponseDto<PartnerAppPropertyDto> getPartnerAppPropertyDetails(@PathVariable(value = "app-property-uuid")String appPropertyUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, partnerAppPropertyService.getPartnerAppPropertyDetails(appPropertyUUID));
+    public ResponseDto<PartnerAppPropertyDto> getPartnerAppPropertyDetails(@PathVariable(value = "app-property-uuid") String appPropertyUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerAppPropertyService.getPartnerAppPropertyDetails(appPropertyUUID));
     }
 
 
     @PostMapping("/app/properties")
-    public ResponseDto<PartnerAppPropertyDto> createPartnerAppProperty(@RequestBody PartnerAppPropertyDto partnerAppPropertyDto){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, partnerAppPropertyService.createPartnerAppProperty(partnerAppPropertyDto));
+    public ResponseDto<PartnerAppPropertyDto> createPartnerAppProperty(@RequestBody PartnerAppPropertyDto partnerAppPropertyDto) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerAppPropertyService.createPartnerAppProperty(partnerAppPropertyDto));
     }
 
     @PutMapping("/app/properties/{app-property-uuid}")
-    public ResponseDto<PartnerAppPropertyDto> updatePartnerAppProperty(@PathVariable(value = "app-property-uuid")String appPropertyUUID, @RequestBody PartnerAppPropertyDto partnerAppPropertyDto){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, partnerAppPropertyService.updatePartnerAppProperty(appPropertyUUID,partnerAppPropertyDto));
+    public ResponseDto<PartnerAppPropertyDto> updatePartnerAppProperty(@PathVariable(value = "app-property-uuid") String appPropertyUUID, @RequestBody PartnerAppPropertyDto partnerAppPropertyDto) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerAppPropertyService.updatePartnerAppProperty(appPropertyUUID, partnerAppPropertyDto));
     }
+
     @DeleteMapping("/app/properties/{app-property-uuid}")
-    public ResponseDto<Boolean> deletePartnerAppProperty(@PathVariable(value = "app-property-uuid")String appPropertyUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, partnerAppPropertyService.deletePartnerAppProperty(appPropertyUUID));
+    public ResponseDto<Boolean> deletePartnerAppProperty(@PathVariable(value = "app-property-uuid") String appPropertyUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerAppPropertyService.deletePartnerAppProperty(appPropertyUUID));
     }
 }

@@ -26,6 +26,14 @@ public class PartnerPayoutTransactionRepositoryImpl implements PartnerPayoutTran
         partnerPayoutTransactionsRecord.store();
         partnerPayoutTransaction.setId(partnerPayoutTransactionsRecord.getId());
         partnerPayoutTransaction.setUuid(partnerPayoutTransaction.getUuid());
+        partnerPayoutTransaction.setCreatedBy(partnerPayoutTransaction.getCreatedBy());
+        partnerPayoutTransaction.setUpdatedBy(partnerPayoutTransaction.getUpdatedBy());
+        partnerPayoutTransaction.setCreatedOn(partnerPayoutTransaction.getCreatedOn());
+        partnerPayoutTransaction.setUpdatedOn(partnerPayoutTransaction.getUpdatedOn());
+        partnerPayoutTransaction.setIsActive(partnerPayoutTransaction.getIsActive());
+        partnerPayoutTransaction.setState(partnerPayoutTransaction.getState());
+        partnerPayoutTransaction.setApiSource(partnerPayoutTransaction.getApiSource());
+        partnerPayoutTransaction.setNotes(partnerPayoutTransaction.getNotes());
         return partnerPayoutTransaction;
     }
 
@@ -33,22 +41,41 @@ public class PartnerPayoutTransactionRepositoryImpl implements PartnerPayoutTran
     public PartnerPayoutTransactionDao update(PartnerPayoutTransactionDao partnerPayoutTransaction) {
         PartnerPayoutTransactionsRecord partnerPayoutTransactionsRecord = context.newRecord(PARTNER_PAYOUT_TRANSACTIONS, partnerPayoutTransaction);
         partnerPayoutTransactionsRecord.update();
+
+
+        partnerPayoutTransaction.setCreatedBy(partnerPayoutTransactionsRecord.getCreatedBy());
+        partnerPayoutTransaction.setUpdatedBy(partnerPayoutTransactionsRecord.getUpdatedBy());
+        partnerPayoutTransaction.setCreatedOn(partnerPayoutTransactionsRecord.getCreatedOn());
+        partnerPayoutTransaction.setUpdatedOn(partnerPayoutTransactionsRecord.getUpdatedOn());
+        partnerPayoutTransaction.setIsActive(partnerPayoutTransactionsRecord.getIsActive());
+        partnerPayoutTransaction.setState(partnerPayoutTransactionsRecord.getState());
+        partnerPayoutTransaction.setApiSource(partnerPayoutTransactionsRecord.getApiSource());
+        partnerPayoutTransaction.setNotes(partnerPayoutTransactionsRecord.getNotes());
         return partnerPayoutTransaction;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(PARTNER_PAYOUT_TRANSACTIONS).set(PARTNER_PAYOUT_TRANSACTIONS.STATE, RecordState.DELETED.name()).where(PARTNER_PAYOUT_TRANSACTIONS.ID.eq(id)).execute();
-    }
+     context.update(PARTNER_PAYOUT_TRANSACTIONS)
+     .set(PARTNER_PAYOUT_TRANSACTIONS.STATE,RecordState.DELETED.name())
+     .where(PARTNER_PAYOUT_TRANSACTIONS.ID.eq(id))
+     .and(PARTNER_PAYOUT_TRANSACTIONS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(PARTNER_PAYOUT_TRANSACTIONS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public PartnerPayoutTransactionDao findByUUID(String uuid) {
-        return context.selectFrom(PARTNER_PAYOUT_TRANSACTIONS).where(PARTNER_PAYOUT_TRANSACTIONS.UUID.eq(uuid)).fetchAnyInto(PartnerPayoutTransactionDao.class);
+        return context.selectFrom(PARTNER_PAYOUT_TRANSACTIONS).where(PARTNER_PAYOUT_TRANSACTIONS.UUID.eq(uuid))
+                .and(PARTNER_PAYOUT_TRANSACTIONS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PartnerPayoutTransactionDao.class);
     }
 
     @Override
     public PartnerPayoutTransactionDao findById(Integer id) {
-        return context.selectFrom(PARTNER_PAYOUT_TRANSACTIONS).where(PARTNER_PAYOUT_TRANSACTIONS.ID.eq(id)).fetchAnyInto(PartnerPayoutTransactionDao.class);
+        return context.selectFrom(PARTNER_PAYOUT_TRANSACTIONS).where(PARTNER_PAYOUT_TRANSACTIONS.ID.eq(id))
+                .and(PARTNER_PAYOUT_TRANSACTIONS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PartnerPayoutTransactionDao.class);
     }
 
     @Override
@@ -57,7 +84,7 @@ public class PartnerPayoutTransactionRepositoryImpl implements PartnerPayoutTran
     }
 
     @Override
-    public List<PartnerPayoutTransactionDao> findAll() {
+    public List<PartnerPayoutTransactionDao> findAllActive() {
         return context.selectFrom(PARTNER_PAYOUT_TRANSACTIONS).fetchInto(PartnerPayoutTransactionDao.class);
     }
 

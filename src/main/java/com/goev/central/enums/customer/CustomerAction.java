@@ -1,5 +1,5 @@
 package com.goev.central.enums.customer;
 
 public enum CustomerAction {
-    CONFIRM,FEEDBACK,UPDATE
+    CONFIRM, FEEDBACK, UPDATE
 }

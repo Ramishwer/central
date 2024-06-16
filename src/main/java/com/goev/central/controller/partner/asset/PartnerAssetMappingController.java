@@ -19,7 +19,7 @@ public class PartnerAssetMappingController {
 
 
     private final PartnerAssetMappingService partnerAssetMappingService;
-    
+
 
     @GetMapping("/partners/{partner-uuid}/assets")
     public ResponseDto<PaginatedResponseDto<AssetDto>> getAssetsForPartners(@PathVariable(value = "partner-uuid") String partnerUUID) {

@@ -25,7 +25,7 @@ public class PartnerDocumentTypeServiceImpl implements PartnerDocumentTypeServic
     @Override
     public PaginatedResponseDto<PartnerDocumentTypeDto> getDocumentTypes() {
         PaginatedResponseDto<PartnerDocumentTypeDto> result = PaginatedResponseDto.<PartnerDocumentTypeDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
-        List<PartnerDocumentTypeDao> partnerDocumentTypeDaos = partnerDocumentTypeRepository.findAll();
+        List<PartnerDocumentTypeDao> partnerDocumentTypeDaos = partnerDocumentTypeRepository.findAllActive();
         if (CollectionUtils.isEmpty(partnerDocumentTypeDaos))
             return result;
 

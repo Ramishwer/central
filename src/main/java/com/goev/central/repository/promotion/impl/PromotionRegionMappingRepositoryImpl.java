@@ -10,7 +10,6 @@ import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Map;
 
 import static com.goev.record.central.tables.PromotionRegionMappings.PROMOTION_REGION_MAPPINGS;
 
@@ -26,6 +25,14 @@ public class PromotionRegionMappingRepositoryImpl implements PromotionRegionMapp
         promotionRegionMappingsRecord.store();
         log.setId(promotionRegionMappingsRecord.getId());
         log.setUuid(promotionRegionMappingsRecord.getUuid());
+        log.setCreatedBy(promotionRegionMappingsRecord.getCreatedBy());
+        log.setUpdatedBy(promotionRegionMappingsRecord.getUpdatedBy());
+        log.setCreatedOn(promotionRegionMappingsRecord.getCreatedOn());
+        log.setUpdatedOn(promotionRegionMappingsRecord.getUpdatedOn());
+        log.setIsActive(promotionRegionMappingsRecord.getIsActive());
+        log.setState(promotionRegionMappingsRecord.getState());
+        log.setApiSource(promotionRegionMappingsRecord.getApiSource());
+        log.setNotes(promotionRegionMappingsRecord.getNotes());
         return log;
     }
 
@@ -33,23 +40,42 @@ public class PromotionRegionMappingRepositoryImpl implements PromotionRegionMapp
     public PromotionRegionMappingDao update(PromotionRegionMappingDao log) {
         PromotionRegionMappingsRecord promotionRegionMappingsRecord = context.newRecord(PROMOTION_REGION_MAPPINGS, log);
         promotionRegionMappingsRecord.update();
+
+
+        log.setCreatedBy(promotionRegionMappingsRecord.getCreatedBy());
+        log.setUpdatedBy(promotionRegionMappingsRecord.getUpdatedBy());
+        log.setCreatedOn(promotionRegionMappingsRecord.getCreatedOn());
+        log.setUpdatedOn(promotionRegionMappingsRecord.getUpdatedOn());
+        log.setIsActive(promotionRegionMappingsRecord.getIsActive());
+        log.setState(promotionRegionMappingsRecord.getState());
+        log.setApiSource(promotionRegionMappingsRecord.getApiSource());
+        log.setNotes(promotionRegionMappingsRecord.getNotes());
         return log;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(PROMOTION_REGION_MAPPINGS).set(PROMOTION_REGION_MAPPINGS.STATE, RecordState.DELETED.name()).where(PROMOTION_REGION_MAPPINGS.ID.eq(id)).execute();
-    }
+     context.update(PROMOTION_REGION_MAPPINGS)
+     .set(PROMOTION_REGION_MAPPINGS.STATE,RecordState.DELETED.name())
+     .where(PROMOTION_REGION_MAPPINGS.ID.eq(id))
+     .and(PROMOTION_REGION_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(PROMOTION_REGION_MAPPINGS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
-    @Override
+     @Override
     public PromotionRegionMappingDao findByUUID(String uuid) {
-        return context.selectFrom(PROMOTION_REGION_MAPPINGS).where(PROMOTION_REGION_MAPPINGS.UUID.eq(uuid)).fetchAnyInto(PromotionRegionMappingDao.class);
-    }
+        return context.selectFrom(PROMOTION_REGION_MAPPINGS).where(PROMOTION_REGION_MAPPINGS.UUID.eq(uuid))
+         .and(PROMOTION_REGION_MAPPINGS.IS_ACTIVE.eq(true))
+        .fetchAnyInto(PromotionRegionMappingDao.class);
+    }  
 
     @Override
     public PromotionRegionMappingDao findById(Integer id) {
-        return context.selectFrom(PROMOTION_REGION_MAPPINGS).where(PROMOTION_REGION_MAPPINGS.ID.eq(id)).fetchAnyInto(PromotionRegionMappingDao.class);
-    }
+        return context.selectFrom(PROMOTION_REGION_MAPPINGS).where(PROMOTION_REGION_MAPPINGS.ID.eq(id))
+         .and(PROMOTION_REGION_MAPPINGS.IS_ACTIVE.eq(true))
+        .fetchAnyInto(PromotionRegionMappingDao.class);
+    } 
 
     @Override
     public List<PromotionRegionMappingDao> findAllByIds(List<Integer> ids) {
@@ -57,7 +83,7 @@ public class PromotionRegionMappingRepositoryImpl implements PromotionRegionMapp
     }
 
     @Override
-    public List<PromotionRegionMappingDao> findAll() {
+    public List<PromotionRegionMappingDao> findAllActive() {
         return context.selectFrom(PROMOTION_REGION_MAPPINGS).fetchInto(PromotionRegionMappingDao.class);
     }
 }

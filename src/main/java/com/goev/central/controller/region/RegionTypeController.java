@@ -18,26 +18,27 @@ public class RegionTypeController {
     private final RegionTypeService regionTypeService;
 
     @GetMapping("/region-types")
-    public ResponseDto<PaginatedResponseDto<RegionTypeDto>> getRegionTypes(){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, regionTypeService.getRegionTypes());
+    public ResponseDto<PaginatedResponseDto<RegionTypeDto>> getRegionTypes() {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, regionTypeService.getRegionTypes());
     }
+
     @PostMapping("/region-types")
-    public ResponseDto<RegionTypeDto> createRegionType(@RequestBody RegionTypeDto regionTypeDto){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, regionTypeService.createRegionType(regionTypeDto));
+    public ResponseDto<RegionTypeDto> createRegionType(@RequestBody RegionTypeDto regionTypeDto) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, regionTypeService.createRegionType(regionTypeDto));
     }
 
     @PutMapping("/region-types/{regionType-uuid}")
-    public ResponseDto<RegionTypeDto> updateRegionType(@PathVariable(value = "regionType-uuid")String regionTypeUUID, @RequestBody RegionTypeDto regionTypeDto){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, regionTypeService.updateRegionType(regionTypeUUID,regionTypeDto));
+    public ResponseDto<RegionTypeDto> updateRegionType(@PathVariable(value = "regionType-uuid") String regionTypeUUID, @RequestBody RegionTypeDto regionTypeDto) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, regionTypeService.updateRegionType(regionTypeUUID, regionTypeDto));
     }
 
     @GetMapping("/region-types/{regionType-uuid}")
-    public ResponseDto<RegionTypeDto> getRegionTypeDetails(@PathVariable(value = "regionType-uuid")String regionTypeUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, regionTypeService.getRegionTypeDetails(regionTypeUUID));
+    public ResponseDto<RegionTypeDto> getRegionTypeDetails(@PathVariable(value = "regionType-uuid") String regionTypeUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, regionTypeService.getRegionTypeDetails(regionTypeUUID));
     }
 
     @DeleteMapping("/region-types/{regionType-uuid}")
-    public ResponseDto<Boolean> deleteRegionType(@PathVariable(value = "regionType-uuid")String regionTypeUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, regionTypeService.deleteRegionType(regionTypeUUID));
+    public ResponseDto<Boolean> deleteRegionType(@PathVariable(value = "regionType-uuid") String regionTypeUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, regionTypeService.deleteRegionType(regionTypeUUID));
     }
 }

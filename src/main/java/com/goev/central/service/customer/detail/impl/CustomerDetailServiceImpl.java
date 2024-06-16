@@ -3,29 +3,15 @@ package com.goev.central.service.customer.detail.impl;
 import com.goev.central.constant.ApplicationConstants;
 import com.goev.central.dao.customer.detail.CustomerDao;
 import com.goev.central.dao.customer.detail.CustomerDetailDao;
-import com.goev.central.dao.location.LocationDao;
-import com.goev.central.dao.partner.detail.PartnerDao;
-import com.goev.central.dao.partner.detail.PartnerDetailDao;
-import com.goev.central.dto.common.PageDto;
-import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.customer.CustomerViewDto;
 import com.goev.central.dto.customer.detail.CustomerDetailDto;
-import com.goev.central.dto.customer.detail.CustomerDto;
-import com.goev.central.dto.location.LocationDto;
-import com.goev.central.dto.partner.PartnerViewDto;
 import com.goev.central.repository.customer.detail.CustomerDetailRepository;
-import com.goev.central.repository.customer.detail.CustomerDeviceRepository;
 import com.goev.central.repository.customer.detail.CustomerRepository;
 import com.goev.central.service.customer.detail.CustomerDetailService;
-import com.goev.central.service.customer.detail.CustomerService;
 import com.goev.lib.exceptions.ResponseException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Slf4j
 @Service
@@ -59,7 +45,7 @@ public class CustomerDetailServiceImpl implements CustomerDetailService {
         customer.setCustomerDetailsId(customerDetailDao.getId());
         customer.setViewInfo(ApplicationConstants.GSON.toJson(getCustomerViewDto(customerDetailDao, customer)));
         customerRepository.update(customer);
-        return getCustomerDetailDto(customerDetailDao,customerDao);
+        return getCustomerDetailDto(customerDetailDao, customerDao);
     }
 
     private CustomerDetailDao getCustomerDetailDao(CustomerDetailDto customerDto) {
@@ -96,10 +82,10 @@ public class CustomerDetailServiceImpl implements CustomerDetailService {
             throw new ResponseException("No customer details found for Id :" + customerUUID);
 
 
-        return getCustomerDetailDto(customerDetailDao,customerDao);
+        return getCustomerDetailDto(customerDetailDao, customerDao);
     }
 
-    private CustomerDetailDto getCustomerDetailDto(CustomerDetailDao customerDetailDao,CustomerDao customerDao) {
+    private CustomerDetailDto getCustomerDetailDto(CustomerDetailDao customerDetailDao, CustomerDao customerDao) {
         return CustomerDetailDto.builder()
                 .uuid(customerDao.getUuid())
                 .email(customerDetailDao.getEmail())
@@ -107,7 +93,7 @@ public class CustomerDetailServiceImpl implements CustomerDetailService {
                 .lastName(customerDetailDao.getLastName())
                 .preferredLanguage(customerDetailDao.getPreferredLanguage())
                 .phoneNumber(customerDetailDao.getPhoneNumber())
-                .customer(getCustomerViewDto(customerDetailDao,customerDao))
+                .customer(getCustomerViewDto(customerDetailDao, customerDao))
                 .build();
     }
 

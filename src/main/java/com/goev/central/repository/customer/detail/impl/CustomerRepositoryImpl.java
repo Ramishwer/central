@@ -26,6 +26,14 @@ public class CustomerRepositoryImpl implements CustomerRepository {
         customersRecord.store();
         customer.setId(customersRecord.getId());
         customer.setUuid(customersRecord.getUuid());
+        customer.setCreatedBy(customersRecord.getCreatedBy());
+        customer.setUpdatedBy(customersRecord.getUpdatedBy());
+        customer.setCreatedOn(customersRecord.getCreatedOn());
+        customer.setUpdatedOn(customersRecord.getUpdatedOn());
+        customer.setIsActive(customersRecord.getIsActive());
+        customer.setState(customersRecord.getState());
+        customer.setApiSource(customersRecord.getApiSource());
+        customer.setNotes(customersRecord.getNotes());
         return customer;
     }
 
@@ -33,22 +41,41 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     public CustomerDao update(CustomerDao customer) {
         CustomersRecord customersRecord = context.newRecord(CUSTOMERS, customer);
         customersRecord.update();
+
+
+        customer.setCreatedBy(customersRecord.getCreatedBy());
+        customer.setUpdatedBy(customersRecord.getUpdatedBy());
+        customer.setCreatedOn(customersRecord.getCreatedOn());
+        customer.setUpdatedOn(customersRecord.getUpdatedOn());
+        customer.setIsActive(customersRecord.getIsActive());
+        customer.setState(customersRecord.getState());
+        customer.setApiSource(customersRecord.getApiSource());
+        customer.setNotes(customersRecord.getNotes());
         return customer;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(CUSTOMERS).set(CUSTOMERS.STATE, RecordState.DELETED.name()).where(CUSTOMERS.ID.eq(id)).execute();
+     context.update(CUSTOMERS)
+     .set(CUSTOMERS.STATE,RecordState.DELETED.name())
+     .where(CUSTOMERS.ID.eq(id))
+     .and(CUSTOMERS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(CUSTOMERS.IS_ACTIVE.eq(true))
+     .execute();
     }
 
     @Override
     public CustomerDao findByUUID(String uuid) {
-        return context.selectFrom(CUSTOMERS).where(CUSTOMERS.UUID.eq(uuid)).fetchAnyInto(CustomerDao.class);
+        return context.selectFrom(CUSTOMERS).where(CUSTOMERS.UUID.eq(uuid))
+                .and(CUSTOMERS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(CustomerDao.class);
     }
 
     @Override
     public CustomerDao findById(Integer id) {
-        return context.selectFrom(CUSTOMERS).where(CUSTOMERS.ID.eq(id)).fetchAnyInto(CustomerDao.class);
+        return context.selectFrom(CUSTOMERS).where(CUSTOMERS.ID.eq(id))
+                .and(CUSTOMERS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(CustomerDao.class);
     }
 
     @Override
@@ -57,7 +84,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     }
 
     @Override
-    public List<CustomerDao> findAll() {
+    public List<CustomerDao> findAllActive() {
         return context.selectFrom(CUSTOMERS).fetchInto(CustomerDao.class);
     }
 

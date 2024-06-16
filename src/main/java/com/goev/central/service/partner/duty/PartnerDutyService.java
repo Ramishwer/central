@@ -5,6 +5,7 @@ import com.goev.central.dto.partner.duty.PartnerDutyDto;
 
 public interface PartnerDutyService {
     PaginatedResponseDto<PartnerDutyDto> getDuties();
-    PartnerDutyDto getDutyDetails(String partnerUUID,String dutyUUID);
+
+    PartnerDutyDto getDutyDetails(String partnerUUID, String dutyUUID);
 
 }

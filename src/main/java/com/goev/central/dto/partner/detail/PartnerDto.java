@@ -6,14 +6,11 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.joda.deser.DateTimeDeserializer;
 import com.fasterxml.jackson.datatype.joda.ser.DateTimeSerializer;
-import com.goev.central.dto.booking.BookingDto;
 import com.goev.central.dto.booking.BookingViewDto;
 import com.goev.central.dto.location.LocationDto;
 import com.goev.central.dto.partner.duty.PartnerDutyDto;
 import com.goev.central.dto.partner.duty.PartnerShiftDto;
 import com.goev.central.dto.vehicle.VehicleViewDto;
-import com.goev.central.dto.vehicle.detail.VehicleDto;
-import com.goev.lib.dto.LatLongDto;
 import lombok.*;
 import org.joda.time.DateTime;
 
@@ -41,7 +38,7 @@ public class PartnerDto {
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime computedShiftEndTime;
-    private PartnerDutyDto dutyDetails ;
+    private PartnerDutyDto dutyDetails;
     private PartnerShiftDto shiftDetails;
     private String locationStatus;
 

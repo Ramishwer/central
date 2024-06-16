@@ -26,6 +26,14 @@ public class CustomerAppSupportedLanguageRepositoryImpl implements CustomerAppSu
         customerAppSupportedLanguagesRecord.store();
         customerAppSupportedLanguage.setId(customerAppSupportedLanguagesRecord.getId());
         customerAppSupportedLanguage.setUuid(customerAppSupportedLanguage.getUuid());
+        customerAppSupportedLanguage.setCreatedBy(customerAppSupportedLanguage.getCreatedBy());
+        customerAppSupportedLanguage.setUpdatedBy(customerAppSupportedLanguage.getUpdatedBy());
+        customerAppSupportedLanguage.setCreatedOn(customerAppSupportedLanguage.getCreatedOn());
+        customerAppSupportedLanguage.setUpdatedOn(customerAppSupportedLanguage.getUpdatedOn());
+        customerAppSupportedLanguage.setIsActive(customerAppSupportedLanguage.getIsActive());
+        customerAppSupportedLanguage.setState(customerAppSupportedLanguage.getState());
+        customerAppSupportedLanguage.setApiSource(customerAppSupportedLanguage.getApiSource());
+        customerAppSupportedLanguage.setNotes(customerAppSupportedLanguage.getNotes());
         return customerAppSupportedLanguage;
     }
 
@@ -33,22 +41,41 @@ public class CustomerAppSupportedLanguageRepositoryImpl implements CustomerAppSu
     public CustomerAppSupportedLanguageDao update(CustomerAppSupportedLanguageDao customerAppSupportedLanguage) {
         CustomerAppSupportedLanguagesRecord customerAppSupportedLanguagesRecord = context.newRecord(CUSTOMER_APP_SUPPORTED_LANGUAGES, customerAppSupportedLanguage);
         customerAppSupportedLanguagesRecord.update();
+
+
+        customerAppSupportedLanguage.setCreatedBy(customerAppSupportedLanguagesRecord.getCreatedBy());
+        customerAppSupportedLanguage.setUpdatedBy(customerAppSupportedLanguagesRecord.getUpdatedBy());
+        customerAppSupportedLanguage.setCreatedOn(customerAppSupportedLanguagesRecord.getCreatedOn());
+        customerAppSupportedLanguage.setUpdatedOn(customerAppSupportedLanguagesRecord.getUpdatedOn());
+        customerAppSupportedLanguage.setIsActive(customerAppSupportedLanguagesRecord.getIsActive());
+        customerAppSupportedLanguage.setState(customerAppSupportedLanguagesRecord.getState());
+        customerAppSupportedLanguage.setApiSource(customerAppSupportedLanguagesRecord.getApiSource());
+        customerAppSupportedLanguage.setNotes(customerAppSupportedLanguagesRecord.getNotes());
         return customerAppSupportedLanguage;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(CUSTOMER_APP_SUPPORTED_LANGUAGES).set(CUSTOMER_APP_SUPPORTED_LANGUAGES.STATE, RecordState.DELETED.name()).where(CUSTOMER_APP_SUPPORTED_LANGUAGES.ID.eq(id)).execute();
-    }
+     context.update(CUSTOMER_APP_SUPPORTED_LANGUAGES)
+     .set(CUSTOMER_APP_SUPPORTED_LANGUAGES.STATE,RecordState.DELETED.name())
+     .where(CUSTOMER_APP_SUPPORTED_LANGUAGES.ID.eq(id))
+     .and(CUSTOMER_APP_SUPPORTED_LANGUAGES.STATE.eq(RecordState.ACTIVE.name()))
+     .and(CUSTOMER_APP_SUPPORTED_LANGUAGES.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public CustomerAppSupportedLanguageDao findByUUID(String uuid) {
-        return context.selectFrom(CUSTOMER_APP_SUPPORTED_LANGUAGES).where(CUSTOMER_APP_SUPPORTED_LANGUAGES.UUID.eq(uuid)).fetchAnyInto(CustomerAppSupportedLanguageDao.class);
+        return context.selectFrom(CUSTOMER_APP_SUPPORTED_LANGUAGES).where(CUSTOMER_APP_SUPPORTED_LANGUAGES.UUID.eq(uuid))
+                .and(CUSTOMER_APP_SUPPORTED_LANGUAGES.IS_ACTIVE.eq(true))
+                .fetchAnyInto(CustomerAppSupportedLanguageDao.class);
     }
 
     @Override
     public CustomerAppSupportedLanguageDao findById(Integer id) {
-        return context.selectFrom(CUSTOMER_APP_SUPPORTED_LANGUAGES).where(CUSTOMER_APP_SUPPORTED_LANGUAGES.ID.eq(id)).fetchAnyInto(CustomerAppSupportedLanguageDao.class);
+        return context.selectFrom(CUSTOMER_APP_SUPPORTED_LANGUAGES).where(CUSTOMER_APP_SUPPORTED_LANGUAGES.ID.eq(id))
+                .and(CUSTOMER_APP_SUPPORTED_LANGUAGES.IS_ACTIVE.eq(true))
+                .fetchAnyInto(CustomerAppSupportedLanguageDao.class);
     }
 
     @Override
@@ -57,7 +84,7 @@ public class CustomerAppSupportedLanguageRepositoryImpl implements CustomerAppSu
     }
 
     @Override
-    public List<CustomerAppSupportedLanguageDao> findAll() {
+    public List<CustomerAppSupportedLanguageDao> findAllActive() {
         return context.selectFrom(CUSTOMER_APP_SUPPORTED_LANGUAGES).fetchInto(CustomerAppSupportedLanguageDao.class);
     }
 }

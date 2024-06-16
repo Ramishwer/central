@@ -6,15 +6,22 @@ import java.util.List;
 
 public interface PartnerAssetMappingRepository {
     PartnerAssetMappingDao save(PartnerAssetMappingDao partner);
+
     PartnerAssetMappingDao update(PartnerAssetMappingDao partner);
+
     void delete(Integer id);
+
     PartnerAssetMappingDao findByUUID(String uuid);
+
     PartnerAssetMappingDao findById(Integer id);
+
     List<PartnerAssetMappingDao> findAllByIds(List<Integer> ids);
-    List<PartnerAssetMappingDao> findAll();
+
+    List<PartnerAssetMappingDao> findAllActive();
 
     List<PartnerAssetMappingDao> findAllByPartnerId(Integer id);
-    PartnerAssetMappingDao findByPartnerIdAndAssetId(Integer partnerId,Integer assetId);
+
+    PartnerAssetMappingDao findByPartnerIdAndAssetId(Integer partnerId, Integer assetId);
 
     PartnerAssetMappingDao findByAssetId(Integer id);
 

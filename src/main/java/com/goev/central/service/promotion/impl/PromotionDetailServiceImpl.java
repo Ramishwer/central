@@ -1,8 +1,6 @@
 package com.goev.central.service.promotion.impl;
 
 import com.goev.central.dao.promotion.PromotionDetailDao;
-import com.goev.central.dto.common.PageDto;
-import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.promotion.PromotionDetailDto;
 import com.goev.central.repository.promotion.PromotionDetailRepository;
 import com.goev.central.service.promotion.PromotionDetailService;
@@ -10,10 +8,6 @@ import com.goev.lib.exceptions.ResponseException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Slf4j
 @Service
@@ -21,7 +15,6 @@ import java.util.List;
 public class PromotionDetailServiceImpl implements PromotionDetailService {
 
     private final PromotionDetailRepository promotionDetailRepository;
-
 
 
     @Override

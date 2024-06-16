@@ -25,7 +25,7 @@ public class CustomerPromotionServiceImpl implements CustomerPromotionService {
     @Override
     public PaginatedResponseDto<CustomerPromotionDto> getCustomerPromotions(String customerUUID) {
         PaginatedResponseDto<CustomerPromotionDto> result = PaginatedResponseDto.<CustomerPromotionDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
-        List<CustomerPromotionDao> customerPromotionDaos = customerPromotionRepository.findAll();
+        List<CustomerPromotionDao> customerPromotionDaos = customerPromotionRepository.findAllActive();
         if (CollectionUtils.isEmpty(customerPromotionDaos))
             return result;
 
@@ -38,7 +38,7 @@ public class CustomerPromotionServiceImpl implements CustomerPromotionService {
     }
 
     @Override
-    public CustomerPromotionDto createCustomerPromotion(String customerUUID,CustomerPromotionDto customerPromotionDto) {
+    public CustomerPromotionDto createCustomerPromotion(String customerUUID, CustomerPromotionDto customerPromotionDto) {
 
         CustomerPromotionDao customerPromotionDao = new CustomerPromotionDao();
         customerPromotionDao = customerPromotionRepository.save(customerPromotionDao);
@@ -49,7 +49,7 @@ public class CustomerPromotionServiceImpl implements CustomerPromotionService {
     }
 
     @Override
-    public CustomerPromotionDto getCustomerPromotionDetails(String customerUUID,String customerPromotionUUID) {
+    public CustomerPromotionDto getCustomerPromotionDetails(String customerUUID, String customerPromotionUUID) {
         CustomerPromotionDao customerPromotionDao = customerPromotionRepository.findByUUID(customerPromotionUUID);
         if (customerPromotionDao == null)
             throw new ResponseException("No customerPromotion  found for Id :" + customerPromotionUUID);
@@ -58,7 +58,7 @@ public class CustomerPromotionServiceImpl implements CustomerPromotionService {
     }
 
     @Override
-    public Boolean deleteCustomerPromotion(String customerUUID,String customerPromotionUUID) {
+    public Boolean deleteCustomerPromotion(String customerUUID, String customerPromotionUUID) {
         CustomerPromotionDao customerPromotionDao = customerPromotionRepository.findByUUID(customerPromotionUUID);
         if (customerPromotionDao == null)
             throw new ResponseException("No customerPromotion  found for Id :" + customerPromotionUUID);

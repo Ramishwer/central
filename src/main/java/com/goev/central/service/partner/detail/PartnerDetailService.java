@@ -5,7 +5,8 @@ import com.goev.central.dto.partner.detail.PartnerDetailDto;
 
 public interface PartnerDetailService {
     PartnerDetailDto createPartner(PartnerDetailDto partnerDto);
+
     PartnerDetailDto getPartnerDetails(String partnerUUID);
 
-    PartnerDetailDto updatePartner(String partnerUUID,PartnerDetailDto partnerDetailDto);
+    PartnerDetailDto updatePartner(String partnerUUID, PartnerDetailDto partnerDetailDto);
 }

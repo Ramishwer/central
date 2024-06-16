@@ -25,7 +25,7 @@ public class CustomerSegmentServiceImpl implements CustomerSegmentService {
     @Override
     public PaginatedResponseDto<CustomerSegmentDto> getCustomerSegments() {
         PaginatedResponseDto<CustomerSegmentDto> result = PaginatedResponseDto.<CustomerSegmentDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
-        List<CustomerSegmentDao> customerSegmentDaos = customerSegmentRepository.findAll();
+        List<CustomerSegmentDao> customerSegmentDaos = customerSegmentRepository.findAllActive();
         if (CollectionUtils.isEmpty(customerSegmentDaos))
             return result;
 
@@ -54,7 +54,7 @@ public class CustomerSegmentServiceImpl implements CustomerSegmentService {
         if (customerSegmentDao == null)
             throw new ResponseException("No customerSegment  found for Id :" + customerSegmentUUID);
         CustomerSegmentDao newCustomerSegmentDao = new CustomerSegmentDao();
-       
+
 
         newCustomerSegmentDao.setId(customerSegmentDao.getId());
         newCustomerSegmentDao.setUuid(customerSegmentDao.getUuid());

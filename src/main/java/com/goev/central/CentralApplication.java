@@ -10,8 +10,8 @@ import org.springframework.context.annotation.ComponentScan;
 @Slf4j
 public class CentralApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(CentralApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(CentralApplication.class, args);
+    }
 
 }

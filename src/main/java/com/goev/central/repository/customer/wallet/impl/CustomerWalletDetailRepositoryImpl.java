@@ -26,6 +26,14 @@ public class CustomerWalletDetailRepositoryImpl implements CustomerWalletDetailR
         customerWalletDetailsRecord.store();
         customerWalletDetail.setId(customerWalletDetailsRecord.getId());
         customerWalletDetail.setUuid(customerWalletDetail.getUuid());
+        customerWalletDetail.setCreatedBy(customerWalletDetail.getCreatedBy());
+        customerWalletDetail.setUpdatedBy(customerWalletDetail.getUpdatedBy());
+        customerWalletDetail.setCreatedOn(customerWalletDetail.getCreatedOn());
+        customerWalletDetail.setUpdatedOn(customerWalletDetail.getUpdatedOn());
+        customerWalletDetail.setIsActive(customerWalletDetail.getIsActive());
+        customerWalletDetail.setState(customerWalletDetail.getState());
+        customerWalletDetail.setApiSource(customerWalletDetail.getApiSource());
+        customerWalletDetail.setNotes(customerWalletDetail.getNotes());
         return customerWalletDetail;
     }
 
@@ -33,22 +41,41 @@ public class CustomerWalletDetailRepositoryImpl implements CustomerWalletDetailR
     public CustomerWalletDetailDao update(CustomerWalletDetailDao customerWalletDetail) {
         CustomerWalletDetailsRecord customerWalletDetailsRecord = context.newRecord(CUSTOMER_WALLET_DETAILS, customerWalletDetail);
         customerWalletDetailsRecord.update();
+
+
+        customerWalletDetail.setCreatedBy(customerWalletDetailsRecord.getCreatedBy());
+        customerWalletDetail.setUpdatedBy(customerWalletDetailsRecord.getUpdatedBy());
+        customerWalletDetail.setCreatedOn(customerWalletDetailsRecord.getCreatedOn());
+        customerWalletDetail.setUpdatedOn(customerWalletDetailsRecord.getUpdatedOn());
+        customerWalletDetail.setIsActive(customerWalletDetailsRecord.getIsActive());
+        customerWalletDetail.setState(customerWalletDetailsRecord.getState());
+        customerWalletDetail.setApiSource(customerWalletDetailsRecord.getApiSource());
+        customerWalletDetail.setNotes(customerWalletDetailsRecord.getNotes());
         return customerWalletDetail;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(CUSTOMER_WALLET_DETAILS).set(CUSTOMER_WALLET_DETAILS.STATE, RecordState.DELETED.name()).where(CUSTOMER_WALLET_DETAILS.ID.eq(id)).execute();
-    }
+     context.update(CUSTOMER_WALLET_DETAILS)
+     .set(CUSTOMER_WALLET_DETAILS.STATE,RecordState.DELETED.name())
+     .where(CUSTOMER_WALLET_DETAILS.ID.eq(id))
+     .and(CUSTOMER_WALLET_DETAILS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(CUSTOMER_WALLET_DETAILS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public CustomerWalletDetailDao findByUUID(String uuid) {
-        return context.selectFrom(CUSTOMER_WALLET_DETAILS).where(CUSTOMER_WALLET_DETAILS.UUID.eq(uuid)).fetchAnyInto(CustomerWalletDetailDao.class);
+        return context.selectFrom(CUSTOMER_WALLET_DETAILS).where(CUSTOMER_WALLET_DETAILS.UUID.eq(uuid))
+                .and(CUSTOMER_WALLET_DETAILS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(CustomerWalletDetailDao.class);
     }
 
     @Override
     public CustomerWalletDetailDao findById(Integer id) {
-        return context.selectFrom(CUSTOMER_WALLET_DETAILS).where(CUSTOMER_WALLET_DETAILS.ID.eq(id)).fetchAnyInto(CustomerWalletDetailDao.class);
+        return context.selectFrom(CUSTOMER_WALLET_DETAILS).where(CUSTOMER_WALLET_DETAILS.ID.eq(id))
+                .and(CUSTOMER_WALLET_DETAILS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(CustomerWalletDetailDao.class);
     }
 
     @Override
@@ -57,12 +84,12 @@ public class CustomerWalletDetailRepositoryImpl implements CustomerWalletDetailR
     }
 
     @Override
-    public List<CustomerWalletDetailDao> findAll() {
+    public List<CustomerWalletDetailDao> findAllActive() {
         return context.selectFrom(CUSTOMER_WALLET_DETAILS).fetchInto(CustomerWalletDetailDao.class);
     }
 
     @Override
     public CustomerWalletDetailDao findByCustomerId(Integer id) {
-       return context.selectFrom(CUSTOMER_WALLET_DETAILS).where(CUSTOMER_WALLET_DETAILS.CUSTOMER_ID.eq(id)).fetchOneInto(CustomerWalletDetailDao.class);
+        return context.selectFrom(CUSTOMER_WALLET_DETAILS).where(CUSTOMER_WALLET_DETAILS.CUSTOMER_ID.eq(id)).fetchOneInto(CustomerWalletDetailDao.class);
     }
 }

@@ -25,7 +25,7 @@ public class VehicleAttributeServiceImpl implements VehicleAttributeService {
     @Override
     public PaginatedResponseDto<VehicleAttributeDto> getVehicleAttributes(String vehicleUUID) {
         PaginatedResponseDto<VehicleAttributeDto> result = PaginatedResponseDto.<VehicleAttributeDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
-        List<VehicleAttributeDao> vehicleAttributeDaos = vehicleAttributeRepository.findAll();
+        List<VehicleAttributeDao> vehicleAttributeDaos = vehicleAttributeRepository.findAllActive();
         if (CollectionUtils.isEmpty(vehicleAttributeDaos))
             return result;
 
@@ -54,7 +54,7 @@ public class VehicleAttributeServiceImpl implements VehicleAttributeService {
         if (vehicleAttributeDao == null)
             throw new ResponseException("No vehicleAttribute  found for Id :" + vehicleAttributeUUID);
         VehicleAttributeDao newVehicleAttributeDao = new VehicleAttributeDao();
-       
+
 
         newVehicleAttributeDao.setId(vehicleAttributeDao.getId());
         newVehicleAttributeDao.setUuid(vehicleAttributeDao.getUuid());

@@ -26,6 +26,14 @@ public class CustomerDeviceRepositoryImpl implements CustomerDeviceRepository {
         customerDevicesRecord.store();
         customerDevice.setId(customerDevicesRecord.getId());
         customerDevice.setUuid(customerDevice.getUuid());
+        customerDevice.setCreatedBy(customerDevice.getCreatedBy());
+        customerDevice.setUpdatedBy(customerDevice.getUpdatedBy());
+        customerDevice.setCreatedOn(customerDevice.getCreatedOn());
+        customerDevice.setUpdatedOn(customerDevice.getUpdatedOn());
+        customerDevice.setIsActive(customerDevice.getIsActive());
+        customerDevice.setState(customerDevice.getState());
+        customerDevice.setApiSource(customerDevice.getApiSource());
+        customerDevice.setNotes(customerDevice.getNotes());
         return customerDevice;
     }
 
@@ -33,22 +41,41 @@ public class CustomerDeviceRepositoryImpl implements CustomerDeviceRepository {
     public CustomerDeviceDao update(CustomerDeviceDao customerDevice) {
         CustomerDevicesRecord customerDevicesRecord = context.newRecord(CUSTOMER_DEVICES, customerDevice);
         customerDevicesRecord.update();
+
+
+        customerDevice.setCreatedBy(customerDevicesRecord.getCreatedBy());
+        customerDevice.setUpdatedBy(customerDevicesRecord.getUpdatedBy());
+        customerDevice.setCreatedOn(customerDevicesRecord.getCreatedOn());
+        customerDevice.setUpdatedOn(customerDevicesRecord.getUpdatedOn());
+        customerDevice.setIsActive(customerDevicesRecord.getIsActive());
+        customerDevice.setState(customerDevicesRecord.getState());
+        customerDevice.setApiSource(customerDevicesRecord.getApiSource());
+        customerDevice.setNotes(customerDevicesRecord.getNotes());
         return customerDevice;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(CUSTOMER_DEVICES).set(CUSTOMER_DEVICES.STATE, RecordState.DELETED.name()).where(CUSTOMER_DEVICES.ID.eq(id)).execute();
-    }
+     context.update(CUSTOMER_DEVICES)
+     .set(CUSTOMER_DEVICES.STATE,RecordState.DELETED.name())
+     .where(CUSTOMER_DEVICES.ID.eq(id))
+     .and(CUSTOMER_DEVICES.STATE.eq(RecordState.ACTIVE.name()))
+     .and(CUSTOMER_DEVICES.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public CustomerDeviceDao findByUUID(String uuid) {
-        return context.selectFrom(CUSTOMER_DEVICES).where(CUSTOMER_DEVICES.UUID.eq(uuid)).fetchAnyInto(CustomerDeviceDao.class);
+        return context.selectFrom(CUSTOMER_DEVICES).where(CUSTOMER_DEVICES.UUID.eq(uuid))
+                .and(CUSTOMER_DEVICES.IS_ACTIVE.eq(true))
+                .fetchAnyInto(CustomerDeviceDao.class);
     }
 
     @Override
     public CustomerDeviceDao findById(Integer id) {
-        return context.selectFrom(CUSTOMER_DEVICES).where(CUSTOMER_DEVICES.ID.eq(id)).fetchAnyInto(CustomerDeviceDao.class);
+        return context.selectFrom(CUSTOMER_DEVICES).where(CUSTOMER_DEVICES.ID.eq(id))
+                .and(CUSTOMER_DEVICES.IS_ACTIVE.eq(true))
+                .fetchAnyInto(CustomerDeviceDao.class);
     }
 
     @Override
@@ -57,7 +84,7 @@ public class CustomerDeviceRepositoryImpl implements CustomerDeviceRepository {
     }
 
     @Override
-    public List<CustomerDeviceDao> findAll() {
+    public List<CustomerDeviceDao> findAllActive() {
         return context.selectFrom(CUSTOMER_DEVICES).fetchInto(CustomerDeviceDao.class);
     }
 }

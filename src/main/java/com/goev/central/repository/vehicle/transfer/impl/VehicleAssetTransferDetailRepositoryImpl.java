@@ -26,6 +26,14 @@ public class VehicleAssetTransferDetailRepositoryImpl implements VehicleAssetTra
         vehicleAssetTransferDetailsRecord.store();
         assetTransferDetail.setId(vehicleAssetTransferDetailsRecord.getId());
         assetTransferDetail.setUuid(vehicleAssetTransferDetailsRecord.getUuid());
+        assetTransferDetail.setCreatedBy(vehicleAssetTransferDetailsRecord.getCreatedBy());
+        assetTransferDetail.setUpdatedBy(vehicleAssetTransferDetailsRecord.getUpdatedBy());
+        assetTransferDetail.setCreatedOn(vehicleAssetTransferDetailsRecord.getCreatedOn());
+        assetTransferDetail.setUpdatedOn(vehicleAssetTransferDetailsRecord.getUpdatedOn());
+        assetTransferDetail.setIsActive(vehicleAssetTransferDetailsRecord.getIsActive());
+        assetTransferDetail.setState(vehicleAssetTransferDetailsRecord.getState());
+        assetTransferDetail.setApiSource(vehicleAssetTransferDetailsRecord.getApiSource());
+        assetTransferDetail.setNotes(vehicleAssetTransferDetailsRecord.getNotes());
         return assetTransferDetail;
     }
 
@@ -33,22 +41,41 @@ public class VehicleAssetTransferDetailRepositoryImpl implements VehicleAssetTra
     public VehicleAssetTransferDetailDao update(VehicleAssetTransferDetailDao assetTransferDetail) {
         VehicleAssetTransferDetailsRecord vehicleAssetTransferDetailsRecord = context.newRecord(VEHICLE_ASSET_TRANSFER_DETAILS, assetTransferDetail);
         vehicleAssetTransferDetailsRecord.update();
+
+
+        assetTransferDetail.setCreatedBy(vehicleAssetTransferDetailsRecord.getCreatedBy());
+        assetTransferDetail.setUpdatedBy(vehicleAssetTransferDetailsRecord.getUpdatedBy());
+        assetTransferDetail.setCreatedOn(vehicleAssetTransferDetailsRecord.getCreatedOn());
+        assetTransferDetail.setUpdatedOn(vehicleAssetTransferDetailsRecord.getUpdatedOn());
+        assetTransferDetail.setIsActive(vehicleAssetTransferDetailsRecord.getIsActive());
+        assetTransferDetail.setState(vehicleAssetTransferDetailsRecord.getState());
+        assetTransferDetail.setApiSource(vehicleAssetTransferDetailsRecord.getApiSource());
+        assetTransferDetail.setNotes(vehicleAssetTransferDetailsRecord.getNotes());
         return assetTransferDetail;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(VEHICLE_ASSET_TRANSFER_DETAILS).set(VEHICLE_ASSET_TRANSFER_DETAILS.STATE, RecordState.DELETED.name()).where(VEHICLE_ASSET_TRANSFER_DETAILS.ID.eq(id)).execute();
-    }
+     context.update(VEHICLE_ASSET_TRANSFER_DETAILS)
+     .set(VEHICLE_ASSET_TRANSFER_DETAILS.STATE,RecordState.DELETED.name())
+     .where(VEHICLE_ASSET_TRANSFER_DETAILS.ID.eq(id))
+     .and(VEHICLE_ASSET_TRANSFER_DETAILS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(VEHICLE_ASSET_TRANSFER_DETAILS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public VehicleAssetTransferDetailDao findByUUID(String uuid) {
-        return context.selectFrom(VEHICLE_ASSET_TRANSFER_DETAILS).where(VEHICLE_ASSET_TRANSFER_DETAILS.UUID.eq(uuid)).fetchAnyInto(VehicleAssetTransferDetailDao.class);
+        return context.selectFrom(VEHICLE_ASSET_TRANSFER_DETAILS).where(VEHICLE_ASSET_TRANSFER_DETAILS.UUID.eq(uuid))
+                .and(VEHICLE_ASSET_TRANSFER_DETAILS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(VehicleAssetTransferDetailDao.class);
     }
 
     @Override
     public VehicleAssetTransferDetailDao findById(Integer id) {
-        return context.selectFrom(VEHICLE_ASSET_TRANSFER_DETAILS).where(VEHICLE_ASSET_TRANSFER_DETAILS.ID.eq(id)).fetchAnyInto(VehicleAssetTransferDetailDao.class);
+        return context.selectFrom(VEHICLE_ASSET_TRANSFER_DETAILS).where(VEHICLE_ASSET_TRANSFER_DETAILS.ID.eq(id))
+                .and(VEHICLE_ASSET_TRANSFER_DETAILS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(VehicleAssetTransferDetailDao.class);
     }
 
     @Override
@@ -57,7 +84,7 @@ public class VehicleAssetTransferDetailRepositoryImpl implements VehicleAssetTra
     }
 
     @Override
-    public List<VehicleAssetTransferDetailDao> findAll() {
+    public List<VehicleAssetTransferDetailDao> findAllActive() {
         return context.selectFrom(VEHICLE_ASSET_TRANSFER_DETAILS).fetchInto(VehicleAssetTransferDetailDao.class);
     }
 }

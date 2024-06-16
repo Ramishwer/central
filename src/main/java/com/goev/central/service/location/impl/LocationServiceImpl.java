@@ -47,7 +47,7 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public PaginatedResponseDto<LocationDto> getLocations() {
         PaginatedResponseDto<LocationDto> result = PaginatedResponseDto.<LocationDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
-        List<LocationDao> locationDaos = locationRepository.findAll();
+        List<LocationDao> locationDaos = locationRepository.findAllActive();
         List<Integer> locationDetailsIds = locationDaos.stream().map(LocationDao::getLocationDetailsId).collect(Collectors.toList());
         List<LocationDetailDao> locationDetailDaoList = locationDetailRepository.findAllByIds(locationDetailsIds);
         Map<Integer, LocationDetailDao> locationDetailIdToLocationDaoMap = locationDetailDaoList.stream().collect(Collectors.toMap(LocationDetailDao::getId, Function.identity()));

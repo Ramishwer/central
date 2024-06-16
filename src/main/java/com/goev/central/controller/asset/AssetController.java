@@ -19,7 +19,7 @@ public class AssetController {
     private final AssetService assetService;
 
     @GetMapping("/assets")
-    public ResponseDto<PaginatedResponseDto<AssetDto>> getAssets(@RequestParam(value = "count",required = false) Integer count,
+    public ResponseDto<PaginatedResponseDto<AssetDto>> getAssets(@RequestParam(value = "count", required = false) Integer count,
                                                                  @RequestParam(value = "start", required = false) Integer start,
                                                                  @RequestParam(value = "from", required = false) Long from,
                                                                  @RequestParam(value = "to", required = false) Long to,
@@ -60,17 +60,17 @@ public class AssetController {
     }
 
     @PostMapping("/assets/{asset-uuid}/mappings")
-    public ResponseDto<AssetMappingDto> createAssetMapping(@PathVariable(value = "asset-uuid") String assetUUID,@RequestBody AssetMappingDto assetMappingDto) {
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, assetService.createAssetMapping(assetUUID,assetMappingDto));
+    public ResponseDto<AssetMappingDto> createAssetMapping(@PathVariable(value = "asset-uuid") String assetUUID, @RequestBody AssetMappingDto assetMappingDto) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, assetService.createAssetMapping(assetUUID, assetMappingDto));
     }
 
     @PutMapping("/assets/{asset-uuid}/mappings/{asset-mapping-uuid}")
-    public ResponseDto<AssetMappingDto> updateAssetMapping(@PathVariable(value = "asset-uuid") String assetUUID,@PathVariable(value = "asset-mapping-uuid") String assetMappingUUID,@RequestBody AssetMappingDto assetMappingDto) {
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, assetService.updateAssetMapping(assetUUID,assetMappingUUID,assetMappingDto));
+    public ResponseDto<AssetMappingDto> updateAssetMapping(@PathVariable(value = "asset-uuid") String assetUUID, @PathVariable(value = "asset-mapping-uuid") String assetMappingUUID, @RequestBody AssetMappingDto assetMappingDto) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, assetService.updateAssetMapping(assetUUID, assetMappingUUID, assetMappingDto));
     }
 
     @DeleteMapping("/assets/{asset-uuid}/mappings/{asset-mapping-uuid}")
-    public ResponseDto<Boolean> deleteAssetMapping(@PathVariable(value = "asset-uuid") String assetUUID,@PathVariable(value = "asset-mapping-uuid") String assetMappingUUID) {
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, assetService.deleteAssetMapping(assetUUID,assetMappingUUID));
+    public ResponseDto<Boolean> deleteAssetMapping(@PathVariable(value = "asset-uuid") String assetUUID, @PathVariable(value = "asset-mapping-uuid") String assetMappingUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, assetService.deleteAssetMapping(assetUUID, assetMappingUUID));
     }
 }

@@ -19,7 +19,7 @@ public class LocationAssetMappingController {
 
 
     private final LocationAssetMappingService locationAssetMappingService;
-    
+
 
     @GetMapping("/locations/{location-uuid}/assets")
     public ResponseDto<PaginatedResponseDto<AssetDto>> getAssetsForLocations(@PathVariable(value = "location-uuid") String locationUUID) {

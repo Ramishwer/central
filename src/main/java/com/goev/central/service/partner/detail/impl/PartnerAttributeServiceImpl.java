@@ -25,7 +25,7 @@ public class PartnerAttributeServiceImpl implements PartnerAttributeService {
     @Override
     public PaginatedResponseDto<PartnerAttributeDto> getPartnerAttributes(String partnerUUID) {
         PaginatedResponseDto<PartnerAttributeDto> result = PaginatedResponseDto.<PartnerAttributeDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
-        List<PartnerAttributeDao> partnerAttributeDaos = partnerAttributeRepository.findAll();
+        List<PartnerAttributeDao> partnerAttributeDaos = partnerAttributeRepository.findAllActive();
         if (CollectionUtils.isEmpty(partnerAttributeDaos))
             return result;
 
@@ -54,7 +54,7 @@ public class PartnerAttributeServiceImpl implements PartnerAttributeService {
         if (partnerAttributeDao == null)
             throw new ResponseException("No partnerAttribute  found for Id :" + partnerAttributeUUID);
         PartnerAttributeDao newPartnerAttributeDao = new PartnerAttributeDao();
-       
+
 
         newPartnerAttributeDao.setId(partnerAttributeDao.getId());
         newPartnerAttributeDao.setUuid(partnerAttributeDao.getUuid());

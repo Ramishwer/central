@@ -1,7 +1,6 @@
 package com.goev.central.controller.customer.detail;
 
 import com.goev.central.dto.customer.detail.CustomerDetailDto;
-import com.goev.central.dto.customer.detail.CustomerDto;
 import com.goev.central.service.customer.detail.CustomerDetailService;
 import com.goev.lib.dto.ResponseDto;
 import com.goev.lib.dto.StatusDto;

@@ -26,6 +26,14 @@ public class UserRoleRepositoryImpl implements UserRoleRepository {
         userRolesRecord.store();
         assetTransferDetail.setId(userRolesRecord.getId());
         assetTransferDetail.setUuid(userRolesRecord.getUuid());
+        assetTransferDetail.setCreatedBy(userRolesRecord.getCreatedBy());
+        assetTransferDetail.setUpdatedBy(userRolesRecord.getUpdatedBy());
+        assetTransferDetail.setCreatedOn(userRolesRecord.getCreatedOn());
+        assetTransferDetail.setUpdatedOn(userRolesRecord.getUpdatedOn());
+        assetTransferDetail.setIsActive(userRolesRecord.getIsActive());
+        assetTransferDetail.setState(userRolesRecord.getState());
+        assetTransferDetail.setApiSource(userRolesRecord.getApiSource());
+        assetTransferDetail.setNotes(userRolesRecord.getNotes());
         return assetTransferDetail;
     }
 
@@ -33,22 +41,41 @@ public class UserRoleRepositoryImpl implements UserRoleRepository {
     public UserRoleDao update(UserRoleDao assetTransferDetail) {
         UserRolesRecord userRolesRecord = context.newRecord(USER_ROLES, assetTransferDetail);
         userRolesRecord.update();
+
+
+        assetTransferDetail.setCreatedBy(userRolesRecord.getCreatedBy());
+        assetTransferDetail.setUpdatedBy(userRolesRecord.getUpdatedBy());
+        assetTransferDetail.setCreatedOn(userRolesRecord.getCreatedOn());
+        assetTransferDetail.setUpdatedOn(userRolesRecord.getUpdatedOn());
+        assetTransferDetail.setIsActive(userRolesRecord.getIsActive());
+        assetTransferDetail.setState(userRolesRecord.getState());
+        assetTransferDetail.setApiSource(userRolesRecord.getApiSource());
+        assetTransferDetail.setNotes(userRolesRecord.getNotes());
         return assetTransferDetail;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(USER_ROLES).set(USER_ROLES.STATE, RecordState.DELETED.name()).where(USER_ROLES.ID.eq(id)).execute();
-    }
+     context.update(USER_ROLES)
+     .set(USER_ROLES.STATE,RecordState.DELETED.name())
+     .where(USER_ROLES.ID.eq(id))
+     .and(USER_ROLES.STATE.eq(RecordState.ACTIVE.name()))
+     .and(USER_ROLES.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public UserRoleDao findByUUID(String uuid) {
-        return context.selectFrom(USER_ROLES).where(USER_ROLES.UUID.eq(uuid)).fetchAnyInto(UserRoleDao.class);
+        return context.selectFrom(USER_ROLES).where(USER_ROLES.UUID.eq(uuid))
+                .and(USER_ROLES.IS_ACTIVE.eq(true))
+                .fetchAnyInto(UserRoleDao.class);
     }
 
     @Override
     public UserRoleDao findById(Integer id) {
-        return context.selectFrom(USER_ROLES).where(USER_ROLES.ID.eq(id)).fetchAnyInto(UserRoleDao.class);
+        return context.selectFrom(USER_ROLES).where(USER_ROLES.ID.eq(id))
+                .and(USER_ROLES.IS_ACTIVE.eq(true))
+                .fetchAnyInto(UserRoleDao.class);
     }
 
     @Override
@@ -57,7 +84,7 @@ public class UserRoleRepositoryImpl implements UserRoleRepository {
     }
 
     @Override
-    public List<UserRoleDao> findAll() {
+    public List<UserRoleDao> findAllActive() {
         return context.selectFrom(USER_ROLES).fetchInto(UserRoleDao.class);
     }
 }

@@ -26,6 +26,14 @@ public class AssetRepositoryImpl implements AssetRepository {
         assetsRecord.store();
         client.setId(assetsRecord.getId());
         client.setUuid(assetsRecord.getUuid());
+        client.setCreatedBy(assetsRecord.getCreatedBy());
+        client.setUpdatedBy(assetsRecord.getUpdatedBy());
+        client.setCreatedOn(assetsRecord.getCreatedOn());
+        client.setUpdatedOn(assetsRecord.getUpdatedOn());
+        client.setIsActive(assetsRecord.getIsActive());
+        client.setState(assetsRecord.getState());
+        client.setApiSource(assetsRecord.getApiSource());
+        client.setNotes(assetsRecord.getNotes());
         return client;
     }
 
@@ -33,22 +41,41 @@ public class AssetRepositoryImpl implements AssetRepository {
     public AssetDao update(AssetDao client) {
         AssetsRecord assetsRecord = context.newRecord(ASSETS, client);
         assetsRecord.update();
+
+
+        client.setCreatedBy(assetsRecord.getCreatedBy());
+        client.setUpdatedBy(assetsRecord.getUpdatedBy());
+        client.setCreatedOn(assetsRecord.getCreatedOn());
+        client.setUpdatedOn(assetsRecord.getUpdatedOn());
+        client.setIsActive(assetsRecord.getIsActive());
+        client.setState(assetsRecord.getState());
+        client.setApiSource(assetsRecord.getApiSource());
+        client.setNotes(assetsRecord.getNotes());
         return client;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(ASSETS).set(ASSETS.STATE, RecordState.DELETED.name()).where(ASSETS.ID.eq(id)).execute();
-    }
+     context.update(ASSETS)
+     .set(ASSETS.STATE,RecordState.DELETED.name())
+     .where(ASSETS.ID.eq(id))
+     .and(ASSETS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(ASSETS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public AssetDao findByUUID(String uuid) {
-        return context.selectFrom(ASSETS).where(ASSETS.UUID.eq(uuid)).fetchAnyInto(AssetDao.class);
+        return context.selectFrom(ASSETS).where(ASSETS.UUID.eq(uuid))
+                .and(ASSETS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(AssetDao.class);
     }
 
     @Override
     public AssetDao findById(Integer id) {
-        return context.selectFrom(ASSETS).where(ASSETS.ID.eq(id)).fetchAnyInto(AssetDao.class);
+        return context.selectFrom(ASSETS).where(ASSETS.ID.eq(id))
+                .and(ASSETS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(AssetDao.class);
     }
 
     @Override
@@ -57,7 +84,7 @@ public class AssetRepositoryImpl implements AssetRepository {
     }
 
     @Override
-    public List<AssetDao> findAll() {
+    public List<AssetDao> findAllActive() {
         return context.selectFrom(ASSETS).fetchInto(AssetDao.class);
     }
 }

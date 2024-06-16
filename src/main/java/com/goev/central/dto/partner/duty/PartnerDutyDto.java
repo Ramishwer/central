@@ -7,9 +7,6 @@ import com.fasterxml.jackson.datatype.joda.deser.DateTimeDeserializer;
 import com.fasterxml.jackson.datatype.joda.ser.DateTimeSerializer;
 import com.goev.central.dto.location.LocationDto;
 import com.goev.central.dto.partner.PartnerViewDto;
-import com.goev.central.dto.partner.detail.PartnerDto;
-import com.goev.central.dto.payout.PayoutModelDto;
-import com.goev.central.dto.shift.ShiftDto;
 import lombok.*;
 import org.joda.time.DateTime;
 

@@ -1,6 +1,3 @@
-
-
-
 package com.goev.central.dao.customer.notification;
 
 import com.goev.lib.dao.BaseDao;

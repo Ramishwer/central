@@ -25,7 +25,7 @@ public class PricingElementServiceImpl implements PricingElementService {
     @Override
     public PaginatedResponseDto<PricingElementDto> getPricingElements() {
         PaginatedResponseDto<PricingElementDto> result = PaginatedResponseDto.<PricingElementDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
-        List<PricingElementDao> pricingElementDaos = pricingElementRepository.findAll();
+        List<PricingElementDao> pricingElementDaos = pricingElementRepository.findAllActive();
         if (CollectionUtils.isEmpty(pricingElementDaos))
             return result;
 
@@ -54,7 +54,7 @@ public class PricingElementServiceImpl implements PricingElementService {
         if (pricingElementDao == null)
             throw new ResponseException("No pricingElement  found for Id :" + pricingElementUUID);
         PricingElementDao newPricingElementDao = new PricingElementDao();
-       
+
 
         newPricingElementDao.setId(pricingElementDao.getId());
         newPricingElementDao.setUuid(pricingElementDao.getUuid());

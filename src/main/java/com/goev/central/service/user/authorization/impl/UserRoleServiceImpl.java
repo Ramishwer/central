@@ -25,7 +25,7 @@ public class UserRoleServiceImpl implements UserRoleService {
     @Override
     public PaginatedResponseDto<UserRoleDto> getRoles() {
         PaginatedResponseDto<UserRoleDto> result = PaginatedResponseDto.<UserRoleDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
-        List<UserRoleDao> userRoleDaos = userRoleRepository.findAll();
+        List<UserRoleDao> userRoleDaos = userRoleRepository.findAllActive();
         if (CollectionUtils.isEmpty(userRoleDaos))
             return result;
 

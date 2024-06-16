@@ -25,7 +25,7 @@ public class PartnerTicketServiceImpl implements PartnerTicketService {
     @Override
     public PaginatedResponseDto<PartnerTicketDto> getPartnerTickets(String partnerUUID) {
         PaginatedResponseDto<PartnerTicketDto> result = PaginatedResponseDto.<PartnerTicketDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
-        List<PartnerTicketDao> partnerTicketDaos = partnerTicketRepository.findAll();
+        List<PartnerTicketDao> partnerTicketDaos = partnerTicketRepository.findAllActive();
         if (CollectionUtils.isEmpty(partnerTicketDaos))
             return result;
 
@@ -54,7 +54,7 @@ public class PartnerTicketServiceImpl implements PartnerTicketService {
         if (partnerTicketDao == null)
             throw new ResponseException("No partnerTicket  found for Id :" + partnerTicketUUID);
         PartnerTicketDao newPartnerTicketDao = new PartnerTicketDao();
-       
+
 
         newPartnerTicketDao.setId(partnerTicketDao.getId());
         newPartnerTicketDao.setUuid(partnerTicketDao.getUuid());

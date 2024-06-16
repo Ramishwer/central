@@ -10,7 +10,6 @@ import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Map;
 
 import static com.goev.record.central.tables.SystemLogs.SYSTEM_LOGS;
 
@@ -26,6 +25,14 @@ public class SystemLogRepositoryImpl implements SystemLogRepository {
         systemLogsRecord.store();
         log.setId(systemLogsRecord.getId());
         log.setUuid(systemLogsRecord.getUuid());
+        log.setCreatedBy(systemLogsRecord.getCreatedBy());
+        log.setUpdatedBy(systemLogsRecord.getUpdatedBy());
+        log.setCreatedOn(systemLogsRecord.getCreatedOn());
+        log.setUpdatedOn(systemLogsRecord.getUpdatedOn());
+        log.setIsActive(systemLogsRecord.getIsActive());
+        log.setState(systemLogsRecord.getState());
+        log.setApiSource(systemLogsRecord.getApiSource());
+        log.setNotes(systemLogsRecord.getNotes());
         return log;
     }
 
@@ -33,22 +40,41 @@ public class SystemLogRepositoryImpl implements SystemLogRepository {
     public SystemLogDao update(SystemLogDao log) {
         SystemLogsRecord systemLogsRecord = context.newRecord(SYSTEM_LOGS, log);
         systemLogsRecord.update();
+
+
+        log.setCreatedBy(systemLogsRecord.getCreatedBy());
+        log.setUpdatedBy(systemLogsRecord.getUpdatedBy());
+        log.setCreatedOn(systemLogsRecord.getCreatedOn());
+        log.setUpdatedOn(systemLogsRecord.getUpdatedOn());
+        log.setIsActive(systemLogsRecord.getIsActive());
+        log.setState(systemLogsRecord.getState());
+        log.setApiSource(systemLogsRecord.getApiSource());
+        log.setNotes(systemLogsRecord.getNotes());
         return log;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(SYSTEM_LOGS).set(SYSTEM_LOGS.STATE, RecordState.DELETED.name()).where(SYSTEM_LOGS.ID.eq(id)).execute();
-    }
+     context.update(SYSTEM_LOGS)
+     .set(SYSTEM_LOGS.STATE,RecordState.DELETED.name())
+     .where(SYSTEM_LOGS.ID.eq(id))
+     .and(SYSTEM_LOGS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(SYSTEM_LOGS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public SystemLogDao findByUUID(String uuid) {
-        return context.selectFrom(SYSTEM_LOGS).where(SYSTEM_LOGS.UUID.eq(uuid)).fetchAnyInto(SystemLogDao.class);
+        return context.selectFrom(SYSTEM_LOGS).where(SYSTEM_LOGS.UUID.eq(uuid))
+                .and(SYSTEM_LOGS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(SystemLogDao.class);
     }
 
     @Override
     public SystemLogDao findById(Integer id) {
-        return context.selectFrom(SYSTEM_LOGS).where(SYSTEM_LOGS.ID.eq(id)).fetchAnyInto(SystemLogDao.class);
+        return context.selectFrom(SYSTEM_LOGS).where(SYSTEM_LOGS.ID.eq(id))
+                .and(SYSTEM_LOGS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(SystemLogDao.class);
     }
 
     @Override
@@ -57,7 +83,7 @@ public class SystemLogRepositoryImpl implements SystemLogRepository {
     }
 
     @Override
-    public List<SystemLogDao> findAll() {
+    public List<SystemLogDao> findAllActive() {
         return context.selectFrom(SYSTEM_LOGS).fetchInto(SystemLogDao.class);
     }
 }

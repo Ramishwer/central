@@ -18,26 +18,27 @@ public class PromotionController {
     private final PromotionService promotionService;
 
     @GetMapping("/promotions")
-    public ResponseDto<PaginatedResponseDto<PromotionDto>> getPromotions(){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, promotionService.getPromotions());
+    public ResponseDto<PaginatedResponseDto<PromotionDto>> getPromotions() {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, promotionService.getPromotions());
     }
+
     @PostMapping("/promotions")
-    public ResponseDto<PromotionDto> createPromotion(@RequestBody PromotionDto promotionDto){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, promotionService.createPromotion(promotionDto));
+    public ResponseDto<PromotionDto> createPromotion(@RequestBody PromotionDto promotionDto) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, promotionService.createPromotion(promotionDto));
     }
 
     @PutMapping("/promotions/{promotion-uuid}")
-    public ResponseDto<PromotionDto> updatePromotion(@PathVariable(value = "promotion-uuid")String promotionUUID, @RequestBody PromotionDto promotionDto){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, promotionService.updatePromotion(promotionUUID,promotionDto));
+    public ResponseDto<PromotionDto> updatePromotion(@PathVariable(value = "promotion-uuid") String promotionUUID, @RequestBody PromotionDto promotionDto) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, promotionService.updatePromotion(promotionUUID, promotionDto));
     }
 
     @GetMapping("/promotions/{promotion-uuid}")
-    public ResponseDto<PromotionDto> getPromotionDetails(@PathVariable(value = "promotion-uuid")String promotionUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, promotionService.getPromotionDetails(promotionUUID));
+    public ResponseDto<PromotionDto> getPromotionDetails(@PathVariable(value = "promotion-uuid") String promotionUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, promotionService.getPromotionDetails(promotionUUID));
     }
 
     @DeleteMapping("/promotions/{promotion-uuid}")
-    public ResponseDto<Boolean> deletePromotion(@PathVariable(value = "promotion-uuid")String promotionUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, promotionService.deletePromotion(promotionUUID));
+    public ResponseDto<Boolean> deletePromotion(@PathVariable(value = "promotion-uuid") String promotionUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, promotionService.deletePromotion(promotionUUID));
     }
 }

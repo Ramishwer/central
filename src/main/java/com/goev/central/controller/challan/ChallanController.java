@@ -18,33 +18,33 @@ public class ChallanController {
     private final ChallanService challanService;
 
     @GetMapping("/challans")
-    public ResponseDto<PaginatedResponseDto<ChallanDto>> getChallans(@RequestParam("count")Integer count,
-                                                                                 @RequestParam("start")Integer start,
-                                                                                 @RequestParam("from")Long from,
-                                                                                 @RequestParam("to")Long to,
-                                                                                 @RequestParam("lastUUID") String lastElementUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, challanService.getChallans());
+    public ResponseDto<PaginatedResponseDto<ChallanDto>> getChallans(@RequestParam("count") Integer count,
+                                                                     @RequestParam("start") Integer start,
+                                                                     @RequestParam("from") Long from,
+                                                                     @RequestParam("to") Long to,
+                                                                     @RequestParam("lastUUID") String lastElementUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, challanService.getChallans());
     }
 
-    
 
     @GetMapping("/challans/{challan-uuid}")
-    public ResponseDto<ChallanDto> getChallanDetails(@PathVariable(value = "challan-uuid")String challanUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, challanService.getChallanDetails(challanUUID));
+    public ResponseDto<ChallanDto> getChallanDetails(@PathVariable(value = "challan-uuid") String challanUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, challanService.getChallanDetails(challanUUID));
     }
 
 
     @PostMapping("/challans")
-    public ResponseDto<ChallanDto> createChallan(@RequestBody ChallanDto challanDto){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, challanService.createChallan(challanDto));
+    public ResponseDto<ChallanDto> createChallan(@RequestBody ChallanDto challanDto) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, challanService.createChallan(challanDto));
     }
 
     @PutMapping("/challans/{challan-uuid}")
-    public ResponseDto<ChallanDto> updateChallan(@PathVariable(value = "challan-uuid")String challanUUID, @RequestBody ChallanDto challanDto){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, challanService.updateChallan(challanUUID,challanDto));
+    public ResponseDto<ChallanDto> updateChallan(@PathVariable(value = "challan-uuid") String challanUUID, @RequestBody ChallanDto challanDto) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, challanService.updateChallan(challanUUID, challanDto));
     }
+
     @DeleteMapping("/challans/{challan-uuid}")
-    public ResponseDto<Boolean> deleteChallan(@PathVariable(value = "challan-uuid")String challanUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, challanService.deleteChallan(challanUUID));
+    public ResponseDto<Boolean> deleteChallan(@PathVariable(value = "challan-uuid") String challanUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, challanService.deleteChallan(challanUUID));
     }
 }

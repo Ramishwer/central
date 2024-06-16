@@ -19,26 +19,27 @@ public class VehicleDocumentTypeController {
     private final VehicleDocumentTypeService vehicleDocumentTypeService;
 
     @GetMapping("/document-types")
-    public ResponseDto<PaginatedResponseDto<VehicleDocumentTypeDto>> getCategories(){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, vehicleDocumentTypeService.getDocumentTypes());
+    public ResponseDto<PaginatedResponseDto<VehicleDocumentTypeDto>> getCategories() {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleDocumentTypeService.getDocumentTypes());
     }
+
     @PostMapping("/document-types")
-    public ResponseDto<VehicleDocumentTypeDto> createDocumentType(@RequestBody VehicleDocumentTypeDto vehicleDocumentTypeDto){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, vehicleDocumentTypeService.createDocumentType(vehicleDocumentTypeDto));
+    public ResponseDto<VehicleDocumentTypeDto> createDocumentType(@RequestBody VehicleDocumentTypeDto vehicleDocumentTypeDto) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleDocumentTypeService.createDocumentType(vehicleDocumentTypeDto));
     }
 
     @PutMapping("/document-types/{document-type-uuid}")
-    public ResponseDto<VehicleDocumentTypeDto> updateDocumentType(@PathVariable(value = "document-type-uuid")String documentTypeUUID, @RequestBody VehicleDocumentTypeDto vehicleDocumentTypeDto){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, vehicleDocumentTypeService.updateDocumentType(documentTypeUUID,vehicleDocumentTypeDto));
+    public ResponseDto<VehicleDocumentTypeDto> updateDocumentType(@PathVariable(value = "document-type-uuid") String documentTypeUUID, @RequestBody VehicleDocumentTypeDto vehicleDocumentTypeDto) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleDocumentTypeService.updateDocumentType(documentTypeUUID, vehicleDocumentTypeDto));
     }
 
     @GetMapping("/document-types/{document-type-uuid}")
-    public ResponseDto<VehicleDocumentTypeDto> getDocumentTypeDetails(@PathVariable(value = "document-type-uuid")String documentTypeUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, vehicleDocumentTypeService.getDocumentTypeDetails(documentTypeUUID));
+    public ResponseDto<VehicleDocumentTypeDto> getDocumentTypeDetails(@PathVariable(value = "document-type-uuid") String documentTypeUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleDocumentTypeService.getDocumentTypeDetails(documentTypeUUID));
     }
 
     @DeleteMapping("/document-types/{document-type-uuid}")
-    public ResponseDto<Boolean> deleteDocumentType(@PathVariable(value = "document-type-uuid")String documentTypeUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, vehicleDocumentTypeService.deleteDocumentType(documentTypeUUID));
+    public ResponseDto<Boolean> deleteDocumentType(@PathVariable(value = "document-type-uuid") String documentTypeUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleDocumentTypeService.deleteDocumentType(documentTypeUUID));
     }
 }

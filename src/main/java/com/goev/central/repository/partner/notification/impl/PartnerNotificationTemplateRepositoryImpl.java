@@ -26,6 +26,14 @@ public class PartnerNotificationTemplateRepositoryImpl implements PartnerNotific
         partnerNotificationTemplatesRecord.store();
         partnerNotificationTemplate.setId(partnerNotificationTemplatesRecord.getId());
         partnerNotificationTemplate.setUuid(partnerNotificationTemplate.getUuid());
+        partnerNotificationTemplate.setCreatedBy(partnerNotificationTemplate.getCreatedBy());
+        partnerNotificationTemplate.setUpdatedBy(partnerNotificationTemplate.getUpdatedBy());
+        partnerNotificationTemplate.setCreatedOn(partnerNotificationTemplate.getCreatedOn());
+        partnerNotificationTemplate.setUpdatedOn(partnerNotificationTemplate.getUpdatedOn());
+        partnerNotificationTemplate.setIsActive(partnerNotificationTemplate.getIsActive());
+        partnerNotificationTemplate.setState(partnerNotificationTemplate.getState());
+        partnerNotificationTemplate.setApiSource(partnerNotificationTemplate.getApiSource());
+        partnerNotificationTemplate.setNotes(partnerNotificationTemplate.getNotes());
         return partnerNotificationTemplate;
     }
 
@@ -33,22 +41,41 @@ public class PartnerNotificationTemplateRepositoryImpl implements PartnerNotific
     public PartnerNotificationTemplateDao update(PartnerNotificationTemplateDao partnerNotificationTemplate) {
         PartnerNotificationTemplatesRecord partnerNotificationTemplatesRecord = context.newRecord(PARTNER_NOTIFICATION_TEMPLATES, partnerNotificationTemplate);
         partnerNotificationTemplatesRecord.update();
+
+
+        partnerNotificationTemplate.setCreatedBy(partnerNotificationTemplatesRecord.getCreatedBy());
+        partnerNotificationTemplate.setUpdatedBy(partnerNotificationTemplatesRecord.getUpdatedBy());
+        partnerNotificationTemplate.setCreatedOn(partnerNotificationTemplatesRecord.getCreatedOn());
+        partnerNotificationTemplate.setUpdatedOn(partnerNotificationTemplatesRecord.getUpdatedOn());
+        partnerNotificationTemplate.setIsActive(partnerNotificationTemplatesRecord.getIsActive());
+        partnerNotificationTemplate.setState(partnerNotificationTemplatesRecord.getState());
+        partnerNotificationTemplate.setApiSource(partnerNotificationTemplatesRecord.getApiSource());
+        partnerNotificationTemplate.setNotes(partnerNotificationTemplatesRecord.getNotes());
         return partnerNotificationTemplate;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(PARTNER_NOTIFICATION_TEMPLATES).set(PARTNER_NOTIFICATION_TEMPLATES.STATE, RecordState.DELETED.name()).where(PARTNER_NOTIFICATION_TEMPLATES.ID.eq(id)).execute();
-    }
+     context.update(PARTNER_NOTIFICATION_TEMPLATES)
+     .set(PARTNER_NOTIFICATION_TEMPLATES.STATE,RecordState.DELETED.name())
+     .where(PARTNER_NOTIFICATION_TEMPLATES.ID.eq(id))
+     .and(PARTNER_NOTIFICATION_TEMPLATES.STATE.eq(RecordState.ACTIVE.name()))
+     .and(PARTNER_NOTIFICATION_TEMPLATES.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public PartnerNotificationTemplateDao findByUUID(String uuid) {
-        return context.selectFrom(PARTNER_NOTIFICATION_TEMPLATES).where(PARTNER_NOTIFICATION_TEMPLATES.UUID.eq(uuid)).fetchAnyInto(PartnerNotificationTemplateDao.class);
+        return context.selectFrom(PARTNER_NOTIFICATION_TEMPLATES).where(PARTNER_NOTIFICATION_TEMPLATES.UUID.eq(uuid))
+                .and(PARTNER_NOTIFICATION_TEMPLATES.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PartnerNotificationTemplateDao.class);
     }
 
     @Override
     public PartnerNotificationTemplateDao findById(Integer id) {
-        return context.selectFrom(PARTNER_NOTIFICATION_TEMPLATES).where(PARTNER_NOTIFICATION_TEMPLATES.ID.eq(id)).fetchAnyInto(PartnerNotificationTemplateDao.class);
+        return context.selectFrom(PARTNER_NOTIFICATION_TEMPLATES).where(PARTNER_NOTIFICATION_TEMPLATES.ID.eq(id))
+                .and(PARTNER_NOTIFICATION_TEMPLATES.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PartnerNotificationTemplateDao.class);
     }
 
     @Override
@@ -57,7 +84,7 @@ public class PartnerNotificationTemplateRepositoryImpl implements PartnerNotific
     }
 
     @Override
-    public List<PartnerNotificationTemplateDao> findAll() {
+    public List<PartnerNotificationTemplateDao> findAllActive() {
         return context.selectFrom(PARTNER_NOTIFICATION_TEMPLATES).fetchInto(PartnerNotificationTemplateDao.class);
     }
 }

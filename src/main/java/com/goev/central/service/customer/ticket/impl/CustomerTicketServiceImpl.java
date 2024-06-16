@@ -25,7 +25,7 @@ public class CustomerTicketServiceImpl implements CustomerTicketService {
     @Override
     public PaginatedResponseDto<CustomerTicketDto> getCustomerTickets(String customerUUID) {
         PaginatedResponseDto<CustomerTicketDto> result = PaginatedResponseDto.<CustomerTicketDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
-        List<CustomerTicketDao> customerTicketDaos = customerTicketRepository.findAll();
+        List<CustomerTicketDao> customerTicketDaos = customerTicketRepository.findAllActive();
         if (CollectionUtils.isEmpty(customerTicketDaos))
             return result;
 
@@ -54,7 +54,7 @@ public class CustomerTicketServiceImpl implements CustomerTicketService {
         if (customerTicketDao == null)
             throw new ResponseException("No customerTicket  found for Id :" + customerTicketUUID);
         CustomerTicketDao newCustomerTicketDao = new CustomerTicketDao();
-       
+
 
         newCustomerTicketDao.setId(customerTicketDao.getId());
         newCustomerTicketDao.setUuid(customerTicketDao.getUuid());

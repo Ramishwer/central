@@ -26,6 +26,14 @@ public class CustomerTicketRepositoryImpl implements CustomerTicketRepository {
         customerTicketsRecord.store();
         customerTicket.setId(customerTicketsRecord.getId());
         customerTicket.setUuid(customerTicket.getUuid());
+        customerTicket.setCreatedBy(customerTicket.getCreatedBy());
+        customerTicket.setUpdatedBy(customerTicket.getUpdatedBy());
+        customerTicket.setCreatedOn(customerTicket.getCreatedOn());
+        customerTicket.setUpdatedOn(customerTicket.getUpdatedOn());
+        customerTicket.setIsActive(customerTicket.getIsActive());
+        customerTicket.setState(customerTicket.getState());
+        customerTicket.setApiSource(customerTicket.getApiSource());
+        customerTicket.setNotes(customerTicket.getNotes());
         return customerTicket;
     }
 
@@ -33,22 +41,41 @@ public class CustomerTicketRepositoryImpl implements CustomerTicketRepository {
     public CustomerTicketDao update(CustomerTicketDao customerTicket) {
         CustomerTicketsRecord customerTicketsRecord = context.newRecord(CUSTOMER_TICKETS, customerTicket);
         customerTicketsRecord.update();
+
+
+        customerTicket.setCreatedBy(customerTicketsRecord.getCreatedBy());
+        customerTicket.setUpdatedBy(customerTicketsRecord.getUpdatedBy());
+        customerTicket.setCreatedOn(customerTicketsRecord.getCreatedOn());
+        customerTicket.setUpdatedOn(customerTicketsRecord.getUpdatedOn());
+        customerTicket.setIsActive(customerTicketsRecord.getIsActive());
+        customerTicket.setState(customerTicketsRecord.getState());
+        customerTicket.setApiSource(customerTicketsRecord.getApiSource());
+        customerTicket.setNotes(customerTicketsRecord.getNotes());
         return customerTicket;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(CUSTOMER_TICKETS).set(CUSTOMER_TICKETS.STATE, RecordState.DELETED.name()).where(CUSTOMER_TICKETS.ID.eq(id)).execute();
-    }
+     context.update(CUSTOMER_TICKETS)
+     .set(CUSTOMER_TICKETS.STATE,RecordState.DELETED.name())
+     .where(CUSTOMER_TICKETS.ID.eq(id))
+     .and(CUSTOMER_TICKETS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(CUSTOMER_TICKETS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public CustomerTicketDao findByUUID(String uuid) {
-        return context.selectFrom(CUSTOMER_TICKETS).where(CUSTOMER_TICKETS.UUID.eq(uuid)).fetchAnyInto(CustomerTicketDao.class);
+        return context.selectFrom(CUSTOMER_TICKETS).where(CUSTOMER_TICKETS.UUID.eq(uuid))
+                .and(CUSTOMER_TICKETS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(CustomerTicketDao.class);
     }
 
     @Override
     public CustomerTicketDao findById(Integer id) {
-        return context.selectFrom(CUSTOMER_TICKETS).where(CUSTOMER_TICKETS.ID.eq(id)).fetchAnyInto(CustomerTicketDao.class);
+        return context.selectFrom(CUSTOMER_TICKETS).where(CUSTOMER_TICKETS.ID.eq(id))
+                .and(CUSTOMER_TICKETS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(CustomerTicketDao.class);
     }
 
     @Override
@@ -57,7 +84,7 @@ public class CustomerTicketRepositoryImpl implements CustomerTicketRepository {
     }
 
     @Override
-    public List<CustomerTicketDao> findAll() {
+    public List<CustomerTicketDao> findAllActive() {
         return context.selectFrom(CUSTOMER_TICKETS).fetchInto(CustomerTicketDao.class);
     }
 }

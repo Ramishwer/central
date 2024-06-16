@@ -18,26 +18,27 @@ public class VehicleModelController {
     private final VehicleModelService vehicleModelService;
 
     @GetMapping("/models")
-    public ResponseDto<PaginatedResponseDto<VehicleModelDto>> getModels(){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, vehicleModelService.getModels());
+    public ResponseDto<PaginatedResponseDto<VehicleModelDto>> getModels() {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleModelService.getModels());
     }
+
     @PostMapping("/models")
-    public ResponseDto<VehicleModelDto> createModel(@RequestBody VehicleModelDto vehicleModelDto){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, vehicleModelService.createModel(vehicleModelDto));
+    public ResponseDto<VehicleModelDto> createModel(@RequestBody VehicleModelDto vehicleModelDto) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleModelService.createModel(vehicleModelDto));
     }
 
     @PutMapping("/models/{model-uuid}")
-    public ResponseDto<VehicleModelDto> updateModel(@PathVariable(value = "model-uuid")String modelUUID, @RequestBody VehicleModelDto vehicleModelDto){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, vehicleModelService.updateModel(modelUUID,vehicleModelDto));
+    public ResponseDto<VehicleModelDto> updateModel(@PathVariable(value = "model-uuid") String modelUUID, @RequestBody VehicleModelDto vehicleModelDto) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleModelService.updateModel(modelUUID, vehicleModelDto));
     }
 
     @GetMapping("/models/{model-uuid}")
-    public ResponseDto<VehicleModelDto> getModelDetails(@PathVariable(value = "model-uuid")String modelUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, vehicleModelService.getModelDetails(modelUUID));
+    public ResponseDto<VehicleModelDto> getModelDetails(@PathVariable(value = "model-uuid") String modelUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleModelService.getModelDetails(modelUUID));
     }
 
     @DeleteMapping("/models/{model-uuid}")
-    public ResponseDto<Boolean> deleteModel(@PathVariable(value = "model-uuid")String modelUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, vehicleModelService.deleteModel(modelUUID));
+    public ResponseDto<Boolean> deleteModel(@PathVariable(value = "model-uuid") String modelUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleModelService.deleteModel(modelUUID));
     }
 }

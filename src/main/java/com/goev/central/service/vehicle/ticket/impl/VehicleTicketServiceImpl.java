@@ -25,7 +25,7 @@ public class VehicleTicketServiceImpl implements VehicleTicketService {
     @Override
     public PaginatedResponseDto<VehicleTicketDto> getVehicleTickets(String vehicleUUID) {
         PaginatedResponseDto<VehicleTicketDto> result = PaginatedResponseDto.<VehicleTicketDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
-        List<VehicleTicketDao> vehicleTicketDaos = vehicleTicketRepository.findAll();
+        List<VehicleTicketDao> vehicleTicketDaos = vehicleTicketRepository.findAllActive();
         if (CollectionUtils.isEmpty(vehicleTicketDaos))
             return result;
 
@@ -54,7 +54,7 @@ public class VehicleTicketServiceImpl implements VehicleTicketService {
         if (vehicleTicketDao == null)
             throw new ResponseException("No vehicleTicket  found for Id :" + vehicleTicketUUID);
         VehicleTicketDao newVehicleTicketDao = new VehicleTicketDao();
-       
+
 
         newVehicleTicketDao.setId(vehicleTicketDao.getId());
         newVehicleTicketDao.setUuid(vehicleTicketDao.getUuid());

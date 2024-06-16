@@ -25,6 +25,14 @@ public class VehicleModelRepositoryImpl implements VehicleModelRepository {
         vehicleModelsRecord.store();
         vehicleModel.setId(vehicleModelsRecord.getId());
         vehicleModel.setUuid(vehicleModel.getUuid());
+        vehicleModel.setCreatedBy(vehicleModel.getCreatedBy());
+        vehicleModel.setUpdatedBy(vehicleModel.getUpdatedBy());
+        vehicleModel.setCreatedOn(vehicleModel.getCreatedOn());
+        vehicleModel.setUpdatedOn(vehicleModel.getUpdatedOn());
+        vehicleModel.setIsActive(vehicleModel.getIsActive());
+        vehicleModel.setState(vehicleModel.getState());
+        vehicleModel.setApiSource(vehicleModel.getApiSource());
+        vehicleModel.setNotes(vehicleModel.getNotes());
         return vehicleModel;
     }
 
@@ -32,22 +40,41 @@ public class VehicleModelRepositoryImpl implements VehicleModelRepository {
     public VehicleModelDao update(VehicleModelDao vehicleModel) {
         VehicleModelsRecord vehiclesRecord = context.newRecord(VEHICLE_MODELS, vehicleModel);
         vehiclesRecord.update();
+
+
+        vehicleModel.setCreatedBy(vehiclesRecord.getCreatedBy());
+        vehicleModel.setUpdatedBy(vehiclesRecord.getUpdatedBy());
+        vehicleModel.setCreatedOn(vehiclesRecord.getCreatedOn());
+        vehicleModel.setUpdatedOn(vehiclesRecord.getUpdatedOn());
+        vehicleModel.setIsActive(vehiclesRecord.getIsActive());
+        vehicleModel.setState(vehiclesRecord.getState());
+        vehicleModel.setApiSource(vehiclesRecord.getApiSource());
+        vehicleModel.setNotes(vehiclesRecord.getNotes());
         return vehicleModel;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(VEHICLE_MODELS).set(VEHICLE_MODELS.STATE, RecordState.DELETED.name()).where(VEHICLE_MODELS.ID.eq(id)).execute();
-    }
+     context.update(VEHICLE_MODELS)
+     .set(VEHICLE_MODELS.STATE,RecordState.DELETED.name())
+     .where(VEHICLE_MODELS.ID.eq(id))
+     .and(VEHICLE_MODELS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(VEHICLE_MODELS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public VehicleModelDao findByUUID(String uuid) {
-        return context.selectFrom(VEHICLE_MODELS).where(VEHICLE_MODELS.UUID.eq(uuid)).fetchAnyInto(VehicleModelDao.class);
+        return context.selectFrom(VEHICLE_MODELS).where(VEHICLE_MODELS.UUID.eq(uuid))
+                .and(VEHICLE_MODELS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(VehicleModelDao.class);
     }
 
     @Override
     public VehicleModelDao findById(Integer id) {
-        return context.selectFrom(VEHICLE_MODELS).where(VEHICLE_MODELS.ID.eq(id)).fetchAnyInto(VehicleModelDao.class);
+        return context.selectFrom(VEHICLE_MODELS).where(VEHICLE_MODELS.ID.eq(id))
+                .and(VEHICLE_MODELS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(VehicleModelDao.class);
     }
 
     @Override
@@ -56,7 +83,7 @@ public class VehicleModelRepositoryImpl implements VehicleModelRepository {
     }
 
     @Override
-    public List<VehicleModelDao> findAll() {
+    public List<VehicleModelDao> findAllActive() {
         return context.selectFrom(VEHICLE_MODELS).fetchInto(VehicleModelDao.class);
     }
 }

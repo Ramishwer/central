@@ -26,6 +26,14 @@ public class UserRepositoryImpl implements UserRepository {
         usersRecord.store();
         user.setId(usersRecord.getId());
         user.setUuid(usersRecord.getUuid());
+        user.setCreatedBy(usersRecord.getCreatedBy());
+        user.setUpdatedBy(usersRecord.getUpdatedBy());
+        user.setCreatedOn(usersRecord.getCreatedOn());
+        user.setUpdatedOn(usersRecord.getUpdatedOn());
+        user.setIsActive(usersRecord.getIsActive());
+        user.setState(usersRecord.getState());
+        user.setApiSource(usersRecord.getApiSource());
+        user.setNotes(usersRecord.getNotes());
         return user;
     }
 
@@ -33,22 +41,41 @@ public class UserRepositoryImpl implements UserRepository {
     public UserDao update(UserDao user) {
         UsersRecord usersRecord = context.newRecord(USERS, user);
         usersRecord.update();
+
+
+        user.setCreatedBy(usersRecord.getCreatedBy());
+        user.setUpdatedBy(usersRecord.getUpdatedBy());
+        user.setCreatedOn(usersRecord.getCreatedOn());
+        user.setUpdatedOn(usersRecord.getUpdatedOn());
+        user.setIsActive(usersRecord.getIsActive());
+        user.setState(usersRecord.getState());
+        user.setApiSource(usersRecord.getApiSource());
+        user.setNotes(usersRecord.getNotes());
         return user;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(USERS).set(USERS.STATE, RecordState.DELETED.name()).where(USERS.ID.eq(id)).execute();
-    }
+     context.update(USERS)
+     .set(USERS.STATE,RecordState.DELETED.name())
+     .where(USERS.ID.eq(id))
+     .and(USERS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(USERS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public UserDao findByUUID(String uuid) {
-        return context.selectFrom(USERS).where(USERS.UUID.eq(uuid)).fetchAnyInto(UserDao.class);
+        return context.selectFrom(USERS).where(USERS.UUID.eq(uuid))
+                .and(USERS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(UserDao.class);
     }
 
     @Override
     public UserDao findById(Integer id) {
-        return context.selectFrom(USERS).where(USERS.ID.eq(id)).fetchAnyInto(UserDao.class);
+        return context.selectFrom(USERS).where(USERS.ID.eq(id))
+                .and(USERS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(UserDao.class);
     }
 
     @Override
@@ -57,7 +84,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public List<UserDao> findAll() {
+    public List<UserDao> findAllActive() {
         return context.selectFrom(USERS).fetchInto(UserDao.class);
     }
 

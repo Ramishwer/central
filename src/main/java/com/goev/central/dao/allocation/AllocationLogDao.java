@@ -1,6 +1,5 @@
 package com.goev.central.dao.allocation;
 
-import com.goev.central.dto.allocation.AllocationLogDto;
 import com.goev.lib.dao.BaseDao;
 import lombok.*;
 

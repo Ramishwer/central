@@ -2,15 +2,8 @@ package com.goev.central.dto.partner.ticket;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.joda.deser.DateTimeDeserializer;
-import com.fasterxml.jackson.datatype.joda.ser.DateTimeSerializer;
 import com.goev.central.dto.partner.PartnerViewDto;
-import com.goev.central.dto.partner.detail.PartnerDto;
-import com.goev.central.dto.partner.payout.PartnerPayoutSummaryDto;
 import lombok.*;
-import org.joda.time.DateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor

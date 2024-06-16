@@ -26,6 +26,14 @@ public class LocationRepositoryImpl implements LocationRepository {
         locationsRecord.store();
         location.setId(locationsRecord.getId());
         location.setUuid(locationsRecord.getUuid());
+        location.setCreatedBy(locationsRecord.getCreatedBy());
+        location.setUpdatedBy(locationsRecord.getUpdatedBy());
+        location.setCreatedOn(locationsRecord.getCreatedOn());
+        location.setUpdatedOn(locationsRecord.getUpdatedOn());
+        location.setIsActive(locationsRecord.getIsActive());
+        location.setState(locationsRecord.getState());
+        location.setApiSource(locationsRecord.getApiSource());
+        location.setNotes(locationsRecord.getNotes());
         return location;
     }
 
@@ -33,22 +41,41 @@ public class LocationRepositoryImpl implements LocationRepository {
     public LocationDao update(LocationDao location) {
         LocationsRecord locationsRecord = context.newRecord(LOCATIONS, location);
         locationsRecord.update();
+
+
+        location.setCreatedBy(locationsRecord.getCreatedBy());
+        location.setUpdatedBy(locationsRecord.getUpdatedBy());
+        location.setCreatedOn(locationsRecord.getCreatedOn());
+        location.setUpdatedOn(locationsRecord.getUpdatedOn());
+        location.setIsActive(locationsRecord.getIsActive());
+        location.setState(locationsRecord.getState());
+        location.setApiSource(locationsRecord.getApiSource());
+        location.setNotes(locationsRecord.getNotes());
         return location;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(LOCATIONS).set(LOCATIONS.STATE, RecordState.DELETED.name()).where(LOCATIONS.ID.eq(id)).execute();
-    }
+     context.update(LOCATIONS)
+     .set(LOCATIONS.STATE,RecordState.DELETED.name())
+     .where(LOCATIONS.ID.eq(id))
+     .and(LOCATIONS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(LOCATIONS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public LocationDao findByUUID(String uuid) {
-        return context.selectFrom(LOCATIONS).where(LOCATIONS.UUID.eq(uuid)).fetchAnyInto(LocationDao.class);
+        return context.selectFrom(LOCATIONS).where(LOCATIONS.UUID.eq(uuid))
+                .and(LOCATIONS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(LocationDao.class);
     }
 
     @Override
     public LocationDao findById(Integer id) {
-        return context.selectFrom(LOCATIONS).where(LOCATIONS.ID.eq(id)).fetchAnyInto(LocationDao.class);
+        return context.selectFrom(LOCATIONS).where(LOCATIONS.ID.eq(id))
+                .and(LOCATIONS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(LocationDao.class);
     }
 
     @Override
@@ -57,7 +84,7 @@ public class LocationRepositoryImpl implements LocationRepository {
     }
 
     @Override
-    public List<LocationDao> findAll() {
+    public List<LocationDao> findAllActive() {
         return context.selectFrom(LOCATIONS).fetchInto(LocationDao.class);
     }
 }

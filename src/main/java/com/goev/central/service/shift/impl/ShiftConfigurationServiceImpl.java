@@ -25,7 +25,7 @@ public class ShiftConfigurationServiceImpl implements ShiftConfigurationService 
     @Override
     public PaginatedResponseDto<ShiftConfigurationDto> getShiftConfigurations(String customerUUID) {
         PaginatedResponseDto<ShiftConfigurationDto> result = PaginatedResponseDto.<ShiftConfigurationDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
-        List<ShiftConfigurationDao> shiftConfigurationDaos = shiftConfigurationRepository.findAll();
+        List<ShiftConfigurationDao> shiftConfigurationDaos = shiftConfigurationRepository.findAllActive();
         if (CollectionUtils.isEmpty(shiftConfigurationDaos))
             return result;
 
@@ -54,7 +54,7 @@ public class ShiftConfigurationServiceImpl implements ShiftConfigurationService 
         if (shiftConfigurationDao == null)
             throw new ResponseException("No shiftConfiguration  found for Id :" + shiftConfigurationUUID);
         ShiftConfigurationDao newShiftConfigurationDao = new ShiftConfigurationDao();
-       
+
 
         newShiftConfigurationDao.setId(shiftConfigurationDao.getId());
         newShiftConfigurationDao.setUuid(shiftConfigurationDao.getUuid());

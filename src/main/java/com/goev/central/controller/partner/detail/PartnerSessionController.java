@@ -18,25 +18,24 @@ public class PartnerSessionController {
     private final PartnerSessionService partnerSessionService;
 
     @GetMapping("/partners/{partner-uuid}/sessions")
-    public ResponseDto<PaginatedResponseDto<PartnerSessionDto>> getPartnerSessions(@PathVariable(value = "partner-uuid")String partnerUUID,
-            @RequestParam("count")Integer count,
-                                                                                 @RequestParam("start")Integer start,
-                                                                                 @RequestParam("from")Long from,
-                                                                                 @RequestParam("to")Long to,
-                                                                                 @RequestParam("lastUUID") String lastElementUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, partnerSessionService.getPartnerSessions(partnerUUID));
+    public ResponseDto<PaginatedResponseDto<PartnerSessionDto>> getPartnerSessions(@PathVariable(value = "partner-uuid") String partnerUUID,
+                                                                                   @RequestParam("count") Integer count,
+                                                                                   @RequestParam("start") Integer start,
+                                                                                   @RequestParam("from") Long from,
+                                                                                   @RequestParam("to") Long to,
+                                                                                   @RequestParam("lastUUID") String lastElementUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerSessionService.getPartnerSessions(partnerUUID));
     }
 
-    
 
     @GetMapping("/partners/{partner-uuid}/sessions/{session-uuid}")
-    public ResponseDto<PartnerSessionDto> getPartnerSessionDetails(@PathVariable(value = "partner-uuid")String partnerUUID,
-                                                                   @PathVariable(value = "session-uuid")String sessionUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, partnerSessionService.getPartnerSessionDetails(partnerUUID,sessionUUID));
+    public ResponseDto<PartnerSessionDto> getPartnerSessionDetails(@PathVariable(value = "partner-uuid") String partnerUUID,
+                                                                   @PathVariable(value = "session-uuid") String sessionUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerSessionService.getPartnerSessionDetails(partnerUUID, sessionUUID));
     }
-    
+
     @DeleteMapping("/partners/{partner-uuid}/sessions/{session-uuid}")
-    public ResponseDto<Boolean> deletePartnerSession(@PathVariable(value = "partner-uuid")String partnerUUID,@PathVariable(value = "session-uuid")String sessionUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, partnerSessionService.deletePartnerSession(partnerUUID,sessionUUID));
+    public ResponseDto<Boolean> deletePartnerSession(@PathVariable(value = "partner-uuid") String partnerUUID, @PathVariable(value = "session-uuid") String sessionUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerSessionService.deletePartnerSession(partnerUUID, sessionUUID));
     }
 }

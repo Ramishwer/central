@@ -18,33 +18,33 @@ public class SystemPropertyController {
     private final SystemPropertyService systemPropertyService;
 
     @GetMapping("/system/properties")
-    public ResponseDto<PaginatedResponseDto<SystemPropertyDto>> getSystemProperties(@RequestParam("count")Integer count,
-                                                                                 @RequestParam("start")Integer start,
-                                                                                 @RequestParam("from")Long from,
-                                                                                 @RequestParam("to")Long to,
-                                                                                 @RequestParam("lastUUID") String lastElementUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, systemPropertyService.getSystemProperties());
+    public ResponseDto<PaginatedResponseDto<SystemPropertyDto>> getSystemProperties(@RequestParam("count") Integer count,
+                                                                                    @RequestParam("start") Integer start,
+                                                                                    @RequestParam("from") Long from,
+                                                                                    @RequestParam("to") Long to,
+                                                                                    @RequestParam("lastUUID") String lastElementUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, systemPropertyService.getSystemProperties());
     }
 
-    
 
     @GetMapping("/system/properties/{system-property-uuid}")
-    public ResponseDto<SystemPropertyDto> getSystemPropertyDetails(@PathVariable(value = "system-property-uuid")String propertyUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, systemPropertyService.getSystemPropertyDetails(propertyUUID));
+    public ResponseDto<SystemPropertyDto> getSystemPropertyDetails(@PathVariable(value = "system-property-uuid") String propertyUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, systemPropertyService.getSystemPropertyDetails(propertyUUID));
     }
 
 
     @PostMapping("/system/properties")
-    public ResponseDto<SystemPropertyDto> createSystemProperty(@RequestBody SystemPropertyDto systemPropertyDto){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, systemPropertyService.createSystemProperty(systemPropertyDto));
+    public ResponseDto<SystemPropertyDto> createSystemProperty(@RequestBody SystemPropertyDto systemPropertyDto) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, systemPropertyService.createSystemProperty(systemPropertyDto));
     }
 
     @PutMapping("/system/properties/{system-property-uuid}")
-    public ResponseDto<SystemPropertyDto> updateSystemProperty(@PathVariable(value = "system-property-uuid")String propertyUUID, @RequestBody SystemPropertyDto systemPropertyDto){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, systemPropertyService.updateSystemProperty(propertyUUID,systemPropertyDto));
+    public ResponseDto<SystemPropertyDto> updateSystemProperty(@PathVariable(value = "system-property-uuid") String propertyUUID, @RequestBody SystemPropertyDto systemPropertyDto) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, systemPropertyService.updateSystemProperty(propertyUUID, systemPropertyDto));
     }
+
     @DeleteMapping("/system/properties/{system-property-uuid}")
-    public ResponseDto<Boolean> deleteSystemProperty(@PathVariable(value = "system-property-uuid")String propertyUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, systemPropertyService.deleteSystemProperty(propertyUUID));
+    public ResponseDto<Boolean> deleteSystemProperty(@PathVariable(value = "system-property-uuid") String propertyUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, systemPropertyService.deleteSystemProperty(propertyUUID));
     }
 }

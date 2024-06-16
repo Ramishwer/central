@@ -3,7 +3,6 @@ package com.goev.central.dto.customer.wallet;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.goev.central.dto.booking.BookingDto;
-import com.goev.central.dto.customer.detail.CustomerDto;
 import com.goev.central.dto.payment.PaymentDto;
 import lombok.*;
 

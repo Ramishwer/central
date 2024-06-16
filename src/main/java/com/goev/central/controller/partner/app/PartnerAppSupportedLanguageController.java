@@ -18,33 +18,33 @@ public class PartnerAppSupportedLanguageController {
     private final PartnerAppSupportedLanguageService partnerAppSupportedLanguageService;
 
     @GetMapping("/app/supported-languages")
-    public ResponseDto<PaginatedResponseDto<PartnerAppSupportedLanguageDto>> getPartnerAppSupportedLanguages(@RequestParam("count")Integer count,
-                                                                                                         @RequestParam("start")Integer start,
-                                                                                                         @RequestParam("from")Long from,
-                                                                                                         @RequestParam("to")Long to,
-                                                                                                         @RequestParam("lastUUID") String lastElementUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, partnerAppSupportedLanguageService.getPartnerAppSupportedLanguages());
+    public ResponseDto<PaginatedResponseDto<PartnerAppSupportedLanguageDto>> getPartnerAppSupportedLanguages(@RequestParam("count") Integer count,
+                                                                                                             @RequestParam("start") Integer start,
+                                                                                                             @RequestParam("from") Long from,
+                                                                                                             @RequestParam("to") Long to,
+                                                                                                             @RequestParam("lastUUID") String lastElementUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerAppSupportedLanguageService.getPartnerAppSupportedLanguages());
     }
 
 
-
     @GetMapping("/app/supported-languages/{app-supportedLanguage-uuid}")
-    public ResponseDto<PartnerAppSupportedLanguageDto> getPartnerAppSupportedLanguageDetails(@PathVariable(value = "app-supportedLanguage-uuid")String appSupportedLanguageUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, partnerAppSupportedLanguageService.getPartnerAppSupportedLanguageDetails(appSupportedLanguageUUID));
+    public ResponseDto<PartnerAppSupportedLanguageDto> getPartnerAppSupportedLanguageDetails(@PathVariable(value = "app-supportedLanguage-uuid") String appSupportedLanguageUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerAppSupportedLanguageService.getPartnerAppSupportedLanguageDetails(appSupportedLanguageUUID));
     }
 
 
     @PostMapping("/app/supported-languages")
-    public ResponseDto<PartnerAppSupportedLanguageDto> createPartnerAppSupportedLanguage(@RequestBody PartnerAppSupportedLanguageDto partnerAppSupportedLanguageDto){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, partnerAppSupportedLanguageService.createPartnerAppSupportedLanguage(partnerAppSupportedLanguageDto));
+    public ResponseDto<PartnerAppSupportedLanguageDto> createPartnerAppSupportedLanguage(@RequestBody PartnerAppSupportedLanguageDto partnerAppSupportedLanguageDto) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerAppSupportedLanguageService.createPartnerAppSupportedLanguage(partnerAppSupportedLanguageDto));
     }
 
     @PutMapping("/app/supported-languages/{app-supportedLanguage-uuid}")
-    public ResponseDto<PartnerAppSupportedLanguageDto> updatePartnerAppSupportedLanguage(@PathVariable(value = "app-supportedLanguage-uuid")String appSupportedLanguageUUID, @RequestBody PartnerAppSupportedLanguageDto partnerAppSupportedLanguageDto){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, partnerAppSupportedLanguageService.updatePartnerAppSupportedLanguage(appSupportedLanguageUUID,partnerAppSupportedLanguageDto));
+    public ResponseDto<PartnerAppSupportedLanguageDto> updatePartnerAppSupportedLanguage(@PathVariable(value = "app-supportedLanguage-uuid") String appSupportedLanguageUUID, @RequestBody PartnerAppSupportedLanguageDto partnerAppSupportedLanguageDto) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerAppSupportedLanguageService.updatePartnerAppSupportedLanguage(appSupportedLanguageUUID, partnerAppSupportedLanguageDto));
     }
+
     @DeleteMapping("/app/supported-languages/{app-supportedLanguage-uuid}")
-    public ResponseDto<Boolean> deletePartnerAppSupportedLanguage(@PathVariable(value = "app-supportedLanguage-uuid")String appSupportedLanguageUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, partnerAppSupportedLanguageService.deletePartnerAppSupportedLanguage(appSupportedLanguageUUID));
+    public ResponseDto<Boolean> deletePartnerAppSupportedLanguage(@PathVariable(value = "app-supportedLanguage-uuid") String appSupportedLanguageUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerAppSupportedLanguageService.deletePartnerAppSupportedLanguage(appSupportedLanguageUUID));
     }
 }

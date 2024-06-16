@@ -3,7 +3,6 @@ package com.goev.central.service.partner.detail.impl;
 
 import com.goev.central.constant.ApplicationConstants;
 import com.goev.central.dao.partner.detail.PartnerDao;
-import com.goev.central.dto.asset.AssetDto;
 import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.partner.PartnerViewDto;
@@ -45,7 +44,7 @@ public class PartnerServiceImpl implements PartnerService {
     public PaginatedResponseDto<PartnerViewDto> getPartners() {
 
         PaginatedResponseDto<PartnerViewDto> result = PaginatedResponseDto.<PartnerViewDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
-        List<PartnerDao> partners = partnerRepository.findAll();
+        List<PartnerDao> partners = partnerRepository.findAllActive();
         return getPartnerViewDtoPaginatedResponseDto(partners, result);
     }
 

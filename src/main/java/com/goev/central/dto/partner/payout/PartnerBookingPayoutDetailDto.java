@@ -2,12 +2,7 @@ package com.goev.central.dto.partner.payout;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.goev.central.dto.booking.BookingDto;
 import com.goev.central.dto.booking.BookingViewDto;
-import com.goev.central.dto.partner.PartnerViewDto;
-import com.goev.central.dto.partner.detail.PartnerDto;
-import com.goev.central.dto.partner.duty.PartnerDutyDto;
-import com.goev.central.dto.partner.payout.PartnerPayoutDto;
 import com.goev.central.dto.payout.PayoutModelDto;
 import lombok.*;
 

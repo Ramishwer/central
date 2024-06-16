@@ -30,7 +30,7 @@ public class LocationAssetMappingServiceImpl implements LocationAssetMappingServ
     private final LocationRepository locationRepository;
     private final LocationAssetMappingRepository locationAssetMappingRepository;
     private final AssetRepository assetRepository;
-    
+
 
     @Override
     public PaginatedResponseDto<AssetDto> getAssetsForLocations(String locationUUID) {
@@ -103,5 +103,5 @@ public class LocationAssetMappingServiceImpl implements LocationAssetMappingServ
         locationAssetMappingRepository.delete(mapping.getId());
         return true;
     }
-    
+
 }

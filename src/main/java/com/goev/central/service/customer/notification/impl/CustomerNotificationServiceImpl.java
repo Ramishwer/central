@@ -25,7 +25,7 @@ public class CustomerNotificationServiceImpl implements CustomerNotificationServ
     @Override
     public PaginatedResponseDto<CustomerNotificationDto> getCustomerNotifications(String customerUUID) {
         PaginatedResponseDto<CustomerNotificationDto> result = PaginatedResponseDto.<CustomerNotificationDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
-        List<CustomerNotificationDao> customerNotificationDaos = customerNotificationRepository.findAll();
+        List<CustomerNotificationDao> customerNotificationDaos = customerNotificationRepository.findAllActive();
         if (CollectionUtils.isEmpty(customerNotificationDaos))
             return result;
 
@@ -39,7 +39,7 @@ public class CustomerNotificationServiceImpl implements CustomerNotificationServ
 
 
     @Override
-    public CustomerNotificationDto getCustomerNotificationDetails(String customerUUID,String customerNotificationUUID) {
+    public CustomerNotificationDto getCustomerNotificationDetails(String customerUUID, String customerNotificationUUID) {
         CustomerNotificationDao customerNotificationDao = customerNotificationRepository.findByUUID(customerNotificationUUID);
         if (customerNotificationDao == null)
             throw new ResponseException("No customerNotification  found for Id :" + customerNotificationUUID);

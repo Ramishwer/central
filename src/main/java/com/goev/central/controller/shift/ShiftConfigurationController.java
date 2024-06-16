@@ -19,28 +19,28 @@ public class ShiftConfigurationController {
 
     @GetMapping("/shifts/{shift-uuid}/configurations")
     public ResponseDto<PaginatedResponseDto<ShiftConfigurationDto>> getShiftConfigurations(@PathVariable(value = "shift-uuid") String shiftUUID, @RequestParam("count") Integer count,
-                                                                                                       @RequestParam("start") Integer start,
-                                                                                                       @RequestParam("from") Long from,
-                                                                                                       @RequestParam("to") Long to,
-                                                                                                       @RequestParam("lastUUID") String lastElementUUID) {
+                                                                                           @RequestParam("start") Integer start,
+                                                                                           @RequestParam("from") Long from,
+                                                                                           @RequestParam("to") Long to,
+                                                                                           @RequestParam("lastUUID") String lastElementUUID) {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, shiftConfigurationService.getShiftConfigurations(shiftUUID));
     }
 
 
     @GetMapping("/shifts/{shift-uuid}/configurations/{configuration-uuid}")
     public ResponseDto<ShiftConfigurationDto> getShiftConfigurationDetails(@PathVariable(value = "shift-uuid") String shiftUUID, @PathVariable(value = "configuration-uuid") String configurationUUID) {
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, shiftConfigurationService.getShiftConfigurationDetails(shiftUUID,configurationUUID));
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, shiftConfigurationService.getShiftConfigurationDetails(shiftUUID, configurationUUID));
     }
 
 
     @PostMapping("/shifts/{shift-uuid}/configurations")
     public ResponseDto<ShiftConfigurationDto> createShiftConfiguration(@PathVariable(value = "shift-uuid") String shiftUUID, @RequestBody ShiftConfigurationDto shiftConfigurationDto) {
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, shiftConfigurationService.createShiftConfiguration(shiftUUID,shiftConfigurationDto));
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, shiftConfigurationService.createShiftConfiguration(shiftUUID, shiftConfigurationDto));
     }
 
     @PutMapping("/shifts/{shift-uuid}/configurations/{configuration-uuid}")
     public ResponseDto<ShiftConfigurationDto> updateShiftConfiguration(@PathVariable(value = "shift-uuid") String shiftUUID, @PathVariable(value = "configuration-uuid") String configurationUUID, @RequestBody ShiftConfigurationDto shiftConfigurationDto) {
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, shiftConfigurationService.updateShiftConfiguration(shiftUUID,configurationUUID, shiftConfigurationDto));
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, shiftConfigurationService.updateShiftConfiguration(shiftUUID, configurationUUID, shiftConfigurationDto));
     }
 
     @DeleteMapping("/shifts/{shift-uuid}/configurations/{configuration-uuid}")

@@ -26,6 +26,14 @@ public class PartnerAccountDetailRepositoryImpl implements PartnerAccountDetailR
         partnerAccountDetailsRecord.store();
         accountDetail.setId(partnerAccountDetailsRecord.getId());
         accountDetail.setUuid(partnerAccountDetailsRecord.getUuid());
+        accountDetail.setCreatedBy(partnerAccountDetailsRecord.getCreatedBy());
+        accountDetail.setUpdatedBy(partnerAccountDetailsRecord.getUpdatedBy());
+        accountDetail.setCreatedOn(partnerAccountDetailsRecord.getCreatedOn());
+        accountDetail.setUpdatedOn(partnerAccountDetailsRecord.getUpdatedOn());
+        accountDetail.setIsActive(partnerAccountDetailsRecord.getIsActive());
+        accountDetail.setState(partnerAccountDetailsRecord.getState());
+        accountDetail.setApiSource(partnerAccountDetailsRecord.getApiSource());
+        accountDetail.setNotes(partnerAccountDetailsRecord.getNotes());
         return accountDetail;
     }
 
@@ -33,22 +41,41 @@ public class PartnerAccountDetailRepositoryImpl implements PartnerAccountDetailR
     public PartnerAccountDetailDao update(PartnerAccountDetailDao accountDetail) {
         PartnerAccountDetailsRecord partnerAccountDetailsRecord = context.newRecord(PARTNER_ACCOUNT_DETAILS, accountDetail);
         partnerAccountDetailsRecord.update();
+
+
+        accountDetail.setCreatedBy(partnerAccountDetailsRecord.getCreatedBy());
+        accountDetail.setUpdatedBy(partnerAccountDetailsRecord.getUpdatedBy());
+        accountDetail.setCreatedOn(partnerAccountDetailsRecord.getCreatedOn());
+        accountDetail.setUpdatedOn(partnerAccountDetailsRecord.getUpdatedOn());
+        accountDetail.setIsActive(partnerAccountDetailsRecord.getIsActive());
+        accountDetail.setState(partnerAccountDetailsRecord.getState());
+        accountDetail.setApiSource(partnerAccountDetailsRecord.getApiSource());
+        accountDetail.setNotes(partnerAccountDetailsRecord.getNotes());
         return accountDetail;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(PARTNER_ACCOUNT_DETAILS).set(PARTNER_ACCOUNT_DETAILS.STATE, RecordState.DELETED.name()).where(PARTNER_ACCOUNT_DETAILS.ID.eq(id)).execute();
-    }
+     context.update(PARTNER_ACCOUNT_DETAILS)
+     .set(PARTNER_ACCOUNT_DETAILS.STATE,RecordState.DELETED.name())
+     .where(PARTNER_ACCOUNT_DETAILS.ID.eq(id))
+     .and(PARTNER_ACCOUNT_DETAILS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(PARTNER_ACCOUNT_DETAILS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public PartnerAccountDetailDao findByUUID(String uuid) {
-        return context.selectFrom(PARTNER_ACCOUNT_DETAILS).where(PARTNER_ACCOUNT_DETAILS.UUID.eq(uuid)).fetchAnyInto(PartnerAccountDetailDao.class);
+        return context.selectFrom(PARTNER_ACCOUNT_DETAILS).where(PARTNER_ACCOUNT_DETAILS.UUID.eq(uuid))
+                .and(PARTNER_ACCOUNT_DETAILS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PartnerAccountDetailDao.class);
     }
 
     @Override
     public PartnerAccountDetailDao findById(Integer id) {
-        return context.selectFrom(PARTNER_ACCOUNT_DETAILS).where(PARTNER_ACCOUNT_DETAILS.ID.eq(id)).fetchAnyInto(PartnerAccountDetailDao.class);
+        return context.selectFrom(PARTNER_ACCOUNT_DETAILS).where(PARTNER_ACCOUNT_DETAILS.ID.eq(id))
+                .and(PARTNER_ACCOUNT_DETAILS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PartnerAccountDetailDao.class);
     }
 
     @Override
@@ -57,7 +84,7 @@ public class PartnerAccountDetailRepositoryImpl implements PartnerAccountDetailR
     }
 
     @Override
-    public List<PartnerAccountDetailDao> findAll() {
+    public List<PartnerAccountDetailDao> findAllActive() {
         return context.selectFrom(PARTNER_ACCOUNT_DETAILS).fetchInto(PartnerAccountDetailDao.class);
     }
 

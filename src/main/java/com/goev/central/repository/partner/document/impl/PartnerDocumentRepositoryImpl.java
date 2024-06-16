@@ -28,6 +28,14 @@ public class PartnerDocumentRepositoryImpl implements PartnerDocumentRepository 
         partnersDocumentRecord.store();
         partnerDocument.setId(partnersDocumentRecord.getId());
         partnerDocument.setUuid(partnerDocument.getUuid());
+        partnerDocument.setCreatedBy(partnerDocument.getCreatedBy());
+        partnerDocument.setUpdatedBy(partnerDocument.getUpdatedBy());
+        partnerDocument.setCreatedOn(partnerDocument.getCreatedOn());
+        partnerDocument.setUpdatedOn(partnerDocument.getUpdatedOn());
+        partnerDocument.setIsActive(partnerDocument.getIsActive());
+        partnerDocument.setState(partnerDocument.getState());
+        partnerDocument.setApiSource(partnerDocument.getApiSource());
+        partnerDocument.setNotes(partnerDocument.getNotes());
         return partnerDocument;
     }
 
@@ -35,22 +43,41 @@ public class PartnerDocumentRepositoryImpl implements PartnerDocumentRepository 
     public PartnerDocumentDao update(PartnerDocumentDao partnerDocument) {
         PartnerDocumentsRecord partnersDocumentRecord = context.newRecord(PARTNER_DOCUMENTS, partnerDocument);
         partnersDocumentRecord.update();
+
+
+        partnerDocument.setCreatedBy(partnersDocumentRecord.getCreatedBy());
+        partnerDocument.setUpdatedBy(partnersDocumentRecord.getUpdatedBy());
+        partnerDocument.setCreatedOn(partnersDocumentRecord.getCreatedOn());
+        partnerDocument.setUpdatedOn(partnersDocumentRecord.getUpdatedOn());
+        partnerDocument.setIsActive(partnersDocumentRecord.getIsActive());
+        partnerDocument.setState(partnersDocumentRecord.getState());
+        partnerDocument.setApiSource(partnersDocumentRecord.getApiSource());
+        partnerDocument.setNotes(partnersDocumentRecord.getNotes());
         return partnerDocument;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(PARTNER_DOCUMENTS).set(PARTNER_DOCUMENTS.STATE, RecordState.DELETED.name()).where(PARTNER_DOCUMENTS.ID.eq(id)).execute();
-    }
+     context.update(PARTNER_DOCUMENTS)
+     .set(PARTNER_DOCUMENTS.STATE,RecordState.DELETED.name())
+     .where(PARTNER_DOCUMENTS.ID.eq(id))
+     .and(PARTNER_DOCUMENTS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(PARTNER_DOCUMENTS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public PartnerDocumentDao findByUUID(String uuid) {
-        return context.selectFrom(PARTNER_DOCUMENTS).where(PARTNER_DOCUMENTS.UUID.eq(uuid)).fetchAnyInto(PartnerDocumentDao.class);
+        return context.selectFrom(PARTNER_DOCUMENTS).where(PARTNER_DOCUMENTS.UUID.eq(uuid))
+                .and(PARTNER_DOCUMENTS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PartnerDocumentDao.class);
     }
 
     @Override
     public PartnerDocumentDao findById(Integer id) {
-        return context.selectFrom(PARTNER_DOCUMENTS).where(PARTNER_DOCUMENTS.ID.eq(id)).fetchAnyInto(PartnerDocumentDao.class);
+        return context.selectFrom(PARTNER_DOCUMENTS).where(PARTNER_DOCUMENTS.ID.eq(id))
+                .and(PARTNER_DOCUMENTS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PartnerDocumentDao.class);
     }
 
     @Override

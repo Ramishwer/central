@@ -18,33 +18,33 @@ public class ShiftController {
     private final ShiftService shiftService;
 
     @GetMapping("/shifts")
-    public ResponseDto<PaginatedResponseDto<ShiftDto>> getShifts(@RequestParam("count")Integer count,
-                                                                                 @RequestParam("start")Integer start,
-                                                                                 @RequestParam("from")Long from,
-                                                                                 @RequestParam("to")Long to,
-                                                                                 @RequestParam("lastUUID") String lastElementUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, shiftService.getShifts());
+    public ResponseDto<PaginatedResponseDto<ShiftDto>> getShifts(@RequestParam("count") Integer count,
+                                                                 @RequestParam("start") Integer start,
+                                                                 @RequestParam("from") Long from,
+                                                                 @RequestParam("to") Long to,
+                                                                 @RequestParam("lastUUID") String lastElementUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, shiftService.getShifts());
     }
 
-    
 
     @GetMapping("/shifts/{shift-uuid}")
-    public ResponseDto<ShiftDto> getShiftDetails(@PathVariable(value = "shift-uuid")String shiftUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, shiftService.getShiftDetails(shiftUUID));
+    public ResponseDto<ShiftDto> getShiftDetails(@PathVariable(value = "shift-uuid") String shiftUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, shiftService.getShiftDetails(shiftUUID));
     }
 
 
     @PostMapping("/shifts")
-    public ResponseDto<ShiftDto> createShift(@RequestBody ShiftDto shiftDto){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, shiftService.createShift(shiftDto));
+    public ResponseDto<ShiftDto> createShift(@RequestBody ShiftDto shiftDto) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, shiftService.createShift(shiftDto));
     }
 
     @PutMapping("/shifts/{shift-uuid}")
-    public ResponseDto<ShiftDto> updateShift(@PathVariable(value = "shift-uuid")String shiftUUID, @RequestBody ShiftDto shiftDto){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, shiftService.updateShift(shiftUUID,shiftDto));
+    public ResponseDto<ShiftDto> updateShift(@PathVariable(value = "shift-uuid") String shiftUUID, @RequestBody ShiftDto shiftDto) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, shiftService.updateShift(shiftUUID, shiftDto));
     }
+
     @DeleteMapping("/shifts/{shift-uuid}")
-    public ResponseDto<Boolean> deleteShift(@PathVariable(value = "shift-uuid")String shiftUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, shiftService.deleteShift(shiftUUID));
+    public ResponseDto<Boolean> deleteShift(@PathVariable(value = "shift-uuid") String shiftUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, shiftService.deleteShift(shiftUUID));
     }
 }

@@ -2,8 +2,6 @@ package com.goev.central.dto.partner.document;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.goev.central.dao.partner.document.PartnerDocumentTypeDao;
-import com.goev.central.dao.vehicle.document.VehicleDocumentTypeDao;
-import com.goev.central.dto.vehicle.document.VehicleDocumentTypeDto;
 import lombok.*;
 
 @AllArgsConstructor

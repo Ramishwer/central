@@ -2,13 +2,15 @@ package com.goev.central.controller.customer.detail;
 
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.customer.CustomerViewDto;
-import com.goev.central.dto.customer.detail.CustomerDto;
 import com.goev.central.service.customer.detail.CustomerService;
 import com.goev.lib.dto.ResponseDto;
 import com.goev.lib.dto.StatusDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
@@ -21,7 +23,7 @@ public class CustomerController {
 
 
     @GetMapping("/customers")
-    public ResponseDto<PaginatedResponseDto<CustomerViewDto>> getCustomers(@RequestParam(value = "count",required = false) Integer count,
+    public ResponseDto<PaginatedResponseDto<CustomerViewDto>> getCustomers(@RequestParam(value = "count", required = false) Integer count,
                                                                            @RequestParam(value = "start", required = false) Integer start,
                                                                            @RequestParam(value = "from", required = false) Long from,
                                                                            @RequestParam(value = "to", required = false) Long to,

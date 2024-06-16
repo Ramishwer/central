@@ -1,8 +1,8 @@
 package com.goev.central.repository.partner.detail.impl;
 
 import com.goev.central.dao.partner.detail.PartnerDao;
-import com.goev.central.enums.partner.PartnerOnboardingStatus;
 import com.goev.central.repository.partner.detail.PartnerRepository;
+import com.goev.central.utilities.EventExecutorUtils;
 import com.goev.lib.enums.RecordState;
 import com.goev.record.central.tables.records.PartnersRecord;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.goev.record.central.tables.Partners.PARTNERS;
@@ -22,12 +21,26 @@ public class PartnerRepositoryImpl implements PartnerRepository {
 
     private final DSLContext context;
 
+    private final EventExecutorUtils eventExecutor;
+
     @Override
     public PartnerDao save(PartnerDao partner) {
         PartnersRecord partnersRecord = context.newRecord(PARTNERS, partner);
         partnersRecord.store();
+
         partner.setId(partnersRecord.getId());
         partner.setUuid(partnersRecord.getUuid());
+        partner.setCreatedBy(partnersRecord.getCreatedBy());
+        partner.setUpdatedBy(partnersRecord.getUpdatedBy());
+        partner.setCreatedOn(partnersRecord.getCreatedOn());
+        partner.setUpdatedOn(partnersRecord.getUpdatedOn());
+        partner.setIsActive(partnersRecord.getIsActive());
+        partner.setState(partnersRecord.getState());
+        partner.setApiSource(partnersRecord.getApiSource());
+        partner.setNotes(partnersRecord.getNotes());
+
+        eventExecutor.fireEvent("PartnerSaveEvent", partner);
+
         return partner;
     }
 
@@ -35,6 +48,17 @@ public class PartnerRepositoryImpl implements PartnerRepository {
     public PartnerDao update(PartnerDao partner) {
         PartnersRecord partnersRecord = context.newRecord(PARTNERS, partner);
         partnersRecord.update();
+
+
+        partner.setCreatedBy(partnersRecord.getCreatedBy());
+        partner.setUpdatedBy(partnersRecord.getUpdatedBy());
+        partner.setCreatedOn(partnersRecord.getCreatedOn());
+        partner.setUpdatedOn(partnersRecord.getUpdatedOn());
+        partner.setIsActive(partnersRecord.getIsActive());
+        partner.setState(partnersRecord.getState());
+        partner.setApiSource(partnersRecord.getApiSource());
+        partner.setNotes(partnersRecord.getNotes());
+        eventExecutor.fireEvent("PartnerUpdateEvent", partner);
         return partner;
     }
 
@@ -71,7 +95,7 @@ public class PartnerRepositoryImpl implements PartnerRepository {
     }
 
     @Override
-    public List<PartnerDao> findAll() {
+    public List<PartnerDao> findAllActive() {
         return context.selectFrom(PARTNERS)
                 .where(PARTNERS.IS_ACTIVE.eq(true))
                 .fetchInto(PartnerDao.class);

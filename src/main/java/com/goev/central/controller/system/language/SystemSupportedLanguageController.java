@@ -18,33 +18,33 @@ public class SystemSupportedLanguageController {
     private final SystemSupportedLanguageService systemSupportedLanguageService;
 
     @GetMapping("/systems/supported-languages")
-    public ResponseDto<PaginatedResponseDto<SystemSupportedLanguageDto>> getSystemSupportedLanguages(@RequestParam("count")Integer count,
-                                                                                                         @RequestParam("start")Integer start,
-                                                                                                         @RequestParam("from")Long from,
-                                                                                                         @RequestParam("to")Long to,
-                                                                                                         @RequestParam("lastUUID") String lastElementUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, systemSupportedLanguageService.getSystemSupportedLanguages());
+    public ResponseDto<PaginatedResponseDto<SystemSupportedLanguageDto>> getSystemSupportedLanguages(@RequestParam("count") Integer count,
+                                                                                                     @RequestParam("start") Integer start,
+                                                                                                     @RequestParam("from") Long from,
+                                                                                                     @RequestParam("to") Long to,
+                                                                                                     @RequestParam("lastUUID") String lastElementUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, systemSupportedLanguageService.getSystemSupportedLanguages());
     }
 
 
-
     @GetMapping("/systems/supported-languages/{app-supportedLanguage-uuid}")
-    public ResponseDto<SystemSupportedLanguageDto> getSystemSupportedLanguageDetails(@PathVariable(value = "app-supportedLanguage-uuid")String appSupportedLanguageUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, systemSupportedLanguageService.getSystemSupportedLanguageDetails(appSupportedLanguageUUID));
+    public ResponseDto<SystemSupportedLanguageDto> getSystemSupportedLanguageDetails(@PathVariable(value = "app-supportedLanguage-uuid") String appSupportedLanguageUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, systemSupportedLanguageService.getSystemSupportedLanguageDetails(appSupportedLanguageUUID));
     }
 
 
     @PostMapping("/systems/supported-languages")
-    public ResponseDto<SystemSupportedLanguageDto> createSystemSupportedLanguage(@RequestBody SystemSupportedLanguageDto systemSupportedLanguageDto){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, systemSupportedLanguageService.createSystemSupportedLanguage(systemSupportedLanguageDto));
+    public ResponseDto<SystemSupportedLanguageDto> createSystemSupportedLanguage(@RequestBody SystemSupportedLanguageDto systemSupportedLanguageDto) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, systemSupportedLanguageService.createSystemSupportedLanguage(systemSupportedLanguageDto));
     }
 
     @PutMapping("/systems/supported-languages/{app-supportedLanguage-uuid}")
-    public ResponseDto<SystemSupportedLanguageDto> updateSystemSupportedLanguage(@PathVariable(value = "app-supportedLanguage-uuid")String appSupportedLanguageUUID, @RequestBody SystemSupportedLanguageDto systemSupportedLanguageDto){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, systemSupportedLanguageService.updateSystemSupportedLanguage(appSupportedLanguageUUID,systemSupportedLanguageDto));
+    public ResponseDto<SystemSupportedLanguageDto> updateSystemSupportedLanguage(@PathVariable(value = "app-supportedLanguage-uuid") String appSupportedLanguageUUID, @RequestBody SystemSupportedLanguageDto systemSupportedLanguageDto) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, systemSupportedLanguageService.updateSystemSupportedLanguage(appSupportedLanguageUUID, systemSupportedLanguageDto));
     }
+
     @DeleteMapping("/systems/supported-languages/{app-supportedLanguage-uuid}")
-    public ResponseDto<Boolean> deleteSystemSupportedLanguage(@PathVariable(value = "app-supportedLanguage-uuid")String appSupportedLanguageUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, systemSupportedLanguageService.deleteSystemSupportedLanguage(appSupportedLanguageUUID));
+    public ResponseDto<Boolean> deleteSystemSupportedLanguage(@PathVariable(value = "app-supportedLanguage-uuid") String appSupportedLanguageUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, systemSupportedLanguageService.deleteSystemSupportedLanguage(appSupportedLanguageUUID));
     }
 }

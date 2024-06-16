@@ -5,7 +5,7 @@ import com.goev.central.dto.customer.notification.CustomerNotificationDto;
 
 public interface CustomerNotificationService {
     PaginatedResponseDto<CustomerNotificationDto> getCustomerNotifications(String customerUUID);
-    
+
     CustomerNotificationDto getCustomerNotificationDetails(String customerUUID, String customerNotificationUUID);
 
 }

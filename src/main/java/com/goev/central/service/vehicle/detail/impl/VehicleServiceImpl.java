@@ -38,7 +38,7 @@ public class VehicleServiceImpl implements VehicleService {
     @Override
     public PaginatedResponseDto<VehicleViewDto> getVehicles() {
         PaginatedResponseDto<VehicleViewDto> result = PaginatedResponseDto.<VehicleViewDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
-        List<VehicleDao> vehicles = vehicleRepository.findAll();
+        List<VehicleDao> vehicles = vehicleRepository.findAllActive();
         if (CollectionUtils.isEmpty(vehicles))
             return result;
 

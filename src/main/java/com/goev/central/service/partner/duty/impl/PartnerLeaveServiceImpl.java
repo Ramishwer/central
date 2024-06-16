@@ -1,12 +1,12 @@
 package com.goev.central.service.partner.duty.impl;
 
-import com.goev.central.dao.partner.duty.PartnerLeaveDao;
 import com.goev.central.dao.partner.detail.PartnerDao;
+import com.goev.central.dao.partner.duty.PartnerLeaveDao;
 import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.partner.duty.PartnerLeaveDto;
-import com.goev.central.repository.partner.duty.PartnerLeaveRepository;
 import com.goev.central.repository.partner.detail.PartnerRepository;
+import com.goev.central.repository.partner.duty.PartnerLeaveRepository;
 import com.goev.central.service.partner.duty.PartnerLeaveService;
 import com.goev.lib.exceptions.ResponseException;
 import lombok.AllArgsConstructor;

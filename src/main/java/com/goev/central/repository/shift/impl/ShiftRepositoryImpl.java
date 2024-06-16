@@ -25,6 +25,14 @@ public class ShiftRepositoryImpl implements ShiftRepository {
         shiftsRecord.store();
         log.setId(shiftsRecord.getId());
         log.setUuid(shiftsRecord.getUuid());
+        log.setCreatedBy(shiftsRecord.getCreatedBy());
+        log.setUpdatedBy(shiftsRecord.getUpdatedBy());
+        log.setCreatedOn(shiftsRecord.getCreatedOn());
+        log.setUpdatedOn(shiftsRecord.getUpdatedOn());
+        log.setIsActive(shiftsRecord.getIsActive());
+        log.setState(shiftsRecord.getState());
+        log.setApiSource(shiftsRecord.getApiSource());
+        log.setNotes(shiftsRecord.getNotes());
         return log;
     }
 
@@ -32,22 +40,41 @@ public class ShiftRepositoryImpl implements ShiftRepository {
     public ShiftDao update(ShiftDao log) {
         ShiftsRecord shiftsRecord = context.newRecord(SHIFTS, log);
         shiftsRecord.update();
+
+
+        log.setCreatedBy(shiftsRecord.getCreatedBy());
+        log.setUpdatedBy(shiftsRecord.getUpdatedBy());
+        log.setCreatedOn(shiftsRecord.getCreatedOn());
+        log.setUpdatedOn(shiftsRecord.getUpdatedOn());
+        log.setIsActive(shiftsRecord.getIsActive());
+        log.setState(shiftsRecord.getState());
+        log.setApiSource(shiftsRecord.getApiSource());
+        log.setNotes(shiftsRecord.getNotes());
         return log;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(SHIFTS).set(SHIFTS.STATE, RecordState.DELETED.name()).where(SHIFTS.ID.eq(id)).execute();
-    }
+     context.update(SHIFTS)
+     .set(SHIFTS.STATE,RecordState.DELETED.name())
+     .where(SHIFTS.ID.eq(id))
+     .and(SHIFTS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(SHIFTS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public ShiftDao findByUUID(String uuid) {
-        return context.selectFrom(SHIFTS).where(SHIFTS.UUID.eq(uuid)).fetchAnyInto(ShiftDao.class);
+        return context.selectFrom(SHIFTS).where(SHIFTS.UUID.eq(uuid))
+                .and(SHIFTS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(ShiftDao.class);
     }
 
     @Override
     public ShiftDao findById(Integer id) {
-        return context.selectFrom(SHIFTS).where(SHIFTS.ID.eq(id)).fetchAnyInto(ShiftDao.class);
+        return context.selectFrom(SHIFTS).where(SHIFTS.ID.eq(id))
+                .and(SHIFTS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(ShiftDao.class);
     }
 
     @Override
@@ -56,7 +83,7 @@ public class ShiftRepositoryImpl implements ShiftRepository {
     }
 
     @Override
-    public List<ShiftDao> findAll() {
+    public List<ShiftDao> findAllActive() {
         return context.selectFrom(SHIFTS).fetchInto(ShiftDao.class);
     }
 }

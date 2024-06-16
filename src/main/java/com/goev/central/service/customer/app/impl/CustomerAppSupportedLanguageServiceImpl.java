@@ -25,7 +25,7 @@ public class CustomerAppSupportedLanguageServiceImpl implements CustomerAppSuppo
     @Override
     public PaginatedResponseDto<CustomerAppSupportedLanguageDto> getCustomerAppSupportedLanguages() {
         PaginatedResponseDto<CustomerAppSupportedLanguageDto> result = PaginatedResponseDto.<CustomerAppSupportedLanguageDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
-        List<CustomerAppSupportedLanguageDao> customerAppSupportedLanguageDaos = customerAppSupportedLanguageRepository.findAll();
+        List<CustomerAppSupportedLanguageDao> customerAppSupportedLanguageDaos = customerAppSupportedLanguageRepository.findAllActive();
         if (CollectionUtils.isEmpty(customerAppSupportedLanguageDaos))
             return result;
 
@@ -54,7 +54,7 @@ public class CustomerAppSupportedLanguageServiceImpl implements CustomerAppSuppo
         if (customerAppSupportedLanguageDao == null)
             throw new ResponseException("No customerAppSupportedLanguage  found for Id :" + customerAppSupportedLanguageUUID);
         CustomerAppSupportedLanguageDao newCustomerAppSupportedLanguageDao = new CustomerAppSupportedLanguageDao();
-       
+
 
         newCustomerAppSupportedLanguageDao.setId(customerAppSupportedLanguageDao.getId());
         newCustomerAppSupportedLanguageDao.setUuid(customerAppSupportedLanguageDao.getUuid());

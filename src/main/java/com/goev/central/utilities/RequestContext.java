@@ -6,7 +6,9 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 public class RequestContext {
-    private RequestContext(){}
+    private RequestContext() {
+    }
+
     public static String getAccessToken() {
         ServletRequestAttributes requestAttributes = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes());
         String clientSecret = null;
@@ -64,7 +66,6 @@ public class RequestContext {
     }
 
 
-
     public static String getRefreshToken() {
         ServletRequestAttributes requestAttributes = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes());
         String clientSecret = null;
@@ -82,7 +83,7 @@ public class RequestContext {
         if (requestAttributes != null) {
             HttpServletRequest request = requestAttributes.getRequest();
             if (request.getAttribute("userSession") != null)
-                userSessionDao =(UserSessionDao) request.getAttribute("userSession");
+                userSessionDao = (UserSessionDao) request.getAttribute("userSession");
         }
         return userSessionDao;
     }

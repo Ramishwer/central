@@ -6,12 +6,19 @@ import java.util.List;
 
 public interface PartnerReferenceRepository {
     PartnerReferenceDao save(PartnerReferenceDao reference);
+
     PartnerReferenceDao update(PartnerReferenceDao reference);
+
     void delete(Integer id);
+
     PartnerReferenceDao findByUUID(String uuid);
+
     PartnerReferenceDao findById(Integer id);
+
     List<PartnerReferenceDao> findAllByIds(List<Integer> ids);
-    List<PartnerReferenceDao> findAll();
+
+    List<PartnerReferenceDao> findAllActive();
+
     List<PartnerReferenceDao> findAllByPartnerId(Integer partnerId);
 }
 

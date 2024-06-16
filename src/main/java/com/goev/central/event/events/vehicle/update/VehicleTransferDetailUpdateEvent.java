@@ -1,12 +1,12 @@
-package com.goev.central.event.events;
+package com.goev.central.event.events.vehicle.update;
 
-import com.goev.central.dao.vehicle.detail.VehicleDao;
+import com.goev.central.dao.vehicle.transfer.VehicleTransferDetailDao;
 import com.goev.central.event.targets.PartnerTarget;
 import com.goev.lib.event.core.Event;
 import jakarta.annotation.PostConstruct;
 
+public class VehicleTransferDetailUpdateEvent extends Event<VehicleTransferDetailDao> {
 
-public class VehicleUpdateEvent extends Event<VehicleDao> {
     @Override
     @PostConstruct
     public void init() {
@@ -15,6 +15,7 @@ public class VehicleUpdateEvent extends Event<VehicleDao> {
 
     @Override
     public String getName() {
-        return "VehicleUpdateEvent";
+        return "VehicleTransferDetailUpdateEvent";
     }
+
 }

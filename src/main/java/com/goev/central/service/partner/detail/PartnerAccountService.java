@@ -7,10 +7,14 @@ import java.util.List;
 
 public interface PartnerAccountService {
     PaginatedResponseDto<PartnerAccountDto> getAccounts(String partnerUUID);
-    PartnerAccountDto createAccount(String partnerUUID,PartnerAccountDto partnerAccountDto);
-    PartnerAccountDto updateAccount(String partnerUUID,String accountUUID, PartnerAccountDto partnerAccountDto);
-    PartnerAccountDto getAccountDetails(String partnerUUID,String accountUUID);
-    Boolean deleteAccount(String partnerUUID,String accountUUID);
+
+    PartnerAccountDto createAccount(String partnerUUID, PartnerAccountDto partnerAccountDto);
+
+    PartnerAccountDto updateAccount(String partnerUUID, String accountUUID, PartnerAccountDto partnerAccountDto);
+
+    PartnerAccountDto getAccountDetails(String partnerUUID, String accountUUID);
+
+    Boolean deleteAccount(String partnerUUID, String accountUUID);
 
     List<PartnerAccountDto> bulkCreateAccount(String partnerUUID, List<PartnerAccountDto> partnerAccountDto);
 }

@@ -18,26 +18,27 @@ public class UserRoleController {
     private final UserRoleService userRoleService;
 
     @GetMapping("/roles")
-    public ResponseDto<PaginatedResponseDto<UserRoleDto>> getRoles(){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, userRoleService.getRoles());
+    public ResponseDto<PaginatedResponseDto<UserRoleDto>> getRoles() {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, userRoleService.getRoles());
     }
+
     @PostMapping("/roles")
-    public ResponseDto<UserRoleDto> createRole(@RequestBody UserRoleDto userRoleDto){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, userRoleService.createRole(userRoleDto));
+    public ResponseDto<UserRoleDto> createRole(@RequestBody UserRoleDto userRoleDto) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, userRoleService.createRole(userRoleDto));
     }
 
     @PutMapping("/roles/{role-uuid}")
-    public ResponseDto<UserRoleDto> updateRole(@PathVariable(value = "role-uuid")String roleUUID, @RequestBody UserRoleDto userRoleDto){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, userRoleService.updateRole(roleUUID,userRoleDto));
+    public ResponseDto<UserRoleDto> updateRole(@PathVariable(value = "role-uuid") String roleUUID, @RequestBody UserRoleDto userRoleDto) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, userRoleService.updateRole(roleUUID, userRoleDto));
     }
 
     @GetMapping("/roles/{role-uuid}")
-    public ResponseDto<UserRoleDto> getRoleDetails(@PathVariable(value = "role-uuid")String roleUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, userRoleService.getRoleDetails(roleUUID));
+    public ResponseDto<UserRoleDto> getRoleDetails(@PathVariable(value = "role-uuid") String roleUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, userRoleService.getRoleDetails(roleUUID));
     }
 
     @DeleteMapping("/roles/{role-uuid}")
-    public ResponseDto<Boolean> deleteRole(@PathVariable(value = "role-uuid")String roleUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, userRoleService.deleteRole(roleUUID));
+    public ResponseDto<Boolean> deleteRole(@PathVariable(value = "role-uuid") String roleUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, userRoleService.deleteRole(roleUUID));
     }
 }

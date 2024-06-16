@@ -21,8 +21,8 @@ public class PartnerPassbookDetailServiceImpl implements PartnerPassbookDetailSe
 
     @Override
     public PartnerPassbookDetailDto getPartnerPassbookDetails(String partnerUUID) {
-        PartnerDao partnerDao  = partnerRepository.findByUUID(partnerUUID);
-        if(partnerDao == null)
+        PartnerDao partnerDao = partnerRepository.findByUUID(partnerUUID);
+        if (partnerDao == null)
             throw new ResponseException("No partner  found for Id :" + partnerUUID);
 
         PartnerPassbookDetailDao partnerPassbookDetailDao = partnerPassbookDetailRepository.findByPartnerId(partnerDao.getId());

@@ -1,13 +1,8 @@
 package com.goev.central.dao.vehicle.document;
 
-import com.goev.central.dao.asset.AssetTypeDao;
-import com.goev.central.dto.asset.AssetTypeDto;
-import com.goev.central.dto.user.detail.UserDto;
 import com.goev.central.dto.vehicle.document.VehicleDocumentTypeDto;
 import com.goev.lib.dao.BaseDao;
 import lombok.*;
-
-import static com.goev.central.constant.ApplicationConstants.GSON;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -38,7 +33,6 @@ public class VehicleDocumentTypeDao extends BaseDao {
 
         return vehicleDocumentTypeDao;
     }
-
 
 
 }

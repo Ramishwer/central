@@ -1,7 +1,6 @@
 package com.goev.central.dto.asset;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.goev.central.dao.asset.AssetDao;
 import lombok.*;
 
 @AllArgsConstructor

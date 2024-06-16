@@ -29,18 +29,18 @@ public class PayoutModelConfigurationController {
 
     @GetMapping("/payout-models/{model-uuid}/configurations/{configuration-uuid}")
     public ResponseDto<PayoutModelConfigurationDto> getPayoutModelConfigurationDetails(@PathVariable(value = "model-uuid") String modelUUID, @PathVariable(value = "configuration-uuid") String configurationUUID) {
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, payoutModelConfigurationService.getPayoutModelConfigurationDetails(modelUUID,configurationUUID));
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, payoutModelConfigurationService.getPayoutModelConfigurationDetails(modelUUID, configurationUUID));
     }
 
 
     @PostMapping("/payout-models/{model-uuid}/configurations")
     public ResponseDto<PayoutModelConfigurationDto> createPayoutModelConfiguration(@PathVariable(value = "model-uuid") String modelUUID, @RequestBody PayoutModelConfigurationDto payoutModelConfigurationDto) {
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, payoutModelConfigurationService.createPayoutModelConfiguration(modelUUID,payoutModelConfigurationDto));
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, payoutModelConfigurationService.createPayoutModelConfiguration(modelUUID, payoutModelConfigurationDto));
     }
 
     @PutMapping("/payout-models/{model-uuid}/configurations/{configuration-uuid}")
     public ResponseDto<PayoutModelConfigurationDto> updatePayoutModelConfiguration(@PathVariable(value = "model-uuid") String modelUUID, @PathVariable(value = "configuration-uuid") String configurationUUID, @RequestBody PayoutModelConfigurationDto payoutModelConfigurationDto) {
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, payoutModelConfigurationService.updatePayoutModelConfiguration(modelUUID,configurationUUID, payoutModelConfigurationDto));
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, payoutModelConfigurationService.updatePayoutModelConfiguration(modelUUID, configurationUUID, payoutModelConfigurationDto));
     }
 
     @DeleteMapping("/payout-models/{model-uuid}/configurations/{configuration-uuid}")

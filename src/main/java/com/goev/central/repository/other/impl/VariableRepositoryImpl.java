@@ -26,6 +26,14 @@ public class VariableRepositoryImpl implements VariableRepository {
         variablesRecord.store();
         variable.setId(variablesRecord.getId());
         variable.setUuid(variablesRecord.getUuid());
+        variable.setCreatedBy(variablesRecord.getCreatedBy());
+        variable.setUpdatedBy(variablesRecord.getUpdatedBy());
+        variable.setCreatedOn(variablesRecord.getCreatedOn());
+        variable.setUpdatedOn(variablesRecord.getUpdatedOn());
+        variable.setIsActive(variablesRecord.getIsActive());
+        variable.setState(variablesRecord.getState());
+        variable.setApiSource(variablesRecord.getApiSource());
+        variable.setNotes(variablesRecord.getNotes());
         return variable;
     }
 
@@ -33,22 +41,41 @@ public class VariableRepositoryImpl implements VariableRepository {
     public VariableDao update(VariableDao variable) {
         VariablesRecord variablesRecord = context.newRecord(VARIABLES, variable);
         variablesRecord.update();
+
+
+        variable.setCreatedBy(variablesRecord.getCreatedBy());
+        variable.setUpdatedBy(variablesRecord.getUpdatedBy());
+        variable.setCreatedOn(variablesRecord.getCreatedOn());
+        variable.setUpdatedOn(variablesRecord.getUpdatedOn());
+        variable.setIsActive(variablesRecord.getIsActive());
+        variable.setState(variablesRecord.getState());
+        variable.setApiSource(variablesRecord.getApiSource());
+        variable.setNotes(variablesRecord.getNotes());
         return variable;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(VARIABLES).set(VARIABLES.STATE, RecordState.DELETED.name()).where(VARIABLES.ID.eq(id)).execute();
-    }
+     context.update(VARIABLES)
+     .set(VARIABLES.STATE,RecordState.DELETED.name())
+     .where(VARIABLES.ID.eq(id))
+     .and(VARIABLES.STATE.eq(RecordState.ACTIVE.name()))
+     .and(VARIABLES.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public VariableDao findByUUID(String uuid) {
-        return context.selectFrom(VARIABLES).where(VARIABLES.UUID.eq(uuid)).fetchAnyInto(VariableDao.class);
+        return context.selectFrom(VARIABLES).where(VARIABLES.UUID.eq(uuid))
+                .and(VARIABLES.IS_ACTIVE.eq(true))
+                .fetchAnyInto(VariableDao.class);
     }
 
     @Override
     public VariableDao findById(Integer id) {
-        return context.selectFrom(VARIABLES).where(VARIABLES.ID.eq(id)).fetchAnyInto(VariableDao.class);
+        return context.selectFrom(VARIABLES).where(VARIABLES.ID.eq(id))
+                .and(VARIABLES.IS_ACTIVE.eq(true))
+                .fetchAnyInto(VariableDao.class);
     }
 
     @Override
@@ -57,7 +84,7 @@ public class VariableRepositoryImpl implements VariableRepository {
     }
 
     @Override
-    public List<VariableDao> findAll() {
+    public List<VariableDao> findAllActive() {
         return context.selectFrom(VARIABLES).fetchInto(VariableDao.class);
     }
 }

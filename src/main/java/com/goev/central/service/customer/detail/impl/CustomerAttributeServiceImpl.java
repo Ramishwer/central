@@ -25,7 +25,7 @@ public class CustomerAttributeServiceImpl implements CustomerAttributeService {
     @Override
     public PaginatedResponseDto<CustomerAttributeDto> getCustomerAttributes(String customerUUID) {
         PaginatedResponseDto<CustomerAttributeDto> result = PaginatedResponseDto.<CustomerAttributeDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
-        List<CustomerAttributeDao> customerAttributeDaos = customerAttributeRepository.findAll();
+        List<CustomerAttributeDao> customerAttributeDaos = customerAttributeRepository.findAllActive();
         if (CollectionUtils.isEmpty(customerAttributeDaos))
             return result;
 
@@ -54,7 +54,7 @@ public class CustomerAttributeServiceImpl implements CustomerAttributeService {
         if (customerAttributeDao == null)
             throw new ResponseException("No customerAttribute  found for Id :" + customerAttributeUUID);
         CustomerAttributeDao newCustomerAttributeDao = new CustomerAttributeDao();
-       
+
 
         newCustomerAttributeDao.setId(customerAttributeDao.getId());
         newCustomerAttributeDao.setUuid(customerAttributeDao.getUuid());

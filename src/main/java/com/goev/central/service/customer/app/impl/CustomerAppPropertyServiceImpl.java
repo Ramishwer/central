@@ -1,9 +1,9 @@
 package com.goev.central.service.customer.app.impl;
 
 import com.goev.central.dao.customer.app.CustomerAppPropertyDao;
-import com.goev.central.dto.customer.app.CustomerAppPropertyDto;
 import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
+import com.goev.central.dto.customer.app.CustomerAppPropertyDto;
 import com.goev.central.repository.customer.app.CustomerAppPropertyRepository;
 import com.goev.central.service.customer.app.CustomerAppPropertyService;
 import com.goev.lib.exceptions.ResponseException;
@@ -25,7 +25,7 @@ public class CustomerAppPropertyServiceImpl implements CustomerAppPropertyServic
     @Override
     public PaginatedResponseDto<CustomerAppPropertyDto> getCustomerAppProperties() {
         PaginatedResponseDto<CustomerAppPropertyDto> result = PaginatedResponseDto.<CustomerAppPropertyDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
-        List<CustomerAppPropertyDao> customerAppPropertyDaos = customerAppPropertyRepository.findAll();
+        List<CustomerAppPropertyDao> customerAppPropertyDaos = customerAppPropertyRepository.findAllActive();
         if (CollectionUtils.isEmpty(customerAppPropertyDaos))
             return result;
 
@@ -54,7 +54,7 @@ public class CustomerAppPropertyServiceImpl implements CustomerAppPropertyServic
         if (customerAppPropertyDao == null)
             throw new ResponseException("No customerAppProperty  found for Id :" + customerAppPropertyUUID);
         CustomerAppPropertyDao newCustomerAppPropertyDao = new CustomerAppPropertyDao();
-       
+
 
         newCustomerAppPropertyDao.setId(customerAppPropertyDao.getId());
         newCustomerAppPropertyDao.setUuid(customerAppPropertyDao.getUuid());

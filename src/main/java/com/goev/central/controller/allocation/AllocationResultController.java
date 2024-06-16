@@ -18,19 +18,18 @@ public class AllocationResultController {
     private final AllocationResultService allocationResultService;
 
     @GetMapping("/allocations/results")
-    public ResponseDto<PaginatedResponseDto<AllocationResultDto>> getAllocationResults(@RequestParam("count")Integer count,
-                                                                                       @RequestParam("start")Integer start,
-                                                                                       @RequestParam("from")Long from,
-                                                                                       @RequestParam("to")Long to,
-                                                                                       @RequestParam("lastUUID") String lastElementUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, allocationResultService.getAllocationResults());
+    public ResponseDto<PaginatedResponseDto<AllocationResultDto>> getAllocationResults(@RequestParam("count") Integer count,
+                                                                                       @RequestParam("start") Integer start,
+                                                                                       @RequestParam("from") Long from,
+                                                                                       @RequestParam("to") Long to,
+                                                                                       @RequestParam("lastUUID") String lastElementUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, allocationResultService.getAllocationResults());
     }
 
-    
 
     @GetMapping("/allocations/results/{allocation-result-uuid}")
-    public ResponseDto<AllocationResultDto> getAllocationResultDetails(@PathVariable(value = "allocation-result-uuid")String allocationResultUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, allocationResultService.getAllocationResultDetails(allocationResultUUID));
+    public ResponseDto<AllocationResultDto> getAllocationResultDetails(@PathVariable(value = "allocation-result-uuid") String allocationResultUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, allocationResultService.getAllocationResultDetails(allocationResultUUID));
     }
 
 }

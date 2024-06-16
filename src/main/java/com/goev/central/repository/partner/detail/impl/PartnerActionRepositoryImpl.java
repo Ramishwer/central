@@ -26,6 +26,14 @@ public class PartnerActionRepositoryImpl implements PartnerActionRepository {
         partnerActionsRecord.store();
         action.setId(partnerActionsRecord.getId());
         action.setUuid(partnerActionsRecord.getUuid());
+        action.setCreatedBy(partnerActionsRecord.getCreatedBy());
+        action.setUpdatedBy(partnerActionsRecord.getUpdatedBy());
+        action.setCreatedOn(partnerActionsRecord.getCreatedOn());
+        action.setUpdatedOn(partnerActionsRecord.getUpdatedOn());
+        action.setIsActive(partnerActionsRecord.getIsActive());
+        action.setState(partnerActionsRecord.getState());
+        action.setApiSource(partnerActionsRecord.getApiSource());
+        action.setNotes(partnerActionsRecord.getNotes());
         return action;
     }
 
@@ -33,22 +41,41 @@ public class PartnerActionRepositoryImpl implements PartnerActionRepository {
     public PartnerActionDao update(PartnerActionDao action) {
         PartnerActionsRecord partnerActionsRecord = context.newRecord(PARTNER_ACTIONS, action);
         partnerActionsRecord.update();
+
+
+        action.setCreatedBy(partnerActionsRecord.getCreatedBy());
+        action.setUpdatedBy(partnerActionsRecord.getUpdatedBy());
+        action.setCreatedOn(partnerActionsRecord.getCreatedOn());
+        action.setUpdatedOn(partnerActionsRecord.getUpdatedOn());
+        action.setIsActive(partnerActionsRecord.getIsActive());
+        action.setState(partnerActionsRecord.getState());
+        action.setApiSource(partnerActionsRecord.getApiSource());
+        action.setNotes(partnerActionsRecord.getNotes());
         return action;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(PARTNER_ACTIONS).set(PARTNER_ACTIONS.STATE, RecordState.DELETED.name()).where(PARTNER_ACTIONS.ID.eq(id)).execute();
-    }
+     context.update(PARTNER_ACTIONS)
+     .set(PARTNER_ACTIONS.STATE,RecordState.DELETED.name())
+     .where(PARTNER_ACTIONS.ID.eq(id))
+     .and(PARTNER_ACTIONS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(PARTNER_ACTIONS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public PartnerActionDao findByUUID(String uuid) {
-        return context.selectFrom(PARTNER_ACTIONS).where(PARTNER_ACTIONS.UUID.eq(uuid)).fetchAnyInto(PartnerActionDao.class);
+        return context.selectFrom(PARTNER_ACTIONS).where(PARTNER_ACTIONS.UUID.eq(uuid))
+                .and(PARTNER_ACTIONS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PartnerActionDao.class);
     }
 
     @Override
     public PartnerActionDao findById(Integer id) {
-        return context.selectFrom(PARTNER_ACTIONS).where(PARTNER_ACTIONS.ID.eq(id)).fetchAnyInto(PartnerActionDao.class);
+        return context.selectFrom(PARTNER_ACTIONS).where(PARTNER_ACTIONS.ID.eq(id))
+                .and(PARTNER_ACTIONS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PartnerActionDao.class);
     }
 
     @Override
@@ -57,7 +84,7 @@ public class PartnerActionRepositoryImpl implements PartnerActionRepository {
     }
 
     @Override
-    public List<PartnerActionDao> findAll() {
+    public List<PartnerActionDao> findAllActive() {
         return context.selectFrom(PARTNER_ACTIONS).fetchInto(PartnerActionDao.class);
     }
 }

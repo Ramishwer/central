@@ -26,6 +26,14 @@ public class PartnerReferenceRepositoryImpl implements PartnerReferenceRepositor
         partnerReferencesRecord.store();
         reference.setId(partnerReferencesRecord.getId());
         reference.setUuid(partnerReferencesRecord.getUuid());
+        reference.setCreatedBy(partnerReferencesRecord.getCreatedBy());
+        reference.setUpdatedBy(partnerReferencesRecord.getUpdatedBy());
+        reference.setCreatedOn(partnerReferencesRecord.getCreatedOn());
+        reference.setUpdatedOn(partnerReferencesRecord.getUpdatedOn());
+        reference.setIsActive(partnerReferencesRecord.getIsActive());
+        reference.setState(partnerReferencesRecord.getState());
+        reference.setApiSource(partnerReferencesRecord.getApiSource());
+        reference.setNotes(partnerReferencesRecord.getNotes());
         return reference;
     }
 
@@ -33,22 +41,41 @@ public class PartnerReferenceRepositoryImpl implements PartnerReferenceRepositor
     public PartnerReferenceDao update(PartnerReferenceDao reference) {
         PartnerReferencesRecord partnerReferencesRecord = context.newRecord(PARTNER_REFERENCES, reference);
         partnerReferencesRecord.update();
+
+
+        reference.setCreatedBy(partnerReferencesRecord.getCreatedBy());
+        reference.setUpdatedBy(partnerReferencesRecord.getUpdatedBy());
+        reference.setCreatedOn(partnerReferencesRecord.getCreatedOn());
+        reference.setUpdatedOn(partnerReferencesRecord.getUpdatedOn());
+        reference.setIsActive(partnerReferencesRecord.getIsActive());
+        reference.setState(partnerReferencesRecord.getState());
+        reference.setApiSource(partnerReferencesRecord.getApiSource());
+        reference.setNotes(partnerReferencesRecord.getNotes());
         return reference;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(PARTNER_REFERENCES).set(PARTNER_REFERENCES.STATE, RecordState.DELETED.name()).where(PARTNER_REFERENCES.ID.eq(id)).execute();
-    }
+     context.update(PARTNER_REFERENCES)
+     .set(PARTNER_REFERENCES.STATE,RecordState.DELETED.name())
+     .where(PARTNER_REFERENCES.ID.eq(id))
+     .and(PARTNER_REFERENCES.STATE.eq(RecordState.ACTIVE.name()))
+     .and(PARTNER_REFERENCES.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public PartnerReferenceDao findByUUID(String uuid) {
-        return context.selectFrom(PARTNER_REFERENCES).where(PARTNER_REFERENCES.UUID.eq(uuid)).fetchAnyInto(PartnerReferenceDao.class);
+        return context.selectFrom(PARTNER_REFERENCES).where(PARTNER_REFERENCES.UUID.eq(uuid))
+                .and(PARTNER_REFERENCES.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PartnerReferenceDao.class);
     }
 
     @Override
     public PartnerReferenceDao findById(Integer id) {
-        return context.selectFrom(PARTNER_REFERENCES).where(PARTNER_REFERENCES.ID.eq(id)).fetchAnyInto(PartnerReferenceDao.class);
+        return context.selectFrom(PARTNER_REFERENCES).where(PARTNER_REFERENCES.ID.eq(id))
+                .and(PARTNER_REFERENCES.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PartnerReferenceDao.class);
     }
 
     @Override
@@ -57,15 +84,15 @@ public class PartnerReferenceRepositoryImpl implements PartnerReferenceRepositor
     }
 
     @Override
-    public List<PartnerReferenceDao> findAll() {
+    public List<PartnerReferenceDao> findAllActive() {
         return context.selectFrom(PARTNER_REFERENCES).fetchInto(PartnerReferenceDao.class);
     }
 
     @Override
     public List<PartnerReferenceDao> findAllByPartnerId(Integer partnerId) {
-         return context.selectFrom(PARTNER_REFERENCES)
-                 .where(PARTNER_REFERENCES.PARTNER_ID.in(partnerId))
-                 .fetchInto(PartnerReferenceDao.class);
+        return context.selectFrom(PARTNER_REFERENCES)
+                .where(PARTNER_REFERENCES.PARTNER_ID.in(partnerId))
+                .fetchInto(PartnerReferenceDao.class);
 
     }
 }

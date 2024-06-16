@@ -26,6 +26,14 @@ public class CustomerWalletTransactionRepositoryImpl implements CustomerWalletTr
         customerWalletTransactionsRecord.store();
         customerWalletTransaction.setId(customerWalletTransactionsRecord.getId());
         customerWalletTransaction.setUuid(customerWalletTransaction.getUuid());
+        customerWalletTransaction.setCreatedBy(customerWalletTransaction.getCreatedBy());
+        customerWalletTransaction.setUpdatedBy(customerWalletTransaction.getUpdatedBy());
+        customerWalletTransaction.setCreatedOn(customerWalletTransaction.getCreatedOn());
+        customerWalletTransaction.setUpdatedOn(customerWalletTransaction.getUpdatedOn());
+        customerWalletTransaction.setIsActive(customerWalletTransaction.getIsActive());
+        customerWalletTransaction.setState(customerWalletTransaction.getState());
+        customerWalletTransaction.setApiSource(customerWalletTransaction.getApiSource());
+        customerWalletTransaction.setNotes(customerWalletTransaction.getNotes());
         return customerWalletTransaction;
     }
 
@@ -33,22 +41,41 @@ public class CustomerWalletTransactionRepositoryImpl implements CustomerWalletTr
     public CustomerWalletTransactionDao update(CustomerWalletTransactionDao customerWalletTransaction) {
         CustomerWalletTransactionsRecord customerWalletTransactionsRecord = context.newRecord(CUSTOMER_WALLET_TRANSACTIONS, customerWalletTransaction);
         customerWalletTransactionsRecord.update();
+
+
+        customerWalletTransaction.setCreatedBy(customerWalletTransactionsRecord.getCreatedBy());
+        customerWalletTransaction.setUpdatedBy(customerWalletTransactionsRecord.getUpdatedBy());
+        customerWalletTransaction.setCreatedOn(customerWalletTransactionsRecord.getCreatedOn());
+        customerWalletTransaction.setUpdatedOn(customerWalletTransactionsRecord.getUpdatedOn());
+        customerWalletTransaction.setIsActive(customerWalletTransactionsRecord.getIsActive());
+        customerWalletTransaction.setState(customerWalletTransactionsRecord.getState());
+        customerWalletTransaction.setApiSource(customerWalletTransactionsRecord.getApiSource());
+        customerWalletTransaction.setNotes(customerWalletTransactionsRecord.getNotes());
         return customerWalletTransaction;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(CUSTOMER_WALLET_TRANSACTIONS).set(CUSTOMER_WALLET_TRANSACTIONS.STATE, RecordState.DELETED.name()).where(CUSTOMER_WALLET_TRANSACTIONS.ID.eq(id)).execute();
+     context.update(CUSTOMER_WALLET_TRANSACTIONS)
+     .set(CUSTOMER_WALLET_TRANSACTIONS.STATE,RecordState.DELETED.name())
+     .where(CUSTOMER_WALLET_TRANSACTIONS.ID.eq(id))
+     .and(CUSTOMER_WALLET_TRANSACTIONS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(CUSTOMER_WALLET_TRANSACTIONS.IS_ACTIVE.eq(true))
+     .execute();
     }
 
     @Override
     public CustomerWalletTransactionDao findByUUID(String uuid) {
-        return context.selectFrom(CUSTOMER_WALLET_TRANSACTIONS).where(CUSTOMER_WALLET_TRANSACTIONS.UUID.eq(uuid)).fetchAnyInto(CustomerWalletTransactionDao.class);
+        return context.selectFrom(CUSTOMER_WALLET_TRANSACTIONS).where(CUSTOMER_WALLET_TRANSACTIONS.UUID.eq(uuid))
+                .and(CUSTOMER_WALLET_TRANSACTIONS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(CustomerWalletTransactionDao.class);
     }
 
     @Override
     public CustomerWalletTransactionDao findById(Integer id) {
-        return context.selectFrom(CUSTOMER_WALLET_TRANSACTIONS).where(CUSTOMER_WALLET_TRANSACTIONS.ID.eq(id)).fetchAnyInto(CustomerWalletTransactionDao.class);
+        return context.selectFrom(CUSTOMER_WALLET_TRANSACTIONS).where(CUSTOMER_WALLET_TRANSACTIONS.ID.eq(id))
+                .and(CUSTOMER_WALLET_TRANSACTIONS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(CustomerWalletTransactionDao.class);
     }
 
     @Override
@@ -57,7 +84,7 @@ public class CustomerWalletTransactionRepositoryImpl implements CustomerWalletTr
     }
 
     @Override
-    public List<CustomerWalletTransactionDao> findAll() {
+    public List<CustomerWalletTransactionDao> findAllActive() {
         return context.selectFrom(CUSTOMER_WALLET_TRANSACTIONS).fetchInto(CustomerWalletTransactionDao.class);
     }
 }

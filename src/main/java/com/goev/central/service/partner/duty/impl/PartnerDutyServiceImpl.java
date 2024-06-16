@@ -1,12 +1,12 @@
 package com.goev.central.service.partner.duty.impl;
 
-import com.goev.central.dao.partner.duty.PartnerDutyDao;
 import com.goev.central.dao.partner.detail.PartnerDao;
+import com.goev.central.dao.partner.duty.PartnerDutyDao;
 import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.partner.duty.PartnerDutyDto;
-import com.goev.central.repository.partner.duty.PartnerDutyRepository;
 import com.goev.central.repository.partner.detail.PartnerRepository;
+import com.goev.central.repository.partner.duty.PartnerDutyRepository;
 import com.goev.central.service.partner.duty.PartnerDutyService;
 import com.goev.lib.exceptions.ResponseException;
 import lombok.AllArgsConstructor;
@@ -29,7 +29,7 @@ public class PartnerDutyServiceImpl implements PartnerDutyService {
 
 //        List<PartnerDutyDao> activeDuties = partnerDutyRepository.findAllByPartnerId(partner.getId());
 //        if (CollectionUtils.isEmpty(activeDuties))
-            return PaginatedResponseDto.<PartnerDutyDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        return PaginatedResponseDto.<PartnerDutyDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
 
 //        List<PartnerDutyDto> dutyList = new ArrayList<>();
 //        activeDuties.forEach(x -> dutyList.add(PartnerDutyDto.builder()
@@ -38,7 +38,6 @@ public class PartnerDutyServiceImpl implements PartnerDutyService {
 //        return PaginatedResponseDto.<PartnerDutyDto>builder().elements(dutyList).build();
 
     }
-
 
 
     @Override

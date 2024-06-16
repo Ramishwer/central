@@ -25,7 +25,7 @@ public class PaymentDetailServiceImpl implements PaymentDetailService {
     @Override
     public PaginatedResponseDto<PaymentDetailDto> getPaymentDetails(String paymentUUID) {
         PaginatedResponseDto<PaymentDetailDto> result = PaginatedResponseDto.<PaymentDetailDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
-        List<PaymentDetailDao> paymentDetailDaos = paymentDetailRepository.findAll();
+        List<PaymentDetailDao> paymentDetailDaos = paymentDetailRepository.findAllActive();
         if (CollectionUtils.isEmpty(paymentDetailDaos))
             return result;
 

@@ -26,6 +26,14 @@ public class PartnerShiftRepositoryImpl implements PartnerShiftRepository {
         partnerShiftsRecord.store();
         partnerShiftDao.setId(partnerShiftsRecord.getId());
         partnerShiftDao.setUuid(partnerShiftsRecord.getUuid());
+        partnerShiftDao.setCreatedBy(partnerShiftsRecord.getCreatedBy());
+        partnerShiftDao.setUpdatedBy(partnerShiftsRecord.getUpdatedBy());
+        partnerShiftDao.setCreatedOn(partnerShiftsRecord.getCreatedOn());
+        partnerShiftDao.setUpdatedOn(partnerShiftsRecord.getUpdatedOn());
+        partnerShiftDao.setIsActive(partnerShiftsRecord.getIsActive());
+        partnerShiftDao.setState(partnerShiftsRecord.getState());
+        partnerShiftDao.setApiSource(partnerShiftsRecord.getApiSource());
+        partnerShiftDao.setNotes(partnerShiftsRecord.getNotes());
         return partnerShiftDao;
     }
 
@@ -33,22 +41,41 @@ public class PartnerShiftRepositoryImpl implements PartnerShiftRepository {
     public PartnerShiftDao update(PartnerShiftDao partnerShiftDao) {
         PartnerShiftsRecord partnerShiftsRecord = context.newRecord(PARTNER_SHIFTS, partnerShiftDao);
         partnerShiftsRecord.update();
+
+
+        partnerShiftDao.setCreatedBy(partnerShiftsRecord.getCreatedBy());
+        partnerShiftDao.setUpdatedBy(partnerShiftsRecord.getUpdatedBy());
+        partnerShiftDao.setCreatedOn(partnerShiftsRecord.getCreatedOn());
+        partnerShiftDao.setUpdatedOn(partnerShiftsRecord.getUpdatedOn());
+        partnerShiftDao.setIsActive(partnerShiftsRecord.getIsActive());
+        partnerShiftDao.setState(partnerShiftsRecord.getState());
+        partnerShiftDao.setApiSource(partnerShiftsRecord.getApiSource());
+        partnerShiftDao.setNotes(partnerShiftsRecord.getNotes());
         return partnerShiftDao;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(PARTNER_SHIFTS).set(PARTNER_SHIFTS.STATE, RecordState.DELETED.name()).where(PARTNER_SHIFTS.ID.eq(id)).execute();
-    }
+     context.update(PARTNER_SHIFTS)
+     .set(PARTNER_SHIFTS.STATE,RecordState.DELETED.name())
+     .where(PARTNER_SHIFTS.ID.eq(id))
+     .and(PARTNER_SHIFTS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(PARTNER_SHIFTS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public PartnerShiftDao findByUUID(String uuid) {
-        return context.selectFrom(PARTNER_SHIFTS).where(PARTNER_SHIFTS.UUID.eq(uuid)).fetchAnyInto(PartnerShiftDao.class);
+        return context.selectFrom(PARTNER_SHIFTS).where(PARTNER_SHIFTS.UUID.eq(uuid))
+                .and(PARTNER_SHIFTS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PartnerShiftDao.class);
     }
 
     @Override
     public PartnerShiftDao findById(Integer id) {
-        return context.selectFrom(PARTNER_SHIFTS).where(PARTNER_SHIFTS.ID.eq(id)).fetchAnyInto(PartnerShiftDao.class);
+        return context.selectFrom(PARTNER_SHIFTS).where(PARTNER_SHIFTS.ID.eq(id))
+                .and(PARTNER_SHIFTS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PartnerShiftDao.class);
     }
 
     @Override
@@ -57,7 +84,7 @@ public class PartnerShiftRepositoryImpl implements PartnerShiftRepository {
     }
 
     @Override
-    public List<PartnerShiftDao> findAll() {
+    public List<PartnerShiftDao> findAllActive() {
         return context.selectFrom(PARTNER_SHIFTS).fetchInto(PartnerShiftDao.class);
     }
 

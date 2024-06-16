@@ -10,7 +10,6 @@ import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Map;
 
 import static com.goev.record.central.tables.PromotionBookingTypeMappings.PROMOTION_BOOKING_TYPE_MAPPINGS;
 
@@ -26,6 +25,14 @@ public class PromotionBookingTypeMappingRepositoryImpl implements PromotionBooki
         promotionBookingTypeMappingsRecord.store();
         log.setId(promotionBookingTypeMappingsRecord.getId());
         log.setUuid(promotionBookingTypeMappingsRecord.getUuid());
+        log.setCreatedBy(promotionBookingTypeMappingsRecord.getCreatedBy());
+        log.setUpdatedBy(promotionBookingTypeMappingsRecord.getUpdatedBy());
+        log.setCreatedOn(promotionBookingTypeMappingsRecord.getCreatedOn());
+        log.setUpdatedOn(promotionBookingTypeMappingsRecord.getUpdatedOn());
+        log.setIsActive(promotionBookingTypeMappingsRecord.getIsActive());
+        log.setState(promotionBookingTypeMappingsRecord.getState());
+        log.setApiSource(promotionBookingTypeMappingsRecord.getApiSource());
+        log.setNotes(promotionBookingTypeMappingsRecord.getNotes());
         return log;
     }
 
@@ -33,22 +40,41 @@ public class PromotionBookingTypeMappingRepositoryImpl implements PromotionBooki
     public PromotionBookingTypeMappingDao update(PromotionBookingTypeMappingDao log) {
         PromotionBookingTypeMappingsRecord promotionBookingTypeMappingsRecord = context.newRecord(PROMOTION_BOOKING_TYPE_MAPPINGS, log);
         promotionBookingTypeMappingsRecord.update();
+
+
+        log.setCreatedBy(promotionBookingTypeMappingsRecord.getCreatedBy());
+        log.setUpdatedBy(promotionBookingTypeMappingsRecord.getUpdatedBy());
+        log.setCreatedOn(promotionBookingTypeMappingsRecord.getCreatedOn());
+        log.setUpdatedOn(promotionBookingTypeMappingsRecord.getUpdatedOn());
+        log.setIsActive(promotionBookingTypeMappingsRecord.getIsActive());
+        log.setState(promotionBookingTypeMappingsRecord.getState());
+        log.setApiSource(promotionBookingTypeMappingsRecord.getApiSource());
+        log.setNotes(promotionBookingTypeMappingsRecord.getNotes());
         return log;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(PROMOTION_BOOKING_TYPE_MAPPINGS).set(PROMOTION_BOOKING_TYPE_MAPPINGS.STATE, RecordState.DELETED.name()).where(PROMOTION_BOOKING_TYPE_MAPPINGS.ID.eq(id)).execute();
+     context.update(PROMOTION_BOOKING_TYPE_MAPPINGS)
+     .set(PROMOTION_BOOKING_TYPE_MAPPINGS.STATE,RecordState.DELETED.name())
+     .where(PROMOTION_BOOKING_TYPE_MAPPINGS.ID.eq(id))
+     .and(PROMOTION_BOOKING_TYPE_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(PROMOTION_BOOKING_TYPE_MAPPINGS.IS_ACTIVE.eq(true))
+     .execute();
     }
 
-    @Override
+     @Override
     public PromotionBookingTypeMappingDao findByUUID(String uuid) {
-        return context.selectFrom(PROMOTION_BOOKING_TYPE_MAPPINGS).where(PROMOTION_BOOKING_TYPE_MAPPINGS.UUID.eq(uuid)).fetchAnyInto(PromotionBookingTypeMappingDao.class);
+        return context.selectFrom(PROMOTION_BOOKING_TYPE_MAPPINGS).where(PROMOTION_BOOKING_TYPE_MAPPINGS.UUID.eq(uuid))
+         .and(PROMOTION_BOOKING_TYPE_MAPPINGS.IS_ACTIVE.eq(true))
+        .fetchAnyInto(PromotionBookingTypeMappingDao.class);
     }
 
     @Override
     public PromotionBookingTypeMappingDao findById(Integer id) {
-        return context.selectFrom(PROMOTION_BOOKING_TYPE_MAPPINGS).where(PROMOTION_BOOKING_TYPE_MAPPINGS.ID.eq(id)).fetchAnyInto(PromotionBookingTypeMappingDao.class);
+        return context.selectFrom(PROMOTION_BOOKING_TYPE_MAPPINGS).where(PROMOTION_BOOKING_TYPE_MAPPINGS.ID.eq(id))
+         .and(PROMOTION_BOOKING_TYPE_MAPPINGS.IS_ACTIVE.eq(true))
+        .fetchAnyInto(PromotionBookingTypeMappingDao.class);
     }
 
     @Override
@@ -57,7 +83,7 @@ public class PromotionBookingTypeMappingRepositoryImpl implements PromotionBooki
     }
 
     @Override
-    public List<PromotionBookingTypeMappingDao> findAll() {
+    public List<PromotionBookingTypeMappingDao> findAllActive() {
         return context.selectFrom(PROMOTION_BOOKING_TYPE_MAPPINGS).fetchInto(PromotionBookingTypeMappingDao.class);
     }
 }

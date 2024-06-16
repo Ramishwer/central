@@ -26,6 +26,14 @@ public class PartnerShiftMappingRepositoryImpl implements PartnerShiftMappingRep
         partnerShiftMappingsRecord.store();
         partnerShiftMappingDao.setId(partnerShiftMappingsRecord.getId());
         partnerShiftMappingDao.setUuid(partnerShiftMappingsRecord.getUuid());
+        partnerShiftMappingDao.setCreatedBy(partnerShiftMappingsRecord.getCreatedBy());
+        partnerShiftMappingDao.setUpdatedBy(partnerShiftMappingsRecord.getUpdatedBy());
+        partnerShiftMappingDao.setCreatedOn(partnerShiftMappingsRecord.getCreatedOn());
+        partnerShiftMappingDao.setUpdatedOn(partnerShiftMappingsRecord.getUpdatedOn());
+        partnerShiftMappingDao.setIsActive(partnerShiftMappingsRecord.getIsActive());
+        partnerShiftMappingDao.setState(partnerShiftMappingsRecord.getState());
+        partnerShiftMappingDao.setApiSource(partnerShiftMappingsRecord.getApiSource());
+        partnerShiftMappingDao.setNotes(partnerShiftMappingsRecord.getNotes());
         return partnerShiftMappingDao;
     }
 
@@ -33,22 +41,41 @@ public class PartnerShiftMappingRepositoryImpl implements PartnerShiftMappingRep
     public PartnerShiftMappingDao update(PartnerShiftMappingDao partnerShiftMappingDao) {
         PartnerShiftMappingsRecord partnerShiftMappingsRecord = context.newRecord(PARTNER_SHIFT_MAPPINGS, partnerShiftMappingDao);
         partnerShiftMappingsRecord.update();
+
+
+        partnerShiftMappingDao.setCreatedBy(partnerShiftMappingsRecord.getCreatedBy());
+        partnerShiftMappingDao.setUpdatedBy(partnerShiftMappingsRecord.getUpdatedBy());
+        partnerShiftMappingDao.setCreatedOn(partnerShiftMappingsRecord.getCreatedOn());
+        partnerShiftMappingDao.setUpdatedOn(partnerShiftMappingsRecord.getUpdatedOn());
+        partnerShiftMappingDao.setIsActive(partnerShiftMappingsRecord.getIsActive());
+        partnerShiftMappingDao.setState(partnerShiftMappingsRecord.getState());
+        partnerShiftMappingDao.setApiSource(partnerShiftMappingsRecord.getApiSource());
+        partnerShiftMappingDao.setNotes(partnerShiftMappingsRecord.getNotes());
         return partnerShiftMappingDao;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(PARTNER_SHIFT_MAPPINGS).set(PARTNER_SHIFT_MAPPINGS.STATE, RecordState.DELETED.name()).where(PARTNER_SHIFT_MAPPINGS.ID.eq(id)).execute();
-    }
+     context.update(PARTNER_SHIFT_MAPPINGS)
+     .set(PARTNER_SHIFT_MAPPINGS.STATE,RecordState.DELETED.name())
+     .where(PARTNER_SHIFT_MAPPINGS.ID.eq(id))
+     .and(PARTNER_SHIFT_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(PARTNER_SHIFT_MAPPINGS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public PartnerShiftMappingDao findByUUID(String uuid) {
-        return context.selectFrom(PARTNER_SHIFT_MAPPINGS).where(PARTNER_SHIFT_MAPPINGS.UUID.eq(uuid)).fetchAnyInto(PartnerShiftMappingDao.class);
+        return context.selectFrom(PARTNER_SHIFT_MAPPINGS).where(PARTNER_SHIFT_MAPPINGS.UUID.eq(uuid))
+                .and(PARTNER_SHIFT_MAPPINGS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PartnerShiftMappingDao.class);
     }
 
     @Override
     public PartnerShiftMappingDao findById(Integer id) {
-        return context.selectFrom(PARTNER_SHIFT_MAPPINGS).where(PARTNER_SHIFT_MAPPINGS.ID.eq(id)).fetchAnyInto(PartnerShiftMappingDao.class);
+        return context.selectFrom(PARTNER_SHIFT_MAPPINGS).where(PARTNER_SHIFT_MAPPINGS.ID.eq(id))
+                .and(PARTNER_SHIFT_MAPPINGS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PartnerShiftMappingDao.class);
     }
 
     @Override
@@ -57,7 +84,7 @@ public class PartnerShiftMappingRepositoryImpl implements PartnerShiftMappingRep
     }
 
     @Override
-    public List<PartnerShiftMappingDao> findAll() {
+    public List<PartnerShiftMappingDao> findAllActive() {
         return context.selectFrom(PARTNER_SHIFT_MAPPINGS).fetchInto(PartnerShiftMappingDao.class);
     }
 }

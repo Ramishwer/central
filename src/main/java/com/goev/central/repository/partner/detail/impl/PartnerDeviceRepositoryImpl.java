@@ -26,6 +26,14 @@ public class PartnerDeviceRepositoryImpl implements PartnerDeviceRepository {
         partnerDevicesRecord.store();
         device.setId(partnerDevicesRecord.getId());
         device.setUuid(partnerDevicesRecord.getUuid());
+        device.setCreatedBy(partnerDevicesRecord.getCreatedBy());
+        device.setUpdatedBy(partnerDevicesRecord.getUpdatedBy());
+        device.setCreatedOn(partnerDevicesRecord.getCreatedOn());
+        device.setUpdatedOn(partnerDevicesRecord.getUpdatedOn());
+        device.setIsActive(partnerDevicesRecord.getIsActive());
+        device.setState(partnerDevicesRecord.getState());
+        device.setApiSource(partnerDevicesRecord.getApiSource());
+        device.setNotes(partnerDevicesRecord.getNotes());
         return device;
     }
 
@@ -33,22 +41,41 @@ public class PartnerDeviceRepositoryImpl implements PartnerDeviceRepository {
     public PartnerDeviceDao update(PartnerDeviceDao device) {
         PartnerDevicesRecord partnerDevicesRecord = context.newRecord(PARTNER_DEVICES, device);
         partnerDevicesRecord.update();
+
+
+        device.setCreatedBy(partnerDevicesRecord.getCreatedBy());
+        device.setUpdatedBy(partnerDevicesRecord.getUpdatedBy());
+        device.setCreatedOn(partnerDevicesRecord.getCreatedOn());
+        device.setUpdatedOn(partnerDevicesRecord.getUpdatedOn());
+        device.setIsActive(partnerDevicesRecord.getIsActive());
+        device.setState(partnerDevicesRecord.getState());
+        device.setApiSource(partnerDevicesRecord.getApiSource());
+        device.setNotes(partnerDevicesRecord.getNotes());
         return device;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(PARTNER_DEVICES).set(PARTNER_DEVICES.STATE, RecordState.DELETED.name()).where(PARTNER_DEVICES.ID.eq(id)).execute();
-    }
+     context.update(PARTNER_DEVICES)
+     .set(PARTNER_DEVICES.STATE,RecordState.DELETED.name())
+     .where(PARTNER_DEVICES.ID.eq(id))
+     .and(PARTNER_DEVICES.STATE.eq(RecordState.ACTIVE.name()))
+     .and(PARTNER_DEVICES.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public PartnerDeviceDao findByUUID(String uuid) {
-        return context.selectFrom(PARTNER_DEVICES).where(PARTNER_DEVICES.UUID.eq(uuid)).fetchAnyInto(PartnerDeviceDao.class);
+        return context.selectFrom(PARTNER_DEVICES).where(PARTNER_DEVICES.UUID.eq(uuid))
+                .and(PARTNER_DEVICES.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PartnerDeviceDao.class);
     }
 
     @Override
     public PartnerDeviceDao findById(Integer id) {
-        return context.selectFrom(PARTNER_DEVICES).where(PARTNER_DEVICES.ID.eq(id)).fetchAnyInto(PartnerDeviceDao.class);
+        return context.selectFrom(PARTNER_DEVICES).where(PARTNER_DEVICES.ID.eq(id))
+                .and(PARTNER_DEVICES.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PartnerDeviceDao.class);
     }
 
     @Override
@@ -57,7 +84,7 @@ public class PartnerDeviceRepositoryImpl implements PartnerDeviceRepository {
     }
 
     @Override
-    public List<PartnerDeviceDao> findAll() {
+    public List<PartnerDeviceDao> findAllActive() {
         return context.selectFrom(PARTNER_DEVICES).fetchInto(PartnerDeviceDao.class);
     }
 }

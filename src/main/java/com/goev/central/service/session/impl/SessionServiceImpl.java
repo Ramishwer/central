@@ -42,8 +42,8 @@ public class SessionServiceImpl implements SessionService {
             throw new ResponseException("User does not exist");
         String url = ApplicationConstants.AUTH_URL + "/api/v1/session-management/sessions";
         HttpHeaders header = new HttpHeaders();
-        header.set(HttpHeaders.AUTHORIZATION, "Basic "+Base64.encodeAsString(String.valueOf(ApplicationConstants.CLIENT_ID+":"+ApplicationConstants.CLIENT_SECRET).getBytes(StandardCharsets.UTF_8)));
-        String response = restClient.post(url, header,AuthCredentialDto.builder()
+        header.set(HttpHeaders.AUTHORIZATION, "Basic " + Base64.encodeAsString((ApplicationConstants.CLIENT_ID + ":" + ApplicationConstants.CLIENT_SECRET).getBytes(StandardCharsets.UTF_8)));
+        String response = restClient.post(url, header, AuthCredentialDto.builder()
                 .authCredentialType(AuthCredentialTypeDto.builder()
                         .name(ApplicationConstants.CREDENTIAL_TYPE_NAME)
                         .uuid(ApplicationConstants.CREDENTIAL_TYPE_UUID)
@@ -51,9 +51,10 @@ public class SessionServiceImpl implements SessionService {
                 .authKey(credentials.getUsername())
                 .authSecret(credentials.getPassword())
                 .authUUID(user.getAuthUuid())
-                .build(), String.class,true);
-        ResponseDto<SessionDto> session = ApplicationConstants.GSON.fromJson(response,new TypeToken<ResponseDto<SessionDto>>(){}.getType());
-        if(session==null || session.getData()==null)
+                .build(), String.class, true);
+        ResponseDto<SessionDto> session = ApplicationConstants.GSON.fromJson(response, new TypeToken<ResponseDto<SessionDto>>() {
+        }.getType());
+        if (session == null || session.getData() == null)
             throw new ResponseException("User does not exist");
         SessionDto sessionDto = session.getData();
         UserSessionDao sessionDao = new UserSessionDao();
@@ -75,18 +76,19 @@ public class SessionServiceImpl implements SessionService {
     @Override
     public SessionDto refreshSessionForSessionUUID(String sessionUUID) {
 
-        UserSessionDao userSessionDao= userSessionRepository.findByUUID(sessionUUID);
-        if(userSessionDao == null)
+        UserSessionDao userSessionDao = userSessionRepository.findByUUID(sessionUUID);
+        if (userSessionDao == null)
             throw new ResponseException("Token Expired");
-        if(RequestContext.getRefreshToken() == null)
+        if (RequestContext.getRefreshToken() == null)
             throw new ResponseException("Token Expired");
-        String url = ApplicationConstants.AUTH_URL + "/api/v1/session-management/sessions/"+userSessionDao.getAuthSessionUuid()+"/token";
+        String url = ApplicationConstants.AUTH_URL + "/api/v1/session-management/sessions/" + userSessionDao.getAuthSessionUuid() + "/token";
         HttpHeaders header = new HttpHeaders();
-        header.set(HttpHeaders.AUTHORIZATION, "Basic "+Base64.encodeAsString(String.valueOf(ApplicationConstants.CLIENT_ID+":"+ApplicationConstants.CLIENT_SECRET).getBytes(StandardCharsets.UTF_8)));
+        header.set(HttpHeaders.AUTHORIZATION, "Basic " + Base64.encodeAsString((ApplicationConstants.CLIENT_ID + ":" + ApplicationConstants.CLIENT_SECRET).getBytes(StandardCharsets.UTF_8)));
         header.set("Refresh-Token", RequestContext.getRefreshToken());
-        String response = restClient.get(url, header, String.class,true);
-        ResponseDto<SessionDto> session = ApplicationConstants.GSON.fromJson(response,new TypeToken<ResponseDto<SessionDto>>(){}.getType());
-        if(session==null || session.getData()==null)
+        String response = restClient.get(url, header, String.class, true);
+        ResponseDto<SessionDto> session = ApplicationConstants.GSON.fromJson(response, new TypeToken<ResponseDto<SessionDto>>() {
+        }.getType());
+        if (session == null || session.getData() == null)
             throw new ResponseException("Token Expired");
 
         SessionDto sessionDto = session.getData();
@@ -110,8 +112,8 @@ public class SessionServiceImpl implements SessionService {
 
     @Override
     public SessionDetailsDto getSessionDetails(String sessionUUID) {
-        UserSessionDao userSessionDao= RequestContext.getUserSession();
-        if(userSessionDao == null)
+        UserSessionDao userSessionDao = RequestContext.getUserSession();
+        if (userSessionDao == null)
             throw new ResponseException("Token Expired");
         userSessionDao.setLastActiveTime(DateTime.now());
         userSessionDao = userSessionRepository.update(userSessionDao);
@@ -127,14 +129,14 @@ public class SessionServiceImpl implements SessionService {
 
     @Override
     public Boolean deleteSession(String sessionUUID) {
-        UserSessionDao userSessionDao= RequestContext.getUserSession();
-        if(userSessionDao == null)
+        UserSessionDao userSessionDao = RequestContext.getUserSession();
+        if (userSessionDao == null)
             throw new ResponseException("Token Expired");
-        String url = ApplicationConstants.AUTH_URL + "/api/v1/session-management/sessions/"+userSessionDao.getAuthSessionUuid();
+        String url = ApplicationConstants.AUTH_URL + "/api/v1/session-management/sessions/" + userSessionDao.getAuthSessionUuid();
         HttpHeaders header = new HttpHeaders();
         header.set("Refresh-Token", RequestContext.getRefreshToken());
         header.set("Authorization", RequestContext.getAccessToken());
-        String response = restClient.delete(url, header, String.class,true);
+        String response = restClient.delete(url, header, String.class, true);
         userSessionRepository.delete(userSessionDao.getId());
         return true;
     }
@@ -144,10 +146,11 @@ public class SessionServiceImpl implements SessionService {
 
         String url = ApplicationConstants.AUTH_URL + "/api/v1/session-management/sessions/tokens";
         HttpHeaders header = new HttpHeaders();
-        header.set(HttpHeaders.AUTHORIZATION, "Basic "+Base64.encodeAsString(String.valueOf(ApplicationConstants.CLIENT_ID+":"+ApplicationConstants.CLIENT_SECRET).getBytes(StandardCharsets.UTF_8)));
-        String response = restClient.post(url, header,token, String.class,true);
-        ResponseDto<SessionDto> session = ApplicationConstants.GSON.fromJson(response,new TypeToken<ResponseDto<SessionDto>>(){}.getType());
-        if(session==null || session.getData()==null || session.getData().getAuthUUID() == null)
+        header.set(HttpHeaders.AUTHORIZATION, "Basic " + Base64.encodeAsString((ApplicationConstants.CLIENT_ID + ":" + ApplicationConstants.CLIENT_SECRET).getBytes(StandardCharsets.UTF_8)));
+        String response = restClient.post(url, header, token, String.class, true);
+        ResponseDto<SessionDto> session = ApplicationConstants.GSON.fromJson(response, new TypeToken<ResponseDto<SessionDto>>() {
+        }.getType());
+        if (session == null || session.getData() == null || session.getData().getAuthUUID() == null)
             throw new ResponseException("User does not exist");
         UserDao user = userRepository.findByAuthUUID(session.getData().getAuthUUID());
         if (user == null)

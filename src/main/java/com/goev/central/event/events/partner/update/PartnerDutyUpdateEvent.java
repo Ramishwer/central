@@ -1,11 +1,11 @@
-package com.goev.central.event.events;
+package com.goev.central.event.events.partner.update;
 
-import com.goev.central.dao.partner.detail.PartnerDao;
+import com.goev.central.dao.partner.duty.PartnerDutyDao;
 import com.goev.central.event.targets.PartnerTarget;
 import com.goev.lib.event.core.Event;
 import jakarta.annotation.PostConstruct;
 
-public class PartnerUpdateEvent extends Event<PartnerDao> {
+public class PartnerDutyUpdateEvent extends Event<PartnerDutyDao> {
 
     @Override
     @PostConstruct
@@ -15,7 +15,7 @@ public class PartnerUpdateEvent extends Event<PartnerDao> {
 
     @Override
     public String getName() {
-        return "PartnerUpdateEvent";
+        return "PartnerDutyUpdateEvent";
     }
 
 }

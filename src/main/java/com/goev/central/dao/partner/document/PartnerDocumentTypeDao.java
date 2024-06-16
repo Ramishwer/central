@@ -1,11 +1,6 @@
-
-
-
 package com.goev.central.dao.partner.document;
 
-import com.goev.central.dao.vehicle.document.VehicleDocumentTypeDao;
 import com.goev.central.dto.partner.document.PartnerDocumentTypeDto;
-import com.goev.central.dto.vehicle.document.VehicleDocumentTypeDto;
 import com.goev.lib.dao.BaseDao;
 import lombok.*;
 

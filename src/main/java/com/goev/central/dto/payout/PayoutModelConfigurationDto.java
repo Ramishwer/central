@@ -16,7 +16,7 @@ public class PayoutModelConfigurationDto {
     private PayoutElementDto payoutElement;
     private PayoutModelDto payoutModel;
     private String day;
-    private Map<String,String> variableValues;
+    private Map<String, String> variableValues;
     private String status;
     private String uuid;
 }

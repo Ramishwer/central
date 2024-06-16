@@ -26,6 +26,14 @@ public class PayoutElementRepositoryImpl implements PayoutElementRepository {
         payoutElementsRecord.store();
         payoutElement.setId(payoutElementsRecord.getId());
         payoutElement.setUuid(payoutElement.getUuid());
+        payoutElement.setCreatedBy(payoutElement.getCreatedBy());
+        payoutElement.setUpdatedBy(payoutElement.getUpdatedBy());
+        payoutElement.setCreatedOn(payoutElement.getCreatedOn());
+        payoutElement.setUpdatedOn(payoutElement.getUpdatedOn());
+        payoutElement.setIsActive(payoutElement.getIsActive());
+        payoutElement.setState(payoutElement.getState());
+        payoutElement.setApiSource(payoutElement.getApiSource());
+        payoutElement.setNotes(payoutElement.getNotes());
         return payoutElement;
     }
 
@@ -33,22 +41,41 @@ public class PayoutElementRepositoryImpl implements PayoutElementRepository {
     public PayoutElementDao update(PayoutElementDao payoutElement) {
         PayoutElementsRecord payoutElementsRecord = context.newRecord(PAYOUT_ELEMENTS, payoutElement);
         payoutElementsRecord.update();
+
+
+        payoutElement.setCreatedBy(payoutElementsRecord.getCreatedBy());
+        payoutElement.setUpdatedBy(payoutElementsRecord.getUpdatedBy());
+        payoutElement.setCreatedOn(payoutElementsRecord.getCreatedOn());
+        payoutElement.setUpdatedOn(payoutElementsRecord.getUpdatedOn());
+        payoutElement.setIsActive(payoutElementsRecord.getIsActive());
+        payoutElement.setState(payoutElementsRecord.getState());
+        payoutElement.setApiSource(payoutElementsRecord.getApiSource());
+        payoutElement.setNotes(payoutElementsRecord.getNotes());
         return payoutElement;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(PAYOUT_ELEMENTS).set(PAYOUT_ELEMENTS.STATE, RecordState.DELETED.name()).where(PAYOUT_ELEMENTS.ID.eq(id)).execute();
-    }
+     context.update(PAYOUT_ELEMENTS)
+     .set(PAYOUT_ELEMENTS.STATE,RecordState.DELETED.name())
+     .where(PAYOUT_ELEMENTS.ID.eq(id))
+     .and(PAYOUT_ELEMENTS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(PAYOUT_ELEMENTS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public PayoutElementDao findByUUID(String uuid) {
-        return context.selectFrom(PAYOUT_ELEMENTS).where(PAYOUT_ELEMENTS.UUID.eq(uuid)).fetchAnyInto(PayoutElementDao.class);
+        return context.selectFrom(PAYOUT_ELEMENTS).where(PAYOUT_ELEMENTS.UUID.eq(uuid))
+                .and(PAYOUT_ELEMENTS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PayoutElementDao.class);
     }
 
     @Override
     public PayoutElementDao findById(Integer id) {
-        return context.selectFrom(PAYOUT_ELEMENTS).where(PAYOUT_ELEMENTS.ID.eq(id)).fetchAnyInto(PayoutElementDao.class);
+        return context.selectFrom(PAYOUT_ELEMENTS).where(PAYOUT_ELEMENTS.ID.eq(id))
+                .and(PAYOUT_ELEMENTS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PayoutElementDao.class);
     }
 
     @Override
@@ -57,7 +84,7 @@ public class PayoutElementRepositoryImpl implements PayoutElementRepository {
     }
 
     @Override
-    public List<PayoutElementDao> findAll() {
+    public List<PayoutElementDao> findAllActive() {
         return context.selectFrom(PAYOUT_ELEMENTS).fetchInto(PayoutElementDao.class);
     }
 }

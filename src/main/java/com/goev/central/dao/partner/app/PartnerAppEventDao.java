@@ -1,6 +1,3 @@
-
-
-
 package com.goev.central.dao.partner.app;
 
 import com.goev.lib.dao.BaseDao;

@@ -10,7 +10,6 @@ import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Map;
 
 import static com.goev.record.central.tables.PromotionCustomerSegmentMappings.PROMOTION_CUSTOMER_SEGMENT_MAPPINGS;
 
@@ -26,6 +25,14 @@ public class PromotionCustomerSegmentMappingRepositoryImpl implements PromotionC
         promotionCustomerSegmentMappingsRecord.store();
         log.setId(promotionCustomerSegmentMappingsRecord.getId());
         log.setUuid(promotionCustomerSegmentMappingsRecord.getUuid());
+        log.setCreatedBy(promotionCustomerSegmentMappingsRecord.getCreatedBy());
+        log.setUpdatedBy(promotionCustomerSegmentMappingsRecord.getUpdatedBy());
+        log.setCreatedOn(promotionCustomerSegmentMappingsRecord.getCreatedOn());
+        log.setUpdatedOn(promotionCustomerSegmentMappingsRecord.getUpdatedOn());
+        log.setIsActive(promotionCustomerSegmentMappingsRecord.getIsActive());
+        log.setState(promotionCustomerSegmentMappingsRecord.getState());
+        log.setApiSource(promotionCustomerSegmentMappingsRecord.getApiSource());
+        log.setNotes(promotionCustomerSegmentMappingsRecord.getNotes());
         return log;
     }
 
@@ -33,23 +40,42 @@ public class PromotionCustomerSegmentMappingRepositoryImpl implements PromotionC
     public PromotionCustomerSegmentMappingDao update(PromotionCustomerSegmentMappingDao log) {
         PromotionCustomerSegmentMappingsRecord promotionCustomerSegmentMappingsRecord = context.newRecord(PROMOTION_CUSTOMER_SEGMENT_MAPPINGS, log);
         promotionCustomerSegmentMappingsRecord.update();
+
+
+        log.setCreatedBy(promotionCustomerSegmentMappingsRecord.getCreatedBy());
+        log.setUpdatedBy(promotionCustomerSegmentMappingsRecord.getUpdatedBy());
+        log.setCreatedOn(promotionCustomerSegmentMappingsRecord.getCreatedOn());
+        log.setUpdatedOn(promotionCustomerSegmentMappingsRecord.getUpdatedOn());
+        log.setIsActive(promotionCustomerSegmentMappingsRecord.getIsActive());
+        log.setState(promotionCustomerSegmentMappingsRecord.getState());
+        log.setApiSource(promotionCustomerSegmentMappingsRecord.getApiSource());
+        log.setNotes(promotionCustomerSegmentMappingsRecord.getNotes());
         return log;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(PROMOTION_CUSTOMER_SEGMENT_MAPPINGS).set(PROMOTION_CUSTOMER_SEGMENT_MAPPINGS.STATE, RecordState.DELETED.name()).where(PROMOTION_CUSTOMER_SEGMENT_MAPPINGS.ID.eq(id)).execute();
-    }
+     context.update(PROMOTION_CUSTOMER_SEGMENT_MAPPINGS)
+     .set(PROMOTION_CUSTOMER_SEGMENT_MAPPINGS.STATE,RecordState.DELETED.name())
+     .where(PROMOTION_CUSTOMER_SEGMENT_MAPPINGS.ID.eq(id))
+     .and(PROMOTION_CUSTOMER_SEGMENT_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(PROMOTION_CUSTOMER_SEGMENT_MAPPINGS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
-    @Override
+     @Override
     public PromotionCustomerSegmentMappingDao findByUUID(String uuid) {
-        return context.selectFrom(PROMOTION_CUSTOMER_SEGMENT_MAPPINGS).where(PROMOTION_CUSTOMER_SEGMENT_MAPPINGS.UUID.eq(uuid)).fetchAnyInto(PromotionCustomerSegmentMappingDao.class);
-    }
+        return context.selectFrom(PROMOTION_CUSTOMER_SEGMENT_MAPPINGS).where(PROMOTION_CUSTOMER_SEGMENT_MAPPINGS.UUID.eq(uuid))
+         .and(PROMOTION_CUSTOMER_SEGMENT_MAPPINGS.IS_ACTIVE.eq(true))
+        .fetchAnyInto(PromotionCustomerSegmentMappingDao.class);
+    }  
 
     @Override
     public PromotionCustomerSegmentMappingDao findById(Integer id) {
-        return context.selectFrom(PROMOTION_CUSTOMER_SEGMENT_MAPPINGS).where(PROMOTION_CUSTOMER_SEGMENT_MAPPINGS.ID.eq(id)).fetchAnyInto(PromotionCustomerSegmentMappingDao.class);
-    }
+        return context.selectFrom(PROMOTION_CUSTOMER_SEGMENT_MAPPINGS).where(PROMOTION_CUSTOMER_SEGMENT_MAPPINGS.ID.eq(id))
+         .and(PROMOTION_CUSTOMER_SEGMENT_MAPPINGS.IS_ACTIVE.eq(true))
+        .fetchAnyInto(PromotionCustomerSegmentMappingDao.class);
+    } 
 
     @Override
     public List<PromotionCustomerSegmentMappingDao> findAllByIds(List<Integer> ids) {
@@ -57,7 +83,7 @@ public class PromotionCustomerSegmentMappingRepositoryImpl implements PromotionC
     }
 
     @Override
-    public List<PromotionCustomerSegmentMappingDao> findAll() {
+    public List<PromotionCustomerSegmentMappingDao> findAllActive() {
         return context.selectFrom(PROMOTION_CUSTOMER_SEGMENT_MAPPINGS).fetchInto(PromotionCustomerSegmentMappingDao.class);
     }
 }

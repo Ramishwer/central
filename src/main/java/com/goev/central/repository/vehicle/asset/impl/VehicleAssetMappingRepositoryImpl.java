@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static com.goev.record.central.tables.LocationAssetMappings.LOCATION_ASSET_MAPPINGS;
 import static com.goev.record.central.tables.VehicleAssetMappings.VEHICLE_ASSET_MAPPINGS;
 
 @Repository
@@ -27,6 +26,14 @@ public class VehicleAssetMappingRepositoryImpl implements VehicleAssetMappingRep
         vehicleAssetMappingsRecord.store();
         assetMapping.setId(vehicleAssetMappingsRecord.getId());
         assetMapping.setUuid(vehicleAssetMappingsRecord.getUuid());
+        assetMapping.setCreatedBy(vehicleAssetMappingsRecord.getCreatedBy());
+        assetMapping.setUpdatedBy(vehicleAssetMappingsRecord.getUpdatedBy());
+        assetMapping.setCreatedOn(vehicleAssetMappingsRecord.getCreatedOn());
+        assetMapping.setUpdatedOn(vehicleAssetMappingsRecord.getUpdatedOn());
+        assetMapping.setIsActive(vehicleAssetMappingsRecord.getIsActive());
+        assetMapping.setState(vehicleAssetMappingsRecord.getState());
+        assetMapping.setApiSource(vehicleAssetMappingsRecord.getApiSource());
+        assetMapping.setNotes(vehicleAssetMappingsRecord.getNotes());
         return assetMapping;
     }
 
@@ -34,22 +41,41 @@ public class VehicleAssetMappingRepositoryImpl implements VehicleAssetMappingRep
     public VehicleAssetMappingDao update(VehicleAssetMappingDao assetMapping) {
         VehicleAssetMappingsRecord vehicleAssetMappingsRecord = context.newRecord(VEHICLE_ASSET_MAPPINGS, assetMapping);
         vehicleAssetMappingsRecord.update();
+
+
+        assetMapping.setCreatedBy(vehicleAssetMappingsRecord.getCreatedBy());
+        assetMapping.setUpdatedBy(vehicleAssetMappingsRecord.getUpdatedBy());
+        assetMapping.setCreatedOn(vehicleAssetMappingsRecord.getCreatedOn());
+        assetMapping.setUpdatedOn(vehicleAssetMappingsRecord.getUpdatedOn());
+        assetMapping.setIsActive(vehicleAssetMappingsRecord.getIsActive());
+        assetMapping.setState(vehicleAssetMappingsRecord.getState());
+        assetMapping.setApiSource(vehicleAssetMappingsRecord.getApiSource());
+        assetMapping.setNotes(vehicleAssetMappingsRecord.getNotes());
         return assetMapping;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(VEHICLE_ASSET_MAPPINGS).set(VEHICLE_ASSET_MAPPINGS.STATE, RecordState.DELETED.name()).where(VEHICLE_ASSET_MAPPINGS.ID.eq(id)).execute();
-    }
+     context.update(VEHICLE_ASSET_MAPPINGS)
+     .set(VEHICLE_ASSET_MAPPINGS.STATE,RecordState.DELETED.name())
+     .where(VEHICLE_ASSET_MAPPINGS.ID.eq(id))
+     .and(VEHICLE_ASSET_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(VEHICLE_ASSET_MAPPINGS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public VehicleAssetMappingDao findByUUID(String uuid) {
-        return context.selectFrom(VEHICLE_ASSET_MAPPINGS).where(VEHICLE_ASSET_MAPPINGS.UUID.eq(uuid)).fetchAnyInto(VehicleAssetMappingDao.class);
+        return context.selectFrom(VEHICLE_ASSET_MAPPINGS).where(VEHICLE_ASSET_MAPPINGS.UUID.eq(uuid))
+                .and(VEHICLE_ASSET_MAPPINGS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(VehicleAssetMappingDao.class);
     }
 
     @Override
     public VehicleAssetMappingDao findById(Integer id) {
-        return context.selectFrom(VEHICLE_ASSET_MAPPINGS).where(VEHICLE_ASSET_MAPPINGS.ID.eq(id)).fetchAnyInto(VehicleAssetMappingDao.class);
+        return context.selectFrom(VEHICLE_ASSET_MAPPINGS).where(VEHICLE_ASSET_MAPPINGS.ID.eq(id))
+                .and(VEHICLE_ASSET_MAPPINGS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(VehicleAssetMappingDao.class);
     }
 
     @Override
@@ -58,7 +84,7 @@ public class VehicleAssetMappingRepositoryImpl implements VehicleAssetMappingRep
     }
 
     @Override
-    public List<VehicleAssetMappingDao> findAll() {
+    public List<VehicleAssetMappingDao> findAllActive() {
         return context.selectFrom(VEHICLE_ASSET_MAPPINGS).fetchInto(VehicleAssetMappingDao.class);
     }
 
@@ -71,7 +97,7 @@ public class VehicleAssetMappingRepositoryImpl implements VehicleAssetMappingRep
     }
 
     @Override
-    public VehicleAssetMappingDao findByVehicleIdAndAssetId(Integer vehicleId,Integer assetId) {
+    public VehicleAssetMappingDao findByVehicleIdAndAssetId(Integer vehicleId, Integer assetId) {
         return context.selectFrom(VEHICLE_ASSET_MAPPINGS)
                 .where(VEHICLE_ASSET_MAPPINGS.VEHICLE_ID.eq(vehicleId))
                 .and(VEHICLE_ASSET_MAPPINGS.ASSET_ID.eq(assetId))

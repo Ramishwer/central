@@ -21,8 +21,8 @@ public class CustomerWalletDetailServiceImpl implements CustomerWalletDetailServ
 
     @Override
     public CustomerWalletDetailDto getCustomerWalletDetails(String customerUUID) {
-        CustomerDao customerDao  = customerRepository.findByUUID(customerUUID);
-        if(customerDao == null)
+        CustomerDao customerDao = customerRepository.findByUUID(customerUUID);
+        if (customerDao == null)
             throw new ResponseException("No customer  found for Id :" + customerUUID);
 
         CustomerWalletDetailDao customerWalletDetailDao = customerWalletDetailRepository.findByCustomerId(customerDao.getId());

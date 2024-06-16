@@ -5,6 +5,7 @@ import com.goev.central.dto.payment.PaymentDto;
 
 public interface PaymentService {
     PaginatedResponseDto<PaymentDto> getPayments();
+
     PaymentDto getPaymentDetails(String paymentUUID);
 
 }

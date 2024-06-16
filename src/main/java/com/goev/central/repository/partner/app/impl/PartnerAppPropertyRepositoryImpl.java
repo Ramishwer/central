@@ -26,6 +26,14 @@ public class PartnerAppPropertyRepositoryImpl implements PartnerAppPropertyRepos
         partnerAppPropertiesRecord.store();
         partnerAppProperty.setId(partnerAppPropertiesRecord.getId());
         partnerAppProperty.setUuid(partnerAppProperty.getUuid());
+        partnerAppProperty.setCreatedBy(partnerAppProperty.getCreatedBy());
+        partnerAppProperty.setUpdatedBy(partnerAppProperty.getUpdatedBy());
+        partnerAppProperty.setCreatedOn(partnerAppProperty.getCreatedOn());
+        partnerAppProperty.setUpdatedOn(partnerAppProperty.getUpdatedOn());
+        partnerAppProperty.setIsActive(partnerAppProperty.getIsActive());
+        partnerAppProperty.setState(partnerAppProperty.getState());
+        partnerAppProperty.setApiSource(partnerAppProperty.getApiSource());
+        partnerAppProperty.setNotes(partnerAppProperty.getNotes());
         return partnerAppProperty;
     }
 
@@ -33,22 +41,41 @@ public class PartnerAppPropertyRepositoryImpl implements PartnerAppPropertyRepos
     public PartnerAppPropertyDao update(PartnerAppPropertyDao partnerAppProperty) {
         PartnerAppPropertiesRecord partnerAppPropertiesRecord = context.newRecord(PARTNER_APP_PROPERTIES, partnerAppProperty);
         partnerAppPropertiesRecord.update();
+
+
+        partnerAppProperty.setCreatedBy(partnerAppPropertiesRecord.getCreatedBy());
+        partnerAppProperty.setUpdatedBy(partnerAppPropertiesRecord.getUpdatedBy());
+        partnerAppProperty.setCreatedOn(partnerAppPropertiesRecord.getCreatedOn());
+        partnerAppProperty.setUpdatedOn(partnerAppPropertiesRecord.getUpdatedOn());
+        partnerAppProperty.setIsActive(partnerAppPropertiesRecord.getIsActive());
+        partnerAppProperty.setState(partnerAppPropertiesRecord.getState());
+        partnerAppProperty.setApiSource(partnerAppPropertiesRecord.getApiSource());
+        partnerAppProperty.setNotes(partnerAppPropertiesRecord.getNotes());
         return partnerAppProperty;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(PARTNER_APP_PROPERTIES).set(PARTNER_APP_PROPERTIES.STATE, RecordState.DELETED.name()).where(PARTNER_APP_PROPERTIES.ID.eq(id)).execute();
-    }
+     context.update(PARTNER_APP_PROPERTIES)
+     .set(PARTNER_APP_PROPERTIES.STATE,RecordState.DELETED.name())
+     .where(PARTNER_APP_PROPERTIES.ID.eq(id))
+     .and(PARTNER_APP_PROPERTIES.STATE.eq(RecordState.ACTIVE.name()))
+     .and(PARTNER_APP_PROPERTIES.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public PartnerAppPropertyDao findByUUID(String uuid) {
-        return context.selectFrom(PARTNER_APP_PROPERTIES).where(PARTNER_APP_PROPERTIES.UUID.eq(uuid)).fetchAnyInto(PartnerAppPropertyDao.class);
+        return context.selectFrom(PARTNER_APP_PROPERTIES).where(PARTNER_APP_PROPERTIES.UUID.eq(uuid))
+                .and(PARTNER_APP_PROPERTIES.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PartnerAppPropertyDao.class);
     }
 
     @Override
     public PartnerAppPropertyDao findById(Integer id) {
-        return context.selectFrom(PARTNER_APP_PROPERTIES).where(PARTNER_APP_PROPERTIES.ID.eq(id)).fetchAnyInto(PartnerAppPropertyDao.class);
+        return context.selectFrom(PARTNER_APP_PROPERTIES).where(PARTNER_APP_PROPERTIES.ID.eq(id))
+                .and(PARTNER_APP_PROPERTIES.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PartnerAppPropertyDao.class);
     }
 
     @Override
@@ -57,7 +84,7 @@ public class PartnerAppPropertyRepositoryImpl implements PartnerAppPropertyRepos
     }
 
     @Override
-    public List<PartnerAppPropertyDao> findAll() {
+    public List<PartnerAppPropertyDao> findAllActive() {
         return context.selectFrom(PARTNER_APP_PROPERTIES).fetchInto(PartnerAppPropertyDao.class);
     }
 }

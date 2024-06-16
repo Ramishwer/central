@@ -6,10 +6,16 @@ import java.util.List;
 
 public interface PayoutModelRepository {
     PayoutModelDao save(PayoutModelDao partner);
+
     PayoutModelDao update(PayoutModelDao partner);
+
     void delete(Integer id);
+
     PayoutModelDao findByUUID(String uuid);
+
     PayoutModelDao findById(Integer id);
+
     List<PayoutModelDao> findAllByIds(List<Integer> ids);
-    List<PayoutModelDao> findAll();
+
+    List<PayoutModelDao> findAllActive();
 }

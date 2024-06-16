@@ -6,10 +6,16 @@ import java.util.List;
 
 public interface PartnerNotificationRepository {
     PartnerNotificationDao save(PartnerNotificationDao partner);
+
     PartnerNotificationDao update(PartnerNotificationDao partner);
+
     void delete(Integer id);
+
     PartnerNotificationDao findByUUID(String uuid);
+
     PartnerNotificationDao findById(Integer id);
+
     List<PartnerNotificationDao> findAllByIds(List<Integer> ids);
-    List<PartnerNotificationDao> findAll();
+
+    List<PartnerNotificationDao> findAllActive();
 }

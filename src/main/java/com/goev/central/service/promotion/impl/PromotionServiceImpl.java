@@ -25,7 +25,7 @@ public class PromotionServiceImpl implements PromotionService {
     @Override
     public PaginatedResponseDto<PromotionDto> getPromotions() {
         PaginatedResponseDto<PromotionDto> result = PaginatedResponseDto.<PromotionDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
-        List<PromotionDao> promotionDaos = promotionRepository.findAll();
+        List<PromotionDao> promotionDaos = promotionRepository.findAllActive();
         if (CollectionUtils.isEmpty(promotionDaos))
             return result;
 
@@ -54,7 +54,7 @@ public class PromotionServiceImpl implements PromotionService {
         if (promotionDao == null)
             throw new ResponseException("No promotion  found for Id :" + promotionUUID);
         PromotionDao newPromotionDao = new PromotionDao();
-       
+
 
         newPromotionDao.setId(promotionDao.getId());
         newPromotionDao.setUuid(promotionDao.getUuid());

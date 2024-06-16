@@ -2,7 +2,6 @@ package com.goev.central.service.vehicle.asset;
 
 import com.goev.central.dto.asset.AssetDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
-import com.goev.central.dto.vehicle.VehicleViewDto;
 
 import java.util.List;
 

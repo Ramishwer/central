@@ -25,7 +25,7 @@ public class PartnerNotificationTemplateServiceImpl implements PartnerNotificati
     @Override
     public PaginatedResponseDto<PartnerNotificationTemplateDto> getPartnerNotificationTemplates() {
         PaginatedResponseDto<PartnerNotificationTemplateDto> result = PaginatedResponseDto.<PartnerNotificationTemplateDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
-        List<PartnerNotificationTemplateDao> partnerNotificationTemplateDaos = partnerNotificationTemplateRepository.findAll();
+        List<PartnerNotificationTemplateDao> partnerNotificationTemplateDaos = partnerNotificationTemplateRepository.findAllActive();
         if (CollectionUtils.isEmpty(partnerNotificationTemplateDaos))
             return result;
 
@@ -54,7 +54,7 @@ public class PartnerNotificationTemplateServiceImpl implements PartnerNotificati
         if (partnerNotificationTemplateDao == null)
             throw new ResponseException("No partnerNotificationTemplate  found for Id :" + partnerNotificationTemplateUUID);
         PartnerNotificationTemplateDao newPartnerNotificationTemplateDao = new PartnerNotificationTemplateDao();
-       
+
 
         newPartnerNotificationTemplateDao.setId(partnerNotificationTemplateDao.getId());
         newPartnerNotificationTemplateDao.setUuid(partnerNotificationTemplateDao.getUuid());

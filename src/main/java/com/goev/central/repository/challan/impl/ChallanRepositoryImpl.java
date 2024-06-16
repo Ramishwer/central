@@ -26,6 +26,14 @@ public class ChallanRepositoryImpl implements ChallanRepository {
         challansRecord.store();
         challanDao.setId(challansRecord.getId());
         challanDao.setUuid(challansRecord.getUuid());
+        challanDao.setCreatedBy(challansRecord.getCreatedBy());
+        challanDao.setUpdatedBy(challansRecord.getUpdatedBy());
+        challanDao.setCreatedOn(challansRecord.getCreatedOn());
+        challanDao.setUpdatedOn(challansRecord.getUpdatedOn());
+        challanDao.setIsActive(challansRecord.getIsActive());
+        challanDao.setState(challansRecord.getState());
+        challanDao.setApiSource(challansRecord.getApiSource());
+        challanDao.setNotes(challansRecord.getNotes());
         return challanDao;
     }
 
@@ -33,22 +41,41 @@ public class ChallanRepositoryImpl implements ChallanRepository {
     public ChallanDao update(ChallanDao challanDao) {
         ChallansRecord challansRecord = context.newRecord(CHALLANS, challanDao);
         challansRecord.update();
+
+
+        challanDao.setCreatedBy(challansRecord.getCreatedBy());
+        challanDao.setUpdatedBy(challansRecord.getUpdatedBy());
+        challanDao.setCreatedOn(challansRecord.getCreatedOn());
+        challanDao.setUpdatedOn(challansRecord.getUpdatedOn());
+        challanDao.setIsActive(challansRecord.getIsActive());
+        challanDao.setState(challansRecord.getState());
+        challanDao.setApiSource(challansRecord.getApiSource());
+        challanDao.setNotes(challansRecord.getNotes());
         return challanDao;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(CHALLANS).set(CHALLANS.STATE, RecordState.DELETED.name()).where(CHALLANS.ID.eq(id)).execute();
-    }
+     context.update(CHALLANS)
+     .set(CHALLANS.STATE,RecordState.DELETED.name())
+     .where(CHALLANS.ID.eq(id))
+     .and(CHALLANS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(CHALLANS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public ChallanDao findByUUID(String uuid) {
-        return context.selectFrom(CHALLANS).where(CHALLANS.UUID.eq(uuid)).fetchAnyInto(ChallanDao.class);
+        return context.selectFrom(CHALLANS).where(CHALLANS.UUID.eq(uuid))
+                .and(CHALLANS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(ChallanDao.class);
     }
 
     @Override
     public ChallanDao findById(Integer id) {
-        return context.selectFrom(CHALLANS).where(CHALLANS.ID.eq(id)).fetchAnyInto(ChallanDao.class);
+        return context.selectFrom(CHALLANS).where(CHALLANS.ID.eq(id))
+                .and(CHALLANS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(ChallanDao.class);
     }
 
     @Override
@@ -57,7 +84,7 @@ public class ChallanRepositoryImpl implements ChallanRepository {
     }
 
     @Override
-    public List<ChallanDao> findAll() {
+    public List<ChallanDao> findAllActive() {
         return context.selectFrom(CHALLANS).fetchInto(ChallanDao.class);
     }
 }

@@ -27,6 +27,14 @@ public class CustomerPaymentRepositoryImpl implements CustomerPaymentRepository 
         customerPaymentsRecord.store();
         customerPaymentDao.setId(customerPaymentsRecord.getId());
         customerPaymentDao.setUuid(customerPaymentsRecord.getUuid());
+        customerPaymentDao.setCreatedBy(customerPaymentsRecord.getCreatedBy());
+        customerPaymentDao.setUpdatedBy(customerPaymentsRecord.getUpdatedBy());
+        customerPaymentDao.setCreatedOn(customerPaymentsRecord.getCreatedOn());
+        customerPaymentDao.setUpdatedOn(customerPaymentsRecord.getUpdatedOn());
+        customerPaymentDao.setIsActive(customerPaymentsRecord.getIsActive());
+        customerPaymentDao.setState(customerPaymentsRecord.getState());
+        customerPaymentDao.setApiSource(customerPaymentsRecord.getApiSource());
+        customerPaymentDao.setNotes(customerPaymentsRecord.getNotes());
         return customerPaymentDao;
     }
 
@@ -34,22 +42,41 @@ public class CustomerPaymentRepositoryImpl implements CustomerPaymentRepository 
     public CustomerPaymentDao update(CustomerPaymentDao customerPaymentDao) {
         CustomerPaymentsRecord customerPaymentsRecord = context.newRecord(CUSTOMER_PAYMENTS, customerPaymentDao);
         customerPaymentsRecord.update();
+
+
+        customerPaymentDao.setCreatedBy(customerPaymentsRecord.getCreatedBy());
+        customerPaymentDao.setUpdatedBy(customerPaymentsRecord.getUpdatedBy());
+        customerPaymentDao.setCreatedOn(customerPaymentsRecord.getCreatedOn());
+        customerPaymentDao.setUpdatedOn(customerPaymentsRecord.getUpdatedOn());
+        customerPaymentDao.setIsActive(customerPaymentsRecord.getIsActive());
+        customerPaymentDao.setState(customerPaymentsRecord.getState());
+        customerPaymentDao.setApiSource(customerPaymentsRecord.getApiSource());
+        customerPaymentDao.setNotes(customerPaymentsRecord.getNotes());
         return customerPaymentDao;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(CUSTOMER_PAYMENTS).set(CUSTOMER_PAYMENTS.STATE, RecordState.DELETED.name()).where(CUSTOMER_PAYMENTS.ID.eq(id)).execute();
-    }
+     context.update(CUSTOMER_PAYMENTS)
+     .set(CUSTOMER_PAYMENTS.STATE,RecordState.DELETED.name())
+     .where(CUSTOMER_PAYMENTS.ID.eq(id))
+     .and(CUSTOMER_PAYMENTS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(CUSTOMER_PAYMENTS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public CustomerPaymentDao findByUUID(String uuid) {
-        return context.selectFrom(CUSTOMER_PAYMENTS).where(CUSTOMER_PAYMENTS.UUID.eq(uuid)).fetchAnyInto(CustomerPaymentDao.class);
+        return context.selectFrom(CUSTOMER_PAYMENTS).where(CUSTOMER_PAYMENTS.UUID.eq(uuid))
+                .and(CUSTOMER_PAYMENTS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(CustomerPaymentDao.class);
     }
 
     @Override
     public CustomerPaymentDao findById(Integer id) {
-        return context.selectFrom(CUSTOMER_PAYMENTS).where(CUSTOMER_PAYMENTS.ID.eq(id)).fetchAnyInto(CustomerPaymentDao.class);
+        return context.selectFrom(CUSTOMER_PAYMENTS).where(CUSTOMER_PAYMENTS.ID.eq(id))
+                .and(CUSTOMER_PAYMENTS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(CustomerPaymentDao.class);
     }
 
     @Override
@@ -58,7 +85,7 @@ public class CustomerPaymentRepositoryImpl implements CustomerPaymentRepository 
     }
 
     @Override
-    public List<CustomerPaymentDao> findAll() {
+    public List<CustomerPaymentDao> findAllActive() {
         return context.selectFrom(CUSTOMER_PAYMENTS).fetchInto(CustomerPaymentDao.class);
     }
 }

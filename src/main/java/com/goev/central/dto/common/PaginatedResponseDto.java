@@ -12,7 +12,7 @@ import java.util.List;
 @ToString
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class PaginatedResponseDto <T>{
+public class PaginatedResponseDto<T> {
     private PageDto pagination;
     private List<T> elements;
 }

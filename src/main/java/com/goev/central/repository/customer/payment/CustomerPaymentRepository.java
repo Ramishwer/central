@@ -17,5 +17,5 @@ public interface CustomerPaymentRepository {
 
     List<CustomerPaymentDao> findAllByIds(List<Integer> ids);
 
-    List<CustomerPaymentDao> findAll();
+    List<CustomerPaymentDao> findAllActive();
 }

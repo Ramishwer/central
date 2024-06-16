@@ -18,33 +18,33 @@ public class EngineRuleFieldController {
     private final EngineRuleFieldService engineRuleFieldService;
 
     @GetMapping("/engines/rule-fields")
-    public ResponseDto<PaginatedResponseDto<EngineRuleFieldDto>> getEngineRuleFields(@RequestParam("count")Integer count,
-                                                                                 @RequestParam("start")Integer start,
-                                                                                 @RequestParam("from")Long from,
-                                                                                 @RequestParam("to")Long to,
-                                                                                 @RequestParam("lastUUID") String lastElementUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, engineRuleFieldService.getEngineRuleFields());
+    public ResponseDto<PaginatedResponseDto<EngineRuleFieldDto>> getEngineRuleFields(@RequestParam("count") Integer count,
+                                                                                     @RequestParam("start") Integer start,
+                                                                                     @RequestParam("from") Long from,
+                                                                                     @RequestParam("to") Long to,
+                                                                                     @RequestParam("lastUUID") String lastElementUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, engineRuleFieldService.getEngineRuleFields());
     }
 
-    
 
     @GetMapping("/engines/rule-fields/{rule-field-uuid}")
-    public ResponseDto<EngineRuleFieldDto> getEngineRuleFieldDetails(@PathVariable(value = "rule-field-uuid")String ruleFieldUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, engineRuleFieldService.getEngineRuleFieldDetails(ruleFieldUUID));
+    public ResponseDto<EngineRuleFieldDto> getEngineRuleFieldDetails(@PathVariable(value = "rule-field-uuid") String ruleFieldUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, engineRuleFieldService.getEngineRuleFieldDetails(ruleFieldUUID));
     }
 
 
     @PostMapping("/engines/rule-fields")
-    public ResponseDto<EngineRuleFieldDto> createEngineRuleField(@RequestBody EngineRuleFieldDto engineRuleFieldDto){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, engineRuleFieldService.createEngineRuleField(engineRuleFieldDto));
+    public ResponseDto<EngineRuleFieldDto> createEngineRuleField(@RequestBody EngineRuleFieldDto engineRuleFieldDto) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, engineRuleFieldService.createEngineRuleField(engineRuleFieldDto));
     }
 
     @PutMapping("/engines/rule-fields/{rule-field-uuid}")
-    public ResponseDto<EngineRuleFieldDto> updateEngineRuleField(@PathVariable(value = "rule-field-uuid")String ruleFieldUUID, @RequestBody EngineRuleFieldDto engineRuleFieldDto){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, engineRuleFieldService.updateEngineRuleField(ruleFieldUUID,engineRuleFieldDto));
+    public ResponseDto<EngineRuleFieldDto> updateEngineRuleField(@PathVariable(value = "rule-field-uuid") String ruleFieldUUID, @RequestBody EngineRuleFieldDto engineRuleFieldDto) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, engineRuleFieldService.updateEngineRuleField(ruleFieldUUID, engineRuleFieldDto));
     }
+
     @DeleteMapping("/engines/rule-fields/{rule-field-uuid}")
-    public ResponseDto<Boolean> deleteEngineRuleField(@PathVariable(value = "rule-field-uuid")String ruleFieldUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, engineRuleFieldService.deleteEngineRuleField(ruleFieldUUID));
+    public ResponseDto<Boolean> deleteEngineRuleField(@PathVariable(value = "rule-field-uuid") String ruleFieldUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, engineRuleFieldService.deleteEngineRuleField(ruleFieldUUID));
     }
 }

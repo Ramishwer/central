@@ -25,7 +25,7 @@ public class PricingModelServiceImpl implements PricingModelService {
     @Override
     public PaginatedResponseDto<PricingModelDto> getPricingModels() {
         PaginatedResponseDto<PricingModelDto> result = PaginatedResponseDto.<PricingModelDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
-        List<PricingModelDao> pricingModelDaos = pricingModelRepository.findAll();
+        List<PricingModelDao> pricingModelDaos = pricingModelRepository.findAllActive();
         if (CollectionUtils.isEmpty(pricingModelDaos))
             return result;
 
@@ -54,7 +54,7 @@ public class PricingModelServiceImpl implements PricingModelService {
         if (pricingModelDao == null)
             throw new ResponseException("No pricingModel  found for Id :" + pricingModelUUID);
         PricingModelDao newPricingModelDao = new PricingModelDao();
-       
+
 
         newPricingModelDao.setId(pricingModelDao.getId());
         newPricingModelDao.setUuid(pricingModelDao.getUuid());

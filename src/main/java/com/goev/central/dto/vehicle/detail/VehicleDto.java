@@ -29,14 +29,14 @@ public class VehicleDto {
     private VehicleTransferDto vehicleTransferDetails;
     private Integer soc;
     private Integer dte;
-    private String subStatus ;
+    private String subStatus;
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
-    private DateTime computedAvailableTime ;
+    private DateTime computedAvailableTime;
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
-    private DateTime computedChargingTime ;
-    private String locationStatus ;
-    private LocationDto locationDetails ;
+    private DateTime computedChargingTime;
+    private String locationStatus;
+    private LocationDto locationDetails;
     private VehicleViewDto vehicle;
 }

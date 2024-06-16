@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.joda.deser.DateTimeDeserializer;
 import com.fasterxml.jackson.datatype.joda.ser.DateTimeSerializer;
-import com.goev.central.dto.partner.detail.PartnerDto;
 import com.goev.central.dto.payout.PayoutElementDto;
 import com.goev.central.dto.payout.PayoutModelDto;
 import lombok.*;

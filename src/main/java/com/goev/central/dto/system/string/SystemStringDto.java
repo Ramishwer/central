@@ -16,5 +16,5 @@ import java.util.Map;
 public class SystemStringDto {
     private String uuid;
     private String language;
-    private List<Map<String,Object>> strings;
+    private List<Map<String, Object>> strings;
 }

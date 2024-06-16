@@ -10,7 +10,6 @@ import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Map;
 
 import static com.goev.record.central.tables.Payments.PAYMENTS;
 
@@ -26,6 +25,14 @@ public class PaymentRepositoryImpl implements PaymentRepository {
         paymentsRecord.store();
         log.setId(paymentsRecord.getId());
         log.setUuid(paymentsRecord.getUuid());
+        log.setCreatedBy(paymentsRecord.getCreatedBy());
+        log.setUpdatedBy(paymentsRecord.getUpdatedBy());
+        log.setCreatedOn(paymentsRecord.getCreatedOn());
+        log.setUpdatedOn(paymentsRecord.getUpdatedOn());
+        log.setIsActive(paymentsRecord.getIsActive());
+        log.setState(paymentsRecord.getState());
+        log.setApiSource(paymentsRecord.getApiSource());
+        log.setNotes(paymentsRecord.getNotes());
         return log;
     }
 
@@ -33,22 +40,41 @@ public class PaymentRepositoryImpl implements PaymentRepository {
     public PaymentDao update(PaymentDao log) {
         PaymentsRecord paymentsRecord = context.newRecord(PAYMENTS, log);
         paymentsRecord.update();
+
+
+        log.setCreatedBy(paymentsRecord.getCreatedBy());
+        log.setUpdatedBy(paymentsRecord.getUpdatedBy());
+        log.setCreatedOn(paymentsRecord.getCreatedOn());
+        log.setUpdatedOn(paymentsRecord.getUpdatedOn());
+        log.setIsActive(paymentsRecord.getIsActive());
+        log.setState(paymentsRecord.getState());
+        log.setApiSource(paymentsRecord.getApiSource());
+        log.setNotes(paymentsRecord.getNotes());
         return log;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(PAYMENTS).set(PAYMENTS.STATE, RecordState.DELETED.name()).where(PAYMENTS.ID.eq(id)).execute();
-    }
+     context.update(PAYMENTS)
+     .set(PAYMENTS.STATE,RecordState.DELETED.name())
+     .where(PAYMENTS.ID.eq(id))
+     .and(PAYMENTS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(PAYMENTS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public PaymentDao findByUUID(String uuid) {
-        return context.selectFrom(PAYMENTS).where(PAYMENTS.UUID.eq(uuid)).fetchAnyInto(PaymentDao.class);
+        return context.selectFrom(PAYMENTS).where(PAYMENTS.UUID.eq(uuid))
+                .and(PAYMENTS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PaymentDao.class);
     }
 
     @Override
     public PaymentDao findById(Integer id) {
-        return context.selectFrom(PAYMENTS).where(PAYMENTS.ID.eq(id)).fetchAnyInto(PaymentDao.class);
+        return context.selectFrom(PAYMENTS).where(PAYMENTS.ID.eq(id))
+                .and(PAYMENTS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PaymentDao.class);
     }
 
     @Override
@@ -57,7 +83,7 @@ public class PaymentRepositoryImpl implements PaymentRepository {
     }
 
     @Override
-    public List<PaymentDao> findAll() {
+    public List<PaymentDao> findAllActive() {
         return context.selectFrom(PAYMENTS).fetchInto(PaymentDao.class);
     }
 }

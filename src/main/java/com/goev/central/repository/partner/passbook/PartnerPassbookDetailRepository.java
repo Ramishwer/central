@@ -6,12 +6,18 @@ import java.util.List;
 
 public interface PartnerPassbookDetailRepository {
     PartnerPassbookDetailDao save(PartnerPassbookDetailDao partner);
+
     PartnerPassbookDetailDao update(PartnerPassbookDetailDao partner);
+
     void delete(Integer id);
+
     PartnerPassbookDetailDao findByUUID(String uuid);
+
     PartnerPassbookDetailDao findById(Integer id);
+
     List<PartnerPassbookDetailDao> findAllByIds(List<Integer> ids);
-    List<PartnerPassbookDetailDao> findAll();
+
+    List<PartnerPassbookDetailDao> findAllActive();
 
     PartnerPassbookDetailDao findByPartnerId(Integer id);
 }

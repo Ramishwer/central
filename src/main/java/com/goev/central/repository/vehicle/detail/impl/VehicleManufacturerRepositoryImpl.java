@@ -25,6 +25,14 @@ public class VehicleManufacturerRepositoryImpl implements VehicleManufacturerRep
         vehicleManufacturersRecord.store();
         manufacturer.setId(vehicleManufacturersRecord.getId());
         manufacturer.setUuid(vehicleManufacturersRecord.getUuid());
+        manufacturer.setCreatedBy(vehicleManufacturersRecord.getCreatedBy());
+        manufacturer.setUpdatedBy(vehicleManufacturersRecord.getUpdatedBy());
+        manufacturer.setCreatedOn(vehicleManufacturersRecord.getCreatedOn());
+        manufacturer.setUpdatedOn(vehicleManufacturersRecord.getUpdatedOn());
+        manufacturer.setIsActive(vehicleManufacturersRecord.getIsActive());
+        manufacturer.setState(vehicleManufacturersRecord.getState());
+        manufacturer.setApiSource(vehicleManufacturersRecord.getApiSource());
+        manufacturer.setNotes(vehicleManufacturersRecord.getNotes());
         return manufacturer;
     }
 
@@ -32,22 +40,41 @@ public class VehicleManufacturerRepositoryImpl implements VehicleManufacturerRep
     public VehicleManufacturerDao update(VehicleManufacturerDao manufacturer) {
         VehicleManufacturersRecord vehicleManufacturersRecord = context.newRecord(VEHICLE_MANUFACTURERS, manufacturer);
         vehicleManufacturersRecord.update();
+
+
+        manufacturer.setCreatedBy(vehicleManufacturersRecord.getCreatedBy());
+        manufacturer.setUpdatedBy(vehicleManufacturersRecord.getUpdatedBy());
+        manufacturer.setCreatedOn(vehicleManufacturersRecord.getCreatedOn());
+        manufacturer.setUpdatedOn(vehicleManufacturersRecord.getUpdatedOn());
+        manufacturer.setIsActive(vehicleManufacturersRecord.getIsActive());
+        manufacturer.setState(vehicleManufacturersRecord.getState());
+        manufacturer.setApiSource(vehicleManufacturersRecord.getApiSource());
+        manufacturer.setNotes(vehicleManufacturersRecord.getNotes());
         return manufacturer;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(VEHICLE_MANUFACTURERS).set(VEHICLE_MANUFACTURERS.STATE, RecordState.DELETED.name()).where(VEHICLE_MANUFACTURERS.ID.eq(id)).execute();
-    }
+     context.update(VEHICLE_MANUFACTURERS)
+     .set(VEHICLE_MANUFACTURERS.STATE,RecordState.DELETED.name())
+     .where(VEHICLE_MANUFACTURERS.ID.eq(id))
+     .and(VEHICLE_MANUFACTURERS.STATE.eq(RecordState.ACTIVE.name()))
+     .and(VEHICLE_MANUFACTURERS.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public VehicleManufacturerDao findByUUID(String uuid) {
-        return context.selectFrom(VEHICLE_MANUFACTURERS).where(VEHICLE_MANUFACTURERS.UUID.eq(uuid)).fetchAnyInto(VehicleManufacturerDao.class);
+        return context.selectFrom(VEHICLE_MANUFACTURERS).where(VEHICLE_MANUFACTURERS.UUID.eq(uuid))
+                .and(VEHICLE_MANUFACTURERS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(VehicleManufacturerDao.class);
     }
 
     @Override
     public VehicleManufacturerDao findById(Integer id) {
-        return context.selectFrom(VEHICLE_MANUFACTURERS).where(VEHICLE_MANUFACTURERS.ID.eq(id)).fetchAnyInto(VehicleManufacturerDao.class);
+        return context.selectFrom(VEHICLE_MANUFACTURERS).where(VEHICLE_MANUFACTURERS.ID.eq(id))
+                .and(VEHICLE_MANUFACTURERS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(VehicleManufacturerDao.class);
     }
 
     @Override
@@ -56,7 +83,7 @@ public class VehicleManufacturerRepositoryImpl implements VehicleManufacturerRep
     }
 
     @Override
-    public List<VehicleManufacturerDao> findAll() {
+    public List<VehicleManufacturerDao> findAllActive() {
         return context.selectFrom(VEHICLE_MANUFACTURERS).fetchInto(VehicleManufacturerDao.class);
     }
 }

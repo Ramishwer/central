@@ -1,11 +1,8 @@
 package com.goev.central.dto.user.detail;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.goev.central.dto.common.AttributeDto;
 import com.goev.central.dto.user.UserViewDto;
 import lombok.*;
-
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor

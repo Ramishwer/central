@@ -1,6 +1,5 @@
 package com.goev.central.service.customer.app;
 
-import com.goev.central.dto.asset.AssetDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.customer.app.CustomerAppEventDto;
 

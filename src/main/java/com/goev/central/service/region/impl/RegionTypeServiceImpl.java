@@ -25,7 +25,7 @@ public class RegionTypeServiceImpl implements RegionTypeService {
     @Override
     public PaginatedResponseDto<RegionTypeDto> getRegionTypes() {
         PaginatedResponseDto<RegionTypeDto> result = PaginatedResponseDto.<RegionTypeDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
-        List<RegionTypeDao> regionTypeDaos = regionTypeRepository.findAll();
+        List<RegionTypeDao> regionTypeDaos = regionTypeRepository.findAllActive();
         if (CollectionUtils.isEmpty(regionTypeDaos))
             return result;
 
@@ -54,7 +54,7 @@ public class RegionTypeServiceImpl implements RegionTypeService {
         if (regionTypeDao == null)
             throw new ResponseException("No regionType  found for Id :" + regionTypeUUID);
         RegionTypeDao newRegionTypeDao = new RegionTypeDao();
-       
+
 
         newRegionTypeDao.setId(regionTypeDao.getId());
         newRegionTypeDao.setUuid(regionTypeDao.getUuid());

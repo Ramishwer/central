@@ -18,19 +18,18 @@ public class AllocationLogController {
     private final AllocationLogService allocationLogService;
 
     @GetMapping("/allocations/logs")
-    public ResponseDto<PaginatedResponseDto<AllocationLogDto>> getAllocations(@RequestParam("count")Integer count,
-                                                                                 @RequestParam("start")Integer start,
-                                                                                 @RequestParam("from")Long from,
-                                                                                 @RequestParam("to")Long to,
-                                                                                 @RequestParam("lastUUID") String lastElementUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, allocationLogService.getAllocationLogs());
+    public ResponseDto<PaginatedResponseDto<AllocationLogDto>> getAllocations(@RequestParam("count") Integer count,
+                                                                              @RequestParam("start") Integer start,
+                                                                              @RequestParam("from") Long from,
+                                                                              @RequestParam("to") Long to,
+                                                                              @RequestParam("lastUUID") String lastElementUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, allocationLogService.getAllocationLogs());
     }
 
-    
 
     @GetMapping("/allocations/logs/{allocation-log-uuid}")
-    public ResponseDto<AllocationLogDto> getAllocationDetails(@PathVariable(value = "allocation-log-uuid")String allocationLogUUID){
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(),200, allocationLogService.getAllocationLogDetails(allocationLogUUID));
+    public ResponseDto<AllocationLogDto> getAllocationDetails(@PathVariable(value = "allocation-log-uuid") String allocationLogUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, allocationLogService.getAllocationLogDetails(allocationLogUUID));
     }
 
 }

@@ -10,7 +10,6 @@ import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Map;
 
 import static com.goev.record.central.tables.SystemSupportedLanguages.SYSTEM_SUPPORTED_LANGUAGES;
 
@@ -26,6 +25,14 @@ public class SystemSupportedLanguageRepositoryImpl implements SystemSupportedLan
         systemSupportedLanguagesRecord.store();
         supportedLanguage.setId(systemSupportedLanguagesRecord.getId());
         supportedLanguage.setUuid(systemSupportedLanguagesRecord.getUuid());
+        supportedLanguage.setCreatedBy(systemSupportedLanguagesRecord.getCreatedBy());
+        supportedLanguage.setUpdatedBy(systemSupportedLanguagesRecord.getUpdatedBy());
+        supportedLanguage.setCreatedOn(systemSupportedLanguagesRecord.getCreatedOn());
+        supportedLanguage.setUpdatedOn(systemSupportedLanguagesRecord.getUpdatedOn());
+        supportedLanguage.setIsActive(systemSupportedLanguagesRecord.getIsActive());
+        supportedLanguage.setState(systemSupportedLanguagesRecord.getState());
+        supportedLanguage.setApiSource(systemSupportedLanguagesRecord.getApiSource());
+        supportedLanguage.setNotes(systemSupportedLanguagesRecord.getNotes());
         return supportedLanguage;
     }
 
@@ -33,22 +40,41 @@ public class SystemSupportedLanguageRepositoryImpl implements SystemSupportedLan
     public SystemSupportedLanguageDao update(SystemSupportedLanguageDao supportedLanguage) {
         SystemSupportedLanguagesRecord systemSupportedLanguagesRecord = context.newRecord(SYSTEM_SUPPORTED_LANGUAGES, supportedLanguage);
         systemSupportedLanguagesRecord.update();
+
+
+        supportedLanguage.setCreatedBy(systemSupportedLanguagesRecord.getCreatedBy());
+        supportedLanguage.setUpdatedBy(systemSupportedLanguagesRecord.getUpdatedBy());
+        supportedLanguage.setCreatedOn(systemSupportedLanguagesRecord.getCreatedOn());
+        supportedLanguage.setUpdatedOn(systemSupportedLanguagesRecord.getUpdatedOn());
+        supportedLanguage.setIsActive(systemSupportedLanguagesRecord.getIsActive());
+        supportedLanguage.setState(systemSupportedLanguagesRecord.getState());
+        supportedLanguage.setApiSource(systemSupportedLanguagesRecord.getApiSource());
+        supportedLanguage.setNotes(systemSupportedLanguagesRecord.getNotes());
         return supportedLanguage;
     }
 
     @Override
     public void delete(Integer id) {
-        context.update(SYSTEM_SUPPORTED_LANGUAGES).set(SYSTEM_SUPPORTED_LANGUAGES.STATE, RecordState.DELETED.name()).where(SYSTEM_SUPPORTED_LANGUAGES.ID.eq(id)).execute();
-    }
+     context.update(SYSTEM_SUPPORTED_LANGUAGES)
+     .set(SYSTEM_SUPPORTED_LANGUAGES.STATE,RecordState.DELETED.name())
+     .where(SYSTEM_SUPPORTED_LANGUAGES.ID.eq(id))
+     .and(SYSTEM_SUPPORTED_LANGUAGES.STATE.eq(RecordState.ACTIVE.name()))
+     .and(SYSTEM_SUPPORTED_LANGUAGES.IS_ACTIVE.eq(true))
+     .execute();
+    } 
 
     @Override
     public SystemSupportedLanguageDao findByUUID(String uuid) {
-        return context.selectFrom(SYSTEM_SUPPORTED_LANGUAGES).where(SYSTEM_SUPPORTED_LANGUAGES.UUID.eq(uuid)).fetchAnyInto(SystemSupportedLanguageDao.class);
+        return context.selectFrom(SYSTEM_SUPPORTED_LANGUAGES).where(SYSTEM_SUPPORTED_LANGUAGES.UUID.eq(uuid))
+                .and(SYSTEM_SUPPORTED_LANGUAGES.IS_ACTIVE.eq(true))
+                .fetchAnyInto(SystemSupportedLanguageDao.class);
     }
 
     @Override
     public SystemSupportedLanguageDao findById(Integer id) {
-        return context.selectFrom(SYSTEM_SUPPORTED_LANGUAGES).where(SYSTEM_SUPPORTED_LANGUAGES.ID.eq(id)).fetchAnyInto(SystemSupportedLanguageDao.class);
+        return context.selectFrom(SYSTEM_SUPPORTED_LANGUAGES).where(SYSTEM_SUPPORTED_LANGUAGES.ID.eq(id))
+                .and(SYSTEM_SUPPORTED_LANGUAGES.IS_ACTIVE.eq(true))
+                .fetchAnyInto(SystemSupportedLanguageDao.class);
     }
 
     @Override
@@ -57,7 +83,7 @@ public class SystemSupportedLanguageRepositoryImpl implements SystemSupportedLan
     }
 
     @Override
-    public List<SystemSupportedLanguageDao> findAll() {
+    public List<SystemSupportedLanguageDao> findAllActive() {
         return context.selectFrom(SYSTEM_SUPPORTED_LANGUAGES).fetchInto(SystemSupportedLanguageDao.class);
     }
 }
