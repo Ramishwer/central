@@ -116,7 +116,7 @@ public class VehicleDocumentRepositoryImpl implements VehicleDocumentRepository 
         Map<Integer, VehicleDocumentDao> documentMap = new HashMap<>();
         if (!CollectionUtils.isEmpty(existingDocuments)) {
             for (VehicleDocumentDao document : existingDocuments) {
-                if (activeDocumentTypeIds.contains(document.getId())) {
+                if (activeDocumentTypeIds.contains(document.getVehicleDocumentTypeId())) {
                     documentMap.put(document.getVehicleDocumentTypeId(), document);
                 }
             }

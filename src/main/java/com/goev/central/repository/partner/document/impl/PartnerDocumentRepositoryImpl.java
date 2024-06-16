@@ -114,7 +114,7 @@ public class PartnerDocumentRepositoryImpl implements PartnerDocumentRepository 
         Map<Integer, PartnerDocumentDao> documentMap = new HashMap<>();
         if (!CollectionUtils.isEmpty(existingDocuments)) {
             for (PartnerDocumentDao document : existingDocuments) {
-                if (activeDocumentTypeIds.contains(document.getId())) {
+                if (activeDocumentTypeIds.contains(document.getPartnerDocumentTypeId())) {
                     documentMap.put(document.getPartnerDocumentTypeId(), document);
                 }
             }
