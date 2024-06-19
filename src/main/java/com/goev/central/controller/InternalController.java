@@ -1,5 +1,6 @@
 package com.goev.central.controller;
 
+import com.goev.central.config.SpringContext;
 import com.goev.central.utilities.RequestContext;
 import com.goev.lib.dto.ResponseDto;
 import com.goev.lib.dto.StatusDto;
@@ -16,8 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 public class InternalController {
 
-    private final EventProcessor eventProcessor;
-
     @PostMapping("/api/v1/internal/events")
     public ResponseDto<Boolean> receivedEvent(@RequestBody String event, @RequestParam("name") String name) {
 
@@ -25,6 +24,6 @@ public class InternalController {
         RequestContext.setRequestSource("EVENT");
         return new ResponseDto<>(
                 StatusDto.builder().message("SUCCESS").build(), 200,
-                eventProcessor.receiveEvent(event, name));
+                SpringContext.getBean(EventProcessor.class).receiveEvent(event, name));
     }
 }

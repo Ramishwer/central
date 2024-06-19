@@ -9,4 +9,6 @@ public interface PartnerDetailService {
     PartnerDetailDto getPartnerDetails(String partnerUUID);
 
     PartnerDetailDto updatePartner(String partnerUUID, PartnerDetailDto partnerDetailDto);
+
+    boolean updateOnboardingStatus(String partnerUUID);
 }

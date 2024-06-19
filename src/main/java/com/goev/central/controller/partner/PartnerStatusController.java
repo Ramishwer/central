@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
@@ -21,7 +22,7 @@ public class PartnerStatusController {
 
 
     @GetMapping("/partners/status")
-    public ResponseDto<PaginatedResponseDto<PartnerDto>> getPartnerStatus() {
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerService.getPartnerStatus());
+    public ResponseDto<PaginatedResponseDto<PartnerDto>> getPartnerStatus(@RequestParam("dutyStatus")String status) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerService.getPartnerStatus(status));
     }
 }

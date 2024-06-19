@@ -20,4 +20,6 @@ public interface PartnerDocumentService {
     DocumentStatus isAllMandatoryDocumentsUploaded(Integer partnerId);
 
     List<PartnerDocumentDto> bulkCreateDocument(String partnerUUID, List<PartnerDocumentDto> partnerDocumentDto);
+
+    PartnerDocumentDto updateDocumentStatus(String partnerUUID, String documentUUID, DocumentStatus status);
 }

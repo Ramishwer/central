@@ -27,6 +27,7 @@ import com.goev.central.event.events.customer.update.CustomerPaymentUpdateEvent;
 import com.goev.central.event.events.customer.update.CustomerUpdateEvent;
 import com.goev.central.event.events.location.save.LocationSaveEvent;
 import com.goev.central.event.events.location.update.LocationUpdateEvent;
+import com.goev.central.event.events.partner.PartnerOnboardingStatusCheckEvent;
 import com.goev.central.event.events.partner.save.*;
 import com.goev.central.event.events.partner.update.*;
 import com.goev.central.event.events.vehicle.save.*;
@@ -58,6 +59,9 @@ public class EventExecutorUtils {
             }
             case "PartnerUpdateEvent" -> {
                 return fireEvent(SpringContext.getBean(PartnerUpdateEvent.class), (PartnerDao) data);
+            }
+            case "PartnerOnboardingStatusCheckEvent"->{
+                return fireEvent(SpringContext.getBean(PartnerOnboardingStatusCheckEvent.class), (String) data);
             }
             case "VehicleSaveEvent" -> {
                 return fireEvent(SpringContext.getBean(VehicleSaveEvent.class), (VehicleDao) data);

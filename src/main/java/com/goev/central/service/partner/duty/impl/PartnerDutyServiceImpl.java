@@ -12,8 +12,10 @@ import com.goev.lib.exceptions.ResponseException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -24,18 +26,18 @@ public class PartnerDutyServiceImpl implements PartnerDutyService {
     private final PartnerRepository partnerRepository;
 
     @Override
-    public PaginatedResponseDto<PartnerDutyDto> getDuties() {
+    public PaginatedResponseDto<PartnerDutyDto> getDuties(String status) {
 
 
-//        List<PartnerDutyDao> activeDuties = partnerDutyRepository.findAllByPartnerId(partner.getId());
-//        if (CollectionUtils.isEmpty(activeDuties))
-        return PaginatedResponseDto.<PartnerDutyDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        List<PartnerDutyDao> activeDuties = partnerDutyRepository.findAllByDutyStatus(status);
+        if (CollectionUtils.isEmpty(activeDuties))
+            return PaginatedResponseDto.<PartnerDutyDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
 
-//        List<PartnerDutyDto> dutyList = new ArrayList<>();
-//        activeDuties.forEach(x -> dutyList.add(PartnerDutyDto.builder()
-//                .uuid(x.getUuid())
-//                .build()));
-//        return PaginatedResponseDto.<PartnerDutyDto>builder().elements(dutyList).build();
+        List<PartnerDutyDto> dutyList = new ArrayList<>();
+        activeDuties.forEach(x -> dutyList.add(PartnerDutyDto.builder()
+                .uuid(x.getUuid())
+                .build()));
+        return PaginatedResponseDto.<PartnerDutyDto>builder().elements(dutyList).build();
 
     }
 

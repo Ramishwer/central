@@ -14,6 +14,7 @@ import com.goev.central.dto.partner.PartnerViewDto;
 import com.goev.central.dto.partner.detail.PartnerDetailDto;
 import com.goev.central.enums.DocumentStatus;
 import com.goev.central.enums.partner.PartnerOnboardingStatus;
+import com.goev.central.event.events.partner.update.PartnerUpdateEvent;
 import com.goev.central.repository.business.BusinessClientRepository;
 import com.goev.central.repository.business.BusinessSegmentRepository;
 import com.goev.central.repository.location.LocationRepository;
@@ -22,6 +23,7 @@ import com.goev.central.repository.partner.detail.PartnerRepository;
 import com.goev.central.service.auth.AuthService;
 import com.goev.central.service.partner.detail.PartnerDetailService;
 import com.goev.central.service.partner.document.PartnerDocumentService;
+import com.goev.central.utilities.EventExecutorUtils;
 import com.goev.central.utilities.S3Utils;
 import com.goev.central.utilities.SecretGenerationUtils;
 import com.goev.lib.dto.LatLongDto;
@@ -42,6 +44,7 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
     private final BusinessClientRepository businessClientRepository;
     private final BusinessSegmentRepository businessSegmentRepository;
     private final AuthService authService;
+    private final EventExecutorUtils eventExecutor;
 
     private final S3Utils s3;
 
@@ -86,9 +89,11 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
         if (partnerDetailDao == null)
             throw new ResponseException("Error in saving partner details");
 
-        partner.setOnboardingStatus(getOnboardingStatus(partnerDao, partnerDetailDao));
-        partner.setProfileUrl(partnerDetailDao.getProfileUrl());
         partner.setPartnerDetailsId(partnerDetailDao.getId());
+        partner.setProfileUrl(partnerDetailDao.getProfileUrl());
+        partner.setOnboardingStatus(getOnboardingStatus(partnerDao, partnerDetailDao));
+
+
         partner.setViewInfo(ApplicationConstants.GSON.toJson(getPartnerViewDto(partnerDetailDao, partner)));
         partnerRepository.update(partner);
 
@@ -102,7 +107,7 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
                 .firstName(partnerDetails.getFirstName())
                 .lastName(partnerDetails.getLastName())
                 .punchId(partnerDao.getPunchId())
-
+                .state(partnerDao.getOnboardingStatus())
                 .profileUrl(partnerDao.getProfileUrl())
                 .phoneNumber(partnerDao.getPhoneNumber())
                 .onboardingDate(partnerDetails.getOnboardingDate())
@@ -159,13 +164,33 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
         if (partnerDetails == null)
             throw new ResponseException("Error in saving partner details");
 
-        partner.setOnboardingStatus(getOnboardingStatus(partner, partnerDetailDao));
         partner.setProfileUrl(partnerDetails.getProfileUrl());
         partner.setPartnerDetailsId(partnerDetails.getId());
+        partner.setOnboardingStatus(getOnboardingStatus(partner, partnerDetailDao));
+
         partner.setViewInfo(ApplicationConstants.GSON.toJson(getPartnerViewDto(partnerDetails, partner)));
         partnerRepository.update(partner);
 
         return getPartnerDetailDto(partnerDetailDao, partner);
+    }
+
+    @Override
+    public  boolean updateOnboardingStatus(String partnerUUID){
+        PartnerDao partner = partnerRepository.findByUUID(partnerUUID);
+        if (partner == null)
+            throw new ResponseException("No partner found for Id :" + partnerUUID);
+        PartnerDetailDao partnerDetailDao = partnerDetailRepository.findById(partner.getPartnerDetailsId());
+
+        if (partnerDetailDao == null)
+            throw new ResponseException("No partner details found for Id :" + partnerUUID);
+
+        String status = getOnboardingStatus(partner, partnerDetailDao);
+        if(!status.equals(partner.getOnboardingStatus())) {
+            partner.setOnboardingStatus(status);
+            partner = partnerRepository.update(partner);
+            eventExecutor.fireEvent(PartnerUpdateEvent.class.getName(),partner);
+        }
+        return true;
     }
 
     private String getOnboardingStatus(PartnerDao partner, PartnerDetailDao partnerDetailDao) {

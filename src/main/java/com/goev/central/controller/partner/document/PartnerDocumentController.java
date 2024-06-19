@@ -2,13 +2,16 @@ package com.goev.central.controller.partner.document;
 
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.partner.document.PartnerDocumentDto;
+import com.goev.central.enums.DocumentStatus;
 import com.goev.central.service.partner.document.PartnerDocumentService;
 import com.goev.lib.dto.ResponseDto;
 import com.goev.lib.dto.StatusDto;
+import com.goev.lib.exceptions.ResponseException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -46,5 +49,15 @@ public class PartnerDocumentController {
     @DeleteMapping("/partners/{partner-uuid}/documents/{document-uuid}")
     public ResponseDto<Boolean> deleteDocument(@PathVariable(value = "partner-uuid") String partnerUUID, @PathVariable(value = "document-uuid") String documentUUID) {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerDocumentService.deleteDocument(partnerUUID, documentUUID));
+    }
+
+
+    @PostMapping("/partners/{partner-uuid}/documents/{document-uuid}/status")
+    public ResponseDto<PartnerDocumentDto> updateDocument(@PathVariable(value = "partner-uuid") String partnerUUID, @PathVariable(value = "document-uuid") String documentUUID,@RequestParam("status") String status) {
+        if(status == null || !Arrays.asList(DocumentStatus.REJECTED.name(),DocumentStatus.APPROVED.name()).contains(status)) {
+            throw new ResponseException("Invalid status");
+        }
+
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerDocumentService.updateDocumentStatus(partnerUUID, documentUUID, DocumentStatus.valueOf(status)));
     }
 }

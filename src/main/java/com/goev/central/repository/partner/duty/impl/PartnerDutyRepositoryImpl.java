@@ -101,4 +101,12 @@ public class PartnerDutyRepositoryImpl implements PartnerDutyRepository {
     public List<PartnerDutyDao> findAllByPartnerId(Integer id) {
         return context.selectFrom(PARTNER_DUTIES).where(PARTNER_DUTIES.PARTNER_ID.eq(id)).fetchInto(PartnerDutyDao.class);
     }
+
+    @Override
+    public List<PartnerDutyDao> findAllByDutyStatus(String status) {
+        return context.selectFrom(PARTNER_DUTIES).where(PARTNER_DUTIES.STATUS.eq(status))
+                .and(PARTNER_DUTIES.STATE.eq(RecordState.ACTIVE.name()))
+                .and(PARTNER_DUTIES.IS_ACTIVE.eq(true))
+                .fetchInto(PartnerDutyDao.class);
+    }
 }

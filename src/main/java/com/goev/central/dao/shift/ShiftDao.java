@@ -15,6 +15,7 @@ public class ShiftDao extends BaseDao {
     private DateTime applicableToTime;
     private String name;
     private String description;
+    private String shiftType;
 }
 
 

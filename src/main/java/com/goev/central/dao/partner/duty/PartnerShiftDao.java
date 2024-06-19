@@ -21,6 +21,14 @@ public class PartnerShiftDao extends BaseDao {
     private Integer partnerId;
     private String day;
     private Integer shiftId;
+    private String shiftConfig;
+    private Integer inLocationId;
+    private Integer outLocationId;
+    private Integer onlineLocationId;
+    private Integer assignableVehicleCategoryId;
+    private String type;
+    private String dutyConfig;
+    private DateTime dutyDate;
 }
 
 

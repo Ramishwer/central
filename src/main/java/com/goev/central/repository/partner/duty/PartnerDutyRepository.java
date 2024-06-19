@@ -20,4 +20,6 @@ public interface PartnerDutyRepository {
     List<PartnerDutyDao> findAllActive();
 
     List<PartnerDutyDao> findAllByPartnerId(Integer id);
+
+    List<PartnerDutyDao> findAllByDutyStatus(String status);
 }

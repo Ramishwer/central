@@ -13,6 +13,7 @@ import com.goev.central.repository.partner.detail.PartnerRepository;
 import com.goev.central.repository.partner.document.PartnerDocumentRepository;
 import com.goev.central.repository.partner.document.PartnerDocumentTypeRepository;
 import com.goev.central.service.partner.document.PartnerDocumentService;
+import com.goev.central.utilities.EventExecutorUtils;
 import com.goev.central.utilities.S3Utils;
 import com.goev.lib.exceptions.ResponseException;
 import lombok.AllArgsConstructor;
@@ -36,6 +37,7 @@ public class PartnerDocumentServiceImpl implements PartnerDocumentService {
     private final PartnerDocumentTypeRepository partnerDocumentTypeRepository;
     private final PartnerRepository partnerRepository;
     private final S3Utils s3;
+    private final EventExecutorUtils eventExecutor;
 
     @Override
     public PaginatedResponseDto<PartnerDocumentDto> getDocuments(String partnerUUID) {
@@ -72,7 +74,7 @@ public class PartnerDocumentServiceImpl implements PartnerDocumentService {
             throw new ResponseException("Error in saving partner document: Invalid Document Type");
 
         partnerDocumentDao.setUrl(s3.getUrlForPath(partnerDocumentDto.getUrl(), partnerDocumentTypeDao.getS3Key()));
-        partnerDocumentDao.setStatus(partnerDocumentDto.getStatus());
+        partnerDocumentDao.setStatus(DocumentStatus.APPROVED.name());
         partnerDocumentDao.setDescription(partnerDocumentDto.getDescription());
         partnerDocumentDao.setFileName(partnerDocumentDto.getFileName());
         partnerDocumentDao.setPartnerId(partnerDao.getId());
@@ -88,6 +90,8 @@ public class PartnerDocumentServiceImpl implements PartnerDocumentService {
                         .groupKey(partnerDocumentTypeDao.getGroupKey())
                         .groupDescription(partnerDocumentTypeDao.getGroupDescription())
                         .name(partnerDocumentTypeDao.getName())
+                        .isMandatory(partnerDocumentTypeDao.getIsMandatory())
+                        .needsVerification(partnerDocumentTypeDao.getNeedsVerification())
                         .build())
                 .fileName(partnerDocumentTypeDao.getName())
                 .description(partnerDocumentDao.getDescription())
@@ -118,7 +122,7 @@ public class PartnerDocumentServiceImpl implements PartnerDocumentService {
         newPartnerDocumentDao.setFileName(partnerDocumentDto.getFileName());
         newPartnerDocumentDao.setDescription(partnerDocumentDto.getDescription());
         newPartnerDocumentDao.setUrl(s3.getUrlForPath(partnerDocumentDto.getUrl(), partnerDocumentTypeDao.getS3Key()));
-        newPartnerDocumentDao.setStatus(DocumentStatus.UPLOADED.name());
+        newPartnerDocumentDao.setStatus(DocumentStatus.APPROVED.name());
         newPartnerDocumentDao.setPartnerId(partnerDao.getId());
         partnerDocumentRepository.delete(partnerDocumentDao.getId());
         newPartnerDocumentDao = partnerDocumentRepository.save(newPartnerDocumentDao);
@@ -134,6 +138,8 @@ public class PartnerDocumentServiceImpl implements PartnerDocumentService {
                         .groupKey(partnerDocumentTypeDao.getGroupKey())
                         .groupDescription(partnerDocumentTypeDao.getGroupDescription())
                         .name(partnerDocumentTypeDao.getName())
+                        .isMandatory(partnerDocumentTypeDao.getIsMandatory())
+                        .needsVerification(partnerDocumentTypeDao.getNeedsVerification())
                         .build())
                 .fileName(partnerDocumentTypeDao.getName())
                 .description(newPartnerDocumentDao.getDescription())
@@ -165,6 +171,8 @@ public class PartnerDocumentServiceImpl implements PartnerDocumentService {
                         .label(partnerDocumentTypeDao.getLabel())
                         .groupKey(partnerDocumentTypeDao.getGroupKey())
                         .groupDescription(partnerDocumentTypeDao.getGroupDescription())
+                        .isMandatory(partnerDocumentTypeDao.getIsMandatory())
+                        .needsVerification(partnerDocumentTypeDao.getNeedsVerification())
                         .name(partnerDocumentTypeDao.getName())
                         .build())
                 .fileName(partnerDocumentTypeDao.getName())
@@ -209,6 +217,45 @@ public class PartnerDocumentServiceImpl implements PartnerDocumentService {
 
         }
         return result;
+    }
+
+    @Override
+    public PartnerDocumentDto updateDocumentStatus(String partnerUUID, String documentUUID, DocumentStatus status) {
+        PartnerDao partnerDao = partnerRepository.findByUUID(partnerUUID);
+        if (partnerDao == null)
+            throw new ResponseException("No partner found for id :" + partnerUUID);
+
+        PartnerDocumentDao partnerDocumentDao = partnerDocumentRepository.findByUUID(documentUUID);
+        if (partnerDocumentDao == null)
+            throw new ResponseException("No document found for id :" + documentUUID);
+
+        if (DocumentStatus.APPROVED.equals(status)) {
+            partnerDocumentDao.setStatus(DocumentStatus.APPROVED.name());
+            partnerDocumentDao = partnerDocumentRepository.update(partnerDocumentDao);
+            eventExecutor.fireEvent("PartnerOnboardingStatusCheckEvent", partnerDao.getUuid());
+        } else if (DocumentStatus.REJECTED.equals(status)) {
+            partnerDocumentDao.setStatus(DocumentStatus.REJECTED.name());
+            partnerDocumentDao = partnerDocumentRepository.update(partnerDocumentDao);
+            eventExecutor.fireEvent("PartnerOnboardingStatusCheckEvent", partnerDao.getUuid());
+        }
+        PartnerDocumentTypeDao partnerDocumentTypeDao = partnerDocumentTypeRepository.findById(partnerDocumentDao.getPartnerDocumentTypeId());
+
+        return PartnerDocumentDto.builder()
+                .uuid(partnerDocumentDao.getUuid())
+                .type(PartnerDocumentTypeDto.builder()
+                        .uuid(partnerDocumentTypeDao.getUuid())
+                        .label(partnerDocumentTypeDao.getLabel())
+                        .groupKey(partnerDocumentTypeDao.getGroupKey())
+                        .groupDescription(partnerDocumentTypeDao.getGroupDescription())
+                        .name(partnerDocumentTypeDao.getName())
+                        .isMandatory(partnerDocumentTypeDao.getIsMandatory())
+                        .needsVerification(partnerDocumentTypeDao.getNeedsVerification())
+                        .build())
+                .fileName(partnerDocumentTypeDao.getName())
+                .description(partnerDocumentDao.getDescription())
+                .status(partnerDocumentDao.getStatus())
+                .url(partnerDocumentDao.getUrl())
+                .build();
     }
 
 

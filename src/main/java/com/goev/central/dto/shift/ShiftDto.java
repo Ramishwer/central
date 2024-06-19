@@ -26,6 +26,7 @@ public class ShiftDto {
     private DateTime applicableToTime;
     private String name;
     private String description;
+    private String shiftType;
 }
 
 

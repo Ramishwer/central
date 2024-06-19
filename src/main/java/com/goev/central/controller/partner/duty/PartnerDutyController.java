@@ -7,10 +7,7 @@ import com.goev.lib.dto.ResponseDto;
 import com.goev.lib.dto.StatusDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -20,8 +17,8 @@ public class PartnerDutyController {
     private final PartnerDutyService partnerDutyService;
 
     @GetMapping("/partners/duties")
-    public ResponseDto<PaginatedResponseDto<PartnerDutyDto>> getDuties() {
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerDutyService.getDuties());
+    public ResponseDto<PaginatedResponseDto<PartnerDutyDto>> getDuties(@RequestParam("status")String status) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerDutyService.getDuties(status));
     }
 
     @GetMapping("/partners/{partner-uuid}/duties/{duty-uuid}")

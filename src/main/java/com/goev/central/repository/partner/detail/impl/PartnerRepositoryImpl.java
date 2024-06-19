@@ -1,6 +1,7 @@
 package com.goev.central.repository.partner.detail.impl;
 
 import com.goev.central.dao.partner.detail.PartnerDao;
+import com.goev.central.enums.partner.PartnerOnboardingStatus;
 import com.goev.central.repository.partner.detail.PartnerRepository;
 import com.goev.central.utilities.EventExecutorUtils;
 import com.goev.central.utilities.RequestContext;
@@ -117,6 +118,15 @@ public class PartnerRepositoryImpl implements PartnerRepository {
 
         return context.selectFrom(PARTNERS)
                 .where(PARTNERS.ONBOARDING_STATUS.in(onboardingStatus))
+                .and(PARTNERS.IS_ACTIVE.eq(true))
+                .fetchInto(PartnerDao.class);
+    }
+
+    @Override
+    public List<PartnerDao> findAllByStatus(String status) {
+        return context.selectFrom(PARTNERS)
+                .where(PARTNERS.ONBOARDING_STATUS.in(PartnerOnboardingStatus.ONBOARDED.name()))
+                .and(PARTNERS.STATUS.eq(status))
                 .and(PARTNERS.IS_ACTIVE.eq(true))
                 .fetchInto(PartnerDao.class);
     }

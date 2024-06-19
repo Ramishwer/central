@@ -9,6 +9,7 @@ import com.goev.central.event.events.booking.BookingSaveEvent;
 import com.goev.central.event.events.booking.BookingUpdateEvent;
 import com.goev.central.event.events.location.save.LocationSaveEvent;
 import com.goev.central.event.events.location.update.LocationUpdateEvent;
+import com.goev.central.event.events.partner.PartnerOnboardingStatusCheckEvent;
 import com.goev.central.event.events.partner.save.*;
 import com.goev.central.event.events.partner.update.*;
 import com.goev.central.event.events.vehicle.save.*;
@@ -21,16 +22,19 @@ import com.goev.central.event.handlers.booking.save.BookingSaveEventHandler;
 import com.goev.central.event.handlers.booking.update.BookingUpdateEventHandler;
 import com.goev.central.event.handlers.location.save.LocationSaveEventHandler;
 import com.goev.central.event.handlers.location.update.LocationUpdateEventHandler;
+import com.goev.central.event.handlers.partner.PartnerOnboardingStatusCheckEventHandler;
 import com.goev.central.event.handlers.partner.save.*;
 import com.goev.central.event.handlers.partner.update.*;
 import com.goev.central.event.handlers.vehicle.save.*;
 import com.goev.central.event.handlers.vehicle.update.*;
+import com.goev.central.event.targets.CentralTarget;
 import com.goev.central.event.targets.PartnerTarget;
 import com.goev.lib.event.core.EventChannel;
 import com.goev.lib.event.core.impl.APIEventChannel;
 import com.goev.lib.event.service.EventProcessor;
 import com.goev.lib.event.service.impl.SimpleEventProcessor;
 import com.goev.lib.services.RestClient;
+import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -42,7 +46,9 @@ import org.springframework.context.annotation.Configuration;
 public class EventConfig {
 
     @Bean
-    public EventProcessor getEventProcessor(EventChannel eventChannel,
+    public EventProcessor getEventProcessor(
+
+            PartnerOnboardingStatusCheckEventHandler partnerOnboardingStatusCheckEventHandler,
 
                                             AssetUpdateEventHandler assetUpdateEventHandler,
                                             AssetTypeUpdateEventHandler assetTypeUpdateEventHandler,
@@ -82,6 +88,10 @@ public class EventConfig {
 
     ) {
         SimpleEventProcessor eventProcessor = new SimpleEventProcessor();
+
+        eventProcessor.registerEvents(new PartnerOnboardingStatusCheckEvent());
+
+        eventProcessor.registerEventHandlers(new PartnerOnboardingStatusCheckEvent(), partnerOnboardingStatusCheckEventHandler);
 
         eventProcessor.registerEvents(new AssetUpdateEvent());
         eventProcessor.registerEvents(new AssetTypeUpdateEvent());
@@ -152,17 +162,9 @@ public class EventConfig {
         eventProcessor.registerEventHandlers(new BookingSaveEvent(), bookingSaveEventHandler);
         eventProcessor.registerEventHandlers(new LocationSaveEvent(), locationSaveEventHandler);
 
-
-        eventProcessor.registerTargets(PartnerTarget.getTarget(eventChannel));
-
+        eventProcessor.registerTargets(PartnerTarget.getTarget(eventProcessor));
+        eventProcessor.registerTargets(CentralTarget.getTarget(eventProcessor));
         return eventProcessor;
     }
 
-
-    @Bean
-    public EventChannel getEventChannel(RestClient restClient) {
-        APIEventChannel eventChannel = new APIEventChannel();
-        eventChannel.init(restClient);
-        return eventChannel;
-    }
 }
