@@ -45,7 +45,7 @@ public class VehicleDocumentServiceImpl implements VehicleDocumentService {
 
         List<VehicleDocumentTypeDao> activeDocumentTypes = vehicleDocumentTypeRepository.findAllActive();
         if (CollectionUtils.isEmpty(activeDocumentTypes))
-            return PaginatedResponseDto.<VehicleDocumentDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+            return PaginatedResponseDto.<VehicleDocumentDto>builder().elements(new ArrayList<>()).build();
 
         Map<Integer, VehicleDocumentTypeDao> documentTypeIdToDocumentTypeMap = activeDocumentTypes.stream()
                 .collect(Collectors.toMap(VehicleDocumentTypeDao::getId, Function.identity()));

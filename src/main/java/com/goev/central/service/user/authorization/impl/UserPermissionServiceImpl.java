@@ -24,7 +24,7 @@ public class UserPermissionServiceImpl implements UserPermissionService {
 
     @Override
     public PaginatedResponseDto<UserPermissionDto> getPermissions() {
-        PaginatedResponseDto<UserPermissionDto> result = PaginatedResponseDto.<UserPermissionDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<UserPermissionDto> result = PaginatedResponseDto.<UserPermissionDto>builder().elements(new ArrayList<>()).build();
         List<UserPermissionDao> userPermissionDaos = userPermissionRepository.findAllActive();
         if (CollectionUtils.isEmpty(userPermissionDaos))
             return result;

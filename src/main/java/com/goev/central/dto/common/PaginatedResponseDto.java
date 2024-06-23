@@ -14,5 +14,6 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PaginatedResponseDto<T> {
     private PageDto pagination;
+    private PageSummaryDto summary;
     private List<T> elements;
 }

@@ -24,7 +24,7 @@ public class CustomerTicketServiceImpl implements CustomerTicketService {
 
     @Override
     public PaginatedResponseDto<CustomerTicketDto> getCustomerTickets(String customerUUID) {
-        PaginatedResponseDto<CustomerTicketDto> result = PaginatedResponseDto.<CustomerTicketDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<CustomerTicketDto> result = PaginatedResponseDto.<CustomerTicketDto>builder().elements(new ArrayList<>()).build();
         List<CustomerTicketDao> customerTicketDaos = customerTicketRepository.findAllActive();
         if (CollectionUtils.isEmpty(customerTicketDaos))
             return result;

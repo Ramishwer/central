@@ -24,7 +24,7 @@ public class PayoutModelServiceImpl implements PayoutModelService {
 
     @Override
     public PaginatedResponseDto<PayoutModelDto> getPayoutModels() {
-        PaginatedResponseDto<PayoutModelDto> result = PaginatedResponseDto.<PayoutModelDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<PayoutModelDto> result = PaginatedResponseDto.<PayoutModelDto>builder().elements(new ArrayList<>()).build();
         List<PayoutModelDao> payoutModelDaos = payoutModelRepository.findAllActive();
         if (CollectionUtils.isEmpty(payoutModelDaos))
             return result;

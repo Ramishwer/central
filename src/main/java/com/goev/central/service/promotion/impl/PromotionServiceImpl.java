@@ -24,7 +24,7 @@ public class PromotionServiceImpl implements PromotionService {
 
     @Override
     public PaginatedResponseDto<PromotionDto> getPromotions() {
-        PaginatedResponseDto<PromotionDto> result = PaginatedResponseDto.<PromotionDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<PromotionDto> result = PaginatedResponseDto.<PromotionDto>builder().elements(new ArrayList<>()).build();
         List<PromotionDao> promotionDaos = promotionRepository.findAllActive();
         if (CollectionUtils.isEmpty(promotionDaos))
             return result;

@@ -24,7 +24,7 @@ public class PayoutElementServiceImpl implements PayoutElementService {
 
     @Override
     public PaginatedResponseDto<PayoutElementDto> getPayoutElements() {
-        PaginatedResponseDto<PayoutElementDto> result = PaginatedResponseDto.<PayoutElementDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<PayoutElementDto> result = PaginatedResponseDto.<PayoutElementDto>builder().elements(new ArrayList<>()).build();
         List<PayoutElementDao> payoutElementDaos = payoutElementRepository.findAllActive();
         if (CollectionUtils.isEmpty(payoutElementDaos))
             return result;

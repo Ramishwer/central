@@ -123,10 +123,20 @@ public class PartnerRepositoryImpl implements PartnerRepository {
     }
 
     @Override
-    public List<PartnerDao> findAllByStatus(String status) {
+    public List<PartnerDao> findAllByStatus(List<String> status) {
         return context.selectFrom(PARTNERS)
                 .where(PARTNERS.ONBOARDING_STATUS.in(PartnerOnboardingStatus.ONBOARDED.name()))
-                .and(PARTNERS.STATUS.eq(status))
+                .and(PARTNERS.STATUS.in(status))
+                .and(PARTNERS.IS_ACTIVE.eq(true))
+                .fetchInto(PartnerDao.class);
+    }
+
+    @Override
+    public List<PartnerDao> findAllByStatusAndShiftIdNotNull(List<String> status) {
+        return context.selectFrom(PARTNERS)
+                .where(PARTNERS.ONBOARDING_STATUS.in(PartnerOnboardingStatus.ONBOARDED.name()))
+                .and(PARTNERS.STATUS.in(status))
+                .and(PARTNERS.PARTNER_SHIFT_ID.isNotNull())
                 .and(PARTNERS.IS_ACTIVE.eq(true))
                 .fetchInto(PartnerDao.class);
     }

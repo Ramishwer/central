@@ -1,5 +1,6 @@
 package com.goev.central.controller.vehicle.transfer;
 
+import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.vehicle.transfer.VehicleTransferDto;
 import com.goev.central.service.vehicle.transfer.VehicleTransferService;
@@ -19,8 +20,8 @@ public class VehicleTransferController {
 
 
     @GetMapping("/vehicles/transfers")
-    public ResponseDto<PaginatedResponseDto<VehicleTransferDto>> getTransfers() {
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleTransferService.getTransfers());
+    public ResponseDto<PaginatedResponseDto<VehicleTransferDto>> getTransfers(@RequestParam("status")String status, PageDto page) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleTransferService.getTransfers(status,page));
     }
 
     @GetMapping("/vehicles/{vehicle-uuid}/transfers")

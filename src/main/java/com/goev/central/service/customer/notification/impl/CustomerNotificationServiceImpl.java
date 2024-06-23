@@ -24,7 +24,7 @@ public class CustomerNotificationServiceImpl implements CustomerNotificationServ
 
     @Override
     public PaginatedResponseDto<CustomerNotificationDto> getCustomerNotifications(String customerUUID) {
-        PaginatedResponseDto<CustomerNotificationDto> result = PaginatedResponseDto.<CustomerNotificationDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<CustomerNotificationDto> result = PaginatedResponseDto.<CustomerNotificationDto>builder().elements(new ArrayList<>()).build();
         List<CustomerNotificationDao> customerNotificationDaos = customerNotificationRepository.findAllActive();
         if (CollectionUtils.isEmpty(customerNotificationDaos))
             return result;

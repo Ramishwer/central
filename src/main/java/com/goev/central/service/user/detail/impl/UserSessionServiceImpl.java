@@ -24,7 +24,7 @@ public class UserSessionServiceImpl implements UserSessionService {
 
     @Override
     public PaginatedResponseDto<UserSessionDto> getUserSessions(String userUUID) {
-        PaginatedResponseDto<UserSessionDto> result = PaginatedResponseDto.<UserSessionDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<UserSessionDto> result = PaginatedResponseDto.<UserSessionDto>builder().elements(new ArrayList<>()).build();
         List<UserSessionDao> userSessionDaos = userSessionRepository.findAllActive();
         if (CollectionUtils.isEmpty(userSessionDaos))
             return result;

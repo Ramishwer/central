@@ -3,11 +3,14 @@ package com.goev.central.service.partner.detail.impl;
 
 import com.goev.central.constant.ApplicationConstants;
 import com.goev.central.dao.partner.detail.PartnerDao;
-import com.goev.central.dto.common.PageDto;
+import com.goev.central.dto.booking.BookingViewDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
+import com.goev.central.dto.location.LocationDto;
 import com.goev.central.dto.partner.PartnerViewDto;
 import com.goev.central.dto.partner.detail.PartnerDto;
+import com.goev.central.dto.partner.duty.PartnerDutyDto;
 import com.goev.central.dto.vehicle.VehicleViewDto;
+import com.goev.central.enums.partner.PartnerStatus;
 import com.goev.central.repository.partner.detail.PartnerRepository;
 import com.goev.central.service.partner.detail.PartnerService;
 import com.goev.lib.exceptions.ResponseException;
@@ -17,6 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -37,13 +42,38 @@ public class PartnerServiceImpl implements PartnerService {
     }
 
     @Override
-    public PaginatedResponseDto<PartnerDto> getPartnerStatus(String status) {
-
-        PaginatedResponseDto<PartnerDto> result = PaginatedResponseDto.<PartnerDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
-
-        List<PartnerDao> partners = partnerRepository.findAllByStatus(status);
-
+    public PaginatedResponseDto<PartnerDto> getPartnerStatuses(String status) {
+        PaginatedResponseDto<PartnerDto> result = PaginatedResponseDto.<PartnerDto>builder().elements(new ArrayList<>()).build();
+        List<PartnerDao> partners = null;
+        if (PartnerStatus.OFF_DUTY.name().equals(status))
+            partners = partnerRepository.findAllByStatusAndShiftIdNotNull(Collections.singletonList(status));
+        else if (PartnerStatus.ON_DUTY.name().equals(status))
+            partners = partnerRepository.findAllByStatus(Arrays.asList(PartnerStatus.ON_DUTY.name(), PartnerStatus.VEHICLE_ASSIGNED.name(),
+                    PartnerStatus.CHECKLIST.name(), PartnerStatus.RETURN_CHECKLIST.name()));
+        else if (PartnerStatus.ONLINE.name().equals(status))
+            partners = partnerRepository.findAllByStatus(Arrays.asList(PartnerStatus.ONLINE.name(), PartnerStatus.ON_BOOKING.name()));
         return getPartnerDtoPaginatedResponseDto(partners, result);
+    }
+
+    @Override
+    public PartnerDto getPartnerStatus(String partnerUUID) {
+        PartnerDao partner = partnerRepository.findByUUID(partnerUUID);
+        if (partner == null)
+            throw new ResponseException("No partner found for Id :" + partnerUUID);
+
+        PartnerDto partnerDto = new PartnerDto();
+        partnerDto.setUuid(partner.getUuid());
+        partnerDto.setPunchId(partner.getPunchId());
+        partnerDto.setStatus(partner.getStatus());
+        partnerDto.setSubStatus(partner.getSubStatus());
+        partnerDto.setLocationStatus(partner.getLocationStatus());
+
+        partnerDto.setVehicleDetails(ApplicationConstants.GSON.fromJson(partner.getVehicleDetails(), VehicleViewDto.class));
+        partnerDto.setDutyDetails(ApplicationConstants.GSON.fromJson(partner.getDutyDetails(), PartnerDutyDto.class));
+        partnerDto.setBookingDetails(ApplicationConstants.GSON.fromJson(partner.getBookingDetails(), BookingViewDto.class));
+        partnerDto.setLocationDetails(ApplicationConstants.GSON.fromJson(partner.getLocationDetails(), LocationDto.class));
+        partnerDto.setPartnerDetails(PartnerViewDto.fromDao(partner));
+        return partnerDto;
     }
 
 
@@ -55,16 +85,23 @@ public class PartnerServiceImpl implements PartnerService {
             partnerDto.setUuid(partner.getUuid());
             partnerDto.setPunchId(partner.getPunchId());
             partnerDto.setStatus(partner.getStatus());
-            partnerDto.setVehicleDetails(ApplicationConstants.GSON.fromJson(partner.getVehicleDetails(), VehicleViewDto.class));
             partnerDto.setSubStatus(partner.getSubStatus());
+            partnerDto.setLocationStatus(partner.getLocationStatus());
+
+            partnerDto.setVehicleDetails(ApplicationConstants.GSON.fromJson(partner.getVehicleDetails(), VehicleViewDto.class));
+            partnerDto.setDutyDetails(ApplicationConstants.GSON.fromJson(partner.getDutyDetails(), PartnerDutyDto.class));
+            partnerDto.setBookingDetails(ApplicationConstants.GSON.fromJson(partner.getBookingDetails(), BookingViewDto.class));
+            partnerDto.setLocationDetails(ApplicationConstants.GSON.fromJson(partner.getLocationDetails(), LocationDto.class));
+            partnerDto.setPartnerDetails(PartnerViewDto.fromDao(partner));
             result.getElements().add(partnerDto);
         }
         return result;
     }
+
     @Override
     public PaginatedResponseDto<PartnerViewDto> getPartners() {
 
-        PaginatedResponseDto<PartnerViewDto> result = PaginatedResponseDto.<PartnerViewDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<PartnerViewDto> result = PaginatedResponseDto.<PartnerViewDto>builder().elements(new ArrayList<>()).build();
         List<PartnerDao> partners = partnerRepository.findAllActive();
         return getPartnerViewDtoPaginatedResponseDto(partners, result);
     }
@@ -84,7 +121,7 @@ public class PartnerServiceImpl implements PartnerService {
 
     @Override
     public PaginatedResponseDto<PartnerViewDto> getPartners(String onboardingStatus) {
-        PaginatedResponseDto<PartnerViewDto> result = PaginatedResponseDto.<PartnerViewDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<PartnerViewDto> result = PaginatedResponseDto.<PartnerViewDto>builder().elements(new ArrayList<>()).build();
         List<PartnerDao> partners = partnerRepository.findAllByOnboardingStatus(onboardingStatus);
         return getPartnerViewDtoPaginatedResponseDto(partners, result);
     }

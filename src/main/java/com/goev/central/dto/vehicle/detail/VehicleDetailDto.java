@@ -9,6 +9,7 @@ import com.goev.central.dao.vehicle.document.VehicleDocumentDao;
 import com.goev.central.dao.vehicle.document.VehicleDocumentTypeDao;
 import com.goev.central.dto.business.BusinessClientDto;
 import com.goev.central.dto.business.BusinessSegmentDto;
+import com.goev.central.dto.common.FileDto;
 import com.goev.central.dto.location.LocationDto;
 import com.goev.central.dto.vehicle.VehicleViewDto;
 import com.goev.central.dto.vehicle.document.VehicleDocumentDto;
@@ -59,6 +60,7 @@ public class VehicleDetailDto {
     private String state;
     private String imageUrl;
     private String plateNumber;
+    private FileDto image;
 
 
     public static List<VehicleDocumentDto> getVehicleDocumentDtoList(Map<Integer, VehicleDocumentTypeDao> documentTypeIdToDocumentTypeMap, Map<Integer, VehicleDocumentDao> existingDocumentMap) {

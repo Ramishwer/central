@@ -24,7 +24,7 @@ public class UserAttributeServiceImpl implements UserAttributeService {
 
     @Override
     public PaginatedResponseDto<UserAttributeDto> getUserAttributes(String userUUID) {
-        PaginatedResponseDto<UserAttributeDto> result = PaginatedResponseDto.<UserAttributeDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<UserAttributeDto> result = PaginatedResponseDto.<UserAttributeDto>builder().elements(new ArrayList<>()).build();
         List<UserAttributeDao> userAttributeDaos = userAttributeRepository.findAllActive();
         if (CollectionUtils.isEmpty(userAttributeDaos))
             return result;

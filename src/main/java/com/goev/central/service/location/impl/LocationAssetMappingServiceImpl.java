@@ -40,7 +40,7 @@ public class LocationAssetMappingServiceImpl implements LocationAssetMappingServ
         List<LocationAssetMappingDao> mappings = locationAssetMappingRepository.findAllByLocationId(location.getId());
 
         if (CollectionUtils.isEmpty(mappings))
-            return PaginatedResponseDto.<AssetDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).totalElements(0).build()).elements(new ArrayList<>()).build();
+            return PaginatedResponseDto.<AssetDto>builder().elements(new ArrayList<>()).build();
 
         List<AssetDao> assets = assetRepository.findAllByIds(mappings.stream().map(LocationAssetMappingDao::getAssetId).collect(Collectors.toList()));
 

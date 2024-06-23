@@ -23,5 +23,7 @@ public interface PartnerRepository {
 
     List<PartnerDao> findAllByOnboardingStatus(String onboardingStatus);
 
-    List<PartnerDao> findAllByStatus(String status);
+    List<PartnerDao> findAllByStatus(List<String> status);
+
+    List<PartnerDao> findAllByStatusAndShiftIdNotNull(List<String> status);
 }

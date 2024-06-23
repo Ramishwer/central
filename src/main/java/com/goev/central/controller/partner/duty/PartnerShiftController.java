@@ -1,6 +1,8 @@
 package com.goev.central.controller.partner.duty;
 
+import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
+import com.goev.central.dto.partner.duty.PartnerDutyDto;
 import com.goev.central.dto.partner.duty.PartnerShiftDto;
 import com.goev.central.service.partner.duty.PartnerShiftService;
 import com.goev.lib.dto.ResponseDto;
@@ -16,9 +18,9 @@ import org.springframework.web.bind.annotation.*;
 public class PartnerShiftController {
     private final PartnerShiftService partnerShiftService;
 
-    @GetMapping("/partners/{partner-uuid}/shifts")
-    public ResponseDto<PaginatedResponseDto<PartnerShiftDto>> getShifts(@PathVariable(value = "partner-uuid") String partnerUUID) {
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerShiftService.getShifts(partnerUUID));
+    @GetMapping("/partners/shifts")
+    public ResponseDto<PaginatedResponseDto<PartnerShiftDto>> getShifts(@RequestParam("status")String status, PageDto page) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerShiftService.getShifts(status,page));
     }
 
     @PostMapping("/partners/{partner-uuid}/shifts")

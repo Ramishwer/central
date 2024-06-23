@@ -34,7 +34,7 @@ public class PartnerAccountServiceImpl implements PartnerAccountService {
 
         List<PartnerAccountDetailDao> activeAccounts = partnerAccountDetailRepository.findAllByPartnerId(partner.getId());
         if (CollectionUtils.isEmpty(activeAccounts))
-            return PaginatedResponseDto.<PartnerAccountDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+            return PaginatedResponseDto.<PartnerAccountDto>builder().elements(new ArrayList<>()).build();
 
         List<PartnerAccountDto> accountList = new ArrayList<>();
         activeAccounts.forEach(x -> accountList.add(PartnerAccountDto.builder()

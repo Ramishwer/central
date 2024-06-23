@@ -1,10 +1,11 @@
 package com.goev.central.service.partner.duty;
 
+import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.partner.duty.PartnerShiftDto;
 
 public interface PartnerShiftService {
-    PaginatedResponseDto<PartnerShiftDto> getShifts(String partnerUUID);
+    PaginatedResponseDto<PartnerShiftDto> getShifts(String status, PageDto page);
 
     PartnerShiftDto createShift(String partnerUUID, PartnerShiftDto partnerShiftDto);
 

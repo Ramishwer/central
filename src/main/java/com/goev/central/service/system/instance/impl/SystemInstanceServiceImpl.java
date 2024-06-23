@@ -24,7 +24,7 @@ public class SystemInstanceServiceImpl implements SystemInstanceService {
 
     @Override
     public PaginatedResponseDto<SystemInstanceDto> getSystemInstances() {
-        PaginatedResponseDto<SystemInstanceDto> result = PaginatedResponseDto.<SystemInstanceDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<SystemInstanceDto> result = PaginatedResponseDto.<SystemInstanceDto>builder().elements(new ArrayList<>()).build();
         List<SystemInstanceDao> systemInstanceDaos = systemInstanceRepository.findAllActive();
         if (CollectionUtils.isEmpty(systemInstanceDaos))
             return result;

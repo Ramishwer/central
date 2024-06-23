@@ -24,7 +24,7 @@ public class SystemStringServiceImpl implements SystemStringService {
 
     @Override
     public PaginatedResponseDto<SystemStringDto> getSystemStrings() {
-        PaginatedResponseDto<SystemStringDto> result = PaginatedResponseDto.<SystemStringDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<SystemStringDto> result = PaginatedResponseDto.<SystemStringDto>builder().elements(new ArrayList<>()).build();
         List<SystemStringDao> systemStringDaos = systemStringRepository.findAllActive();
         if (CollectionUtils.isEmpty(systemStringDaos))
             return result;

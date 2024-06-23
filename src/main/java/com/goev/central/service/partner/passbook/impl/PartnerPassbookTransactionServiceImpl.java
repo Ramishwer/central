@@ -24,7 +24,7 @@ public class PartnerPassbookTransactionServiceImpl implements PartnerPassbookTra
 
     @Override
     public PaginatedResponseDto<PartnerPassbookTransactionDto> getPartnerPassbookTransactions(String partnerUUID) {
-        PaginatedResponseDto<PartnerPassbookTransactionDto> result = PaginatedResponseDto.<PartnerPassbookTransactionDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<PartnerPassbookTransactionDto> result = PaginatedResponseDto.<PartnerPassbookTransactionDto>builder().elements(new ArrayList<>()).build();
         List<PartnerPassbookTransactionDao> partnerPassbookTransactionDaos = partnerPassbookTransactionRepository.findAllActive();
         if (CollectionUtils.isEmpty(partnerPassbookTransactionDaos))
             return result;

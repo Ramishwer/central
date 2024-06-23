@@ -24,7 +24,7 @@ public class ShiftConfigurationServiceImpl implements ShiftConfigurationService 
 
     @Override
     public PaginatedResponseDto<ShiftConfigurationDto> getShiftConfigurations(String customerUUID) {
-        PaginatedResponseDto<ShiftConfigurationDto> result = PaginatedResponseDto.<ShiftConfigurationDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<ShiftConfigurationDto> result = PaginatedResponseDto.<ShiftConfigurationDto>builder().elements(new ArrayList<>()).build();
         List<ShiftConfigurationDao> shiftConfigurationDaos = shiftConfigurationRepository.findAllActive();
         if (CollectionUtils.isEmpty(shiftConfigurationDaos))
             return result;

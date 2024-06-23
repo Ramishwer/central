@@ -24,7 +24,7 @@ public class VehicleCategoryServiceImpl implements VehicleCategoryService {
 
     @Override
     public PaginatedResponseDto<VehicleCategoryDto> getCategories() {
-        PaginatedResponseDto<VehicleCategoryDto> result = PaginatedResponseDto.<VehicleCategoryDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<VehicleCategoryDto> result = PaginatedResponseDto.<VehicleCategoryDto>builder().elements(new ArrayList<>()).build();
         List<VehicleCategoryDao> vehicleCategoryDaos = vehicleCategoryRepository.findAllActive();
         if (CollectionUtils.isEmpty(vehicleCategoryDaos))
             return result;

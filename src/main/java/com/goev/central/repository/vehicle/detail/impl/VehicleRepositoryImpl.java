@@ -2,6 +2,8 @@ package com.goev.central.repository.vehicle.detail.impl;
 
 import com.goev.central.dao.vehicle.detail.VehicleDao;
 import com.goev.central.dao.vehicle.detail.VehicleDao;
+import com.goev.central.dao.vehicle.detail.VehicleDao;
+import com.goev.central.enums.vehicle.VehicleOnboardingStatus;
 import com.goev.central.repository.vehicle.detail.VehicleRepository;
 import com.goev.central.utilities.EventExecutorUtils;
 import com.goev.central.utilities.RequestContext;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import static com.goev.record.central.tables.Vehicles.VEHICLES;
 import static com.goev.record.central.tables.Vehicles.VEHICLES;
 import static com.goev.record.central.tables.Vehicles.VEHICLES;
 
@@ -107,6 +110,15 @@ public class VehicleRepositoryImpl implements VehicleRepository {
     public List<VehicleDao> findAllByOnboardingStatus(String onboardingStatus) {
         return context.selectFrom(VEHICLES)
                 .where(VEHICLES.ONBOARDING_STATUS.in(onboardingStatus))
+                .and(VEHICLES.IS_ACTIVE.eq(true))
+                .fetchInto(VehicleDao.class);
+    }
+
+    @Override
+    public List<VehicleDao> findAllByStatus(String status) {
+        return context.selectFrom(VEHICLES)
+                .where(VEHICLES.ONBOARDING_STATUS.in(VehicleOnboardingStatus.ONBOARDED.name()))
+                .and(VEHICLES.STATUS.eq(status))
                 .and(VEHICLES.IS_ACTIVE.eq(true))
                 .fetchInto(VehicleDao.class);
     }

@@ -12,6 +12,7 @@ public interface PartnerService {
 
     Boolean deletePartner(String partnerUUID);
 
-    PaginatedResponseDto<PartnerDto> getPartnerStatus(String status);
+    PaginatedResponseDto<PartnerDto> getPartnerStatuses(String status);
 
+    PartnerDto getPartnerStatus(String partnerUUID);
 }

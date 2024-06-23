@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public PaginatedResponseDto<UserViewDto> getUsers() {
 
-        PaginatedResponseDto<UserViewDto> result = PaginatedResponseDto.<UserViewDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<UserViewDto> result = PaginatedResponseDto.<UserViewDto>builder().elements(new ArrayList<>()).build();
         List<UserDao> users = userRepository.findAllActive();
         if (CollectionUtils.isEmpty(users))
             return result;

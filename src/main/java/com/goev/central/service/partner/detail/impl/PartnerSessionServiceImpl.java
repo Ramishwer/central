@@ -24,7 +24,7 @@ public class PartnerSessionServiceImpl implements PartnerSessionService {
 
     @Override
     public PaginatedResponseDto<PartnerSessionDto> getPartnerSessions(String partnerUUID) {
-        PaginatedResponseDto<PartnerSessionDto> result = PaginatedResponseDto.<PartnerSessionDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<PartnerSessionDto> result = PaginatedResponseDto.<PartnerSessionDto>builder().elements(new ArrayList<>()).build();
         List<PartnerSessionDao> partnerSessionDaos = partnerSessionRepository.findAllActive();
         if (CollectionUtils.isEmpty(partnerSessionDaos))
             return result;

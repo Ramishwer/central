@@ -24,7 +24,7 @@ public class PartnerNotificationServiceImpl implements PartnerNotificationServic
 
     @Override
     public PaginatedResponseDto<PartnerNotificationDto> getPartnerNotifications(String partnerUUID) {
-        PaginatedResponseDto<PartnerNotificationDto> result = PaginatedResponseDto.<PartnerNotificationDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<PartnerNotificationDto> result = PaginatedResponseDto.<PartnerNotificationDto>builder().elements(new ArrayList<>()).build();
         List<PartnerNotificationDao> partnerNotificationDaos = partnerNotificationRepository.findAllActive();
         if (CollectionUtils.isEmpty(partnerNotificationDaos))
             return result;

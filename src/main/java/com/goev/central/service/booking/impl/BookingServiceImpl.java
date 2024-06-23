@@ -24,7 +24,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public PaginatedResponseDto<BookingDto> getBookings() {
-        PaginatedResponseDto<BookingDto> result = PaginatedResponseDto.<BookingDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<BookingDto> result = PaginatedResponseDto.<BookingDto>builder().elements(new ArrayList<>()).build();
         List<BookingDao> bookingDaos = bookingRepository.findAllActive();
         if (CollectionUtils.isEmpty(bookingDaos))
             return result;

@@ -1,9 +1,11 @@
 package com.goev.central.service.partner.duty.impl;
 
 import com.goev.central.dao.partner.detail.PartnerDao;
+import com.goev.central.dao.partner.duty.PartnerDutyDao;
 import com.goev.central.dao.partner.duty.PartnerShiftDao;
 import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
+import com.goev.central.dto.partner.PartnerViewDto;
 import com.goev.central.dto.partner.duty.PartnerShiftDto;
 import com.goev.central.repository.partner.detail.PartnerRepository;
 import com.goev.central.repository.partner.duty.PartnerShiftRepository;
@@ -16,6 +18,9 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -26,20 +31,20 @@ public class PartnerShiftServiceImpl implements PartnerShiftService {
     private final PartnerRepository partnerRepository;
 
     @Override
-    public PaginatedResponseDto<PartnerShiftDto> getShifts(String partnerUUID) {
+    public PaginatedResponseDto<PartnerShiftDto> getShifts(String status, PageDto page) {
 
-        PartnerDao partner = partnerRepository.findByUUID(partnerUUID);
-        if (partner == null)
-            throw new ResponseException("No partner found for Id :" + partnerUUID);
-
-        List<PartnerShiftDao> activeShifts = partnerShiftRepository.findAllByPartnerId(partner.getId());
+        List<PartnerShiftDao> activeShifts = partnerShiftRepository.findAllByStatus(status,page);
         if (CollectionUtils.isEmpty(activeShifts))
-            return PaginatedResponseDto.<PartnerShiftDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+            return PaginatedResponseDto.<PartnerShiftDto>builder().elements(new ArrayList<>()).build();
+
+        List<PartnerDao> partners = partnerRepository.findAllByIds(activeShifts.stream().map(PartnerShiftDao::getPartnerId).toList());
+        Map<Integer, PartnerDao> partnerDaoMap = partners.stream().collect(Collectors.toMap(PartnerDao::getId, Function.identity()));
 
         List<PartnerShiftDto> shiftList = new ArrayList<>();
-        activeShifts.forEach(x -> shiftList.add(PartnerShiftDto.builder()
-                .uuid(x.getUuid())
-                .build()));
+        activeShifts.forEach(x -> {
+            PartnerViewDto partnerViewDto = PartnerViewDto.fromDao(partnerDaoMap.get(x.getPartnerId()));
+            shiftList.add(PartnerShiftDto.fromDao(x, partnerViewDto));
+        });
         return PaginatedResponseDto.<PartnerShiftDto>builder().elements(shiftList).build();
 
     }
@@ -57,9 +62,7 @@ public class PartnerShiftServiceImpl implements PartnerShiftService {
         partnerShiftDao = partnerShiftRepository.save(partnerShiftDao);
         if (partnerShiftDao == null)
             throw new ResponseException("Error in saving partner shift");
-        return PartnerShiftDto.builder()
-                .uuid(partnerShiftDao.getUuid())
-                .build();
+        return PartnerShiftDto.fromDao(partnerShiftDao, PartnerViewDto.fromDao(partner));
     }
 
     @Override
@@ -82,9 +85,7 @@ public class PartnerShiftServiceImpl implements PartnerShiftService {
             throw new ResponseException("Error in updating details partner shift");
 
 
-        return PartnerShiftDto.builder()
-                .uuid(partnerShiftDao.getUuid())
-                .build();
+        return PartnerShiftDto.fromDao(partnerShiftDao, PartnerViewDto.fromDao(partner));
     }
 
     @Override
@@ -98,9 +99,7 @@ public class PartnerShiftServiceImpl implements PartnerShiftService {
             throw new ResponseException("No partner shift found for Id :" + shiftUUID);
 
 
-        return PartnerShiftDto.builder()
-                .uuid(partnerShiftDao.getUuid())
-                .build();
+        return PartnerShiftDto.fromDao(partnerShiftDao, PartnerViewDto.fromDao(partner));
     }
 
     @Override

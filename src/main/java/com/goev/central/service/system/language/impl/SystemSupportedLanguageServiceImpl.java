@@ -24,7 +24,7 @@ public class SystemSupportedLanguageServiceImpl implements SystemSupportedLangua
 
     @Override
     public PaginatedResponseDto<SystemSupportedLanguageDto> getSystemSupportedLanguages() {
-        PaginatedResponseDto<SystemSupportedLanguageDto> result = PaginatedResponseDto.<SystemSupportedLanguageDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<SystemSupportedLanguageDto> result = PaginatedResponseDto.<SystemSupportedLanguageDto>builder().elements(new ArrayList<>()).build();
         List<SystemSupportedLanguageDao> systemSupportedLanguageDaos = systemSupportedLanguageRepository.findAllActive();
         if (CollectionUtils.isEmpty(systemSupportedLanguageDaos))
             return result;

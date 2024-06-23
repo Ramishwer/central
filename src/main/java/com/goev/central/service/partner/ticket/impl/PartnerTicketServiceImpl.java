@@ -24,7 +24,7 @@ public class PartnerTicketServiceImpl implements PartnerTicketService {
 
     @Override
     public PaginatedResponseDto<PartnerTicketDto> getPartnerTickets(String partnerUUID) {
-        PaginatedResponseDto<PartnerTicketDto> result = PaginatedResponseDto.<PartnerTicketDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<PartnerTicketDto> result = PaginatedResponseDto.<PartnerTicketDto>builder().elements(new ArrayList<>()).build();
         List<PartnerTicketDao> partnerTicketDaos = partnerTicketRepository.findAllActive();
         if (CollectionUtils.isEmpty(partnerTicketDaos))
             return result;

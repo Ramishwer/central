@@ -24,7 +24,7 @@ public class PartnerNotificationTemplateServiceImpl implements PartnerNotificati
 
     @Override
     public PaginatedResponseDto<PartnerNotificationTemplateDto> getPartnerNotificationTemplates() {
-        PaginatedResponseDto<PartnerNotificationTemplateDto> result = PaginatedResponseDto.<PartnerNotificationTemplateDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<PartnerNotificationTemplateDto> result = PaginatedResponseDto.<PartnerNotificationTemplateDto>builder().elements(new ArrayList<>()).build();
         List<PartnerNotificationTemplateDao> partnerNotificationTemplateDaos = partnerNotificationTemplateRepository.findAllActive();
         if (CollectionUtils.isEmpty(partnerNotificationTemplateDaos))
             return result;

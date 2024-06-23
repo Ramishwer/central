@@ -24,7 +24,7 @@ public class PricingModelServiceImpl implements PricingModelService {
 
     @Override
     public PaginatedResponseDto<PricingModelDto> getPricingModels() {
-        PaginatedResponseDto<PricingModelDto> result = PaginatedResponseDto.<PricingModelDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<PricingModelDto> result = PaginatedResponseDto.<PricingModelDto>builder().elements(new ArrayList<>()).build();
         List<PricingModelDao> pricingModelDaos = pricingModelRepository.findAllActive();
         if (CollectionUtils.isEmpty(pricingModelDaos))
             return result;

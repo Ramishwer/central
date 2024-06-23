@@ -24,7 +24,7 @@ public class PartnerAppStringServiceImpl implements PartnerAppStringService {
 
     @Override
     public PaginatedResponseDto<PartnerAppStringDto> getPartnerAppStrings() {
-        PaginatedResponseDto<PartnerAppStringDto> result = PaginatedResponseDto.<PartnerAppStringDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<PartnerAppStringDto> result = PaginatedResponseDto.<PartnerAppStringDto>builder().elements(new ArrayList<>()).build();
         List<PartnerAppStringDao> partnerAppStringDaos = partnerAppStringRepository.findAllActive();
         if (CollectionUtils.isEmpty(partnerAppStringDaos))
             return result;

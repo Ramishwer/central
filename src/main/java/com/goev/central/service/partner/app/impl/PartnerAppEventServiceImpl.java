@@ -24,7 +24,7 @@ public class PartnerAppEventServiceImpl implements PartnerAppEventService {
 
     @Override
     public PaginatedResponseDto<PartnerAppEventDto> getPartnerAppEvents(String partnerUUID) {
-        PaginatedResponseDto<PartnerAppEventDto> result = PaginatedResponseDto.<PartnerAppEventDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<PartnerAppEventDto> result = PaginatedResponseDto.<PartnerAppEventDto>builder().elements(new ArrayList<>()).build();
         List<PartnerAppEventDao> partnerAppEventDaos = partnerAppEventRepository.findAllActive();
         if (CollectionUtils.isEmpty(partnerAppEventDaos))
             return result;

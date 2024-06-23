@@ -24,7 +24,7 @@ public class AllocationLogServiceImpl implements AllocationLogService {
 
     @Override
     public PaginatedResponseDto<AllocationLogDto> getAllocationLogs() {
-        PaginatedResponseDto<AllocationLogDto> result = PaginatedResponseDto.<AllocationLogDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<AllocationLogDto> result = PaginatedResponseDto.<AllocationLogDto>builder().elements(new ArrayList<>()).build();
         List<AllocationLogDao> allocationLogDaos = allocationLogRepository.findAllActive();
         if (CollectionUtils.isEmpty(allocationLogDaos))
             return result;

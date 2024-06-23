@@ -24,7 +24,7 @@ public class ShiftServiceImpl implements ShiftService {
 
     @Override
     public PaginatedResponseDto<ShiftDto> getShifts() {
-        PaginatedResponseDto<ShiftDto> result = PaginatedResponseDto.<ShiftDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<ShiftDto> result = PaginatedResponseDto.<ShiftDto>builder().elements(new ArrayList<>()).build();
         List<ShiftDao> shiftDaos = shiftRepository.findAllActive();
         if (CollectionUtils.isEmpty(shiftDaos))
             return result;

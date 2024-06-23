@@ -24,7 +24,7 @@ public class CustomerPromotionServiceImpl implements CustomerPromotionService {
 
     @Override
     public PaginatedResponseDto<CustomerPromotionDto> getCustomerPromotions(String customerUUID) {
-        PaginatedResponseDto<CustomerPromotionDto> result = PaginatedResponseDto.<CustomerPromotionDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<CustomerPromotionDto> result = PaginatedResponseDto.<CustomerPromotionDto>builder().elements(new ArrayList<>()).build();
         List<CustomerPromotionDao> customerPromotionDaos = customerPromotionRepository.findAllActive();
         if (CollectionUtils.isEmpty(customerPromotionDaos))
             return result;

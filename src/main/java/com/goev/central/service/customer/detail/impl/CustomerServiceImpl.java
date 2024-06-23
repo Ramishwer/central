@@ -24,7 +24,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public PaginatedResponseDto<CustomerViewDto> getCustomers() {
-        PaginatedResponseDto<CustomerViewDto> result = PaginatedResponseDto.<CustomerViewDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<CustomerViewDto> result = PaginatedResponseDto.<CustomerViewDto>builder().elements(new ArrayList<>()).build();
         List<CustomerDao> customerDaos = customerRepository.findAllActive();
         if (CollectionUtils.isEmpty(customerDaos))
             return result;

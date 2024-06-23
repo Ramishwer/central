@@ -24,7 +24,7 @@ public class CustomerSegmentServiceImpl implements CustomerSegmentService {
 
     @Override
     public PaginatedResponseDto<CustomerSegmentDto> getCustomerSegments() {
-        PaginatedResponseDto<CustomerSegmentDto> result = PaginatedResponseDto.<CustomerSegmentDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<CustomerSegmentDto> result = PaginatedResponseDto.<CustomerSegmentDto>builder().elements(new ArrayList<>()).build();
         List<CustomerSegmentDao> customerSegmentDaos = customerSegmentRepository.findAllActive();
         if (CollectionUtils.isEmpty(customerSegmentDaos))
             return result;

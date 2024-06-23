@@ -24,7 +24,7 @@ public class PricingElementServiceImpl implements PricingElementService {
 
     @Override
     public PaginatedResponseDto<PricingElementDto> getPricingElements() {
-        PaginatedResponseDto<PricingElementDto> result = PaginatedResponseDto.<PricingElementDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<PricingElementDto> result = PaginatedResponseDto.<PricingElementDto>builder().elements(new ArrayList<>()).build();
         List<PricingElementDao> pricingElementDaos = pricingElementRepository.findAllActive();
         if (CollectionUtils.isEmpty(pricingElementDaos))
             return result;

@@ -24,7 +24,7 @@ public class BusinessSegmentServiceImpl implements BusinessSegmentService {
 
     @Override
     public PaginatedResponseDto<BusinessSegmentDto> getSegments() {
-        PaginatedResponseDto<BusinessSegmentDto> result = PaginatedResponseDto.<BusinessSegmentDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<BusinessSegmentDto> result = PaginatedResponseDto.<BusinessSegmentDto>builder().elements(new ArrayList<>()).build();
         List<BusinessSegmentDao> businessSegmentDaos = businessSegmentRepository.findAllActive();
         if (CollectionUtils.isEmpty(businessSegmentDaos))
             return result;

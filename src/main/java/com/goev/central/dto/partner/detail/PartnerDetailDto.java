@@ -9,6 +9,7 @@ import com.goev.central.dao.partner.document.PartnerDocumentDao;
 import com.goev.central.dao.partner.document.PartnerDocumentTypeDao;
 import com.goev.central.dto.business.BusinessClientDto;
 import com.goev.central.dto.business.BusinessSegmentDto;
+import com.goev.central.dto.common.FileDto;
 import com.goev.central.dto.location.LocationDto;
 import com.goev.central.dto.partner.PartnerViewDto;
 import com.goev.central.dto.partner.document.PartnerDocumentDto;
@@ -68,6 +69,7 @@ public class PartnerDetailDto {
     private String localAddress;
     private String permanentAddress;
     private String profileUrl;
+    private FileDto profile;
 
 
     public static List<PartnerDocumentDto> getPartnerDocumentDtoList(Map<Integer, PartnerDocumentTypeDao> documentTypeIdToDocumentTypeMap, Map<Integer, PartnerDocumentDao> existingDocumentMap) {

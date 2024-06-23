@@ -11,8 +11,7 @@ import lombok.*;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PageDto {
-    private Integer totalPages;
-    private Integer currentPage;
-    private Integer totalElements;
-    private String lastElement;
+    private String lastElementUUID;
+    private Integer start;
+    private Integer limit;
 }

@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.joda.deser.DateTimeDeserializer;
 import com.fasterxml.jackson.datatype.joda.ser.DateTimeSerializer;
+import com.goev.central.constant.ApplicationConstants;
+import com.goev.central.dao.partner.duty.PartnerDutyDao;
 import com.goev.central.dto.location.LocationDto;
 import com.goev.central.dto.partner.PartnerViewDto;
 import lombok.*;
@@ -20,7 +22,7 @@ import org.joda.time.DateTime;
 public class PartnerDutyDto {
     private String uuid;
     private PartnerViewDto partner;
-    private PartnerShiftDto partnerShift;
+    private PartnerShiftDto shiftDetails;
     private Long plannedTotalOnlineTimeInMillis;
     private Long plannedTotalPauseTimeInMillis;
     @JsonSerialize(using = DateTimeSerializer.class)
@@ -42,4 +44,36 @@ public class PartnerDutyDto {
     private Long actualTotalOnlineTimeInMillis;
     private Long actualTotalPauseTimeInMillis;
     private String status;
+
+    public static PartnerDutyDto fromDao(PartnerDutyDao dutyDao, PartnerViewDto partner, PartnerShiftDto shift) {
+
+        if (dutyDao == null)
+            return null;
+
+        PartnerDutyDto result = PartnerDutyDto.builder()
+                .uuid(dutyDao.getUuid())
+                .status(dutyDao.getStatus())
+                .plannedTotalOnlineTimeInMillis(dutyDao.getPlannedTotalOnlineTimeInMillis())
+                .plannedTotalPauseTimeInMillis(dutyDao.getPlannedTotalPauseTimeInMillis())
+                .plannedDutyStartTime(dutyDao.getPlannedDutyStartTime())
+                .plannedDutyEndTime(dutyDao.getPlannedDutyEndTime())
+                .plannedDutyStartLocationDetails(ApplicationConstants.GSON.fromJson(dutyDao.getPlannedDutyStartLocationDetails(), LocationDto.class))
+                .actualTotalOnlineTimeInMillis(dutyDao.getActualTotalOnlineTimeInMillis())
+                .actualTotalPauseTimeInMillis(dutyDao.getActualTotalPauseTimeInMillis())
+                .actualDutyStartTime(dutyDao.getActualDutyStartTime())
+                .actualDutyEndTime(dutyDao.getActualDutyEndTime())
+                .actualDutyStartLocationDetails(ApplicationConstants.GSON.fromJson(dutyDao.getActualDutyStartLocationDetails(), LocationDto.class))
+                .build();
+
+        if (shift != null) {
+            result.setShiftDetails(shift);
+        }
+        if (partner != null) {
+            result.setPartner(partner);
+        }
+
+        return result;
+
+    }
+
 }

@@ -24,7 +24,7 @@ public class VehicleLeasingAgencyServiceImpl implements VehicleLeasingAgencyServ
 
     @Override
     public PaginatedResponseDto<VehicleLeasingAgencyDto> getLeasingAgencies() {
-        PaginatedResponseDto<VehicleLeasingAgencyDto> result = PaginatedResponseDto.<VehicleLeasingAgencyDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<VehicleLeasingAgencyDto> result = PaginatedResponseDto.<VehicleLeasingAgencyDto>builder().elements(new ArrayList<>()).build();
         List<VehicleLeasingAgencyDao> vehicleLeasingAgencyDaos = vehicleLeasingAgencyRepository.findAllActive();
         if (CollectionUtils.isEmpty(vehicleLeasingAgencyDaos))
             return result;

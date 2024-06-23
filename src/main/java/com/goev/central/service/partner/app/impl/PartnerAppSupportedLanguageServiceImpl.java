@@ -24,7 +24,7 @@ public class PartnerAppSupportedLanguageServiceImpl implements PartnerAppSupport
 
     @Override
     public PaginatedResponseDto<PartnerAppSupportedLanguageDto> getPartnerAppSupportedLanguages() {
-        PaginatedResponseDto<PartnerAppSupportedLanguageDto> result = PaginatedResponseDto.<PartnerAppSupportedLanguageDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<PartnerAppSupportedLanguageDto> result = PaginatedResponseDto.<PartnerAppSupportedLanguageDto>builder().elements(new ArrayList<>()).build();
         List<PartnerAppSupportedLanguageDao> partnerAppSupportedLanguageDaos = partnerAppSupportedLanguageRepository.findAllActive();
         if (CollectionUtils.isEmpty(partnerAppSupportedLanguageDaos))
             return result;

@@ -24,7 +24,7 @@ public class CustomerWalletTransactionServiceImpl implements CustomerWalletTrans
 
     @Override
     public PaginatedResponseDto<CustomerWalletTransactionDto> getCustomerWalletTransactions(String customerUUID) {
-        PaginatedResponseDto<CustomerWalletTransactionDto> result = PaginatedResponseDto.<CustomerWalletTransactionDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<CustomerWalletTransactionDto> result = PaginatedResponseDto.<CustomerWalletTransactionDto>builder().elements(new ArrayList<>()).build();
         List<CustomerWalletTransactionDao> customerWalletTransactionDaos = customerWalletTransactionRepository.findAllActive();
         if (CollectionUtils.isEmpty(customerWalletTransactionDaos))
             return result;

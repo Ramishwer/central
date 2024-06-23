@@ -24,7 +24,7 @@ public class CustomerSessionServiceImpl implements CustomerSessionService {
 
     @Override
     public PaginatedResponseDto<CustomerSessionDto> getCustomerSessions(String customerUUID) {
-        PaginatedResponseDto<CustomerSessionDto> result = PaginatedResponseDto.<CustomerSessionDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<CustomerSessionDto> result = PaginatedResponseDto.<CustomerSessionDto>builder().elements(new ArrayList<>()).build();
         List<CustomerSessionDao> customerSessionDaos = customerSessionRepository.findAllActive();
         if (CollectionUtils.isEmpty(customerSessionDaos))
             return result;

@@ -24,7 +24,7 @@ public class EngineRuleServiceImpl implements EngineRuleService {
 
     @Override
     public PaginatedResponseDto<EngineRuleDto> getEngineRules() {
-        PaginatedResponseDto<EngineRuleDto> result = PaginatedResponseDto.<EngineRuleDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<EngineRuleDto> result = PaginatedResponseDto.<EngineRuleDto>builder().elements(new ArrayList<>()).build();
         List<EngineRuleDao> engineRuleDaos = engineRuleRepository.findAllActive();
         if (CollectionUtils.isEmpty(engineRuleDaos))
             return result;

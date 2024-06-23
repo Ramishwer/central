@@ -24,7 +24,7 @@ public class VehicleDocumentTypeServiceImpl implements VehicleDocumentTypeServic
 
     @Override
     public PaginatedResponseDto<VehicleDocumentTypeDto> getDocumentTypes() {
-        PaginatedResponseDto<VehicleDocumentTypeDto> result = PaginatedResponseDto.<VehicleDocumentTypeDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<VehicleDocumentTypeDto> result = PaginatedResponseDto.<VehicleDocumentTypeDto>builder().elements(new ArrayList<>()).build();
         List<VehicleDocumentTypeDao> vehicleDocumentTypeDaos = vehicleDocumentTypeRepository.findAllActive();
         if (CollectionUtils.isEmpty(vehicleDocumentTypeDaos))
             return result;

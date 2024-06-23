@@ -24,7 +24,7 @@ public class CustomerAppStringServiceImpl implements CustomerAppStringService {
 
     @Override
     public PaginatedResponseDto<CustomerAppStringDto> getCustomerAppStrings() {
-        PaginatedResponseDto<CustomerAppStringDto> result = PaginatedResponseDto.<CustomerAppStringDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<CustomerAppStringDto> result = PaginatedResponseDto.<CustomerAppStringDto>builder().elements(new ArrayList<>()).build();
         List<CustomerAppStringDao> customerAppStringDaos = customerAppStringRepository.findAllActive();
         if (CollectionUtils.isEmpty(customerAppStringDaos))
             return result;

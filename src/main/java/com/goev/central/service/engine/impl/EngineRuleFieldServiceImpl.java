@@ -24,7 +24,7 @@ public class EngineRuleFieldServiceImpl implements EngineRuleFieldService {
 
     @Override
     public PaginatedResponseDto<EngineRuleFieldDto> getEngineRuleFields() {
-        PaginatedResponseDto<EngineRuleFieldDto> result = PaginatedResponseDto.<EngineRuleFieldDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<EngineRuleFieldDto> result = PaginatedResponseDto.<EngineRuleFieldDto>builder().elements(new ArrayList<>()).build();
         List<EngineRuleFieldDao> engineRuleFieldDaos = engineRuleFieldRepository.findAllActive();
         if (CollectionUtils.isEmpty(engineRuleFieldDaos))
             return result;

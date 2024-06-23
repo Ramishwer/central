@@ -248,8 +248,8 @@ public class VehicleDetailServiceImpl implements VehicleDetailService {
         }
 
 
-        if (vehicleDto.getImageUrl() != null) {
-            newVehicleDetails.setImageUrl(s3.getUrlForPath(vehicleDto.getImageUrl(), "image"));
+        if (vehicleDto.getImage() != null) {
+            newVehicleDetails.setImageUrl(s3.getUrlForPath(vehicleDto.getImage().getPath(), "image"));
         }
         newVehicleDetails.setOnboardingDate(vehicleDto.getOnboardingDate());
         newVehicleDetails.setDeboardingDate(vehicleDto.getDeboardingDate());

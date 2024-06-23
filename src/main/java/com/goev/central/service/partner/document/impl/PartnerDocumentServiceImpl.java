@@ -47,7 +47,7 @@ public class PartnerDocumentServiceImpl implements PartnerDocumentService {
 
         List<PartnerDocumentTypeDao> activeDocumentTypes = partnerDocumentTypeRepository.findAllActive();
         if (CollectionUtils.isEmpty(activeDocumentTypes))
-            return PaginatedResponseDto.<PartnerDocumentDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+            return PaginatedResponseDto.<PartnerDocumentDto>builder().elements(new ArrayList<>()).build();
 
         Map<Integer, PartnerDocumentTypeDao> documentTypeIdToDocumentTypeMap = activeDocumentTypes.stream()
                 .collect(Collectors.toMap(PartnerDocumentTypeDao::getId, Function.identity()));

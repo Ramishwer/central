@@ -1,6 +1,7 @@
 package com.goev.central.utilities;
 
 import com.goev.central.config.SpringContext;
+import com.goev.central.constant.ApplicationConstants;
 import com.goev.central.dao.asset.AssetTypeDao;
 import com.goev.central.dao.booking.BookingDao;
 import com.goev.central.dao.customer.detail.CustomerDao;
@@ -34,6 +35,7 @@ import com.goev.central.event.events.vehicle.save.*;
 import com.goev.central.event.events.vehicle.update.*;
 import com.goev.lib.event.core.Event;
 import com.goev.lib.event.service.EventProcessor;
+import com.goev.lib.utilities.ApplicationContext;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
@@ -47,6 +49,7 @@ public class EventExecutorUtils {
     private static <T> boolean fireEvent(Event<T> eventObj, T data) {
         eventObj.setData(data);
         eventObj.setExecutionTime(DateTime.now().getMillis());
+        eventObj.setActionByUUID(ApplicationContext.getAuthUUID());
         SpringContext.getBean(EventProcessor.class).sendEvent(eventObj);
         return true;
     }

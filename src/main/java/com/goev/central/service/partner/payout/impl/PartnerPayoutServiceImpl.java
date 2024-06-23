@@ -36,7 +36,7 @@ public class PartnerPayoutServiceImpl implements PartnerPayoutService {
         if (partnerDao == null)
             throw new ResponseException("No partner  found for Id :" + partnerUUID);
 
-        PaginatedResponseDto<PartnerPayoutDto> result = PaginatedResponseDto.<PartnerPayoutDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<PartnerPayoutDto> result = PaginatedResponseDto.<PartnerPayoutDto>builder().elements(new ArrayList<>()).build();
         List<PartnerPayoutDao> partnerPayoutDaos = partnerPayoutRepository.findAllByPartnerId(partnerDao.getId());
         if (CollectionUtils.isEmpty(partnerPayoutDaos))
             return result;
@@ -73,7 +73,7 @@ public class PartnerPayoutServiceImpl implements PartnerPayoutService {
             throw new ResponseException("No partner payout  found for Id :" + partnerPayoutUUID);
 
 
-        PaginatedResponseDto<PartnerPayoutTransactionDto> result = PaginatedResponseDto.<PartnerPayoutTransactionDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<PartnerPayoutTransactionDto> result = PaginatedResponseDto.<PartnerPayoutTransactionDto>builder().elements(new ArrayList<>()).build();
         List<PartnerPayoutTransactionDao> partnerPayoutTransactionDaos = partnerPayoutTransactionRepository.findAllByPartnerPayoutId(partnerPayoutDao.getId());
         if (CollectionUtils.isEmpty(partnerPayoutTransactionDaos))
             return result;
@@ -88,7 +88,7 @@ public class PartnerPayoutServiceImpl implements PartnerPayoutService {
 
     @Override
     public PaginatedResponseDto<PartnerPayoutDto> getPayouts() {
-        PaginatedResponseDto<PartnerPayoutDto> result = PaginatedResponseDto.<PartnerPayoutDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<PartnerPayoutDto> result = PaginatedResponseDto.<PartnerPayoutDto>builder().elements(new ArrayList<>()).build();
         return result;
     }
 

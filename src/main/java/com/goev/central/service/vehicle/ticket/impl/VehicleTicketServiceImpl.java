@@ -24,7 +24,7 @@ public class VehicleTicketServiceImpl implements VehicleTicketService {
 
     @Override
     public PaginatedResponseDto<VehicleTicketDto> getVehicleTickets(String vehicleUUID) {
-        PaginatedResponseDto<VehicleTicketDto> result = PaginatedResponseDto.<VehicleTicketDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<VehicleTicketDto> result = PaginatedResponseDto.<VehicleTicketDto>builder().elements(new ArrayList<>()).build();
         List<VehicleTicketDao> vehicleTicketDaos = vehicleTicketRepository.findAllActive();
         if (CollectionUtils.isEmpty(vehicleTicketDaos))
             return result;

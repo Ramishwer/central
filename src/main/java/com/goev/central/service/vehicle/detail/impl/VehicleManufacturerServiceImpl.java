@@ -24,7 +24,7 @@ public class VehicleManufacturerServiceImpl implements VehicleManufacturerServic
 
     @Override
     public PaginatedResponseDto<VehicleManufacturerDto> getManufacturers() {
-        PaginatedResponseDto<VehicleManufacturerDto> result = PaginatedResponseDto.<VehicleManufacturerDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<VehicleManufacturerDto> result = PaginatedResponseDto.<VehicleManufacturerDto>builder().elements(new ArrayList<>()).build();
         List<VehicleManufacturerDao> vehicleManufacturerDaos = vehicleManufacturerRepository.findAllActive();
         if (CollectionUtils.isEmpty(vehicleManufacturerDaos))
             return result;

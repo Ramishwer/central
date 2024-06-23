@@ -24,7 +24,7 @@ public class CustomerAppSupportedLanguageServiceImpl implements CustomerAppSuppo
 
     @Override
     public PaginatedResponseDto<CustomerAppSupportedLanguageDto> getCustomerAppSupportedLanguages() {
-        PaginatedResponseDto<CustomerAppSupportedLanguageDto> result = PaginatedResponseDto.<CustomerAppSupportedLanguageDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<CustomerAppSupportedLanguageDto> result = PaginatedResponseDto.<CustomerAppSupportedLanguageDto>builder().elements(new ArrayList<>()).build();
         List<CustomerAppSupportedLanguageDao> customerAppSupportedLanguageDaos = customerAppSupportedLanguageRepository.findAllActive();
         if (CollectionUtils.isEmpty(customerAppSupportedLanguageDaos))
             return result;

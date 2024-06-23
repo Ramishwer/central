@@ -22,4 +22,6 @@ public interface VehicleRepository {
     VehicleDao findByPlateNumber(String plateNumber);
 
     List<VehicleDao> findAllByOnboardingStatus(String onboardingStatus);
+
+    List<VehicleDao> findAllByStatus(String status);
 }

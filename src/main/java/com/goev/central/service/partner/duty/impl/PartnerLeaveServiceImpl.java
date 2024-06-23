@@ -34,7 +34,7 @@ public class PartnerLeaveServiceImpl implements PartnerLeaveService {
 
         List<PartnerLeaveDao> activeLeaves = partnerLeaveRepository.findAllByPartnerId(partner.getId());
         if (CollectionUtils.isEmpty(activeLeaves))
-            return PaginatedResponseDto.<PartnerLeaveDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+            return PaginatedResponseDto.<PartnerLeaveDto>builder().elements(new ArrayList<>()).build();
 
         List<PartnerLeaveDto> leaveList = new ArrayList<>();
         activeLeaves.forEach(x -> leaveList.add(PartnerLeaveDto.builder()

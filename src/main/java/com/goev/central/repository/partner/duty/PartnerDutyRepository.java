@@ -1,6 +1,7 @@
 package com.goev.central.repository.partner.duty;
 
 import com.goev.central.dao.partner.duty.PartnerDutyDao;
+import com.goev.central.dto.common.PageDto;
 
 import java.util.List;
 
@@ -21,5 +22,5 @@ public interface PartnerDutyRepository {
 
     List<PartnerDutyDao> findAllByPartnerId(Integer id);
 
-    List<PartnerDutyDao> findAllByDutyStatus(String status);
+    List<PartnerDutyDao> findAllByStatus(String status, PageDto page);
 }

@@ -5,11 +5,17 @@ import com.goev.central.constant.ApplicationConstants;
 import com.goev.central.dao.vehicle.detail.VehicleDao;
 import com.goev.central.dao.vehicle.detail.VehicleDao;
 import com.goev.central.dao.vehicle.detail.VehicleDao;
+import com.goev.central.dao.vehicle.detail.VehicleDao;
+import com.goev.central.dao.vehicle.detail.VehicleDao;
 import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
+import com.goev.central.dto.partner.PartnerViewDto;
+import com.goev.central.dto.vehicle.detail.VehicleDto;
+import com.goev.central.dto.vehicle.detail.VehicleDto;
 import com.goev.central.dto.vehicle.VehicleViewDto;
 import com.goev.central.dto.vehicle.VehicleViewDto;
 import com.goev.central.dto.vehicle.VehicleViewDto;
+import com.goev.central.dto.vehicle.detail.VehicleDto;
 import com.goev.central.repository.vehicle.detail.VehicleRepository;
 import com.goev.central.service.vehicle.detail.VehicleService;
 import com.goev.lib.exceptions.ResponseException;
@@ -40,15 +46,37 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
+    public PaginatedResponseDto<VehicleDto> getVehicleStatus(String status) {
+        PaginatedResponseDto<VehicleDto> result = PaginatedResponseDto.<VehicleDto>builder().elements(new ArrayList<>()).build();
+        List<VehicleDao> vehicles = vehicleRepository.findAllByStatus(status);
+        return getVehicleDtoPaginatedResponseDto(vehicles, result);
+    }
+
+    private PaginatedResponseDto<VehicleDto> getVehicleDtoPaginatedResponseDto(List<VehicleDao> vehicles, PaginatedResponseDto<VehicleDto> result) {
+        if (CollectionUtils.isEmpty(vehicles))
+            return result;
+        for (VehicleDao vehicle : vehicles) {
+            VehicleDto vehicleDto = new VehicleDto();
+            vehicleDto.setUuid(vehicle.getUuid());
+            vehicleDto.setPlateNumber(vehicle.getPlateNumber());
+            vehicleDto.setStatus(vehicle.getStatus());
+            vehicleDto.setPartnerDetails(ApplicationConstants.GSON.fromJson(vehicle.getPartnerDetails(), PartnerViewDto.class));
+            vehicleDto.setSubStatus(vehicle.getSubStatus());
+            result.getElements().add(vehicleDto);
+        }
+        return result;
+    }
+
+    @Override
     public PaginatedResponseDto<VehicleViewDto> getVehicles() {
-        PaginatedResponseDto<VehicleViewDto> result = PaginatedResponseDto.<VehicleViewDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<VehicleViewDto> result = PaginatedResponseDto.<VehicleViewDto>builder().elements(new ArrayList<>()).build();
         List<VehicleDao> vehicles = vehicleRepository.findAllActive();
         return getVehicleViewDtoPaginatedResponseDto(vehicles, result);
     }
 
     @Override
     public PaginatedResponseDto<VehicleViewDto> getVehicles(String onboardingStatus) {
-        PaginatedResponseDto<VehicleViewDto> result = PaginatedResponseDto.<VehicleViewDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<VehicleViewDto> result = PaginatedResponseDto.<VehicleViewDto>builder().elements(new ArrayList<>()).build();
         List<VehicleDao> vehicles = vehicleRepository.findAllByOnboardingStatus(onboardingStatus);
         return getVehicleViewDtoPaginatedResponseDto(vehicles, result);
     }

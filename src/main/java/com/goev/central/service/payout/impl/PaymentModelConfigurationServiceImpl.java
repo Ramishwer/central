@@ -24,7 +24,7 @@ public class PaymentModelConfigurationServiceImpl implements PayoutModelConfigur
 
     @Override
     public PaginatedResponseDto<PayoutModelConfigurationDto> getPayoutModelConfigurations(String customerUUID) {
-        PaginatedResponseDto<PayoutModelConfigurationDto> result = PaginatedResponseDto.<PayoutModelConfigurationDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<PayoutModelConfigurationDto> result = PaginatedResponseDto.<PayoutModelConfigurationDto>builder().elements(new ArrayList<>()).build();
         List<PayoutModelConfigurationDao> payoutModelConfigurationDaos = payoutModelConfigurationRepository.findAllActive();
         if (CollectionUtils.isEmpty(payoutModelConfigurationDaos))
             return result;

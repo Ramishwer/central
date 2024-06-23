@@ -24,7 +24,7 @@ public class CustomerAttributeServiceImpl implements CustomerAttributeService {
 
     @Override
     public PaginatedResponseDto<CustomerAttributeDto> getCustomerAttributes(String customerUUID) {
-        PaginatedResponseDto<CustomerAttributeDto> result = PaginatedResponseDto.<CustomerAttributeDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<CustomerAttributeDto> result = PaginatedResponseDto.<CustomerAttributeDto>builder().elements(new ArrayList<>()).build();
         List<CustomerAttributeDao> customerAttributeDaos = customerAttributeRepository.findAllActive();
         if (CollectionUtils.isEmpty(customerAttributeDaos))
             return result;

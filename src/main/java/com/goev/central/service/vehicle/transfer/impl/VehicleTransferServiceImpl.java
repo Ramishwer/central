@@ -30,7 +30,7 @@ public class VehicleTransferServiceImpl implements VehicleTransferService {
         if (vehicleDao == null)
             throw new ResponseException("No vehicle  found for Id :" + vehicleUUID);
 
-        PaginatedResponseDto<VehicleTransferDto> result = PaginatedResponseDto.<VehicleTransferDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<VehicleTransferDto> result = PaginatedResponseDto.<VehicleTransferDto>builder().elements(new ArrayList<>()).build();
         List<VehicleTransferDetailDao> vehicleTransferDaos = vehicleTransferDetailRepository.findAllByVehicleId(vehicleDao.getId());
         if (CollectionUtils.isEmpty(vehicleTransferDaos))
             return result;
@@ -44,8 +44,8 @@ public class VehicleTransferServiceImpl implements VehicleTransferService {
     }
 
     @Override
-    public PaginatedResponseDto<VehicleTransferDto> getTransfers() {
-        PaginatedResponseDto<VehicleTransferDto> result = PaginatedResponseDto.<VehicleTransferDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+    public PaginatedResponseDto<VehicleTransferDto> getTransfers(String status, PageDto page) {
+        PaginatedResponseDto<VehicleTransferDto> result = PaginatedResponseDto.<VehicleTransferDto>builder().elements(new ArrayList<>()).build();
         return result;
     }
 

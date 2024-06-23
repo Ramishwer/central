@@ -24,7 +24,7 @@ public class SystemPropertyServiceImpl implements SystemPropertyService {
 
     @Override
     public PaginatedResponseDto<SystemPropertyDto> getSystemProperties() {
-        PaginatedResponseDto<SystemPropertyDto> result = PaginatedResponseDto.<SystemPropertyDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<SystemPropertyDto> result = PaginatedResponseDto.<SystemPropertyDto>builder().elements(new ArrayList<>()).build();
         List<SystemPropertyDao> systemPropertyDaos = systemPropertyRepository.findAllActive();
         if (CollectionUtils.isEmpty(systemPropertyDaos))
             return result;

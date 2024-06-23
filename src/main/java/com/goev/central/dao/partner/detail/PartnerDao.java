@@ -23,7 +23,6 @@ public class PartnerDao extends BaseDao {
     private Integer partnerDetailsId;
     private String profileUrl;
     private String onboardingStatus;
-
     private String subStatus;
     private DateTime computedAvailableTime;
     private DateTime computedShiftEndTime;

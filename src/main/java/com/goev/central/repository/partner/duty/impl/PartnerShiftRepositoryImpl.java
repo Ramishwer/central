@@ -1,6 +1,7 @@
 package com.goev.central.repository.partner.duty.impl;
 
 import com.goev.central.dao.partner.duty.PartnerShiftDao;
+import com.goev.central.dto.common.PageDto;
 import com.goev.central.repository.partner.duty.PartnerShiftRepository;
 import com.goev.central.utilities.EventExecutorUtils;
 import com.goev.central.utilities.RequestContext;
@@ -99,5 +100,15 @@ public class PartnerShiftRepositoryImpl implements PartnerShiftRepository {
     @Override
     public List<PartnerShiftDao> findAllByPartnerId(Integer id) {
         return context.selectFrom(PARTNER_SHIFTS).where(PARTNER_SHIFTS.PARTNER_ID.eq(id)).fetchInto(PartnerShiftDao.class);
+    }
+
+    @Override
+    public List<PartnerShiftDao> findAllByStatus(String status, PageDto page) {
+        return context.selectFrom(PARTNER_SHIFTS)
+                .where(PARTNER_SHIFTS.STATUS.eq(status))
+                .and(PARTNER_SHIFTS.IS_ACTIVE.eq(true))
+                .limit(page.getLimit())
+                .offset(page.getStart())
+                .fetchInto(PartnerShiftDao.class);
     }
 }

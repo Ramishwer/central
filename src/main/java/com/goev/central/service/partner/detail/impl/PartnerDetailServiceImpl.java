@@ -14,6 +14,7 @@ import com.goev.central.dto.partner.PartnerViewDto;
 import com.goev.central.dto.partner.detail.PartnerDetailDto;
 import com.goev.central.enums.DocumentStatus;
 import com.goev.central.enums.partner.PartnerOnboardingStatus;
+import com.goev.central.enums.partner.PartnerStatus;
 import com.goev.central.event.events.partner.update.PartnerUpdateEvent;
 import com.goev.central.repository.business.BusinessClientRepository;
 import com.goev.central.repository.business.BusinessSegmentRepository;
@@ -78,6 +79,8 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
                 .organizationUUID(ApplicationContext.getOrganizationUUID())
                 .clientUUID(ApplicationConstants.PARTNER_CLIENT_UUID)
                 .build()));
+        partnerDao.setStatus(PartnerStatus.OFF_DUTY.name());
+        partnerDao.setSubStatus(PartnerStatus.ON_DUTY.name());
         PartnerDao partner = partnerRepository.save(partnerDao);
 
         if (partner == null)
@@ -258,8 +261,8 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
         }
 
 
-        if (partnerDto.getProfileUrl() != null) {
-            newPartnerDetails.setProfileUrl(s3.getUrlForPath(partnerDto.getProfileUrl(), "profile"));
+        if (partnerDto.getProfile() != null) {
+            newPartnerDetails.setProfileUrl(s3.getUrlForPath(partnerDto.getProfile().getPath(), "profile"));
         }
         newPartnerDetails.setIsVerified(true);
         newPartnerDetails.setOnboardingDate(partnerDto.getOnboardingDate());

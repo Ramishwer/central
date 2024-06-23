@@ -24,7 +24,7 @@ public class RegionServiceImpl implements RegionService {
 
     @Override
     public PaginatedResponseDto<RegionDto> getRegions() {
-        PaginatedResponseDto<RegionDto> result = PaginatedResponseDto.<RegionDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<RegionDto> result = PaginatedResponseDto.<RegionDto>builder().elements(new ArrayList<>()).build();
         List<RegionDao> regionDaos = regionRepository.findAllActive();
         if (CollectionUtils.isEmpty(regionDaos))
             return result;

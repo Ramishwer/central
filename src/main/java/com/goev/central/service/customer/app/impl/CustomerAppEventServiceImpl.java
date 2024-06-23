@@ -24,7 +24,7 @@ public class CustomerAppEventServiceImpl implements CustomerAppEventService {
 
     @Override
     public PaginatedResponseDto<CustomerAppEventDto> getCustomerAppEvents(String customerUUID) {
-        PaginatedResponseDto<CustomerAppEventDto> result = PaginatedResponseDto.<CustomerAppEventDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<CustomerAppEventDto> result = PaginatedResponseDto.<CustomerAppEventDto>builder().elements(new ArrayList<>()).build();
         List<CustomerAppEventDao> customerAppEventDaos = customerAppEventRepository.findAllActive();
         if (CollectionUtils.isEmpty(customerAppEventDaos))
             return result;

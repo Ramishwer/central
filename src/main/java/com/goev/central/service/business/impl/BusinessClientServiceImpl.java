@@ -24,7 +24,7 @@ public class BusinessClientServiceImpl implements BusinessClientService {
 
     @Override
     public PaginatedResponseDto<BusinessClientDto> getClients() {
-        PaginatedResponseDto<BusinessClientDto> result = PaginatedResponseDto.<BusinessClientDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<BusinessClientDto> result = PaginatedResponseDto.<BusinessClientDto>builder().elements(new ArrayList<>()).build();
         List<BusinessClientDao> businessClientDaos = businessClientRepository.findAllActive();
         if (CollectionUtils.isEmpty(businessClientDaos))
             return result;

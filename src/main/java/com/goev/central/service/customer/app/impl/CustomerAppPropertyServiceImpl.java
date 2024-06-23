@@ -24,7 +24,7 @@ public class CustomerAppPropertyServiceImpl implements CustomerAppPropertyServic
 
     @Override
     public PaginatedResponseDto<CustomerAppPropertyDto> getCustomerAppProperties() {
-        PaginatedResponseDto<CustomerAppPropertyDto> result = PaginatedResponseDto.<CustomerAppPropertyDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<CustomerAppPropertyDto> result = PaginatedResponseDto.<CustomerAppPropertyDto>builder().elements(new ArrayList<>()).build();
         List<CustomerAppPropertyDao> customerAppPropertyDaos = customerAppPropertyRepository.findAllActive();
         if (CollectionUtils.isEmpty(customerAppPropertyDaos))
             return result;

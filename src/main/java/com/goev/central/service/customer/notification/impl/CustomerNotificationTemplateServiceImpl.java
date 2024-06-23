@@ -24,7 +24,7 @@ public class CustomerNotificationTemplateServiceImpl implements CustomerNotifica
 
     @Override
     public PaginatedResponseDto<CustomerNotificationTemplateDto> getCustomerNotificationTemplates() {
-        PaginatedResponseDto<CustomerNotificationTemplateDto> result = PaginatedResponseDto.<CustomerNotificationTemplateDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<CustomerNotificationTemplateDto> result = PaginatedResponseDto.<CustomerNotificationTemplateDto>builder().elements(new ArrayList<>()).build();
         List<CustomerNotificationTemplateDao> customerNotificationTemplateDaos = customerNotificationTemplateRepository.findAllActive();
         if (CollectionUtils.isEmpty(customerNotificationTemplateDaos))
             return result;

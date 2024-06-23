@@ -24,7 +24,7 @@ public class SystemLogServiceImpl implements SystemLogService {
 
     @Override
     public PaginatedResponseDto<SystemLogDto> getSystemLogs() {
-        PaginatedResponseDto<SystemLogDto> result = PaginatedResponseDto.<SystemLogDto>builder().pagination(PageDto.builder().currentPage(0).totalPages(0).build()).elements(new ArrayList<>()).build();
+        PaginatedResponseDto<SystemLogDto> result = PaginatedResponseDto.<SystemLogDto>builder().elements(new ArrayList<>()).build();
         List<SystemLogDao> systemLogDaos = systemLogRepository.findAllActive();
         if (CollectionUtils.isEmpty(systemLogDaos))
             return result;

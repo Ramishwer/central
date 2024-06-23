@@ -8,6 +8,7 @@ import com.fasterxml.jackson.datatype.joda.deser.DateTimeDeserializer;
 import com.fasterxml.jackson.datatype.joda.ser.DateTimeSerializer;
 import com.goev.central.dto.booking.BookingViewDto;
 import com.goev.central.dto.location.LocationDto;
+import com.goev.central.dto.partner.PartnerViewDto;
 import com.goev.central.dto.partner.duty.PartnerDutyDto;
 import com.goev.central.dto.partner.duty.PartnerShiftDto;
 import com.goev.central.dto.vehicle.VehicleViewDto;
@@ -41,5 +42,6 @@ public class PartnerDto {
     private PartnerDutyDto dutyDetails;
     private PartnerShiftDto shiftDetails;
     private String locationStatus;
+    private PartnerViewDto partnerDetails;
 
 }
