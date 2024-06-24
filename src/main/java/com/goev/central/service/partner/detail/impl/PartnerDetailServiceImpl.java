@@ -192,8 +192,8 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
         if(!status.equals(partner.getOnboardingStatus())) {
             partner.setOnboardingStatus(status);
             partner = partnerRepository.update(partner);
-            eventExecutor.fireEvent(PartnerUpdateEvent.class.getName(),partner);
         }
+        eventExecutor.fireEvent("PartnerUpdateEvent",partner);
         return true;
     }
 
