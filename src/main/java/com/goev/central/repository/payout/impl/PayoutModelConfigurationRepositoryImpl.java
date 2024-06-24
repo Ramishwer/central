@@ -25,15 +25,15 @@ public class PayoutModelConfigurationRepositoryImpl implements PayoutModelConfig
         PayoutModelConfigurationsRecord payoutModelConfigurationsRecord = context.newRecord(PAYOUT_MODEL_CONFIGURATIONS, payoutModelConfiguration);
         payoutModelConfigurationsRecord.store();
         payoutModelConfiguration.setId(payoutModelConfigurationsRecord.getId());
-        payoutModelConfiguration.setUuid(payoutModelConfiguration.getUuid());
-        payoutModelConfiguration.setCreatedBy(payoutModelConfiguration.getCreatedBy());
-        payoutModelConfiguration.setUpdatedBy(payoutModelConfiguration.getUpdatedBy());
-        payoutModelConfiguration.setCreatedOn(payoutModelConfiguration.getCreatedOn());
-        payoutModelConfiguration.setUpdatedOn(payoutModelConfiguration.getUpdatedOn());
-        payoutModelConfiguration.setIsActive(payoutModelConfiguration.getIsActive());
-        payoutModelConfiguration.setState(payoutModelConfiguration.getState());
-        payoutModelConfiguration.setApiSource(payoutModelConfiguration.getApiSource());
-        payoutModelConfiguration.setNotes(payoutModelConfiguration.getNotes());
+        payoutModelConfiguration.setUuid(payoutModelConfigurationsRecord.getUuid());
+        payoutModelConfiguration.setCreatedBy(payoutModelConfigurationsRecord.getCreatedBy());
+        payoutModelConfiguration.setUpdatedBy(payoutModelConfigurationsRecord.getUpdatedBy());
+        payoutModelConfiguration.setCreatedOn(payoutModelConfigurationsRecord.getCreatedOn());
+        payoutModelConfiguration.setUpdatedOn(payoutModelConfigurationsRecord.getUpdatedOn());
+        payoutModelConfiguration.setIsActive(payoutModelConfigurationsRecord.getIsActive());
+        payoutModelConfiguration.setState(payoutModelConfigurationsRecord.getState());
+        payoutModelConfiguration.setApiSource(payoutModelConfigurationsRecord.getApiSource());
+        payoutModelConfiguration.setNotes(payoutModelConfigurationsRecord.getNotes());
         return payoutModelConfiguration;
     }
 

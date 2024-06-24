@@ -11,6 +11,9 @@ import com.goev.central.dto.common.QrValueDto;
 import com.goev.central.dto.location.LocationDto;
 import com.goev.central.dto.vehicle.VehicleViewDto;
 import com.goev.central.dto.vehicle.detail.*;
+import com.goev.central.enums.vehicle.VehicleOnboardingStatus;
+import com.goev.central.enums.vehicle.VehicleStatus;
+import com.goev.central.enums.vehicle.VehicleSubStatus;
 import com.goev.central.repository.business.BusinessClientRepository;
 import com.goev.central.repository.business.BusinessSegmentRepository;
 import com.goev.central.repository.location.LocationRepository;
@@ -72,6 +75,9 @@ public class VehicleDetailServiceImpl implements VehicleDetailService {
         VehicleDao vehicleDao = new VehicleDao();
 
         vehicleDao.setPlateNumber(vehicleDto.getVehicle().getPlateNumber());
+        vehicleDao.setOnboardingStatus(VehicleOnboardingStatus.ONBOARDED.name());
+        vehicleDao.setStatus(VehicleStatus.AVAILABLE.name());
+        vehicleDao.setSubStatus(VehicleSubStatus.NOT_ASSIGNED.name());
         return vehicleDao;
     }
 
@@ -247,7 +253,7 @@ public class VehicleDetailServiceImpl implements VehicleDetailService {
             newVehicleDetails.setBusinessClientId(businessClientDao.getId());
         }
 
-
+        newVehicleDetails.setImageUrl(vehicleDto.getImageUrl());
         if (vehicleDto.getImage() != null) {
             newVehicleDetails.setImageUrl(s3.getUrlForPath(vehicleDto.getImage().getPath(), "image"));
         }
@@ -262,7 +268,8 @@ public class VehicleDetailServiceImpl implements VehicleDetailService {
         VehicleViewDto vehicleDto = VehicleViewDto.builder().build();
         vehicleDto.setPlateNumber(vehicleDao.getPlateNumber());
         vehicleDto.setUuid(vehicleDao.getUuid());
-
+        vehicleDto.setImageUrl(vehicleDao.getImageUrl());
+        result.setImageUrl(vehicleDao.getImageUrl());
         result.setVehicle(vehicleDto);
         result.setUuid(vehicleDao.getUuid());
         if (vehicleDetailDao == null)

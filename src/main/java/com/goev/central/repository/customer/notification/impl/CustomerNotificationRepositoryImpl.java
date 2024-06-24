@@ -25,15 +25,15 @@ public class CustomerNotificationRepositoryImpl implements CustomerNotificationR
         CustomerNotificationsRecord customerNotificationsRecord = context.newRecord(CUSTOMER_NOTIFICATIONS, customerNotification);
         customerNotificationsRecord.store();
         customerNotification.setId(customerNotificationsRecord.getId());
-        customerNotification.setUuid(customerNotification.getUuid());
-        customerNotification.setCreatedBy(customerNotification.getCreatedBy());
-        customerNotification.setUpdatedBy(customerNotification.getUpdatedBy());
-        customerNotification.setCreatedOn(customerNotification.getCreatedOn());
-        customerNotification.setUpdatedOn(customerNotification.getUpdatedOn());
-        customerNotification.setIsActive(customerNotification.getIsActive());
-        customerNotification.setState(customerNotification.getState());
-        customerNotification.setApiSource(customerNotification.getApiSource());
-        customerNotification.setNotes(customerNotification.getNotes());
+        customerNotification.setUuid(customerNotificationsRecord.getUuid());
+        customerNotification.setCreatedBy(customerNotificationsRecord.getCreatedBy());
+        customerNotification.setUpdatedBy(customerNotificationsRecord.getUpdatedBy());
+        customerNotification.setCreatedOn(customerNotificationsRecord.getCreatedOn());
+        customerNotification.setUpdatedOn(customerNotificationsRecord.getUpdatedOn());
+        customerNotification.setIsActive(customerNotificationsRecord.getIsActive());
+        customerNotification.setState(customerNotificationsRecord.getState());
+        customerNotification.setApiSource(customerNotificationsRecord.getApiSource());
+        customerNotification.setNotes(customerNotificationsRecord.getNotes());
         return customerNotification;
     }
 

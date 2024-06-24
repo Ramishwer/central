@@ -25,15 +25,15 @@ public class PartnerDutyPayoutDetailRepositoryImpl implements PartnerDutyPayoutD
         PartnerDutyPayoutDetailsRecord partnerDutyPayoutDetailsRecord = context.newRecord(PARTNER_DUTY_PAYOUT_DETAILS, partnerDutyPayoutDetail);
         partnerDutyPayoutDetailsRecord.store();
         partnerDutyPayoutDetail.setId(partnerDutyPayoutDetailsRecord.getId());
-        partnerDutyPayoutDetail.setUuid(partnerDutyPayoutDetail.getUuid());
-        partnerDutyPayoutDetail.setCreatedBy(partnerDutyPayoutDetail.getCreatedBy());
-        partnerDutyPayoutDetail.setUpdatedBy(partnerDutyPayoutDetail.getUpdatedBy());
-        partnerDutyPayoutDetail.setCreatedOn(partnerDutyPayoutDetail.getCreatedOn());
-        partnerDutyPayoutDetail.setUpdatedOn(partnerDutyPayoutDetail.getUpdatedOn());
-        partnerDutyPayoutDetail.setIsActive(partnerDutyPayoutDetail.getIsActive());
-        partnerDutyPayoutDetail.setState(partnerDutyPayoutDetail.getState());
-        partnerDutyPayoutDetail.setApiSource(partnerDutyPayoutDetail.getApiSource());
-        partnerDutyPayoutDetail.setNotes(partnerDutyPayoutDetail.getNotes());
+        partnerDutyPayoutDetail.setUuid(partnerDutyPayoutDetailsRecord.getUuid());
+        partnerDutyPayoutDetail.setCreatedBy(partnerDutyPayoutDetailsRecord.getCreatedBy());
+        partnerDutyPayoutDetail.setUpdatedBy(partnerDutyPayoutDetailsRecord.getUpdatedBy());
+        partnerDutyPayoutDetail.setCreatedOn(partnerDutyPayoutDetailsRecord.getCreatedOn());
+        partnerDutyPayoutDetail.setUpdatedOn(partnerDutyPayoutDetailsRecord.getUpdatedOn());
+        partnerDutyPayoutDetail.setIsActive(partnerDutyPayoutDetailsRecord.getIsActive());
+        partnerDutyPayoutDetail.setState(partnerDutyPayoutDetailsRecord.getState());
+        partnerDutyPayoutDetail.setApiSource(partnerDutyPayoutDetailsRecord.getApiSource());
+        partnerDutyPayoutDetail.setNotes(partnerDutyPayoutDetailsRecord.getNotes());
         return partnerDutyPayoutDetail;
     }
 

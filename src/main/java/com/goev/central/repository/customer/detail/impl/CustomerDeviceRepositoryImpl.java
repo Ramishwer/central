@@ -25,15 +25,15 @@ public class CustomerDeviceRepositoryImpl implements CustomerDeviceRepository {
         CustomerDevicesRecord customerDevicesRecord = context.newRecord(CUSTOMER_DEVICES, customerDevice);
         customerDevicesRecord.store();
         customerDevice.setId(customerDevicesRecord.getId());
-        customerDevice.setUuid(customerDevice.getUuid());
-        customerDevice.setCreatedBy(customerDevice.getCreatedBy());
-        customerDevice.setUpdatedBy(customerDevice.getUpdatedBy());
-        customerDevice.setCreatedOn(customerDevice.getCreatedOn());
-        customerDevice.setUpdatedOn(customerDevice.getUpdatedOn());
-        customerDevice.setIsActive(customerDevice.getIsActive());
-        customerDevice.setState(customerDevice.getState());
-        customerDevice.setApiSource(customerDevice.getApiSource());
-        customerDevice.setNotes(customerDevice.getNotes());
+        customerDevice.setUuid(customerDevicesRecord.getUuid());
+        customerDevice.setCreatedBy(customerDevicesRecord.getCreatedBy());
+        customerDevice.setUpdatedBy(customerDevicesRecord.getUpdatedBy());
+        customerDevice.setCreatedOn(customerDevicesRecord.getCreatedOn());
+        customerDevice.setUpdatedOn(customerDevicesRecord.getUpdatedOn());
+        customerDevice.setIsActive(customerDevicesRecord.getIsActive());
+        customerDevice.setState(customerDevicesRecord.getState());
+        customerDevice.setApiSource(customerDevicesRecord.getApiSource());
+        customerDevice.setNotes(customerDevicesRecord.getNotes());
         return customerDevice;
     }
 

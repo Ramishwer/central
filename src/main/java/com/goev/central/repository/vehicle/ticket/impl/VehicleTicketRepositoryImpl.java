@@ -25,15 +25,15 @@ public class VehicleTicketRepositoryImpl implements VehicleTicketRepository {
         VehicleTicketsRecord vehicleTicketsRecord = context.newRecord(VEHICLE_TICKETS, vehicleTicket);
         vehicleTicketsRecord.store();
         vehicleTicket.setId(vehicleTicketsRecord.getId());
-        vehicleTicket.setUuid(vehicleTicket.getUuid());
-        vehicleTicket.setCreatedBy(vehicleTicket.getCreatedBy());
-        vehicleTicket.setUpdatedBy(vehicleTicket.getUpdatedBy());
-        vehicleTicket.setCreatedOn(vehicleTicket.getCreatedOn());
-        vehicleTicket.setUpdatedOn(vehicleTicket.getUpdatedOn());
-        vehicleTicket.setIsActive(vehicleTicket.getIsActive());
-        vehicleTicket.setState(vehicleTicket.getState());
-        vehicleTicket.setApiSource(vehicleTicket.getApiSource());
-        vehicleTicket.setNotes(vehicleTicket.getNotes());
+        vehicleTicket.setUuid(vehicleTicketsRecord.getUuid());
+        vehicleTicket.setCreatedBy(vehicleTicketsRecord.getCreatedBy());
+        vehicleTicket.setUpdatedBy(vehicleTicketsRecord.getUpdatedBy());
+        vehicleTicket.setCreatedOn(vehicleTicketsRecord.getCreatedOn());
+        vehicleTicket.setUpdatedOn(vehicleTicketsRecord.getUpdatedOn());
+        vehicleTicket.setIsActive(vehicleTicketsRecord.getIsActive());
+        vehicleTicket.setState(vehicleTicketsRecord.getState());
+        vehicleTicket.setApiSource(vehicleTicketsRecord.getApiSource());
+        vehicleTicket.setNotes(vehicleTicketsRecord.getNotes());
         return vehicleTicket;
     }
 

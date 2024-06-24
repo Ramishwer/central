@@ -24,15 +24,15 @@ public class VehicleModelRepositoryImpl implements VehicleModelRepository {
         VehicleModelsRecord vehicleModelsRecord = context.newRecord(VEHICLE_MODELS, vehicleModel);
         vehicleModelsRecord.store();
         vehicleModel.setId(vehicleModelsRecord.getId());
-        vehicleModel.setUuid(vehicleModel.getUuid());
-        vehicleModel.setCreatedBy(vehicleModel.getCreatedBy());
-        vehicleModel.setUpdatedBy(vehicleModel.getUpdatedBy());
-        vehicleModel.setCreatedOn(vehicleModel.getCreatedOn());
-        vehicleModel.setUpdatedOn(vehicleModel.getUpdatedOn());
-        vehicleModel.setIsActive(vehicleModel.getIsActive());
-        vehicleModel.setState(vehicleModel.getState());
-        vehicleModel.setApiSource(vehicleModel.getApiSource());
-        vehicleModel.setNotes(vehicleModel.getNotes());
+        vehicleModel.setUuid(vehicleModelsRecord.getUuid());
+        vehicleModel.setCreatedBy(vehicleModelsRecord.getCreatedBy());
+        vehicleModel.setUpdatedBy(vehicleModelsRecord.getUpdatedBy());
+        vehicleModel.setCreatedOn(vehicleModelsRecord.getCreatedOn());
+        vehicleModel.setUpdatedOn(vehicleModelsRecord.getUpdatedOn());
+        vehicleModel.setIsActive(vehicleModelsRecord.getIsActive());
+        vehicleModel.setState(vehicleModelsRecord.getState());
+        vehicleModel.setApiSource(vehicleModelsRecord.getApiSource());
+        vehicleModel.setNotes(vehicleModelsRecord.getNotes());
         return vehicleModel;
     }
 

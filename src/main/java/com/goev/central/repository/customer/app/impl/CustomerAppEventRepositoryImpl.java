@@ -25,15 +25,15 @@ public class CustomerAppEventRepositoryImpl implements CustomerAppEventRepositor
         CustomerAppEventsRecord customerAppEventsRecord = context.newRecord(CUSTOMER_APP_EVENTS, customerAppEvent);
         customerAppEventsRecord.store();
         customerAppEvent.setId(customerAppEventsRecord.getId());
-        customerAppEvent.setUuid(customerAppEvent.getUuid());
-        customerAppEvent.setCreatedBy(customerAppEvent.getCreatedBy());
-        customerAppEvent.setUpdatedBy(customerAppEvent.getUpdatedBy());
-        customerAppEvent.setCreatedOn(customerAppEvent.getCreatedOn());
-        customerAppEvent.setUpdatedOn(customerAppEvent.getUpdatedOn());
-        customerAppEvent.setIsActive(customerAppEvent.getIsActive());
-        customerAppEvent.setState(customerAppEvent.getState());
-        customerAppEvent.setApiSource(customerAppEvent.getApiSource());
-        customerAppEvent.setNotes(customerAppEvent.getNotes());
+        customerAppEvent.setUuid(customerAppEventsRecord.getUuid());
+        customerAppEvent.setCreatedBy(customerAppEventsRecord.getCreatedBy());
+        customerAppEvent.setUpdatedBy(customerAppEventsRecord.getUpdatedBy());
+        customerAppEvent.setCreatedOn(customerAppEventsRecord.getCreatedOn());
+        customerAppEvent.setUpdatedOn(customerAppEventsRecord.getUpdatedOn());
+        customerAppEvent.setIsActive(customerAppEventsRecord.getIsActive());
+        customerAppEvent.setState(customerAppEventsRecord.getState());
+        customerAppEvent.setApiSource(customerAppEventsRecord.getApiSource());
+        customerAppEvent.setNotes(customerAppEventsRecord.getNotes());
         return customerAppEvent;
     }
 

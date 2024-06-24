@@ -25,15 +25,15 @@ public class EngineRuleRepositoryImpl implements EngineRuleRepository {
         EngineRulesRecord engineRulesRecord = context.newRecord(ENGINE_RULES, engineRule);
         engineRulesRecord.store();
         engineRule.setId(engineRulesRecord.getId());
-        engineRule.setUuid(engineRule.getUuid());
-        engineRule.setCreatedBy(engineRule.getCreatedBy());
-        engineRule.setUpdatedBy(engineRule.getUpdatedBy());
-        engineRule.setCreatedOn(engineRule.getCreatedOn());
-        engineRule.setUpdatedOn(engineRule.getUpdatedOn());
-        engineRule.setIsActive(engineRule.getIsActive());
-        engineRule.setState(engineRule.getState());
-        engineRule.setApiSource(engineRule.getApiSource());
-        engineRule.setNotes(engineRule.getNotes());
+        engineRule.setUuid(engineRulesRecord.getUuid());
+        engineRule.setCreatedBy(engineRulesRecord.getCreatedBy());
+        engineRule.setUpdatedBy(engineRulesRecord.getUpdatedBy());
+        engineRule.setCreatedOn(engineRulesRecord.getCreatedOn());
+        engineRule.setUpdatedOn(engineRulesRecord.getUpdatedOn());
+        engineRule.setIsActive(engineRulesRecord.getIsActive());
+        engineRule.setState(engineRulesRecord.getState());
+        engineRule.setApiSource(engineRulesRecord.getApiSource());
+        engineRule.setNotes(engineRulesRecord.getNotes());
         return engineRule;
     }
 

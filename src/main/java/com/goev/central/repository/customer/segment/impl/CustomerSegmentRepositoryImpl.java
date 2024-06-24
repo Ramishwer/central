@@ -25,15 +25,15 @@ public class CustomerSegmentRepositoryImpl implements CustomerSegmentRepository 
         CustomerSegmentsRecord customerSegmentsRecord = context.newRecord(CUSTOMER_SEGMENTS, customerSegment);
         customerSegmentsRecord.store();
         customerSegment.setId(customerSegmentsRecord.getId());
-        customerSegment.setUuid(customerSegment.getUuid());
-        customerSegment.setCreatedBy(customerSegment.getCreatedBy());
-        customerSegment.setUpdatedBy(customerSegment.getUpdatedBy());
-        customerSegment.setCreatedOn(customerSegment.getCreatedOn());
-        customerSegment.setUpdatedOn(customerSegment.getUpdatedOn());
-        customerSegment.setIsActive(customerSegment.getIsActive());
-        customerSegment.setState(customerSegment.getState());
-        customerSegment.setApiSource(customerSegment.getApiSource());
-        customerSegment.setNotes(customerSegment.getNotes());
+        customerSegment.setUuid(customerSegmentsRecord.getUuid());
+        customerSegment.setCreatedBy(customerSegmentsRecord.getCreatedBy());
+        customerSegment.setUpdatedBy(customerSegmentsRecord.getUpdatedBy());
+        customerSegment.setCreatedOn(customerSegmentsRecord.getCreatedOn());
+        customerSegment.setUpdatedOn(customerSegmentsRecord.getUpdatedOn());
+        customerSegment.setIsActive(customerSegmentsRecord.getIsActive());
+        customerSegment.setState(customerSegmentsRecord.getState());
+        customerSegment.setApiSource(customerSegmentsRecord.getApiSource());
+        customerSegment.setNotes(customerSegmentsRecord.getNotes());
         return customerSegment;
     }
 

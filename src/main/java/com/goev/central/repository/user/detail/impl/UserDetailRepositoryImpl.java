@@ -24,15 +24,15 @@ public class UserDetailRepositoryImpl implements UserDetailRepository {
         UserDetailsRecord userDetailsRecord = context.newRecord(USER_DETAILS, userDetails);
         userDetailsRecord.store();
         userDetails.setId(userDetailsRecord.getId());
-        userDetails.setUuid(userDetails.getUuid());
-        userDetails.setCreatedBy(userDetails.getCreatedBy());
-        userDetails.setUpdatedBy(userDetails.getUpdatedBy());
-        userDetails.setCreatedOn(userDetails.getCreatedOn());
-        userDetails.setUpdatedOn(userDetails.getUpdatedOn());
-        userDetails.setIsActive(userDetails.getIsActive());
-        userDetails.setState(userDetails.getState());
-        userDetails.setApiSource(userDetails.getApiSource());
-        userDetails.setNotes(userDetails.getNotes());
+        userDetails.setUuid(userDetailsRecord.getUuid());
+        userDetails.setCreatedBy(userDetailsRecord.getCreatedBy());
+        userDetails.setUpdatedBy(userDetailsRecord.getUpdatedBy());
+        userDetails.setCreatedOn(userDetailsRecord.getCreatedOn());
+        userDetails.setUpdatedOn(userDetailsRecord.getUpdatedOn());
+        userDetails.setIsActive(userDetailsRecord.getIsActive());
+        userDetails.setState(userDetailsRecord.getState());
+        userDetails.setApiSource(userDetailsRecord.getApiSource());
+        userDetails.setNotes(userDetailsRecord.getNotes());
         return userDetails;
     }
 

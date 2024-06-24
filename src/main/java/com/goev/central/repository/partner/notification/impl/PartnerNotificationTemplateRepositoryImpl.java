@@ -25,15 +25,15 @@ public class PartnerNotificationTemplateRepositoryImpl implements PartnerNotific
         PartnerNotificationTemplatesRecord partnerNotificationTemplatesRecord = context.newRecord(PARTNER_NOTIFICATION_TEMPLATES, partnerNotificationTemplate);
         partnerNotificationTemplatesRecord.store();
         partnerNotificationTemplate.setId(partnerNotificationTemplatesRecord.getId());
-        partnerNotificationTemplate.setUuid(partnerNotificationTemplate.getUuid());
-        partnerNotificationTemplate.setCreatedBy(partnerNotificationTemplate.getCreatedBy());
-        partnerNotificationTemplate.setUpdatedBy(partnerNotificationTemplate.getUpdatedBy());
-        partnerNotificationTemplate.setCreatedOn(partnerNotificationTemplate.getCreatedOn());
-        partnerNotificationTemplate.setUpdatedOn(partnerNotificationTemplate.getUpdatedOn());
-        partnerNotificationTemplate.setIsActive(partnerNotificationTemplate.getIsActive());
-        partnerNotificationTemplate.setState(partnerNotificationTemplate.getState());
-        partnerNotificationTemplate.setApiSource(partnerNotificationTemplate.getApiSource());
-        partnerNotificationTemplate.setNotes(partnerNotificationTemplate.getNotes());
+        partnerNotificationTemplate.setUuid(partnerNotificationTemplatesRecord.getUuid());
+        partnerNotificationTemplate.setCreatedBy(partnerNotificationTemplatesRecord.getCreatedBy());
+        partnerNotificationTemplate.setUpdatedBy(partnerNotificationTemplatesRecord.getUpdatedBy());
+        partnerNotificationTemplate.setCreatedOn(partnerNotificationTemplatesRecord.getCreatedOn());
+        partnerNotificationTemplate.setUpdatedOn(partnerNotificationTemplatesRecord.getUpdatedOn());
+        partnerNotificationTemplate.setIsActive(partnerNotificationTemplatesRecord.getIsActive());
+        partnerNotificationTemplate.setState(partnerNotificationTemplatesRecord.getState());
+        partnerNotificationTemplate.setApiSource(partnerNotificationTemplatesRecord.getApiSource());
+        partnerNotificationTemplate.setNotes(partnerNotificationTemplatesRecord.getNotes());
         return partnerNotificationTemplate;
     }
 

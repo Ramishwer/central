@@ -25,15 +25,15 @@ public class CustomerDetailRepositoryImpl implements CustomerDetailRepository {
         CustomerDetailsRecord customerDetailsRecord = context.newRecord(CUSTOMER_DETAILS, customerDetail);
         customerDetailsRecord.store();
         customerDetail.setId(customerDetailsRecord.getId());
-        customerDetail.setUuid(customerDetail.getUuid());
-        customerDetail.setCreatedBy(customerDetail.getCreatedBy());
-        customerDetail.setUpdatedBy(customerDetail.getUpdatedBy());
-        customerDetail.setCreatedOn(customerDetail.getCreatedOn());
-        customerDetail.setUpdatedOn(customerDetail.getUpdatedOn());
-        customerDetail.setIsActive(customerDetail.getIsActive());
-        customerDetail.setState(customerDetail.getState());
-        customerDetail.setApiSource(customerDetail.getApiSource());
-        customerDetail.setNotes(customerDetail.getNotes());
+        customerDetail.setUuid(customerDetailsRecord.getUuid());
+        customerDetail.setCreatedBy(customerDetailsRecord.getCreatedBy());
+        customerDetail.setUpdatedBy(customerDetailsRecord.getUpdatedBy());
+        customerDetail.setCreatedOn(customerDetailsRecord.getCreatedOn());
+        customerDetail.setUpdatedOn(customerDetailsRecord.getUpdatedOn());
+        customerDetail.setIsActive(customerDetailsRecord.getIsActive());
+        customerDetail.setState(customerDetailsRecord.getState());
+        customerDetail.setApiSource(customerDetailsRecord.getApiSource());
+        customerDetail.setNotes(customerDetailsRecord.getNotes());
         return customerDetail;
     }
 

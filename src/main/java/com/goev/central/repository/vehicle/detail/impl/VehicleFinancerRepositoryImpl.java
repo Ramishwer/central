@@ -24,15 +24,15 @@ public class VehicleFinancerRepositoryImpl implements VehicleFinancerRepository 
         VehicleFinancersRecord vehicleFinancersRecord = context.newRecord(VEHICLE_FINANCERS, vehicleFinancer);
         vehicleFinancersRecord.store();
         vehicleFinancer.setId(vehicleFinancersRecord.getId());
-        vehicleFinancer.setUuid(vehicleFinancer.getUuid());
-        vehicleFinancer.setCreatedBy(vehicleFinancer.getCreatedBy());
-        vehicleFinancer.setUpdatedBy(vehicleFinancer.getUpdatedBy());
-        vehicleFinancer.setCreatedOn(vehicleFinancer.getCreatedOn());
-        vehicleFinancer.setUpdatedOn(vehicleFinancer.getUpdatedOn());
-        vehicleFinancer.setIsActive(vehicleFinancer.getIsActive());
-        vehicleFinancer.setState(vehicleFinancer.getState());
-        vehicleFinancer.setApiSource(vehicleFinancer.getApiSource());
-        vehicleFinancer.setNotes(vehicleFinancer.getNotes());
+        vehicleFinancer.setUuid(vehicleFinancersRecord.getUuid());
+        vehicleFinancer.setCreatedBy(vehicleFinancersRecord.getCreatedBy());
+        vehicleFinancer.setUpdatedBy(vehicleFinancersRecord.getUpdatedBy());
+        vehicleFinancer.setCreatedOn(vehicleFinancersRecord.getCreatedOn());
+        vehicleFinancer.setUpdatedOn(vehicleFinancersRecord.getUpdatedOn());
+        vehicleFinancer.setIsActive(vehicleFinancersRecord.getIsActive());
+        vehicleFinancer.setState(vehicleFinancersRecord.getState());
+        vehicleFinancer.setApiSource(vehicleFinancersRecord.getApiSource());
+        vehicleFinancer.setNotes(vehicleFinancersRecord.getNotes());
         return vehicleFinancer;
     }
 

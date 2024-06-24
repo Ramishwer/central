@@ -25,15 +25,15 @@ public class PartnerPayoutTransactionRepositoryImpl implements PartnerPayoutTran
         PartnerPayoutTransactionsRecord partnerPayoutTransactionsRecord = context.newRecord(PARTNER_PAYOUT_TRANSACTIONS, partnerPayoutTransaction);
         partnerPayoutTransactionsRecord.store();
         partnerPayoutTransaction.setId(partnerPayoutTransactionsRecord.getId());
-        partnerPayoutTransaction.setUuid(partnerPayoutTransaction.getUuid());
-        partnerPayoutTransaction.setCreatedBy(partnerPayoutTransaction.getCreatedBy());
-        partnerPayoutTransaction.setUpdatedBy(partnerPayoutTransaction.getUpdatedBy());
-        partnerPayoutTransaction.setCreatedOn(partnerPayoutTransaction.getCreatedOn());
-        partnerPayoutTransaction.setUpdatedOn(partnerPayoutTransaction.getUpdatedOn());
-        partnerPayoutTransaction.setIsActive(partnerPayoutTransaction.getIsActive());
-        partnerPayoutTransaction.setState(partnerPayoutTransaction.getState());
-        partnerPayoutTransaction.setApiSource(partnerPayoutTransaction.getApiSource());
-        partnerPayoutTransaction.setNotes(partnerPayoutTransaction.getNotes());
+        partnerPayoutTransaction.setUuid(partnerPayoutTransactionsRecord.getUuid());
+        partnerPayoutTransaction.setCreatedBy(partnerPayoutTransactionsRecord.getCreatedBy());
+        partnerPayoutTransaction.setUpdatedBy(partnerPayoutTransactionsRecord.getUpdatedBy());
+        partnerPayoutTransaction.setCreatedOn(partnerPayoutTransactionsRecord.getCreatedOn());
+        partnerPayoutTransaction.setUpdatedOn(partnerPayoutTransactionsRecord.getUpdatedOn());
+        partnerPayoutTransaction.setIsActive(partnerPayoutTransactionsRecord.getIsActive());
+        partnerPayoutTransaction.setState(partnerPayoutTransactionsRecord.getState());
+        partnerPayoutTransaction.setApiSource(partnerPayoutTransactionsRecord.getApiSource());
+        partnerPayoutTransaction.setNotes(partnerPayoutTransactionsRecord.getNotes());
         return partnerPayoutTransaction;
     }
 

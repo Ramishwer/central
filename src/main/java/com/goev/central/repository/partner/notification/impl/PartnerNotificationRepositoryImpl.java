@@ -25,15 +25,15 @@ public class PartnerNotificationRepositoryImpl implements PartnerNotificationRep
         PartnerNotificationsRecord partnerNotificationsRecord = context.newRecord(PARTNER_NOTIFICATIONS, partnerNotification);
         partnerNotificationsRecord.store();
         partnerNotification.setId(partnerNotificationsRecord.getId());
-        partnerNotification.setUuid(partnerNotification.getUuid());
-        partnerNotification.setCreatedBy(partnerNotification.getCreatedBy());
-        partnerNotification.setUpdatedBy(partnerNotification.getUpdatedBy());
-        partnerNotification.setCreatedOn(partnerNotification.getCreatedOn());
-        partnerNotification.setUpdatedOn(partnerNotification.getUpdatedOn());
-        partnerNotification.setIsActive(partnerNotification.getIsActive());
-        partnerNotification.setState(partnerNotification.getState());
-        partnerNotification.setApiSource(partnerNotification.getApiSource());
-        partnerNotification.setNotes(partnerNotification.getNotes());
+        partnerNotification.setUuid(partnerNotificationsRecord.getUuid());
+        partnerNotification.setCreatedBy(partnerNotificationsRecord.getCreatedBy());
+        partnerNotification.setUpdatedBy(partnerNotificationsRecord.getUpdatedBy());
+        partnerNotification.setCreatedOn(partnerNotificationsRecord.getCreatedOn());
+        partnerNotification.setUpdatedOn(partnerNotificationsRecord.getUpdatedOn());
+        partnerNotification.setIsActive(partnerNotificationsRecord.getIsActive());
+        partnerNotification.setState(partnerNotificationsRecord.getState());
+        partnerNotification.setApiSource(partnerNotificationsRecord.getApiSource());
+        partnerNotification.setNotes(partnerNotificationsRecord.getNotes());
         return partnerNotification;
     }
 

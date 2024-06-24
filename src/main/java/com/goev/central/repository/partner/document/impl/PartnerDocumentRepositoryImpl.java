@@ -30,15 +30,15 @@ public class PartnerDocumentRepositoryImpl implements PartnerDocumentRepository 
         PartnerDocumentsRecord partnersDocumentRecord = context.newRecord(PARTNER_DOCUMENTS, partnerDocument);
         partnersDocumentRecord.store();
         partnerDocument.setId(partnersDocumentRecord.getId());
-        partnerDocument.setUuid(partnerDocument.getUuid());
-        partnerDocument.setCreatedBy(partnerDocument.getCreatedBy());
-        partnerDocument.setUpdatedBy(partnerDocument.getUpdatedBy());
-        partnerDocument.setCreatedOn(partnerDocument.getCreatedOn());
-        partnerDocument.setUpdatedOn(partnerDocument.getUpdatedOn());
-        partnerDocument.setIsActive(partnerDocument.getIsActive());
-        partnerDocument.setState(partnerDocument.getState());
-        partnerDocument.setApiSource(partnerDocument.getApiSource());
-        partnerDocument.setNotes(partnerDocument.getNotes());
+        partnerDocument.setUuid(partnersDocumentRecord.getUuid());
+        partnerDocument.setCreatedBy(partnersDocumentRecord.getCreatedBy());
+        partnerDocument.setUpdatedBy(partnersDocumentRecord.getUpdatedBy());
+        partnerDocument.setCreatedOn(partnersDocumentRecord.getCreatedOn());
+        partnerDocument.setUpdatedOn(partnersDocumentRecord.getUpdatedOn());
+        partnerDocument.setIsActive(partnersDocumentRecord.getIsActive());
+        partnerDocument.setState(partnersDocumentRecord.getState());
+        partnerDocument.setApiSource(partnersDocumentRecord.getApiSource());
+        partnerDocument.setNotes(partnersDocumentRecord.getNotes());
 
         if ("API".equals(RequestContext.getRequestSource()))
             eventExecutor.fireEvent("PartnerDocumentSaveEvent", partnerDocument);

@@ -25,15 +25,15 @@ public class PartnerTicketRepositoryImpl implements PartnerTicketRepository {
         PartnerTicketsRecord partnerTicketsRecord = context.newRecord(PARTNER_TICKETS, partnerTicket);
         partnerTicketsRecord.store();
         partnerTicket.setId(partnerTicketsRecord.getId());
-        partnerTicket.setUuid(partnerTicket.getUuid());
-        partnerTicket.setCreatedBy(partnerTicket.getCreatedBy());
-        partnerTicket.setUpdatedBy(partnerTicket.getUpdatedBy());
-        partnerTicket.setCreatedOn(partnerTicket.getCreatedOn());
-        partnerTicket.setUpdatedOn(partnerTicket.getUpdatedOn());
-        partnerTicket.setIsActive(partnerTicket.getIsActive());
-        partnerTicket.setState(partnerTicket.getState());
-        partnerTicket.setApiSource(partnerTicket.getApiSource());
-        partnerTicket.setNotes(partnerTicket.getNotes());
+        partnerTicket.setUuid(partnerTicketsRecord.getUuid());
+        partnerTicket.setCreatedBy(partnerTicketsRecord.getCreatedBy());
+        partnerTicket.setUpdatedBy(partnerTicketsRecord.getUpdatedBy());
+        partnerTicket.setCreatedOn(partnerTicketsRecord.getCreatedOn());
+        partnerTicket.setUpdatedOn(partnerTicketsRecord.getUpdatedOn());
+        partnerTicket.setIsActive(partnerTicketsRecord.getIsActive());
+        partnerTicket.setState(partnerTicketsRecord.getState());
+        partnerTicket.setApiSource(partnerTicketsRecord.getApiSource());
+        partnerTicket.setNotes(partnerTicketsRecord.getNotes());
         return partnerTicket;
     }
 

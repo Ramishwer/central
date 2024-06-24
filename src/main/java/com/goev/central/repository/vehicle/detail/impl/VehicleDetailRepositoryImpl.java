@@ -27,15 +27,15 @@ public class VehicleDetailRepositoryImpl implements VehicleDetailRepository {
         VehicleDetailsRecord vehicleDetailsRecord = context.newRecord(VEHICLE_DETAILS, vehicleDetails);
         vehicleDetailsRecord.store();
         vehicleDetails.setId(vehicleDetailsRecord.getId());
-        vehicleDetails.setUuid(vehicleDetails.getUuid());
-        vehicleDetails.setCreatedBy(vehicleDetails.getCreatedBy());
-        vehicleDetails.setUpdatedBy(vehicleDetails.getUpdatedBy());
-        vehicleDetails.setCreatedOn(vehicleDetails.getCreatedOn());
-        vehicleDetails.setUpdatedOn(vehicleDetails.getUpdatedOn());
-        vehicleDetails.setIsActive(vehicleDetails.getIsActive());
-        vehicleDetails.setState(vehicleDetails.getState());
-        vehicleDetails.setApiSource(vehicleDetails.getApiSource());
-        vehicleDetails.setNotes(vehicleDetails.getNotes());
+        vehicleDetails.setUuid(vehicleDetailsRecord.getUuid());
+        vehicleDetails.setCreatedBy(vehicleDetailsRecord.getCreatedBy());
+        vehicleDetails.setUpdatedBy(vehicleDetailsRecord.getUpdatedBy());
+        vehicleDetails.setCreatedOn(vehicleDetailsRecord.getCreatedOn());
+        vehicleDetails.setUpdatedOn(vehicleDetailsRecord.getUpdatedOn());
+        vehicleDetails.setIsActive(vehicleDetailsRecord.getIsActive());
+        vehicleDetails.setState(vehicleDetailsRecord.getState());
+        vehicleDetails.setApiSource(vehicleDetailsRecord.getApiSource());
+        vehicleDetails.setNotes(vehicleDetailsRecord.getNotes());
 
         if ("API".equals(RequestContext.getRequestSource()))
             eventExecutor.fireEvent("VehicleDetailSaveEvent", vehicleDetails);

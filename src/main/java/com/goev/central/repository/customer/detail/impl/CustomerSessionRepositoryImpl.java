@@ -25,15 +25,15 @@ public class CustomerSessionRepositoryImpl implements CustomerSessionRepository 
         CustomerSessionsRecord customerSessionsRecord = context.newRecord(CUSTOMER_SESSIONS, customerSession);
         customerSessionsRecord.store();
         customerSession.setId(customerSessionsRecord.getId());
-        customerSession.setUuid(customerSession.getUuid());
-        customerSession.setCreatedBy(customerSession.getCreatedBy());
-        customerSession.setUpdatedBy(customerSession.getUpdatedBy());
-        customerSession.setCreatedOn(customerSession.getCreatedOn());
-        customerSession.setUpdatedOn(customerSession.getUpdatedOn());
-        customerSession.setIsActive(customerSession.getIsActive());
-        customerSession.setState(customerSession.getState());
-        customerSession.setApiSource(customerSession.getApiSource());
-        customerSession.setNotes(customerSession.getNotes());
+        customerSession.setUuid(customerSessionsRecord.getUuid());
+        customerSession.setCreatedBy(customerSessionsRecord.getCreatedBy());
+        customerSession.setUpdatedBy(customerSessionsRecord.getUpdatedBy());
+        customerSession.setCreatedOn(customerSessionsRecord.getCreatedOn());
+        customerSession.setUpdatedOn(customerSessionsRecord.getUpdatedOn());
+        customerSession.setIsActive(customerSessionsRecord.getIsActive());
+        customerSession.setState(customerSessionsRecord.getState());
+        customerSession.setApiSource(customerSessionsRecord.getApiSource());
+        customerSession.setNotes(customerSessionsRecord.getNotes());
         return customerSession;
     }
 

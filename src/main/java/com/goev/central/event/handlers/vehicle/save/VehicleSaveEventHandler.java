@@ -24,7 +24,7 @@ public class VehicleSaveEventHandler extends EventHandler<VehicleDao> {
             return false;
         }
         VehicleDao existing = vehicleRepository.findByUUID(vehicleDao.getUuid());
-        if (existing != null) {
+        if (existing == null) {
             vehicleRepository.save(vehicleDao);
             return true;
         }

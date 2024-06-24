@@ -25,15 +25,15 @@ public class CustomerTicketRepositoryImpl implements CustomerTicketRepository {
         CustomerTicketsRecord customerTicketsRecord = context.newRecord(CUSTOMER_TICKETS, customerTicket);
         customerTicketsRecord.store();
         customerTicket.setId(customerTicketsRecord.getId());
-        customerTicket.setUuid(customerTicket.getUuid());
-        customerTicket.setCreatedBy(customerTicket.getCreatedBy());
-        customerTicket.setUpdatedBy(customerTicket.getUpdatedBy());
-        customerTicket.setCreatedOn(customerTicket.getCreatedOn());
-        customerTicket.setUpdatedOn(customerTicket.getUpdatedOn());
-        customerTicket.setIsActive(customerTicket.getIsActive());
-        customerTicket.setState(customerTicket.getState());
-        customerTicket.setApiSource(customerTicket.getApiSource());
-        customerTicket.setNotes(customerTicket.getNotes());
+        customerTicket.setUuid(customerTicketsRecord.getUuid());
+        customerTicket.setCreatedBy(customerTicketsRecord.getCreatedBy());
+        customerTicket.setUpdatedBy(customerTicketsRecord.getUpdatedBy());
+        customerTicket.setCreatedOn(customerTicketsRecord.getCreatedOn());
+        customerTicket.setUpdatedOn(customerTicketsRecord.getUpdatedOn());
+        customerTicket.setIsActive(customerTicketsRecord.getIsActive());
+        customerTicket.setState(customerTicketsRecord.getState());
+        customerTicket.setApiSource(customerTicketsRecord.getApiSource());
+        customerTicket.setNotes(customerTicketsRecord.getNotes());
         return customerTicket;
     }
 

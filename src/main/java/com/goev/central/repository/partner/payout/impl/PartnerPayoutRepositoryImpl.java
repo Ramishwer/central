@@ -25,15 +25,15 @@ public class PartnerPayoutRepositoryImpl implements PartnerPayoutRepository {
         PartnerPayoutsRecord partnerPayoutsRecord = context.newRecord(PARTNER_PAYOUTS, partnerPayout);
         partnerPayoutsRecord.store();
         partnerPayout.setId(partnerPayoutsRecord.getId());
-        partnerPayout.setUuid(partnerPayout.getUuid());
-        partnerPayout.setCreatedBy(partnerPayout.getCreatedBy());
-        partnerPayout.setUpdatedBy(partnerPayout.getUpdatedBy());
-        partnerPayout.setCreatedOn(partnerPayout.getCreatedOn());
-        partnerPayout.setUpdatedOn(partnerPayout.getUpdatedOn());
-        partnerPayout.setIsActive(partnerPayout.getIsActive());
-        partnerPayout.setState(partnerPayout.getState());
-        partnerPayout.setApiSource(partnerPayout.getApiSource());
-        partnerPayout.setNotes(partnerPayout.getNotes());
+        partnerPayout.setUuid(partnerPayoutsRecord.getUuid());
+        partnerPayout.setCreatedBy(partnerPayoutsRecord.getCreatedBy());
+        partnerPayout.setUpdatedBy(partnerPayoutsRecord.getUpdatedBy());
+        partnerPayout.setCreatedOn(partnerPayoutsRecord.getCreatedOn());
+        partnerPayout.setUpdatedOn(partnerPayoutsRecord.getUpdatedOn());
+        partnerPayout.setIsActive(partnerPayoutsRecord.getIsActive());
+        partnerPayout.setState(partnerPayoutsRecord.getState());
+        partnerPayout.setApiSource(partnerPayoutsRecord.getApiSource());
+        partnerPayout.setNotes(partnerPayoutsRecord.getNotes());
         return partnerPayout;
     }
 

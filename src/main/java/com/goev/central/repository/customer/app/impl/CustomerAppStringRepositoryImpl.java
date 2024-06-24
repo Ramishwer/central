@@ -25,15 +25,15 @@ public class CustomerAppStringRepositoryImpl implements CustomerAppStringReposit
         CustomerAppStringsRecord customerAppStringsRecord = context.newRecord(CUSTOMER_APP_STRINGS, customerAppString);
         customerAppStringsRecord.store();
         customerAppString.setId(customerAppStringsRecord.getId());
-        customerAppString.setUuid(customerAppString.getUuid());
-        customerAppString.setCreatedBy(customerAppString.getCreatedBy());
-        customerAppString.setUpdatedBy(customerAppString.getUpdatedBy());
-        customerAppString.setCreatedOn(customerAppString.getCreatedOn());
-        customerAppString.setUpdatedOn(customerAppString.getUpdatedOn());
-        customerAppString.setIsActive(customerAppString.getIsActive());
-        customerAppString.setState(customerAppString.getState());
-        customerAppString.setApiSource(customerAppString.getApiSource());
-        customerAppString.setNotes(customerAppString.getNotes());
+        customerAppString.setUuid(customerAppStringsRecord.getUuid());
+        customerAppString.setCreatedBy(customerAppStringsRecord.getCreatedBy());
+        customerAppString.setUpdatedBy(customerAppStringsRecord.getUpdatedBy());
+        customerAppString.setCreatedOn(customerAppStringsRecord.getCreatedOn());
+        customerAppString.setUpdatedOn(customerAppStringsRecord.getUpdatedOn());
+        customerAppString.setIsActive(customerAppStringsRecord.getIsActive());
+        customerAppString.setState(customerAppStringsRecord.getState());
+        customerAppString.setApiSource(customerAppStringsRecord.getApiSource());
+        customerAppString.setNotes(customerAppStringsRecord.getNotes());
         return customerAppString;
     }
 

@@ -25,15 +25,15 @@ public class CustomerPromotionRepositoryImpl implements CustomerPromotionReposit
         CustomerPromotionsRecord customerPromotionsRecord = context.newRecord(CUSTOMER_PROMOTIONS, customerPromotion);
         customerPromotionsRecord.store();
         customerPromotion.setId(customerPromotionsRecord.getId());
-        customerPromotion.setUuid(customerPromotion.getUuid());
-        customerPromotion.setCreatedBy(customerPromotion.getCreatedBy());
-        customerPromotion.setUpdatedBy(customerPromotion.getUpdatedBy());
-        customerPromotion.setCreatedOn(customerPromotion.getCreatedOn());
-        customerPromotion.setUpdatedOn(customerPromotion.getUpdatedOn());
-        customerPromotion.setIsActive(customerPromotion.getIsActive());
-        customerPromotion.setState(customerPromotion.getState());
-        customerPromotion.setApiSource(customerPromotion.getApiSource());
-        customerPromotion.setNotes(customerPromotion.getNotes());
+        customerPromotion.setUuid(customerPromotionsRecord.getUuid());
+        customerPromotion.setCreatedBy(customerPromotionsRecord.getCreatedBy());
+        customerPromotion.setUpdatedBy(customerPromotionsRecord.getUpdatedBy());
+        customerPromotion.setCreatedOn(customerPromotionsRecord.getCreatedOn());
+        customerPromotion.setUpdatedOn(customerPromotionsRecord.getUpdatedOn());
+        customerPromotion.setIsActive(customerPromotionsRecord.getIsActive());
+        customerPromotion.setState(customerPromotionsRecord.getState());
+        customerPromotion.setApiSource(customerPromotionsRecord.getApiSource());
+        customerPromotion.setNotes(customerPromotionsRecord.getNotes());
         return customerPromotion;
     }
 

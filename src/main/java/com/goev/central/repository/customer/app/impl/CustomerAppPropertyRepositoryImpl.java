@@ -25,15 +25,15 @@ public class CustomerAppPropertyRepositoryImpl implements CustomerAppPropertyRep
         CustomerAppPropertiesRecord customerAppPropertiesRecord = context.newRecord(CUSTOMER_APP_PROPERTIES, customerAppProperty);
         customerAppPropertiesRecord.store();
         customerAppProperty.setId(customerAppPropertiesRecord.getId());
-        customerAppProperty.setUuid(customerAppProperty.getUuid());
-        customerAppProperty.setCreatedBy(customerAppProperty.getCreatedBy());
-        customerAppProperty.setUpdatedBy(customerAppProperty.getUpdatedBy());
-        customerAppProperty.setCreatedOn(customerAppProperty.getCreatedOn());
-        customerAppProperty.setUpdatedOn(customerAppProperty.getUpdatedOn());
-        customerAppProperty.setIsActive(customerAppProperty.getIsActive());
-        customerAppProperty.setState(customerAppProperty.getState());
-        customerAppProperty.setApiSource(customerAppProperty.getApiSource());
-        customerAppProperty.setNotes(customerAppProperty.getNotes());
+        customerAppProperty.setUuid(customerAppPropertiesRecord.getUuid());
+        customerAppProperty.setCreatedBy(customerAppPropertiesRecord.getCreatedBy());
+        customerAppProperty.setUpdatedBy(customerAppPropertiesRecord.getUpdatedBy());
+        customerAppProperty.setCreatedOn(customerAppPropertiesRecord.getCreatedOn());
+        customerAppProperty.setUpdatedOn(customerAppPropertiesRecord.getUpdatedOn());
+        customerAppProperty.setIsActive(customerAppPropertiesRecord.getIsActive());
+        customerAppProperty.setState(customerAppPropertiesRecord.getState());
+        customerAppProperty.setApiSource(customerAppPropertiesRecord.getApiSource());
+        customerAppProperty.setNotes(customerAppPropertiesRecord.getNotes());
         return customerAppProperty;
     }
 

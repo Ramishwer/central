@@ -15,6 +15,7 @@ import com.goev.central.dto.partner.detail.PartnerDetailDto;
 import com.goev.central.enums.DocumentStatus;
 import com.goev.central.enums.partner.PartnerOnboardingStatus;
 import com.goev.central.enums.partner.PartnerStatus;
+import com.goev.central.enums.partner.PartnerSubStatus;
 import com.goev.central.event.events.partner.update.PartnerUpdateEvent;
 import com.goev.central.repository.business.BusinessClientRepository;
 import com.goev.central.repository.business.BusinessSegmentRepository;
@@ -80,7 +81,7 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
                 .clientUUID(ApplicationConstants.PARTNER_CLIENT_UUID)
                 .build()));
         partnerDao.setStatus(PartnerStatus.OFF_DUTY.name());
-        partnerDao.setSubStatus(PartnerStatus.ON_DUTY.name());
+        partnerDao.setSubStatus(PartnerSubStatus.NO_DUTY.name());
         PartnerDao partner = partnerRepository.save(partnerDao);
 
         if (partner == null)

@@ -53,6 +53,7 @@ public class UserDetailServiceImpl implements UserDetailService {
                         .organizationUUID(ApplicationContext.getOrganizationUUID())
                         .clientUUID(ApplicationConstants.CLIENT_UUID)
                 .build()));
+        user.setViewInfo(ApplicationConstants.GSON.toJson(getUserViewDto(userDetails, user)));
         userRepository.update(user);
 
         UserDetailDto result = UserDetailDto.builder().build();
@@ -111,6 +112,7 @@ public class UserDetailServiceImpl implements UserDetailService {
             newUserDetails.setLastName(userDto.getLastName());
             newUserDetails.setEmail(userDto.getUser().getEmail());
             newUserDetails.setProfileUrl(userDto.getProfileUrl());
+            newUserDetails.setPhoneNumber(userDto.getUser().getPhoneNumber());
         }
 
         return newUserDetails;
@@ -121,7 +123,8 @@ public class UserDetailServiceImpl implements UserDetailService {
         userDto.setUuid(userDao.getUuid());
         userDto.setPhoneNumber(userDao.getPhoneNumber());
         userDto.setAuthUUID(userDao.getAuthUuid());
-
+        userDto.setEmail(userDao.getEmail());
+        userDto.setProfileUrl(userDao.getProfileUrl());
         result.setUser(userDto);
 
 
@@ -138,6 +141,7 @@ public class UserDetailServiceImpl implements UserDetailService {
         return UserViewDto.builder()
                 .firstName(userDetails.getFirstName())
                 .lastName(userDetails.getLastName())
+                .email(userDetails.getEmail())
                 .phoneNumber(userDetails.getPhoneNumber())
                 .role(userDao.getRole())
                 .profileUrl(userDao.getProfileUrl())

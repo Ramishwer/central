@@ -24,7 +24,7 @@ public class VehicleDocumentSaveEventHandler extends EventHandler<VehicleDocumen
             return false;
         }
         VehicleDocumentDao existing = vehicleDocumentRepository.findByUUID(vehicleDocumentDao.getUuid());
-        if (existing != null) {
+        if (existing == null) {
             vehicleDocumentRepository.save(vehicleDocumentDao);
             return true;
         }

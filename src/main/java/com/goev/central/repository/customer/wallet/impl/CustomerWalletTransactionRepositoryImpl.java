@@ -25,15 +25,15 @@ public class CustomerWalletTransactionRepositoryImpl implements CustomerWalletTr
         CustomerWalletTransactionsRecord customerWalletTransactionsRecord = context.newRecord(CUSTOMER_WALLET_TRANSACTIONS, customerWalletTransaction);
         customerWalletTransactionsRecord.store();
         customerWalletTransaction.setId(customerWalletTransactionsRecord.getId());
-        customerWalletTransaction.setUuid(customerWalletTransaction.getUuid());
-        customerWalletTransaction.setCreatedBy(customerWalletTransaction.getCreatedBy());
-        customerWalletTransaction.setUpdatedBy(customerWalletTransaction.getUpdatedBy());
-        customerWalletTransaction.setCreatedOn(customerWalletTransaction.getCreatedOn());
-        customerWalletTransaction.setUpdatedOn(customerWalletTransaction.getUpdatedOn());
-        customerWalletTransaction.setIsActive(customerWalletTransaction.getIsActive());
-        customerWalletTransaction.setState(customerWalletTransaction.getState());
-        customerWalletTransaction.setApiSource(customerWalletTransaction.getApiSource());
-        customerWalletTransaction.setNotes(customerWalletTransaction.getNotes());
+        customerWalletTransaction.setUuid(customerWalletTransactionsRecord.getUuid());
+        customerWalletTransaction.setCreatedBy(customerWalletTransactionsRecord.getCreatedBy());
+        customerWalletTransaction.setUpdatedBy(customerWalletTransactionsRecord.getUpdatedBy());
+        customerWalletTransaction.setCreatedOn(customerWalletTransactionsRecord.getCreatedOn());
+        customerWalletTransaction.setUpdatedOn(customerWalletTransactionsRecord.getUpdatedOn());
+        customerWalletTransaction.setIsActive(customerWalletTransactionsRecord.getIsActive());
+        customerWalletTransaction.setState(customerWalletTransactionsRecord.getState());
+        customerWalletTransaction.setApiSource(customerWalletTransactionsRecord.getApiSource());
+        customerWalletTransaction.setNotes(customerWalletTransactionsRecord.getNotes());
         return customerWalletTransaction;
     }
 

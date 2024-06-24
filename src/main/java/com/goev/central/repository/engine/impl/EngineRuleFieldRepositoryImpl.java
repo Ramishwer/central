@@ -25,15 +25,15 @@ public class EngineRuleFieldRepositoryImpl implements EngineRuleFieldRepository 
         EngineRuleFieldsRecord engineRuleFieldsRecord = context.newRecord(ENGINE_RULE_FIELDS, engineRuleField);
         engineRuleFieldsRecord.store();
         engineRuleField.setId(engineRuleFieldsRecord.getId());
-        engineRuleField.setUuid(engineRuleField.getUuid());
-        engineRuleField.setCreatedBy(engineRuleField.getCreatedBy());
-        engineRuleField.setUpdatedBy(engineRuleField.getUpdatedBy());
-        engineRuleField.setCreatedOn(engineRuleField.getCreatedOn());
-        engineRuleField.setUpdatedOn(engineRuleField.getUpdatedOn());
-        engineRuleField.setIsActive(engineRuleField.getIsActive());
-        engineRuleField.setState(engineRuleField.getState());
-        engineRuleField.setApiSource(engineRuleField.getApiSource());
-        engineRuleField.setNotes(engineRuleField.getNotes());
+        engineRuleField.setUuid(engineRuleFieldsRecord.getUuid());
+        engineRuleField.setCreatedBy(engineRuleFieldsRecord.getCreatedBy());
+        engineRuleField.setUpdatedBy(engineRuleFieldsRecord.getUpdatedBy());
+        engineRuleField.setCreatedOn(engineRuleFieldsRecord.getCreatedOn());
+        engineRuleField.setUpdatedOn(engineRuleFieldsRecord.getUpdatedOn());
+        engineRuleField.setIsActive(engineRuleFieldsRecord.getIsActive());
+        engineRuleField.setState(engineRuleFieldsRecord.getState());
+        engineRuleField.setApiSource(engineRuleFieldsRecord.getApiSource());
+        engineRuleField.setNotes(engineRuleFieldsRecord.getNotes());
         return engineRuleField;
     }
 

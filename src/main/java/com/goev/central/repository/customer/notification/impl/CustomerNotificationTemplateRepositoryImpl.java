@@ -25,15 +25,15 @@ public class CustomerNotificationTemplateRepositoryImpl implements CustomerNotif
         CustomerNotificationTemplatesRecord customerNotificationTemplatesRecord = context.newRecord(CUSTOMER_NOTIFICATION_TEMPLATES, customerNotificationTemplate);
         customerNotificationTemplatesRecord.store();
         customerNotificationTemplate.setId(customerNotificationTemplatesRecord.getId());
-        customerNotificationTemplate.setUuid(customerNotificationTemplate.getUuid());
-        customerNotificationTemplate.setCreatedBy(customerNotificationTemplate.getCreatedBy());
-        customerNotificationTemplate.setUpdatedBy(customerNotificationTemplate.getUpdatedBy());
-        customerNotificationTemplate.setCreatedOn(customerNotificationTemplate.getCreatedOn());
-        customerNotificationTemplate.setUpdatedOn(customerNotificationTemplate.getUpdatedOn());
-        customerNotificationTemplate.setIsActive(customerNotificationTemplate.getIsActive());
-        customerNotificationTemplate.setState(customerNotificationTemplate.getState());
-        customerNotificationTemplate.setApiSource(customerNotificationTemplate.getApiSource());
-        customerNotificationTemplate.setNotes(customerNotificationTemplate.getNotes());
+        customerNotificationTemplate.setUuid(customerNotificationTemplatesRecord.getUuid());
+        customerNotificationTemplate.setCreatedBy(customerNotificationTemplatesRecord.getCreatedBy());
+        customerNotificationTemplate.setUpdatedBy(customerNotificationTemplatesRecord.getUpdatedBy());
+        customerNotificationTemplate.setCreatedOn(customerNotificationTemplatesRecord.getCreatedOn());
+        customerNotificationTemplate.setUpdatedOn(customerNotificationTemplatesRecord.getUpdatedOn());
+        customerNotificationTemplate.setIsActive(customerNotificationTemplatesRecord.getIsActive());
+        customerNotificationTemplate.setState(customerNotificationTemplatesRecord.getState());
+        customerNotificationTemplate.setApiSource(customerNotificationTemplatesRecord.getApiSource());
+        customerNotificationTemplate.setNotes(customerNotificationTemplatesRecord.getNotes());
         return customerNotificationTemplate;
     }
 

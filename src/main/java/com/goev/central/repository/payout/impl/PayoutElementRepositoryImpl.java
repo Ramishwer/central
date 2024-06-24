@@ -25,15 +25,15 @@ public class PayoutElementRepositoryImpl implements PayoutElementRepository {
         PayoutElementsRecord payoutElementsRecord = context.newRecord(PAYOUT_ELEMENTS, payoutElement);
         payoutElementsRecord.store();
         payoutElement.setId(payoutElementsRecord.getId());
-        payoutElement.setUuid(payoutElement.getUuid());
-        payoutElement.setCreatedBy(payoutElement.getCreatedBy());
-        payoutElement.setUpdatedBy(payoutElement.getUpdatedBy());
-        payoutElement.setCreatedOn(payoutElement.getCreatedOn());
-        payoutElement.setUpdatedOn(payoutElement.getUpdatedOn());
-        payoutElement.setIsActive(payoutElement.getIsActive());
-        payoutElement.setState(payoutElement.getState());
-        payoutElement.setApiSource(payoutElement.getApiSource());
-        payoutElement.setNotes(payoutElement.getNotes());
+        payoutElement.setUuid(payoutElementsRecord.getUuid());
+        payoutElement.setCreatedBy(payoutElementsRecord.getCreatedBy());
+        payoutElement.setUpdatedBy(payoutElementsRecord.getUpdatedBy());
+        payoutElement.setCreatedOn(payoutElementsRecord.getCreatedOn());
+        payoutElement.setUpdatedOn(payoutElementsRecord.getUpdatedOn());
+        payoutElement.setIsActive(payoutElementsRecord.getIsActive());
+        payoutElement.setState(payoutElementsRecord.getState());
+        payoutElement.setApiSource(payoutElementsRecord.getApiSource());
+        payoutElement.setNotes(payoutElementsRecord.getNotes());
         return payoutElement;
     }
 

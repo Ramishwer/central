@@ -25,15 +25,15 @@ public class PartnerAppPropertyRepositoryImpl implements PartnerAppPropertyRepos
         PartnerAppPropertiesRecord partnerAppPropertiesRecord = context.newRecord(PARTNER_APP_PROPERTIES, partnerAppProperty);
         partnerAppPropertiesRecord.store();
         partnerAppProperty.setId(partnerAppPropertiesRecord.getId());
-        partnerAppProperty.setUuid(partnerAppProperty.getUuid());
-        partnerAppProperty.setCreatedBy(partnerAppProperty.getCreatedBy());
-        partnerAppProperty.setUpdatedBy(partnerAppProperty.getUpdatedBy());
-        partnerAppProperty.setCreatedOn(partnerAppProperty.getCreatedOn());
-        partnerAppProperty.setUpdatedOn(partnerAppProperty.getUpdatedOn());
-        partnerAppProperty.setIsActive(partnerAppProperty.getIsActive());
-        partnerAppProperty.setState(partnerAppProperty.getState());
-        partnerAppProperty.setApiSource(partnerAppProperty.getApiSource());
-        partnerAppProperty.setNotes(partnerAppProperty.getNotes());
+        partnerAppProperty.setUuid(partnerAppPropertiesRecord.getUuid());
+        partnerAppProperty.setCreatedBy(partnerAppPropertiesRecord.getCreatedBy());
+        partnerAppProperty.setUpdatedBy(partnerAppPropertiesRecord.getUpdatedBy());
+        partnerAppProperty.setCreatedOn(partnerAppPropertiesRecord.getCreatedOn());
+        partnerAppProperty.setUpdatedOn(partnerAppPropertiesRecord.getUpdatedOn());
+        partnerAppProperty.setIsActive(partnerAppPropertiesRecord.getIsActive());
+        partnerAppProperty.setState(partnerAppPropertiesRecord.getState());
+        partnerAppProperty.setApiSource(partnerAppPropertiesRecord.getApiSource());
+        partnerAppProperty.setNotes(partnerAppPropertiesRecord.getNotes());
         return partnerAppProperty;
     }
 

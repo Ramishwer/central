@@ -30,15 +30,15 @@ public class VehicleDocumentRepositoryImpl implements VehicleDocumentRepository 
         VehicleDocumentsRecord vehiclesDocumentRecord = context.newRecord(VEHICLE_DOCUMENTS, vehicleDocument);
         vehiclesDocumentRecord.store();
         vehicleDocument.setId(vehiclesDocumentRecord.getId());
-        vehicleDocument.setUuid(vehicleDocument.getUuid());
-        vehicleDocument.setCreatedBy(vehicleDocument.getCreatedBy());
-        vehicleDocument.setUpdatedBy(vehicleDocument.getUpdatedBy());
-        vehicleDocument.setCreatedOn(vehicleDocument.getCreatedOn());
-        vehicleDocument.setUpdatedOn(vehicleDocument.getUpdatedOn());
-        vehicleDocument.setIsActive(vehicleDocument.getIsActive());
-        vehicleDocument.setState(vehicleDocument.getState());
-        vehicleDocument.setApiSource(vehicleDocument.getApiSource());
-        vehicleDocument.setNotes(vehicleDocument.getNotes());
+        vehicleDocument.setUuid(vehiclesDocumentRecord.getUuid());
+        vehicleDocument.setCreatedBy(vehiclesDocumentRecord.getCreatedBy());
+        vehicleDocument.setUpdatedBy(vehiclesDocumentRecord.getUpdatedBy());
+        vehicleDocument.setCreatedOn(vehiclesDocumentRecord.getCreatedOn());
+        vehicleDocument.setUpdatedOn(vehiclesDocumentRecord.getUpdatedOn());
+        vehicleDocument.setIsActive(vehiclesDocumentRecord.getIsActive());
+        vehicleDocument.setState(vehiclesDocumentRecord.getState());
+        vehicleDocument.setApiSource(vehiclesDocumentRecord.getApiSource());
+        vehicleDocument.setNotes(vehiclesDocumentRecord.getNotes());
 
         if ("API".equals(RequestContext.getRequestSource()))
             eventExecutor.fireEvent("VehicleDocumentSaveEvent", vehicleDocument);

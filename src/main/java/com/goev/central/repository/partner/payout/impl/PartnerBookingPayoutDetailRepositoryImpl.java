@@ -25,15 +25,15 @@ public class PartnerBookingPayoutDetailRepositoryImpl implements PartnerBookingP
         PartnerBookingPayoutDetailsRecord partnerBookingPayoutDetailsRecord = context.newRecord(PARTNER_BOOKING_PAYOUT_DETAILS, partnerBookingPayoutDetail);
         partnerBookingPayoutDetailsRecord.store();
         partnerBookingPayoutDetail.setId(partnerBookingPayoutDetailsRecord.getId());
-        partnerBookingPayoutDetail.setUuid(partnerBookingPayoutDetail.getUuid());
-        partnerBookingPayoutDetail.setCreatedBy(partnerBookingPayoutDetail.getCreatedBy());
-        partnerBookingPayoutDetail.setUpdatedBy(partnerBookingPayoutDetail.getUpdatedBy());
-        partnerBookingPayoutDetail.setCreatedOn(partnerBookingPayoutDetail.getCreatedOn());
-        partnerBookingPayoutDetail.setUpdatedOn(partnerBookingPayoutDetail.getUpdatedOn());
-        partnerBookingPayoutDetail.setIsActive(partnerBookingPayoutDetail.getIsActive());
-        partnerBookingPayoutDetail.setState(partnerBookingPayoutDetail.getState());
-        partnerBookingPayoutDetail.setApiSource(partnerBookingPayoutDetail.getApiSource());
-        partnerBookingPayoutDetail.setNotes(partnerBookingPayoutDetail.getNotes());
+        partnerBookingPayoutDetail.setUuid(partnerBookingPayoutDetailsRecord.getUuid());
+        partnerBookingPayoutDetail.setCreatedBy(partnerBookingPayoutDetailsRecord.getCreatedBy());
+        partnerBookingPayoutDetail.setUpdatedBy(partnerBookingPayoutDetailsRecord.getUpdatedBy());
+        partnerBookingPayoutDetail.setCreatedOn(partnerBookingPayoutDetailsRecord.getCreatedOn());
+        partnerBookingPayoutDetail.setUpdatedOn(partnerBookingPayoutDetailsRecord.getUpdatedOn());
+        partnerBookingPayoutDetail.setIsActive(partnerBookingPayoutDetailsRecord.getIsActive());
+        partnerBookingPayoutDetail.setState(partnerBookingPayoutDetailsRecord.getState());
+        partnerBookingPayoutDetail.setApiSource(partnerBookingPayoutDetailsRecord.getApiSource());
+        partnerBookingPayoutDetail.setNotes(partnerBookingPayoutDetailsRecord.getNotes());
         return partnerBookingPayoutDetail;
     }
 

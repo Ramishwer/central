@@ -25,15 +25,15 @@ public class PayoutModelRepositoryImpl implements PayoutModelRepository {
         PayoutModelsRecord payoutModelsRecord = context.newRecord(PAYOUT_MODELS, payoutModel);
         payoutModelsRecord.store();
         payoutModel.setId(payoutModelsRecord.getId());
-        payoutModel.setUuid(payoutModel.getUuid());
-        payoutModel.setCreatedBy(payoutModel.getCreatedBy());
-        payoutModel.setUpdatedBy(payoutModel.getUpdatedBy());
-        payoutModel.setCreatedOn(payoutModel.getCreatedOn());
-        payoutModel.setUpdatedOn(payoutModel.getUpdatedOn());
-        payoutModel.setIsActive(payoutModel.getIsActive());
-        payoutModel.setState(payoutModel.getState());
-        payoutModel.setApiSource(payoutModel.getApiSource());
-        payoutModel.setNotes(payoutModel.getNotes());
+        payoutModel.setUuid(payoutModelsRecord.getUuid());
+        payoutModel.setCreatedBy(payoutModelsRecord.getCreatedBy());
+        payoutModel.setUpdatedBy(payoutModelsRecord.getUpdatedBy());
+        payoutModel.setCreatedOn(payoutModelsRecord.getCreatedOn());
+        payoutModel.setUpdatedOn(payoutModelsRecord.getUpdatedOn());
+        payoutModel.setIsActive(payoutModelsRecord.getIsActive());
+        payoutModel.setState(payoutModelsRecord.getState());
+        payoutModel.setApiSource(payoutModelsRecord.getApiSource());
+        payoutModel.setNotes(payoutModelsRecord.getNotes());
         return payoutModel;
     }
 

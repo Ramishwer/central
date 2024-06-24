@@ -25,15 +25,15 @@ public class PartnerPassbookTransactionRepositoryImpl implements PartnerPassbook
         PartnerPassbookTransactionsRecord partnerPassbookTransactionsRecord = context.newRecord(PARTNER_PASSBOOK_TRANSACTIONS, partnerPassbookTransaction);
         partnerPassbookTransactionsRecord.store();
         partnerPassbookTransaction.setId(partnerPassbookTransactionsRecord.getId());
-        partnerPassbookTransaction.setUuid(partnerPassbookTransaction.getUuid());
-        partnerPassbookTransaction.setCreatedBy(partnerPassbookTransaction.getCreatedBy());
-        partnerPassbookTransaction.setUpdatedBy(partnerPassbookTransaction.getUpdatedBy());
-        partnerPassbookTransaction.setCreatedOn(partnerPassbookTransaction.getCreatedOn());
-        partnerPassbookTransaction.setUpdatedOn(partnerPassbookTransaction.getUpdatedOn());
-        partnerPassbookTransaction.setIsActive(partnerPassbookTransaction.getIsActive());
-        partnerPassbookTransaction.setState(partnerPassbookTransaction.getState());
-        partnerPassbookTransaction.setApiSource(partnerPassbookTransaction.getApiSource());
-        partnerPassbookTransaction.setNotes(partnerPassbookTransaction.getNotes());
+        partnerPassbookTransaction.setUuid(partnerPassbookTransactionsRecord.getUuid());
+        partnerPassbookTransaction.setCreatedBy(partnerPassbookTransactionsRecord.getCreatedBy());
+        partnerPassbookTransaction.setUpdatedBy(partnerPassbookTransactionsRecord.getUpdatedBy());
+        partnerPassbookTransaction.setCreatedOn(partnerPassbookTransactionsRecord.getCreatedOn());
+        partnerPassbookTransaction.setUpdatedOn(partnerPassbookTransactionsRecord.getUpdatedOn());
+        partnerPassbookTransaction.setIsActive(partnerPassbookTransactionsRecord.getIsActive());
+        partnerPassbookTransaction.setState(partnerPassbookTransactionsRecord.getState());
+        partnerPassbookTransaction.setApiSource(partnerPassbookTransactionsRecord.getApiSource());
+        partnerPassbookTransaction.setNotes(partnerPassbookTransactionsRecord.getNotes());
         return partnerPassbookTransaction;
     }
 

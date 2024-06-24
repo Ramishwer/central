@@ -25,15 +25,15 @@ public class CustomerAppSupportedLanguageRepositoryImpl implements CustomerAppSu
         CustomerAppSupportedLanguagesRecord customerAppSupportedLanguagesRecord = context.newRecord(CUSTOMER_APP_SUPPORTED_LANGUAGES, customerAppSupportedLanguage);
         customerAppSupportedLanguagesRecord.store();
         customerAppSupportedLanguage.setId(customerAppSupportedLanguagesRecord.getId());
-        customerAppSupportedLanguage.setUuid(customerAppSupportedLanguage.getUuid());
-        customerAppSupportedLanguage.setCreatedBy(customerAppSupportedLanguage.getCreatedBy());
-        customerAppSupportedLanguage.setUpdatedBy(customerAppSupportedLanguage.getUpdatedBy());
-        customerAppSupportedLanguage.setCreatedOn(customerAppSupportedLanguage.getCreatedOn());
-        customerAppSupportedLanguage.setUpdatedOn(customerAppSupportedLanguage.getUpdatedOn());
-        customerAppSupportedLanguage.setIsActive(customerAppSupportedLanguage.getIsActive());
-        customerAppSupportedLanguage.setState(customerAppSupportedLanguage.getState());
-        customerAppSupportedLanguage.setApiSource(customerAppSupportedLanguage.getApiSource());
-        customerAppSupportedLanguage.setNotes(customerAppSupportedLanguage.getNotes());
+        customerAppSupportedLanguage.setUuid(customerAppSupportedLanguagesRecord.getUuid());
+        customerAppSupportedLanguage.setCreatedBy(customerAppSupportedLanguagesRecord.getCreatedBy());
+        customerAppSupportedLanguage.setUpdatedBy(customerAppSupportedLanguagesRecord.getUpdatedBy());
+        customerAppSupportedLanguage.setCreatedOn(customerAppSupportedLanguagesRecord.getCreatedOn());
+        customerAppSupportedLanguage.setUpdatedOn(customerAppSupportedLanguagesRecord.getUpdatedOn());
+        customerAppSupportedLanguage.setIsActive(customerAppSupportedLanguagesRecord.getIsActive());
+        customerAppSupportedLanguage.setState(customerAppSupportedLanguagesRecord.getState());
+        customerAppSupportedLanguage.setApiSource(customerAppSupportedLanguagesRecord.getApiSource());
+        customerAppSupportedLanguage.setNotes(customerAppSupportedLanguagesRecord.getNotes());
         return customerAppSupportedLanguage;
     }
 

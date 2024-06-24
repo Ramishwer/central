@@ -25,15 +25,15 @@ public class CustomerWalletDetailRepositoryImpl implements CustomerWalletDetailR
         CustomerWalletDetailsRecord customerWalletDetailsRecord = context.newRecord(CUSTOMER_WALLET_DETAILS, customerWalletDetail);
         customerWalletDetailsRecord.store();
         customerWalletDetail.setId(customerWalletDetailsRecord.getId());
-        customerWalletDetail.setUuid(customerWalletDetail.getUuid());
-        customerWalletDetail.setCreatedBy(customerWalletDetail.getCreatedBy());
-        customerWalletDetail.setUpdatedBy(customerWalletDetail.getUpdatedBy());
-        customerWalletDetail.setCreatedOn(customerWalletDetail.getCreatedOn());
-        customerWalletDetail.setUpdatedOn(customerWalletDetail.getUpdatedOn());
-        customerWalletDetail.setIsActive(customerWalletDetail.getIsActive());
-        customerWalletDetail.setState(customerWalletDetail.getState());
-        customerWalletDetail.setApiSource(customerWalletDetail.getApiSource());
-        customerWalletDetail.setNotes(customerWalletDetail.getNotes());
+        customerWalletDetail.setUuid(customerWalletDetailsRecord.getUuid());
+        customerWalletDetail.setCreatedBy(customerWalletDetailsRecord.getCreatedBy());
+        customerWalletDetail.setUpdatedBy(customerWalletDetailsRecord.getUpdatedBy());
+        customerWalletDetail.setCreatedOn(customerWalletDetailsRecord.getCreatedOn());
+        customerWalletDetail.setUpdatedOn(customerWalletDetailsRecord.getUpdatedOn());
+        customerWalletDetail.setIsActive(customerWalletDetailsRecord.getIsActive());
+        customerWalletDetail.setState(customerWalletDetailsRecord.getState());
+        customerWalletDetail.setApiSource(customerWalletDetailsRecord.getApiSource());
+        customerWalletDetail.setNotes(customerWalletDetailsRecord.getNotes());
         return customerWalletDetail;
     }
 

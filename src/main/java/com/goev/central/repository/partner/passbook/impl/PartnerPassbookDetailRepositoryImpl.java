@@ -25,15 +25,15 @@ public class PartnerPassbookDetailRepositoryImpl implements PartnerPassbookDetai
         PartnerPassbookDetailsRecord partnerPassbookDetailsRecord = context.newRecord(PARTNER_PASSBOOK_DETAILS, partnerPassbookDetail);
         partnerPassbookDetailsRecord.store();
         partnerPassbookDetail.setId(partnerPassbookDetailsRecord.getId());
-        partnerPassbookDetail.setUuid(partnerPassbookDetail.getUuid());
-        partnerPassbookDetail.setCreatedBy(partnerPassbookDetail.getCreatedBy());
-        partnerPassbookDetail.setUpdatedBy(partnerPassbookDetail.getUpdatedBy());
-        partnerPassbookDetail.setCreatedOn(partnerPassbookDetail.getCreatedOn());
-        partnerPassbookDetail.setUpdatedOn(partnerPassbookDetail.getUpdatedOn());
-        partnerPassbookDetail.setIsActive(partnerPassbookDetail.getIsActive());
-        partnerPassbookDetail.setState(partnerPassbookDetail.getState());
-        partnerPassbookDetail.setApiSource(partnerPassbookDetail.getApiSource());
-        partnerPassbookDetail.setNotes(partnerPassbookDetail.getNotes());
+        partnerPassbookDetail.setUuid(partnerPassbookDetailsRecord.getUuid());
+        partnerPassbookDetail.setCreatedBy(partnerPassbookDetailsRecord.getCreatedBy());
+        partnerPassbookDetail.setUpdatedBy(partnerPassbookDetailsRecord.getUpdatedBy());
+        partnerPassbookDetail.setCreatedOn(partnerPassbookDetailsRecord.getCreatedOn());
+        partnerPassbookDetail.setUpdatedOn(partnerPassbookDetailsRecord.getUpdatedOn());
+        partnerPassbookDetail.setIsActive(partnerPassbookDetailsRecord.getIsActive());
+        partnerPassbookDetail.setState(partnerPassbookDetailsRecord.getState());
+        partnerPassbookDetail.setApiSource(partnerPassbookDetailsRecord.getApiSource());
+        partnerPassbookDetail.setNotes(partnerPassbookDetailsRecord.getNotes());
         return partnerPassbookDetail;
     }
 

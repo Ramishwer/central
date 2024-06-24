@@ -25,15 +25,15 @@ public class CustomerAttributeRepositoryImpl implements CustomerAttributeReposit
         CustomerAttributesRecord customerAttributesRecord = context.newRecord(CUSTOMER_ATTRIBUTES, customerAttribute);
         customerAttributesRecord.store();
         customerAttribute.setId(customerAttributesRecord.getId());
-        customerAttribute.setUuid(customerAttribute.getUuid());
-        customerAttribute.setCreatedBy(customerAttribute.getCreatedBy());
-        customerAttribute.setUpdatedBy(customerAttribute.getUpdatedBy());
-        customerAttribute.setCreatedOn(customerAttribute.getCreatedOn());
-        customerAttribute.setUpdatedOn(customerAttribute.getUpdatedOn());
-        customerAttribute.setIsActive(customerAttribute.getIsActive());
-        customerAttribute.setState(customerAttribute.getState());
-        customerAttribute.setApiSource(customerAttribute.getApiSource());
-        customerAttribute.setNotes(customerAttribute.getNotes());
+        customerAttribute.setUuid(customerAttributesRecord.getUuid());
+        customerAttribute.setCreatedBy(customerAttributesRecord.getCreatedBy());
+        customerAttribute.setUpdatedBy(customerAttributesRecord.getUpdatedBy());
+        customerAttribute.setCreatedOn(customerAttributesRecord.getCreatedOn());
+        customerAttribute.setUpdatedOn(customerAttributesRecord.getUpdatedOn());
+        customerAttribute.setIsActive(customerAttributesRecord.getIsActive());
+        customerAttribute.setState(customerAttributesRecord.getState());
+        customerAttribute.setApiSource(customerAttributesRecord.getApiSource());
+        customerAttribute.setNotes(customerAttributesRecord.getNotes());
         return customerAttribute;
     }
 

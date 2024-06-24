@@ -17,7 +17,7 @@ public class PartnerDocumentTypeUpdateEvent extends Event<PartnerDocumentTypeDao
 
     @Override
     public String getName() {
-        return "PartnerDocumentTypeAddEvent";
+        return "PartnerDocumentTypeUpdateEvent";
     }
 
 }

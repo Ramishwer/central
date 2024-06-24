@@ -25,15 +25,15 @@ public class CustomerSegmentMappingRepositoryImpl implements CustomerSegmentMapp
         CustomerSegmentMappingsRecord customerSegmentMappingsRecord = context.newRecord(CUSTOMER_SEGMENT_MAPPINGS, customerSegmentMapping);
         customerSegmentMappingsRecord.store();
         customerSegmentMapping.setId(customerSegmentMappingsRecord.getId());
-        customerSegmentMapping.setUuid(customerSegmentMapping.getUuid());
-        customerSegmentMapping.setCreatedBy(customerSegmentMapping.getCreatedBy());
-        customerSegmentMapping.setUpdatedBy(customerSegmentMapping.getUpdatedBy());
-        customerSegmentMapping.setCreatedOn(customerSegmentMapping.getCreatedOn());
-        customerSegmentMapping.setUpdatedOn(customerSegmentMapping.getUpdatedOn());
-        customerSegmentMapping.setIsActive(customerSegmentMapping.getIsActive());
-        customerSegmentMapping.setState(customerSegmentMapping.getState());
-        customerSegmentMapping.setApiSource(customerSegmentMapping.getApiSource());
-        customerSegmentMapping.setNotes(customerSegmentMapping.getNotes());
+        customerSegmentMapping.setUuid(customerSegmentMappingsRecord.getUuid());
+        customerSegmentMapping.setCreatedBy(customerSegmentMappingsRecord.getCreatedBy());
+        customerSegmentMapping.setUpdatedBy(customerSegmentMappingsRecord.getUpdatedBy());
+        customerSegmentMapping.setCreatedOn(customerSegmentMappingsRecord.getCreatedOn());
+        customerSegmentMapping.setUpdatedOn(customerSegmentMappingsRecord.getUpdatedOn());
+        customerSegmentMapping.setIsActive(customerSegmentMappingsRecord.getIsActive());
+        customerSegmentMapping.setState(customerSegmentMappingsRecord.getState());
+        customerSegmentMapping.setApiSource(customerSegmentMappingsRecord.getApiSource());
+        customerSegmentMapping.setNotes(customerSegmentMappingsRecord.getNotes());
         return customerSegmentMapping;
     }
 
