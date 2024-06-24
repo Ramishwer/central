@@ -12,6 +12,10 @@ import lombok.*;
 public class PartnerShiftMappingDao extends BaseDao {
     private Integer partnerId;
     private Integer shiftId;
+    private String shiftConfig;
+    private String dutyConfig;
+    private String locationConfig;
+    private String assignableCategories;
 }
 
 

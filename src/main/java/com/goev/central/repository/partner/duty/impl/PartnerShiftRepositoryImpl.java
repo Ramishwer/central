@@ -9,6 +9,7 @@ import com.goev.lib.enums.RecordState;
 import com.goev.record.central.tables.records.PartnerShiftsRecord;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.joda.time.DateTime;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
@@ -110,5 +111,16 @@ public class PartnerShiftRepositoryImpl implements PartnerShiftRepository {
                 .limit(page.getLimit())
                 .offset(page.getStart())
                 .fetchInto(PartnerShiftDao.class);
+    }
+
+    @Override
+    public PartnerShiftDao findByPartnerIdShiftIdDayDate(Integer partnerId, Integer shiftId, String currentDay, DateTime date) {
+        return context.selectFrom(PARTNER_SHIFTS)
+                .where(PARTNER_SHIFTS.PARTNER_ID.eq(partnerId))
+                .and(PARTNER_SHIFTS.SHIFT_ID.eq(shiftId))
+                .and(PARTNER_SHIFTS.DAY.eq(currentDay))
+                .and(PARTNER_SHIFTS.DUTY_DATE.eq(date))
+                .and(PARTNER_SHIFTS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PartnerShiftDao.class);
     }
 }
