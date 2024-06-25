@@ -152,6 +152,7 @@ public class VehicleDetailServiceImpl implements VehicleDetailService {
         if (vehicleDetails == null)
             throw new ResponseException("Error in saving vehicle details");
 
+        vehicleDetailRepository.delete(vehicleDetailDao.getId());
         vehicle.setImageUrl(vehicleDetails.getImageUrl());
         vehicle.setVehicleDetailsId(vehicleDetails.getId());
         vehicle.setViewInfo(ApplicationConstants.GSON.toJson(getVehicleViewDto(vehicleDetails, vehicle)));

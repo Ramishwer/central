@@ -168,6 +168,7 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
         if (partnerDetails == null)
             throw new ResponseException("Error in saving partner details");
 
+        partnerDetailRepository.delete(partnerDetailDao.getId());
         partner.setProfileUrl(partnerDetails.getProfileUrl());
         partner.setPartnerDetailsId(partnerDetails.getId());
         partner.setOnboardingStatus(getOnboardingStatus(partner, partnerDetailDao));

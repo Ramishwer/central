@@ -24,4 +24,6 @@ public interface PartnerDutyRepository {
     List<PartnerDutyDao> findAllByPartnerId(Integer id);
 
     List<PartnerDutyDao> findAllByStatus(String status, PageDto page, FilterDto filter);
+
+    List<PartnerDutyDao> findAllByStatus(String status, PageDto page);
 }

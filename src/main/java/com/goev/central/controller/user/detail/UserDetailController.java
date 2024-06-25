@@ -27,7 +27,7 @@ public class UserDetailController {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, userDetailService.getUserDetails(userUUID));
     }
 
-    @PutMapping("/users/{vehicle-uuid}/details")
+    @PutMapping("/users/{user-uuid}/details")
     public ResponseDto<UserDetailDto> updateVehicle(@PathVariable(value = "user-uuid") String userUUID, @RequestBody UserDetailDto userDetailDto) {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, userDetailService.updateUser(userUUID, userDetailDto));
     }

@@ -95,6 +95,7 @@ public class UserDetailServiceImpl implements UserDetailService {
         if (userDetails == null)
             throw new ResponseException("Error in saving user details");
 
+        userRepository.delete(userDetailDao.getId());
         user.setUserDetailsId(userDetails.getId());
         user.setViewInfo(ApplicationConstants.GSON.toJson(getUserViewDto(userDetails, user)));
         userRepository.update(user);

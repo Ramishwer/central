@@ -114,4 +114,14 @@ public class PartnerDutyRepositoryImpl implements PartnerDutyRepository {
                 .offset(page.getStart())
                 .fetchInto(PartnerDutyDao.class);
     }
+
+    @Override
+    public List<PartnerDutyDao> findAllByStatus(String status, PageDto page) {
+        return context.selectFrom(PARTNER_DUTIES).where(PARTNER_DUTIES.STATUS.eq(status))
+                .and(PARTNER_DUTIES.STATE.eq(RecordState.ACTIVE.name()))
+                .and(PARTNER_DUTIES.IS_ACTIVE.eq(true))
+                .limit(page.getLimit())
+                .offset(page.getStart())
+                .fetchInto(PartnerDutyDao.class);
+    }
 }
