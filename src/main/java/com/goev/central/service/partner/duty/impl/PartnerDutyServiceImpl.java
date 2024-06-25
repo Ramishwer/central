@@ -3,6 +3,7 @@ package com.goev.central.service.partner.duty.impl;
 import com.goev.central.dao.partner.detail.PartnerDao;
 import com.goev.central.dao.partner.duty.PartnerDutyDao;
 import com.goev.central.dao.partner.duty.PartnerShiftDao;
+import com.goev.central.dto.common.FilterDto;
 import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.partner.PartnerViewDto;
@@ -34,8 +35,8 @@ public class PartnerDutyServiceImpl implements PartnerDutyService {
     private final PartnerShiftRepository partnerShiftRepository;
 
     @Override
-    public PaginatedResponseDto<PartnerDutyDto> getDuties(String status, PageDto page) {
-        List<PartnerDutyDao> activeDuties = partnerDutyRepository.findAllByStatus(status, page);
+    public PaginatedResponseDto<PartnerDutyDto> getDuties(String status, PageDto page, FilterDto filter) {
+        List<PartnerDutyDao> activeDuties = partnerDutyRepository.findAllByStatus(status, page,filter);
         if (CollectionUtils.isEmpty(activeDuties))
             return PaginatedResponseDto.<PartnerDutyDto>builder().elements(new ArrayList<>()).build();
 

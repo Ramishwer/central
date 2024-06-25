@@ -10,21 +10,22 @@ import org.joda.time.DateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
 @Setter
 @ToString
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FilterDto {
+    private Long startTime;
+    private Long endTime;
 
 
-    @JsonSerialize(using = DateTimeSerializer.class)
-    @JsonDeserialize(using = DateTimeDeserializer.class)
-    private DateTime startTime;
+    public DateTime getStartTime(){
+        return new DateTime(this.startTime);
+    }
 
-    @JsonSerialize(using = DateTimeSerializer.class)
-    @JsonDeserialize(using = DateTimeDeserializer.class)
-    private DateTime endTime;
+    public DateTime getEndTime(){
+        return new DateTime(this.endTime);
+    }
 
 
 }

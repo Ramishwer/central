@@ -1,6 +1,7 @@
 package com.goev.central.repository.partner.duty.impl;
 
 import com.goev.central.dao.partner.duty.PartnerDutyDao;
+import com.goev.central.dto.common.FilterDto;
 import com.goev.central.dto.common.PageDto;
 import com.goev.central.repository.partner.duty.PartnerDutyRepository;
 import com.goev.central.utilities.EventExecutorUtils;
@@ -104,10 +105,11 @@ public class PartnerDutyRepositoryImpl implements PartnerDutyRepository {
     }
 
     @Override
-    public List<PartnerDutyDao> findAllByStatus(String status, PageDto page) {
+    public List<PartnerDutyDao> findAllByStatus(String status, PageDto page, FilterDto filter) {
         return context.selectFrom(PARTNER_DUTIES).where(PARTNER_DUTIES.STATUS.eq(status))
                 .and(PARTNER_DUTIES.STATE.eq(RecordState.ACTIVE.name()))
                 .and(PARTNER_DUTIES.IS_ACTIVE.eq(true))
+                .and(PARTNER_DUTIES.ACTUAL_DUTY_START_TIME.between(filter.getStartTime(),filter.getEndTime()))
                 .limit(page.getLimit())
                 .offset(page.getStart())
                 .fetchInto(PartnerDutyDao.class);
