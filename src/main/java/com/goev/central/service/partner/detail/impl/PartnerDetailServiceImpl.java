@@ -129,8 +129,6 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
         PartnerDetailDto result = PartnerDetailDto.builder().build();
         setPartnerDetails(result, partner, partnerDetails);
         setPartnerHomeLocation(result, partnerDetails.getHomeLocationId());
-        setBusinessSegment(result, partnerDetails.getBusinessSegmentId());
-        setBusinessClient(result, partnerDetails.getBusinessClientId());
         return result;
     }
 
@@ -237,22 +235,6 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
         newPartnerDetails.setPermanentAddress(partnerDto.getPermanentAddress());
         newPartnerDetails.setFathersName(partnerDto.getFathersName());
 
-
-        if (partnerDto.getBusinessClient() != null) {
-
-            BusinessClientDao businessClientDao = businessClientRepository.findByUUID(partnerDto.getBusinessClient().getUuid());
-            if (businessClientDao == null)
-                throw new ResponseException("No business client found for Id :" + partnerDto.getBusinessClient().getUuid());
-            newPartnerDetails.setBusinessClientId(businessClientDao.getId());
-        }
-        if (partnerDto.getBusinessSegment() != null) {
-
-            BusinessSegmentDao businessSegmentDao = businessSegmentRepository.findByUUID(partnerDto.getBusinessSegment().getUuid());
-            if (businessSegmentDao == null)
-                throw new ResponseException("No business segment found for Id :" + partnerDto.getBusinessSegment().getUuid());
-            newPartnerDetails.setBusinessSegmentId(businessSegmentDao.getId());
-        }
-
         if (partnerDto.getHomeLocation() != null) {
 
             LocationDao locationDao = locationRepository.findByUUID(partnerDto.getHomeLocation().getUuid());
@@ -321,27 +303,6 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
         result.setPermanentAddress(partnerDetails.getPermanentAddress());
         result.setAadhaarCardNumber(partnerDetails.getAadhaarCardNumber());
         result.setProfileUrl(partnerDetails.getProfileUrl());
-    }
-
-    private void setBusinessClient(PartnerDetailDto result, Integer businessClientId) {
-        BusinessClientDao businessClientDao = businessClientRepository.findById(businessClientId);
-        if (businessClientDao == null)
-            return;
-        result.setBusinessClient(BusinessClientDto.builder()
-                .name(businessClientDao.getName())
-                .description(businessClientDao.getDescription())
-                .uuid(businessClientDao.getUuid())
-                .build());
-    }
-
-    private void setBusinessSegment(PartnerDetailDto result, Integer businessSegmentId) {
-        BusinessSegmentDao businessSegmentDao = businessSegmentRepository.findById(businessSegmentId);
-        if (businessSegmentDao == null)
-            return;
-        result.setBusinessSegment(BusinessSegmentDto.builder()
-                .name(businessSegmentDao.getName())
-                .uuid(businessSegmentDao.getUuid())
-                .build());
     }
 
     private void setPartnerHomeLocation(PartnerDetailDto result, Integer homeLocationId) {

@@ -181,9 +181,6 @@ public class VehicleDetailServiceImpl implements VehicleDetailService {
         setVehicleLeasingAgency(result, vehicleDetailDao.getVehicleLeasingAgencyId());
         setVehicleFinancer(result, vehicleDetailDao.getVehicleFinancerId());
         setVehicleModel(result, vehicleDetailDao.getVehicleModelId());
-        setBusinessSegment(result, vehicleDetailDao.getBusinessSegmentId());
-        setBusinessClient(result, vehicleDetailDao.getBusinessClientId());
-
         return result;
     }
 
@@ -238,20 +235,6 @@ public class VehicleDetailServiceImpl implements VehicleDetailService {
             if (vehicleLeasingAgencyDao == null)
                 throw new ResponseException("No vehicle leasing agency found for Id :" + vehicleDto.getVehicleLeasingAgency().getUuid());
             newVehicleDetails.setVehicleLeasingAgencyId(vehicleLeasingAgencyDao.getId());
-        }
-
-        if (vehicleDto.getBusinessSegment() != null) {
-            BusinessSegmentDao businessSegmentDao = businessSegmentRepository.findByUUID(vehicleDto.getBusinessSegment().getUuid());
-            if (businessSegmentDao == null)
-                throw new ResponseException("No business segment found for Id :" + vehicleDto.getBusinessSegment().getUuid());
-            newVehicleDetails.setBusinessSegmentId(businessSegmentDao.getId());
-        }
-
-        if (vehicleDto.getBusinessClient() != null) {
-            BusinessClientDao businessClientDao = businessClientRepository.findByUUID(vehicleDto.getBusinessClient().getUuid());
-            if (businessClientDao == null)
-                throw new ResponseException("No business client found for Id :" + vehicleDto.getBusinessClient().getUuid());
-            newVehicleDetails.setBusinessClientId(businessClientDao.getId());
         }
 
         newVehicleDetails.setImageUrl(vehicleDto.getImageUrl());
@@ -333,26 +316,6 @@ public class VehicleDetailServiceImpl implements VehicleDetailService {
         result.setVehicleFinancer(VehicleFinancerDto.builder()
                 .uuid(vehicleFinancerDao.getUuid())
                 .name(vehicleFinancerDao.getName())
-                .build());
-    }
-
-    private void setBusinessSegment(VehicleDetailDto result, Integer businessSegmentId) {
-        BusinessSegmentDao businessSegmentDao = businessSegmentRepository.findById(businessSegmentId);
-        if (businessSegmentDao == null)
-            return;
-        result.setBusinessSegment(BusinessSegmentDto.builder()
-                .uuid(businessSegmentDao.getUuid())
-                .name(businessSegmentDao.getName())
-                .build());
-    }
-
-    private void setBusinessClient(VehicleDetailDto result, Integer businessClientId) {
-        BusinessClientDao businessClientDao = businessClientRepository.findById(businessClientId);
-        if (businessClientDao == null)
-            return;
-        result.setBusinessClient(BusinessClientDto.builder()
-                .uuid(businessClientDao.getUuid())
-                .name(businessClientDao.getName())
                 .build());
     }
 
