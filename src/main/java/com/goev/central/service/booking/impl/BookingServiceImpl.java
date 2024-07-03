@@ -41,7 +41,7 @@ public class BookingServiceImpl implements BookingService {
                     .status(bookingDao.getStatus())
                     .subStatus(bookingDao.getSubStatus())
                     .startLocationDetails(ApplicationConstants.GSON.fromJson(bookingDao.getStartLocationDetails(), LatLongDto.class))
-                    .startLocationDetails(ApplicationConstants.GSON.fromJson(bookingDao.getEndLocationDetails(), LatLongDto.class))
+                    .endLocationDetails(ApplicationConstants.GSON.fromJson(bookingDao.getEndLocationDetails(), LatLongDto.class))
                     .build());
         }
         return result;
