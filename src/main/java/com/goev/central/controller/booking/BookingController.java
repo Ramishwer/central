@@ -25,7 +25,7 @@ public class BookingController {
                                                                          @RequestParam(value = "to", required = false) Long to,
                                                                          @RequestParam(value = "lastUUID", required = false) String lastElementUUID,
                                                                          @RequestParam("status")String status,
-                                                                         @RequestParam("subStatus")String subStatus) {
+                                                                         @RequestParam(value = "subStatus", required = false)String subStatus) {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, bookingService.getBookings(status,subStatus));
     }
 
