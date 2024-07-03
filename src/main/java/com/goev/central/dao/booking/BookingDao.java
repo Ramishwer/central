@@ -3,6 +3,7 @@ package com.goev.central.dao.booking;
 import com.goev.central.dto.booking.BookingDto;
 import com.goev.lib.dao.BaseDao;
 import lombok.*;
+import org.joda.time.DateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,6 +25,7 @@ public class BookingDao extends BaseDao {
     private Integer customerId;
     private Integer partnerId;
     private Integer vehicleId;
+    private DateTime plannedStartTime;
 
     public static BookingDao fromDto(BookingDto bookingDto) {
         BookingDao bookingDao = new BookingDao();
