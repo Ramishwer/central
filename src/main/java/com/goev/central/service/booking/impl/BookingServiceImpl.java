@@ -1,11 +1,15 @@
 package com.goev.central.service.booking.impl;
 
+import com.goev.central.constant.ApplicationConstants;
 import com.goev.central.dao.booking.BookingDao;
 import com.goev.central.dto.booking.BookingDto;
 import com.goev.central.dto.booking.BookingViewDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
+import com.goev.central.dto.partner.PartnerViewDto;
+import com.goev.central.dto.vehicle.VehicleViewDto;
 import com.goev.central.repository.booking.BookingRepository;
 import com.goev.central.service.booking.BookingService;
+import com.goev.lib.dto.LatLongDto;
 import com.goev.lib.exceptions.ResponseException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,12 +29,20 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public PaginatedResponseDto<BookingViewDto> getBookings(String status, String subStatus) {
         PaginatedResponseDto<BookingViewDto> result = PaginatedResponseDto.<BookingViewDto>builder().elements(new ArrayList<>()).build();
-        List<BookingDao> bookingDaos = bookingRepository.findAllActive(status,subStatus);
+        List<BookingDao> bookingDaos = bookingRepository.findAllActive(status, subStatus);
         if (CollectionUtils.isEmpty(bookingDaos))
             return result;
 
         for (BookingDao bookingDao : bookingDaos) {
-            result.getElements().add(BookingViewDto.fromDao(bookingDao));
+            result.getElements().add(BookingViewDto.builder()
+                    .uuid(bookingDao.getUuid())
+                    .partnerDetails(ApplicationConstants.GSON.fromJson(bookingDao.getPartnerDetails(), PartnerViewDto.class))
+                    .vehicleDetails(ApplicationConstants.GSON.fromJson(bookingDao.getVehicleDetails(), VehicleViewDto.class))
+                    .status(bookingDao.getStatus())
+                    .subStatus(bookingDao.getSubStatus())
+                    .startLocationDetails(ApplicationConstants.GSON.fromJson(bookingDao.getStartLocationDetails(), LatLongDto.class))
+                    .startLocationDetails(ApplicationConstants.GSON.fromJson(bookingDao.getEndLocationDetails(), LatLongDto.class))
+                    .build());
         }
         return result;
     }
