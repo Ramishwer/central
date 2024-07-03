@@ -2,14 +2,16 @@ package com.goev.central.controller.partner.duty;
 
 import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
-import com.goev.central.dto.partner.duty.PartnerDutyDto;
 import com.goev.central.dto.partner.duty.PartnerShiftDto;
+import com.goev.central.dto.partner.duty.PartnerShiftMappingDto;
 import com.goev.central.service.partner.duty.PartnerShiftService;
 import com.goev.lib.dto.ResponseDto;
 import com.goev.lib.dto.StatusDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -23,9 +25,19 @@ public class PartnerShiftController {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerShiftService.getShifts(status,page));
     }
 
+
+    @GetMapping("/partners/{partner-uuid}/shifts")
+    public ResponseDto<List<PartnerShiftMappingDto>> getShiftMappings(@PathVariable(value = "partner-uuid") String partnerUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerShiftService.getShiftMappings(partnerUUID));
+    }
     @PostMapping("/partners/{partner-uuid}/shifts")
-    public ResponseDto<PartnerShiftDto> createShift(@PathVariable(value = "partner-uuid") String partnerUUID, @RequestBody PartnerShiftDto partnerShiftDto) {
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerShiftService.createShift(partnerUUID, partnerShiftDto));
+    public ResponseDto<PartnerShiftMappingDto> createShift(@PathVariable(value = "partner-uuid") String partnerUUID, @RequestBody PartnerShiftMappingDto partnerShiftMappingDto) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerShiftService.createShiftMapping(partnerUUID, partnerShiftMappingDto));
+    }
+
+    @DeleteMapping("/partners/{partner-uuid}/shifts/{partner-shift-mapping-uuid}")
+    public ResponseDto<Boolean> createShift(@PathVariable(value = "partner-uuid") String partnerUUID,@PathVariable(value = "partner-shift-mapping-uuid") String partnerShiftMappingUUID)  {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerShiftService.deleteShiftMapping(partnerUUID, partnerShiftMappingUUID));
     }
 
     @PutMapping("/partners/{partner-uuid}/shifts/{shift-uuid}")

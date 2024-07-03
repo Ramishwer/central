@@ -18,4 +18,6 @@ public interface PartnerShiftMappingRepository {
     List<PartnerShiftMappingDao> findAllByIds(List<Integer> ids);
 
     List<PartnerShiftMappingDao> findAllActive();
+
+    List<PartnerShiftMappingDao> findAllByPartnerId(Integer partnerId);
 }

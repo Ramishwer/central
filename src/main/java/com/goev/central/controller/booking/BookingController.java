@@ -1,6 +1,7 @@
 package com.goev.central.controller.booking;
 
 import com.goev.central.dto.booking.BookingDto;
+import com.goev.central.dto.booking.BookingViewDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.service.booking.BookingService;
 import com.goev.lib.dto.ResponseDto;
@@ -18,24 +19,20 @@ public class BookingController {
     private final BookingService bookingService;
 
     @GetMapping("/bookings")
-    public ResponseDto<PaginatedResponseDto<BookingDto>> getBookings(@RequestParam(value = "count", required = false) Integer count,
-                                                                     @RequestParam(value = "start", required = false) Integer start,
-                                                                     @RequestParam(value = "from", required = false) Long from,
-                                                                     @RequestParam(value = "to", required = false) Long to,
-                                                                     @RequestParam(value = "lastUUID", required = false) String lastElementUUID) {
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, bookingService.getBookings());
+    public ResponseDto<PaginatedResponseDto<BookingViewDto>> getBookings(@RequestParam(value = "count", required = false) Integer count,
+                                                                         @RequestParam(value = "start", required = false) Integer start,
+                                                                         @RequestParam(value = "from", required = false) Long from,
+                                                                         @RequestParam(value = "to", required = false) Long to,
+                                                                         @RequestParam(value = "lastUUID", required = false) String lastElementUUID,
+                                                                         @RequestParam("status")String status,
+                                                                         @RequestParam("subStatus")String subStatus) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, bookingService.getBookings(status,subStatus));
     }
 
 
     @GetMapping("/bookings/{booking-uuid}")
     public ResponseDto<BookingDto> getBookingDetails(@PathVariable(value = "booking-uuid") String bookingUUID) {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, bookingService.getBookingDetails(bookingUUID));
-    }
-
-
-    @PostMapping("/bookings")
-    public ResponseDto<BookingDto> createBooking(@RequestBody BookingDto bookingDto) {
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, bookingService.createBooking(bookingDto));
     }
 
     @PutMapping("/bookings/{booking-uuid}")

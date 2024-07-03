@@ -27,6 +27,8 @@ public class BookingDto {
     private CustomerViewDto customerDetails;
 
     public static BookingDto fromDao(BookingDao bookingDao) {
-        return BookingDto.builder().uuid(bookingDao.getUuid()).build();
+        return BookingDto.builder()
+                .uuid(bookingDao.getUuid())
+                .build();
     }
 }

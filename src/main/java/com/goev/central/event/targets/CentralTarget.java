@@ -1,6 +1,5 @@
 package com.goev.central.event.targets;
 
-import com.goev.central.config.SpringContext;
 import com.goev.lib.event.core.EventChannel;
 import com.goev.lib.event.core.EventChannelConfiguration;
 import com.goev.lib.event.core.EventTarget;
@@ -17,8 +16,8 @@ public class CentralTarget extends EventTarget {
     }
 
     public static CentralTarget getTarget(EventProcessor eventProcessor) {
-        EventChannel eventChannel = new SelfEventChannel();
-        eventChannel.init(getTargetName(),eventChannel.getType());
+        SelfEventChannel eventChannel = new SelfEventChannel();
+        eventChannel.init();
         CentralTarget centralTarget = new CentralTarget();
         centralTarget.setChannel(eventChannel);
         centralTarget.setName(getTargetName());

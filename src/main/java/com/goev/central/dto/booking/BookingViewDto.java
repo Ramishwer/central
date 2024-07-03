@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.joda.deser.DateTimeDeserializer;
 import com.fasterxml.jackson.datatype.joda.ser.DateTimeSerializer;
+import com.goev.central.constant.ApplicationConstants;
+import com.goev.central.dao.booking.BookingDao;
 import com.goev.central.dto.customer.CustomerViewDto;
 import com.goev.central.dto.partner.PartnerViewDto;
 import com.goev.central.dto.vehicle.VehicleViewDto;
@@ -44,4 +46,10 @@ public class BookingViewDto {
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime plannedEndTime;
+
+
+
+    public static BookingViewDto fromDao(BookingDao bookingDao){
+        return ApplicationConstants.GSON.fromJson(bookingDao.getViewInfo(), BookingViewDto.class);
+    }
 }

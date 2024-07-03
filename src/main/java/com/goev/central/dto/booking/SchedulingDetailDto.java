@@ -1,14 +1,15 @@
-package com.goev.central.dto.shift;
-
+package com.goev.central.dto.booking;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.joda.deser.DateTimeDeserializer;
 import com.fasterxml.jackson.datatype.joda.ser.DateTimeSerializer;
-import com.goev.central.dao.shift.ShiftDao;
+import com.goev.central.enums.booking.SchedulingTypes;
 import lombok.*;
 import org.joda.time.DateTime;
+
+import java.util.Map;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,27 +18,16 @@ import org.joda.time.DateTime;
 @ToString
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ShiftDto {
-    private String uuid;
-    @JsonSerialize(using = DateTimeSerializer.class)
-    @JsonDeserialize(using = DateTimeDeserializer.class)
-    private DateTime applicableFromTime;
-    @JsonSerialize(using = DateTimeSerializer.class)
-    @JsonDeserialize(using = DateTimeDeserializer.class)
-    private DateTime applicableToTime;
-    private String name;
-    private String description;
-    private String shiftType;
+public class SchedulingDetailDto {
 
-    public static ShiftDto fromDao(ShiftDao shiftDao) {
-        return ShiftDto.builder()
-                .uuid(shiftDao.getUuid())
-                .name(shiftDao.getName())
-                .description(shiftDao.getDescription())
-                .shiftType(shiftDao.getShiftType())
-                .build();
-    }
+    private SchedulingTypes type;
+    @JsonSerialize(using = DateTimeSerializer.class)
+    @JsonDeserialize(using = DateTimeDeserializer.class)
+    private DateTime startTime;
+    @JsonSerialize(using = DateTimeSerializer.class)
+    @JsonDeserialize(using = DateTimeDeserializer.class)
+    private DateTime endTime;
+    private Map<String,String> schedule;
+
+
 }
-
-
-

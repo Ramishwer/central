@@ -1,8 +1,8 @@
 package com.goev.central.repository.booking.impl;
 
-
 import com.goev.central.dao.booking.BookingDao;
-import com.goev.central.repository.booking.BookingRepository;
+import com.goev.central.repository.booking.BookingRequestRepository;
+import com.goev.central.service.booking.BookingRequestService;
 import com.goev.central.utilities.EventExecutorUtils;
 import com.goev.central.utilities.RequestContext;
 import com.goev.lib.enums.RecordState;
@@ -12,14 +12,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 import static com.goev.record.central.tables.Bookings.BOOKINGS;
 
 @Slf4j
 @Repository
 @AllArgsConstructor
-public class BookingRepositoryImpl implements BookingRepository {
+public class BookingRequestRepositoryImpl implements BookingRequestRepository {
 
     private final DSLContext context;
     private final EventExecutorUtils eventExecutor;
@@ -86,27 +84,5 @@ public class BookingRepositoryImpl implements BookingRepository {
         return context.selectFrom(BOOKINGS).where(BOOKINGS.ID.eq(id))
                 .and(BOOKINGS.IS_ACTIVE.eq(true))
                 .fetchAnyInto(BookingDao.class);
-    }
-
-    @Override
-    public List<BookingDao> findAllByIds(List<Integer> ids) {
-        return context.selectFrom(BOOKINGS).where(BOOKINGS.ID.in(ids)).fetchInto(BookingDao.class);
-    }
-
-    @Override
-    public List<BookingDao> findAllActive(String status, String subStatus) {
-        if(subStatus == null)
-            return context.selectFrom(BOOKINGS)
-                    .where(BOOKINGS.STATUS.eq(status))
-                    .and(BOOKINGS.STATE.eq(RecordState.ACTIVE.name()))
-                    .and(BOOKINGS.IS_ACTIVE.eq(true))
-                    .fetchInto(BookingDao.class);
-
-        return context.selectFrom(BOOKINGS)
-                .where(BOOKINGS.STATUS.eq(status))
-                .and(BOOKINGS.SUB_STATUS.eq(subStatus))
-                .and(BOOKINGS.STATE.eq(RecordState.ACTIVE.name()))
-                .and(BOOKINGS.IS_ACTIVE.eq(true))
-                .fetchInto(BookingDao.class);
     }
 }

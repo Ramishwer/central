@@ -2,9 +2,8 @@ package com.goev.central.repository.booking;
 
 import com.goev.central.dao.booking.BookingDao;
 
-import java.util.List;
+public interface BookingRequestRepository {
 
-public interface BookingRepository {
     BookingDao save(BookingDao booking);
 
     BookingDao update(BookingDao booking);
@@ -15,7 +14,4 @@ public interface BookingRepository {
 
     BookingDao findById(Integer id);
 
-    List<BookingDao> findAllByIds(List<Integer> ids);
-
-    List<BookingDao> findAllActive(String status, String subStatus);
 }

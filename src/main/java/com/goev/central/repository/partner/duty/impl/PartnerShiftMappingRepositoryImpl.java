@@ -85,6 +85,17 @@ public class PartnerShiftMappingRepositoryImpl implements PartnerShiftMappingRep
 
     @Override
     public List<PartnerShiftMappingDao> findAllActive() {
-        return context.selectFrom(PARTNER_SHIFT_MAPPINGS).fetchInto(PartnerShiftMappingDao.class);
+        return context.selectFrom(PARTNER_SHIFT_MAPPINGS)
+                .where(PARTNER_SHIFT_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(PARTNER_SHIFT_MAPPINGS.IS_ACTIVE.eq(true))
+                .fetchInto(PartnerShiftMappingDao.class);
+    }
+
+    @Override
+    public List<PartnerShiftMappingDao> findAllByPartnerId(Integer partnerId) {
+        return context.selectFrom(PARTNER_SHIFT_MAPPINGS).where(PARTNER_SHIFT_MAPPINGS.PARTNER_ID.eq(partnerId))
+                .and(PARTNER_SHIFT_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(PARTNER_SHIFT_MAPPINGS.IS_ACTIVE.eq(true))
+                .fetchInto(PartnerShiftMappingDao.class);
     }
 }

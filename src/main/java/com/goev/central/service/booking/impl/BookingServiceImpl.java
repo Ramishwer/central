@@ -2,7 +2,7 @@ package com.goev.central.service.booking.impl;
 
 import com.goev.central.dao.booking.BookingDao;
 import com.goev.central.dto.booking.BookingDto;
-import com.goev.central.dto.common.PageDto;
+import com.goev.central.dto.booking.BookingViewDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.repository.booking.BookingRepository;
 import com.goev.central.service.booking.BookingService;
@@ -23,14 +23,14 @@ public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
 
     @Override
-    public PaginatedResponseDto<BookingDto> getBookings() {
-        PaginatedResponseDto<BookingDto> result = PaginatedResponseDto.<BookingDto>builder().elements(new ArrayList<>()).build();
-        List<BookingDao> bookingDaos = bookingRepository.findAllActive();
+    public PaginatedResponseDto<BookingViewDto> getBookings(String status, String subStatus) {
+        PaginatedResponseDto<BookingViewDto> result = PaginatedResponseDto.<BookingViewDto>builder().elements(new ArrayList<>()).build();
+        List<BookingDao> bookingDaos = bookingRepository.findAllActive(status,subStatus);
         if (CollectionUtils.isEmpty(bookingDaos))
             return result;
 
         for (BookingDao bookingDao : bookingDaos) {
-            result.getElements().add(getBookingDto(bookingDao));
+            result.getElements().add(BookingViewDto.fromDao(bookingDao));
         }
         return result;
     }

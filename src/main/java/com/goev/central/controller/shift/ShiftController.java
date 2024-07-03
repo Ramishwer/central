@@ -18,11 +18,11 @@ public class ShiftController {
     private final ShiftService shiftService;
 
     @GetMapping("/shifts")
-    public ResponseDto<PaginatedResponseDto<ShiftDto>> getShifts(@RequestParam("count") Integer count,
-                                                                 @RequestParam("start") Integer start,
-                                                                 @RequestParam("from") Long from,
-                                                                 @RequestParam("to") Long to,
-                                                                 @RequestParam("lastUUID") String lastElementUUID) {
+    public ResponseDto<PaginatedResponseDto<ShiftDto>> getShifts(@RequestParam(value = "count",required = false) Integer count,
+                                                                 @RequestParam(value = "start",required = false) Integer start,
+                                                                 @RequestParam(value = "from",required = false) Long from,
+                                                                 @RequestParam(value = "to",required = false) Long to,
+                                                                 @RequestParam(value = "lastUUID",required = false) String lastElementUUID) {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, shiftService.getShifts());
     }
 

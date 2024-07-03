@@ -30,9 +30,7 @@ public class ShiftServiceImpl implements ShiftService {
             return result;
 
         for (ShiftDao shiftDao : shiftDaos) {
-            result.getElements().add(ShiftDto.builder()
-                    .uuid(shiftDao.getUuid())
-                    .build());
+            result.getElements().add(ShiftDto.fromDao(shiftDao));
         }
         return result;
     }
@@ -44,8 +42,7 @@ public class ShiftServiceImpl implements ShiftService {
         shiftDao = shiftRepository.save(shiftDao);
         if (shiftDao == null)
             throw new ResponseException("Error in saving shift shift");
-        return ShiftDto.builder()
-                .uuid(shiftDao.getUuid()).build();
+        return ShiftDto.fromDao(shiftDao);
     }
 
     @Override
@@ -61,8 +58,7 @@ public class ShiftServiceImpl implements ShiftService {
         shiftDao = shiftRepository.update(newShiftDao);
         if (shiftDao == null)
             throw new ResponseException("Error in updating details shift ");
-        return ShiftDto.builder()
-                .uuid(shiftDao.getUuid()).build();
+        return ShiftDto.fromDao(shiftDao);
     }
 
     @Override
@@ -70,8 +66,7 @@ public class ShiftServiceImpl implements ShiftService {
         ShiftDao shiftDao = shiftRepository.findByUUID(shiftUUID);
         if (shiftDao == null)
             throw new ResponseException("No shift  found for Id :" + shiftUUID);
-        return ShiftDto.builder()
-                .uuid(shiftDao.getUuid()).build();
+        return ShiftDto.fromDao(shiftDao);
     }
 
     @Override

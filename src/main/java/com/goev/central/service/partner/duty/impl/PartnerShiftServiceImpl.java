@@ -1,14 +1,20 @@
 package com.goev.central.service.partner.duty.impl;
 
+import com.goev.central.constant.ApplicationConstants;
 import com.goev.central.dao.partner.detail.PartnerDao;
-import com.goev.central.dao.partner.duty.PartnerDutyDao;
 import com.goev.central.dao.partner.duty.PartnerShiftDao;
+import com.goev.central.dao.partner.duty.PartnerShiftMappingDao;
+import com.goev.central.dao.shift.ShiftDao;
 import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.partner.PartnerViewDto;
 import com.goev.central.dto.partner.duty.PartnerShiftDto;
+import com.goev.central.dto.partner.duty.PartnerShiftMappingDto;
+import com.goev.central.dto.shift.ShiftDto;
 import com.goev.central.repository.partner.detail.PartnerRepository;
+import com.goev.central.repository.partner.duty.PartnerShiftMappingRepository;
 import com.goev.central.repository.partner.duty.PartnerShiftRepository;
+import com.goev.central.repository.shift.ShiftRepository;
 import com.goev.central.service.partner.duty.PartnerShiftService;
 import com.goev.lib.exceptions.ResponseException;
 import lombok.AllArgsConstructor;
@@ -28,12 +34,14 @@ import java.util.stream.Collectors;
 public class PartnerShiftServiceImpl implements PartnerShiftService {
 
     private final PartnerShiftRepository partnerShiftRepository;
+    private final PartnerShiftMappingRepository partnerShiftMappingRepository;
     private final PartnerRepository partnerRepository;
+    private final ShiftRepository shiftRepository;
 
     @Override
     public PaginatedResponseDto<PartnerShiftDto> getShifts(String status, PageDto page) {
 
-        List<PartnerShiftDao> activeShifts = partnerShiftRepository.findAllByStatus(status,page);
+        List<PartnerShiftDao> activeShifts = partnerShiftRepository.findAllByStatus(status, page);
         if (CollectionUtils.isEmpty(activeShifts))
             return PaginatedResponseDto.<PartnerShiftDto>builder().elements(new ArrayList<>()).build();
 
@@ -50,19 +58,48 @@ public class PartnerShiftServiceImpl implements PartnerShiftService {
     }
 
     @Override
-    public PartnerShiftDto createShift(String partnerUUID, PartnerShiftDto partnerShiftDto) {
+    public PartnerShiftMappingDto createShiftMapping(String partnerUUID, PartnerShiftMappingDto partnerShiftMappingDto) {
 
         PartnerDao partner = partnerRepository.findByUUID(partnerUUID);
         if (partner == null)
             throw new ResponseException("No partner found for Id :" + partnerUUID);
 
-        PartnerShiftDao partnerShiftDao = new PartnerShiftDao();
+        if (partnerShiftMappingDto.getShift() == null)
+            throw new ResponseException("No shift details present.");
 
-        partnerShiftDao.setPartnerId(partner.getId());
-        partnerShiftDao = partnerShiftRepository.save(partnerShiftDao);
-        if (partnerShiftDao == null)
-            throw new ResponseException("Error in saving partner shift");
-        return PartnerShiftDto.fromDao(partnerShiftDao, PartnerViewDto.fromDao(partner));
+        ShiftDao shiftDao = shiftRepository.findByUUID(partnerShiftMappingDto.getShift().getUuid());
+
+        if (shiftDao == null)
+            throw new ResponseException("No shift found for Id :" + partnerShiftMappingDto.getShift().getUuid());
+
+
+        PartnerShiftMappingDao partnerShiftMappingDao = new PartnerShiftMappingDao();
+
+        partnerShiftMappingDao.setPartnerId(partner.getId());
+        partnerShiftMappingDao.setShiftId(shiftDao.getId());
+        partnerShiftMappingDao.setLocationConfig(ApplicationConstants.GSON.toJson(partnerShiftMappingDto.getLocationConfig()));
+        partnerShiftMappingDao.setDutyConfig(partnerShiftMappingDto.getDutyConfig());
+
+
+        partnerShiftMappingDao = partnerShiftMappingRepository.save(partnerShiftMappingDao);
+        if (partnerShiftMappingDao == null)
+            throw new ResponseException("Error in saving partner shift mapping");
+        return PartnerShiftMappingDto.fromDao(partnerShiftMappingDao, PartnerViewDto.fromDao(partner), ShiftDto.fromDao(shiftDao));
+    }
+
+    @Override
+    public Boolean deleteShiftMapping(String partnerUUID, String partnerShiftMappingUUID) {
+
+        PartnerDao partner = partnerRepository.findByUUID(partnerUUID);
+        if (partner == null)
+            throw new ResponseException("No partner found for Id :" + partnerUUID);
+
+        PartnerShiftMappingDao partnerShiftMappingDao = partnerShiftMappingRepository.findByUUID(partnerShiftMappingUUID);
+        if (partnerShiftMappingDao == null)
+            throw new ResponseException("No shift mapping found for Id :" + partnerShiftMappingUUID);
+
+        partnerShiftMappingRepository.delete(partnerShiftMappingDao.getId());
+        return true;
     }
 
     @Override
@@ -113,5 +150,25 @@ public class PartnerShiftServiceImpl implements PartnerShiftService {
             throw new ResponseException("No partner shift found for Id :" + shiftUUID);
         partnerShiftRepository.delete(partnerShiftDao.getId());
         return true;
+    }
+
+    @Override
+    public List<PartnerShiftMappingDto> getShiftMappings(String partnerUUID) {
+        PartnerDao partner = partnerRepository.findByUUID(partnerUUID);
+        if (partner == null)
+            throw new ResponseException("No partner found for Id :" + partnerUUID);
+
+        List<PartnerShiftMappingDao> partnerShiftMappingDaoList = partnerShiftMappingRepository.findAllByPartnerId(partner.getId());
+
+        List<PartnerShiftMappingDto> result = new ArrayList<>();
+
+        for(PartnerShiftMappingDao partnerShiftMappingDao : partnerShiftMappingDaoList){
+            ShiftDao shiftDao = shiftRepository.findById(partnerShiftMappingDao.getId());
+            if(shiftDao == null)
+                continue;
+            result.add(PartnerShiftMappingDto.fromDao(partnerShiftMappingDao,PartnerViewDto.fromDao(partner),ShiftDto.fromDao(shiftDao)));
+        }
+        return result;
+
     }
 }

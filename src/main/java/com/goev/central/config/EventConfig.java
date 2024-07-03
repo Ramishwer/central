@@ -1,6 +1,7 @@
 package com.goev.central.config;
 
 
+import com.goev.central.event.ExtendedEventProcessor;
 import com.goev.central.event.events.asset.save.AssetSaveEvent;
 import com.goev.central.event.events.asset.save.AssetTypeSaveEvent;
 import com.goev.central.event.events.asset.update.AssetTypeUpdateEvent;
@@ -29,12 +30,7 @@ import com.goev.central.event.handlers.vehicle.save.*;
 import com.goev.central.event.handlers.vehicle.update.*;
 import com.goev.central.event.targets.CentralTarget;
 import com.goev.central.event.targets.PartnerTarget;
-import com.goev.lib.event.core.EventChannel;
-import com.goev.lib.event.core.impl.APIEventChannel;
 import com.goev.lib.event.service.EventProcessor;
-import com.goev.lib.event.service.impl.SimpleEventProcessor;
-import com.goev.lib.services.RestClient;
-import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -50,46 +46,46 @@ public class EventConfig {
 
             PartnerOnboardingStatusCheckEventHandler partnerOnboardingStatusCheckEventHandler,
 
-                                            AssetUpdateEventHandler assetUpdateEventHandler,
-                                            AssetTypeUpdateEventHandler assetTypeUpdateEventHandler,
-                                            PartnerUpdateEventHandler partnerUpdateEventHandler,
-                                            PartnerDetailUpdateEventHandler partnerDetailUpdateEventHandler,
-                                            PartnerDutyUpdateEventHandler partnerDutyUpdateEventHandler,
-                                            PartnerPayoutUpdateEventHandler partnerPayoutUpdateEventHandler,
-                                            PartnerDocumentUpdateEventHandler partnerDocumentUpdateEventHandler,
-                                            PartnerDocumentTypeUpdateEventHandler partnerDocumentTypeUpdateEventHandler,
-                                            VehicleUpdateEventHandler vehicleUpdateEventHandler,
-                                            VehicleDocumentUpdateEventHandler vehicleDocumentUpdateEventHandler,
-                                            VehicleDocumentTypeUpdateEventHandler vehicleDocumentTypeUpdateEventHandler,
-                                            VehicleDetailUpdateEventHandler vehicleDetailUpdateEventHandler,
-                                            VehicleTransferDetailUpdateEventHandler vehicleTransferDetailUpdateEventHandler,
-                                            VehicleAssetTransferDetailUpdateEventHandler vehicleAssetTransferDetailUpdateEventHandler,
-                                            VehicleAssetMappingUpdateEventHandler vehicleAssetMappingUpdateEventHandler,
-                                            BookingUpdateEventHandler bookingUpdateEventHandler,
-                                            LocationUpdateEventHandler locationUpdateEventHandler,
+            AssetUpdateEventHandler assetUpdateEventHandler,
+            AssetTypeUpdateEventHandler assetTypeUpdateEventHandler,
+            PartnerUpdateEventHandler partnerUpdateEventHandler,
+            PartnerDetailUpdateEventHandler partnerDetailUpdateEventHandler,
+            PartnerDutyUpdateEventHandler partnerDutyUpdateEventHandler,
+            PartnerPayoutUpdateEventHandler partnerPayoutUpdateEventHandler,
+            PartnerDocumentUpdateEventHandler partnerDocumentUpdateEventHandler,
+            PartnerDocumentTypeUpdateEventHandler partnerDocumentTypeUpdateEventHandler,
+            VehicleUpdateEventHandler vehicleUpdateEventHandler,
+            VehicleDocumentUpdateEventHandler vehicleDocumentUpdateEventHandler,
+            VehicleDocumentTypeUpdateEventHandler vehicleDocumentTypeUpdateEventHandler,
+            VehicleDetailUpdateEventHandler vehicleDetailUpdateEventHandler,
+            VehicleTransferDetailUpdateEventHandler vehicleTransferDetailUpdateEventHandler,
+            VehicleAssetTransferDetailUpdateEventHandler vehicleAssetTransferDetailUpdateEventHandler,
+            VehicleAssetMappingUpdateEventHandler vehicleAssetMappingUpdateEventHandler,
+            BookingUpdateEventHandler bookingUpdateEventHandler,
+            LocationUpdateEventHandler locationUpdateEventHandler,
 
 
-                                            AssetSaveEventHandler assetSaveEventHandler,
-                                            AssetTypeSaveEventHandler assetTypeSaveEventHandler,
-                                            PartnerSaveEventHandler partnerSaveEventHandler,
-                                            PartnerDetailSaveEventHandler partnerDetailSaveEventHandler,
-                                            PartnerDutySaveEventHandler partnerDutySaveEventHandler,
-                                            PartnerPayoutSaveEventHandler partnerPayoutSaveEventHandler,
-                                            PartnerDocumentSaveEventHandler partnerDocumentSaveEventHandler,
-                                            PartnerDocumentTypeSaveEventHandler partnerDocumentTypeSaveEventHandler,
-                                            VehicleSaveEventHandler vehicleSaveEventHandler,
-                                            VehicleDocumentSaveEventHandler vehicleDocumentSaveEventHandler,
-                                            VehicleDocumentTypeSaveEventHandler vehicleDocumentTypeSaveEventHandler,
-                                            VehicleDetailSaveEventHandler vehicleDetailSaveEventHandler,
-                                            VehicleTransferDetailSaveEventHandler vehicleTransferDetailSaveEventHandler,
-                                            VehicleAssetTransferDetailSaveEventHandler vehicleAssetTransferDetailSaveEventHandler,
-                                            VehicleAssetMappingSaveEventHandler vehicleAssetMappingSaveEventHandler,
-                                            BookingSaveEventHandler bookingSaveEventHandler,
-                                            LocationSaveEventHandler locationSaveEventHandler
+            AssetSaveEventHandler assetSaveEventHandler,
+            AssetTypeSaveEventHandler assetTypeSaveEventHandler,
+            PartnerSaveEventHandler partnerSaveEventHandler,
+            PartnerDetailSaveEventHandler partnerDetailSaveEventHandler,
+            PartnerDutySaveEventHandler partnerDutySaveEventHandler,
+            PartnerPayoutSaveEventHandler partnerPayoutSaveEventHandler,
+            PartnerDocumentSaveEventHandler partnerDocumentSaveEventHandler,
+            PartnerDocumentTypeSaveEventHandler partnerDocumentTypeSaveEventHandler,
+            VehicleSaveEventHandler vehicleSaveEventHandler,
+            VehicleDocumentSaveEventHandler vehicleDocumentSaveEventHandler,
+            VehicleDocumentTypeSaveEventHandler vehicleDocumentTypeSaveEventHandler,
+            VehicleDetailSaveEventHandler vehicleDetailSaveEventHandler,
+            VehicleTransferDetailSaveEventHandler vehicleTransferDetailSaveEventHandler,
+            VehicleAssetTransferDetailSaveEventHandler vehicleAssetTransferDetailSaveEventHandler,
+            VehicleAssetMappingSaveEventHandler vehicleAssetMappingSaveEventHandler,
+            BookingSaveEventHandler bookingSaveEventHandler,
+            LocationSaveEventHandler locationSaveEventHandler
 
 
     ) {
-        SimpleEventProcessor eventProcessor = new SimpleEventProcessor();
+        ExtendedEventProcessor eventProcessor = new ExtendedEventProcessor();
 
         eventProcessor.registerEvents(new PartnerOnboardingStatusCheckEvent());
 
