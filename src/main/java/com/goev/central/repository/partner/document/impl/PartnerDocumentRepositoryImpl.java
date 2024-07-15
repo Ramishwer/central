@@ -40,7 +40,7 @@ public class PartnerDocumentRepositoryImpl implements PartnerDocumentRepository 
         partnerDocument.setApiSource(partnersDocumentRecord.getApiSource());
         partnerDocument.setNotes(partnersDocumentRecord.getNotes());
 
-        if ("API".equals(RequestContext.getRequestSource()))
+        if (!"EVENT".equals(RequestContext.getRequestSource()))
             eventExecutor.fireEvent("PartnerDocumentSaveEvent", partnerDocument);
         return partnerDocument;
     }
@@ -59,7 +59,7 @@ public class PartnerDocumentRepositoryImpl implements PartnerDocumentRepository 
         partnerDocument.setState(partnersDocumentRecord.getState());
         partnerDocument.setApiSource(partnersDocumentRecord.getApiSource());
         partnerDocument.setNotes(partnersDocumentRecord.getNotes());
-        if ("API".equals(RequestContext.getRequestSource()))
+        if (!"EVENT".equals(RequestContext.getRequestSource()))
             eventExecutor.fireEvent("PartnerDocumentUpdateEvent", partnerDocument);
         return partnerDocument;
     }

@@ -37,7 +37,7 @@ public class PartnerDocumentTypeRepositoryImpl implements PartnerDocumentTypeRep
         partnerDocumentType.setApiSource(partnersDocumentTypeRecord.getApiSource());
         partnerDocumentType.setNotes(partnersDocumentTypeRecord.getNotes());
 
-        if ("API".equals(RequestContext.getRequestSource()))
+        if (!"EVENT".equals(RequestContext.getRequestSource()))
             eventExecutor.fireEvent("PartnerDocumentTypeSaveEvent", partnerDocumentType);
 
         return partnerDocumentType;
@@ -57,7 +57,7 @@ public class PartnerDocumentTypeRepositoryImpl implements PartnerDocumentTypeRep
         partnerDocumentType.setState(partnersDocumentTypeRecord.getState());
         partnerDocumentType.setApiSource(partnersDocumentTypeRecord.getApiSource());
         partnerDocumentType.setNotes(partnersDocumentTypeRecord.getNotes());
-        if ("API".equals(RequestContext.getRequestSource()))
+        if (!"EVENT".equals(RequestContext.getRequestSource()))
             eventExecutor.fireEvent("PartnerDocumentTypeUpdateEvent", partnerDocumentType);
 
         return partnerDocumentType;

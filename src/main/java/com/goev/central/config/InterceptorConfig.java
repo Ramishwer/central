@@ -24,7 +24,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(applicationSourceInterceptor);
-        registry.addInterceptor(basicAuthenticationInterceptor).addPathPatterns("/api/v1/internal/events");
+        registry.addInterceptor(basicAuthenticationInterceptor).addPathPatterns("/api/v1/internal/**");
         registry.addInterceptor(authenticationInterceptor).addPathPatterns("/**").
                 excludePathPatterns(
                         "/v3/api-docs/**",
@@ -36,7 +36,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
                         "/api/v1/session-management/session",
                         "/api/v1/session-management/sessions/**/token",
                         "/api/v1/session-management/sessions/tokens",
-                        "/api/v1/internal/events"
+                        "/api/v1/internal/**"
                 );
     }
 }

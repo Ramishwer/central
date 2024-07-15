@@ -7,8 +7,11 @@ import com.fasterxml.jackson.datatype.joda.deser.DateTimeDeserializer;
 import com.fasterxml.jackson.datatype.joda.ser.DateTimeSerializer;
 import com.goev.central.constant.ApplicationConstants;
 import com.goev.central.dao.partner.duty.PartnerDutyDao;
+import com.goev.central.dao.partner.duty.PartnerShiftDao;
 import com.goev.central.dto.location.LocationDto;
 import com.goev.central.dto.partner.PartnerViewDto;
+import com.goev.central.dto.shift.ShiftConfigurationDto;
+import com.goev.central.dto.vehicle.detail.VehicleCategoryDto;
 import lombok.*;
 import org.joda.time.DateTime;
 
@@ -45,14 +48,13 @@ public class PartnerDutyDto {
     private Long actualTotalPauseTimeInMillis;
     private String status;
 
-    public static PartnerDutyDto fromDao(PartnerDutyDao dutyDao, PartnerViewDto partner, PartnerShiftDto shift) {
+    public static PartnerDutyDto fromDao(PartnerDutyDao dutyDao, PartnerViewDto partner, PartnerShiftDao shift) {
 
-        if (dutyDao == null)
-            return null;
 
         PartnerDutyDto result = PartnerDutyDto.builder()
                 .uuid(dutyDao.getUuid())
                 .status(dutyDao.getStatus())
+                .partner(partner)
                 .plannedTotalOnlineTimeInMillis(dutyDao.getPlannedTotalOnlineTimeInMillis())
                 .plannedTotalPauseTimeInMillis(dutyDao.getPlannedTotalPauseTimeInMillis())
                 .plannedDutyStartTime(dutyDao.getPlannedDutyStartTime())
@@ -66,10 +68,8 @@ public class PartnerDutyDto {
                 .build();
 
         if (shift != null) {
-            result.setShiftDetails(shift);
-        }
-        if (partner != null) {
-            result.setPartner(partner);
+            PartnerShiftDto shiftDto = PartnerShiftDto.fromDao(shift,partner);
+            result.setShiftDetails(shiftDto);
         }
 
         return result;

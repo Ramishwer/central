@@ -37,7 +37,7 @@ public class VehicleDetailRepositoryImpl implements VehicleDetailRepository {
         vehicleDetails.setApiSource(vehicleDetailsRecord.getApiSource());
         vehicleDetails.setNotes(vehicleDetailsRecord.getNotes());
 
-        if ("API".equals(RequestContext.getRequestSource()))
+        if (!"EVENT".equals(RequestContext.getRequestSource()))
             eventExecutor.fireEvent("VehicleDetailSaveEvent", vehicleDetails);
         return vehicleDetails;
     }
@@ -56,7 +56,7 @@ public class VehicleDetailRepositoryImpl implements VehicleDetailRepository {
         vehicleDetails.setState(vehicleDetailsRecord.getState());
         vehicleDetails.setApiSource(vehicleDetailsRecord.getApiSource());
         vehicleDetails.setNotes(vehicleDetailsRecord.getNotes());
-        if ("API".equals(RequestContext.getRequestSource()))
+        if (!"EVENT".equals(RequestContext.getRequestSource()))
             eventExecutor.fireEvent("VehicleDetailUpdateEvent", vehicleDetails);
         return vehicleDetails;
     }

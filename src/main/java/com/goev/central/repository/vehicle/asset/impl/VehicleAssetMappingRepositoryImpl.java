@@ -38,7 +38,7 @@ public class VehicleAssetMappingRepositoryImpl implements VehicleAssetMappingRep
         assetMapping.setApiSource(vehicleAssetMappingsRecord.getApiSource());
         assetMapping.setNotes(vehicleAssetMappingsRecord.getNotes());
 
-        if ("API".equals(RequestContext.getRequestSource()))
+        if (!"EVENT".equals(RequestContext.getRequestSource()))
             eventExecutor.fireEvent("VehicleAssetMappingSaveEvent", assetMapping);
         return assetMapping;
     }
@@ -58,7 +58,7 @@ public class VehicleAssetMappingRepositoryImpl implements VehicleAssetMappingRep
         assetMapping.setApiSource(vehicleAssetMappingsRecord.getApiSource());
         assetMapping.setNotes(vehicleAssetMappingsRecord.getNotes());
 
-        if ("API".equals(RequestContext.getRequestSource()))
+        if (!"EVENT".equals(RequestContext.getRequestSource()))
             eventExecutor.fireEvent("VehicleAssetMappingUpdateEvent", assetMapping);
         return assetMapping;
     }

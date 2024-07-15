@@ -26,6 +26,17 @@ public class PartnerDutyDao extends BaseDao {
     private Long actualTotalOnlineTimeInMillis;
     private Long actualTotalPauseTimeInMillis;
     private String status;
+
+    private Integer plannedDutyStartLocationId;
+    private Integer plannedDutyEndLocationId;
+
+    private Integer plannedOnlineLocationId;
+    private String plannedOnlineLocationDetails;
+    private Integer actualOnlineLocationId;
+    private String actualOnlineLocationDetails;
+
+    private DateTime plannedOnlineTime;
+    private DateTime actualOnlineTime;
 }
 
 

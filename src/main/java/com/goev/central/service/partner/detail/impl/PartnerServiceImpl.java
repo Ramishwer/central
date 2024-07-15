@@ -2,20 +2,33 @@ package com.goev.central.service.partner.detail.impl;
 
 
 import com.goev.central.constant.ApplicationConstants;
+import com.goev.central.dao.booking.BookingDao;
 import com.goev.central.dao.partner.detail.PartnerDao;
+import com.goev.central.dao.partner.duty.PartnerDutyDao;
+import com.goev.central.dao.partner.duty.PartnerShiftDao;
 import com.goev.central.dto.booking.BookingViewDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.location.LocationDto;
+import com.goev.central.dto.partner.ActionDto;
 import com.goev.central.dto.partner.PartnerViewDto;
 import com.goev.central.dto.partner.detail.PartnerDto;
 import com.goev.central.dto.partner.duty.PartnerDutyDto;
 import com.goev.central.dto.vehicle.VehicleViewDto;
+import com.goev.central.enums.booking.BookingStatus;
+import com.goev.central.enums.booking.BookingSubStatus;
+import com.goev.central.enums.partner.PartnerDutyStatus;
 import com.goev.central.enums.partner.PartnerStatus;
+import com.goev.central.enums.partner.PartnerSubStatus;
+import com.goev.central.repository.booking.BookingRepository;
 import com.goev.central.repository.partner.detail.PartnerRepository;
+import com.goev.central.repository.partner.duty.PartnerDutyRepository;
+import com.goev.central.repository.partner.duty.PartnerShiftRepository;
 import com.goev.central.service.partner.detail.PartnerService;
 import com.goev.lib.exceptions.ResponseException;
+import com.goev.lib.utilities.ApplicationContext;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -31,6 +44,9 @@ public class PartnerServiceImpl implements PartnerService {
 
 
     private final PartnerRepository partnerRepository;
+    private final PartnerDutyRepository partnerDutyRepository;
+    private final BookingRepository bookingRepository;
+    private final PartnerShiftRepository partnerShiftRepository;
 
     @Override
     public Boolean deletePartner(String partnerUUID) {
@@ -124,6 +140,285 @@ public class PartnerServiceImpl implements PartnerService {
         PaginatedResponseDto<PartnerViewDto> result = PaginatedResponseDto.<PartnerViewDto>builder().elements(new ArrayList<>()).build();
         List<PartnerDao> partners = partnerRepository.findAllByOnboardingStatus(onboardingStatus);
         return getPartnerViewDtoPaginatedResponseDto(partners, result);
+    }
+
+
+
+    @Override
+    public PartnerDto updatePartner(String partnerUUID, ActionDto actionDto) {
+        PartnerDao partner = partnerRepository.findByUUID(partnerUUID);
+        if (partner == null)
+            throw new ResponseException("No partner found for Id :" + partnerUUID);
+
+        switch (actionDto.getAction()) {
+            case CHECK_IN -> {
+                partner = checkin(partner, actionDto);
+            }
+            case SELECT_VEHICLE -> {
+                partner = selectVehicle(partner, actionDto);
+            }
+            case RETURN_VEHICLE -> {
+                partner = returnVehicle(partner, actionDto);
+            }
+            case SUBMIT_CHECKLIST -> {
+                partner = submitChecklist(partner, actionDto);
+            }
+            case GO_ONLINE -> {
+                partner = goOnline(partner, actionDto);
+            }
+            case PAUSE -> {
+                partner = pause(partner, actionDto);
+            }
+            case UNPAUSE -> {
+                partner = unPause(partner, actionDto);
+            }
+            case ENROUTE -> {
+                partner = enroute(partner, actionDto);
+            }
+            case ARRIVE -> {
+                partner = arrive(partner, actionDto);
+            }
+            case START -> {
+                partner = start(partner, actionDto);
+            }
+            case END -> {
+                partner = end(partner, actionDto);
+            }
+            case COMPLETE -> {
+                partner = complete(partner, actionDto);
+            }
+            case GO_OFFLINE -> {
+                partner = goOffline(partner, actionDto);
+            }
+            case CHECK_OUT -> {
+                partner = checkOut(partner, actionDto);
+            }
+        }
+
+        return PartnerDto.fromDao(partner);
+    }
+
+
+
+    private PartnerDao checkOut(PartnerDao partner, ActionDto actionDto) {
+        PartnerDutyDao currentDuty = partnerDutyRepository.findById(partner.getPartnerDutyId());
+        if (currentDuty != null) {
+            currentDuty.setStatus(PartnerDutyStatus.COMPLETED.name());
+            currentDuty.setActualDutyEndTime(DateTime.now());
+            partnerDutyRepository.update(currentDuty);
+        }
+
+        partner.setStatus(PartnerStatus.OFF_DUTY.name());
+        partner.setSubStatus(PartnerSubStatus.NO_DUTY.name());
+        partner.setPartnerDutyId(null);
+        if (partner.getPartnerShiftId() == null)
+            partner.setDutyDetails(null);
+        partner = partnerRepository.update(partner);
+
+        return partner;
+    }
+
+    private PartnerDao goOffline(PartnerDao partner, ActionDto actionDto) {
+
+        partner.setStatus(PartnerStatus.VEHICLE_ASSIGNED.name());
+        partner.setSubStatus(PartnerSubStatus.WAITING_FOR_ONLINE.name());
+        partner = partnerRepository.update(partner);
+        return partner;
+    }
+
+    private PartnerDao complete(PartnerDao partner, ActionDto actionDto) {
+        partner.setStatus(PartnerStatus.ONLINE.name());
+        partner.setSubStatus(PartnerSubStatus.NO_BOOKING.name());
+        partner = partnerRepository.update(partner);
+        if (partner.getBookingId() != null) {
+            BookingDao bookingDao = bookingRepository.findById(partner.getBookingId());
+            bookingDao.setStatus(BookingStatus.COMPLETED.name());
+            bookingDao.setSubStatus(BookingSubStatus.COMPLETED.name());
+            bookingRepository.update(bookingDao);
+        }
+        return partner;
+    }
+
+    private PartnerDao end(PartnerDao partner, ActionDto actionDto) {
+        partner.setStatus(PartnerStatus.ONLINE.name());
+        partner.setSubStatus(PartnerSubStatus.NO_BOOKING.name());
+        partner = partnerRepository.update(partner);
+        if (partner.getBookingId() != null) {
+            BookingDao bookingDao = bookingRepository.findById(partner.getBookingId());
+            bookingDao.setStatus(BookingStatus.COMPLETED.name());
+            bookingDao.setSubStatus(BookingSubStatus.ENDED.name());
+            bookingRepository.update(bookingDao);
+        }
+        return partner;
+    }
+
+    private PartnerDao start(PartnerDao partner, ActionDto actionDto) {
+        partner.setStatus(PartnerStatus.ON_BOOKING.name());
+        partner.setSubStatus(PartnerSubStatus.STARTED.name());
+        partner = partnerRepository.update(partner);
+        if (partner.getBookingId() != null) {
+            BookingDao bookingDao = bookingRepository.findById(partner.getBookingId());
+            bookingDao.setStatus(BookingStatus.IN_PROGRESS.name());
+            bookingDao.setSubStatus(BookingSubStatus.STARTED.name());
+            bookingRepository.update(bookingDao);
+        }
+        return partner;
+    }
+
+    private PartnerDao arrive(PartnerDao partner, ActionDto actionDto) {
+        partner.setStatus(PartnerStatus.ON_BOOKING.name());
+        partner.setSubStatus(PartnerSubStatus.ARRIVED.name());
+        partner = partnerRepository.update(partner);
+        if (partner.getBookingId() != null) {
+            BookingDao bookingDao = bookingRepository.findById(partner.getBookingId());
+            bookingDao.setStatus(BookingStatus.IN_PROGRESS.name());
+            bookingDao.setSubStatus(BookingSubStatus.ARRIVED.name());
+            bookingRepository.update(bookingDao);
+        }
+        return partner;
+    }
+
+    private PartnerDao enroute(PartnerDao partner, ActionDto actionDto) {
+        partner.setStatus(PartnerStatus.ON_BOOKING.name());
+        partner.setSubStatus(PartnerSubStatus.ENROUTE.name());
+        partner = partnerRepository.update(partner);
+        if (partner.getBookingId() != null) {
+            BookingDao bookingDao = bookingRepository.findById(partner.getBookingId());
+            bookingDao.setStatus(BookingStatus.IN_PROGRESS.name());
+            bookingDao.setSubStatus(BookingSubStatus.ENROUTE.name());
+            bookingRepository.update(bookingDao);
+        }
+        return partner;
+    }
+
+    private PartnerDao unPause(PartnerDao partner, ActionDto actionDto) {
+        partner.setStatus(PartnerStatus.ONLINE.name());
+        partner.setSubStatus(PartnerSubStatus.NO_BOOKING.name());
+        partner = partnerRepository.update(partner);
+        return partner;
+    }
+
+    private PartnerDao pause(PartnerDao partner, ActionDto actionDto) {
+        partner.setStatus(PartnerStatus.ONLINE.name());
+        partner.setSubStatus(PartnerSubStatus.PAUSE.name());
+        partner = partnerRepository.update(partner);
+        return partner;
+    }
+
+    private PartnerDao goOnline(PartnerDao partner, ActionDto actionDto) {
+        partner.setStatus(PartnerStatus.ONLINE.name());
+        partner.setSubStatus(PartnerSubStatus.NO_BOOKING.name());
+        partner = partnerRepository.update(partner);
+        return partner;
+    }
+
+    private PartnerDao submitChecklist(PartnerDao partner, ActionDto actionDto) {
+        if (PartnerStatus.CHECKLIST.name().equals(partner.getStatus())) {
+            partner.setStatus(PartnerStatus.VEHICLE_ASSIGNED.name());
+            partner.setSubStatus(PartnerSubStatus.WAITING_FOR_ONLINE.name());
+            partner = partnerRepository.update(partner);
+        } else if (PartnerStatus.RETURN_CHECKLIST.name().equals(partner.getStatus())) {
+            partner.setStatus(PartnerStatus.ON_DUTY.name());
+            partner.setSubStatus(PartnerSubStatus.VEHICLE_NOT_ALLOTTED.name());
+            partner.setVehicleDetails(null);
+            partner.setVehicleId(null);
+            partner = partnerRepository.update(partner);
+        }
+        return partner;
+    }
+
+    private PartnerDao selectVehicle(PartnerDao partner, ActionDto actionDto) {
+        partner.setStatus(PartnerStatus.VEHICLE_ASSIGNED.name());
+        partner.setSubStatus(PartnerSubStatus.WAITING_FOR_ONLINE.name());
+        partner = partnerRepository.update(partner);
+
+
+
+//        partner.setStatus(PartnerStatus.CHECKLIST.name());
+//        partner.setSubStatus(PartnerSubStatus.CHECKLIST_PENDING.name());
+//        partner = partnerRepository.update(partner);
+        return partner;
+    }
+
+    private PartnerDao returnVehicle(PartnerDao partner, ActionDto actionDto) {
+
+
+        partner.setStatus(PartnerStatus.ON_DUTY.name());
+        partner.setSubStatus(PartnerSubStatus.VEHICLE_NOT_ALLOTTED.name());
+        partner.setVehicleDetails(null);
+        partner.setVehicleId(null);
+        partner = partnerRepository.update(partner);
+
+//        partner.setStatus(PartnerStatus.RETURN_CHECKLIST.name());
+//        partner.setSubStatus(PartnerSubStatus.CHECKLIST_PENDING.name());
+//        partner = partnerRepository.update(partner);
+        return partner;
+    }
+
+    private PartnerDao checkin(PartnerDao partner, ActionDto actionDto) {
+
+        PartnerShiftDao partnerShiftDao = partnerShiftRepository.findById(partner.getPartnerShiftId());
+        if (partnerShiftDao == null)
+            throw new ResponseException("Invalid action: Shift Details Incorrect");
+
+//        LocationDao expectedInLocation = locationRepository.findById(partnerShiftDao.getInLocationId());
+//        if (expectedInLocation == null)
+//            throw new ResponseException("Invalid action: Shift Details Incorrect No Location present");
+
+//        validateLocationQr(actionDto.getQrString(),expectedInLocation);
+//        validateLocationGps(actionDto.getLocation(),expectedInLocation);
+
+        PartnerDutyDao newDuty = new PartnerDutyDao();
+
+        newDuty.setPartnerId(partner.getId());
+        newDuty.setStatus(PartnerDutyStatus.IN_PROGRESS.name());
+        newDuty.setPartnerShiftId(partnerShiftDao.getId());
+
+        newDuty.setActualDutyStartTime(DateTime.now());
+//        newDuty.setActualDutyStartLocationDetails(ApplicationConstants.GSON.toJson(expectedInLocation));
+
+        newDuty.setPlannedDutyStartTime(partnerShiftDao.getEstimatedStartTime());
+        newDuty.setPlannedOnlineTime(partnerShiftDao.getEstimatedOnlineTime());
+        newDuty.setPlannedDutyEndTime(partnerShiftDao.getEstimatedEndTime());
+
+        newDuty.setPlannedDutyStartLocationDetails(partnerShiftDao.getInLocationDetails());
+        newDuty.setPlannedOnlineLocationDetails(partnerShiftDao.getOnlineLocationDetails());
+        newDuty.setPlannedDutyEndLocationDetails(partnerShiftDao.getOutLocationDetails());
+
+        newDuty.setPlannedDutyStartLocationId(partnerShiftDao.getInLocationId());
+        newDuty.setPlannedOnlineLocationId(partnerShiftDao.getOnlineLocationId());
+        newDuty.setPlannedDutyEndLocationId(partnerShiftDao.getOutLocationId());
+
+        newDuty = partnerDutyRepository.save(newDuty);
+
+        partner.setDutyDetails(ApplicationConstants.GSON.toJson(PartnerDutyDto.fromDao(newDuty, PartnerViewDto.fromDao(partner), partnerShiftDao)));
+        partner.setPartnerDutyId(newDuty.getId());
+        partner.setStatus(PartnerStatus.ON_DUTY.name());
+        partner.setSubStatus(PartnerSubStatus.VEHICLE_NOT_ALLOTTED.name());
+        partner = partnerRepository.update(partner);
+
+
+//        VehicleDao vehicle = vehicleRepository.findByPartnerId(partner.getId());
+//        if (vehicle != null) {
+//            final PartnerDao assignVehiclePartner = partner;
+//            executorService.submit(() -> {
+//                try {
+//                    Thread.sleep(2000L);
+//                } catch (InterruptedException e) {
+//                    log.error("Error in sleep", e);
+//                }
+//
+//                assignVehiclePartner.setStatus(PartnerStatus.ON_DUTY.name());
+//                assignVehiclePartner.setSubStatus(PartnerSubStatus.VEHICLE_ALLOTTED.name());
+//                assignVehiclePartner.setVehicleId(vehicle.getId());
+//                assignVehiclePartner.setVehicleDetails(vehicle.getViewInfo());
+//                partnerRepository.update(assignVehiclePartner);
+//
+//            });
+//
+//        }
+
+        return partner;
     }
 
 }

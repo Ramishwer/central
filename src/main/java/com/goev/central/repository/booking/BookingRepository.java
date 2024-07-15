@@ -1,6 +1,7 @@
 package com.goev.central.repository.booking;
 
 import com.goev.central.dao.booking.BookingDao;
+import org.joda.time.DateTime;
 
 import java.util.List;
 
@@ -18,4 +19,6 @@ public interface BookingRepository {
     List<BookingDao> findAllByIds(List<Integer> ids);
 
     List<BookingDao> findAllActive(String status, String subStatus);
+
+    List<BookingDao> findAllActiveWithTime(DateTime start, DateTime end);
 }

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.joda.deser.DateTimeDeserializer;
 import com.fasterxml.jackson.datatype.joda.ser.DateTimeSerializer;
+import com.goev.central.dao.payout.PayoutModelDao;
 import lombok.*;
 import org.joda.time.DateTime;
 
@@ -27,4 +28,14 @@ public class PayoutModelDto {
     private String triggerType;
     private String status;
     private String uuid;
+
+    public static PayoutModelDto fromDao(PayoutModelDao payoutModelDao) {
+        return PayoutModelDto.builder()
+                .uuid(payoutModelDao.getUuid())
+                .status(payoutModelDao.getStatus())
+                .name(payoutModelDao.getName())
+                .description(payoutModelDao.getDescription())
+                .triggerType(payoutModelDao.getTriggerType())
+                .build();
+    }
 }

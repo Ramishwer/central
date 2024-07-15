@@ -38,7 +38,7 @@ public class AssetTypeRepositoryImpl implements AssetTypeRepository {
         assetTypeDao.setApiSource(assetTypesRecord.getApiSource());
         assetTypeDao.setNotes(assetTypesRecord.getNotes());
 
-        if ("API".equals(RequestContext.getRequestSource()))
+        if (!"EVENT".equals(RequestContext.getRequestSource()))
             eventExecutor.fireEvent("AssetTypeSaveEvent", assetTypeDao);
         return assetTypeDao;
     }
@@ -58,7 +58,7 @@ public class AssetTypeRepositoryImpl implements AssetTypeRepository {
         assetTypeDao.setApiSource(assetTypesRecord.getApiSource());
         assetTypeDao.setNotes(assetTypesRecord.getNotes());
 
-        if ("API".equals(RequestContext.getRequestSource()))
+        if (!"EVENT".equals(RequestContext.getRequestSource()))
             eventExecutor.fireEvent("AssetTypeUpdateEvent", assetTypeDao);
         return assetTypeDao;
     }

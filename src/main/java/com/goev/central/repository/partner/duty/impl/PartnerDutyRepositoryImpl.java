@@ -40,7 +40,7 @@ public class PartnerDutyRepositoryImpl implements PartnerDutyRepository {
         partnerDutyDao.setApiSource(partnerDutiesRecord.getApiSource());
         partnerDutyDao.setNotes(partnerDutiesRecord.getNotes());
 
-        if ("API".equals(RequestContext.getRequestSource()))
+        if (!"EVENT".equals(RequestContext.getRequestSource()))
             eventExecutor.fireEvent("PartnerDutySaveEvent", partnerDutyDao);
         return partnerDutyDao;
     }
@@ -59,8 +59,8 @@ public class PartnerDutyRepositoryImpl implements PartnerDutyRepository {
         partnerDutyDao.setState(partnerDutiesRecord.getState());
         partnerDutyDao.setApiSource(partnerDutiesRecord.getApiSource());
         partnerDutyDao.setNotes(partnerDutiesRecord.getNotes());
-        if ("API".equals(RequestContext.getRequestSource()))
-            eventExecutor.fireEvent("PartnerShiftUpdateEvent", partnerDutyDao);
+        if (!"EVENT".equals(RequestContext.getRequestSource()))
+            eventExecutor.fireEvent("PartnerDutyUpdateEvent", partnerDutyDao);
         return partnerDutyDao;
     }
 

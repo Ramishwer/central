@@ -26,16 +26,16 @@ public class PartnerShiftController {
     }
 
 
-    @GetMapping("/partners/{partner-uuid}/shifts")
+    @GetMapping("/partners/{partner-uuid}/shift-mappings")
     public ResponseDto<List<PartnerShiftMappingDto>> getShiftMappings(@PathVariable(value = "partner-uuid") String partnerUUID) {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerShiftService.getShiftMappings(partnerUUID));
     }
-    @PostMapping("/partners/{partner-uuid}/shifts")
+    @PostMapping("/partners/{partner-uuid}/shift-mappings")
     public ResponseDto<PartnerShiftMappingDto> createShift(@PathVariable(value = "partner-uuid") String partnerUUID, @RequestBody PartnerShiftMappingDto partnerShiftMappingDto) {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerShiftService.createShiftMapping(partnerUUID, partnerShiftMappingDto));
     }
 
-    @DeleteMapping("/partners/{partner-uuid}/shifts/{partner-shift-mapping-uuid}")
+    @DeleteMapping("/partners/{partner-uuid}/shift-mappings/{partner-shift-mapping-uuid}")
     public ResponseDto<Boolean> createShift(@PathVariable(value = "partner-uuid") String partnerUUID,@PathVariable(value = "partner-shift-mapping-uuid") String partnerShiftMappingUUID)  {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerShiftService.deleteShiftMapping(partnerUUID, partnerShiftMappingUUID));
     }

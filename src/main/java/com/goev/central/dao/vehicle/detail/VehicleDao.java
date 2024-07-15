@@ -13,6 +13,7 @@ public class VehicleDao extends BaseDao {
     private String plateNumber;
     private String status;
     private String partnerDetails;
+    private Integer partnerId;
     private String vehicleTransferDetails;
     private Integer soc;
     private Integer vehicleDetailsId;

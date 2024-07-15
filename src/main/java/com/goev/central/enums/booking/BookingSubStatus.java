@@ -7,6 +7,7 @@ public enum BookingSubStatus {
     ARRIVED,
     STARTED,
     ENDED,
+    COMPLETED,
 
     CANCELLED,
     NO_SHOW,

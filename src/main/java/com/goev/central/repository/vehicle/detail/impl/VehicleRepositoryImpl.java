@@ -42,7 +42,7 @@ public class VehicleRepositoryImpl implements VehicleRepository {
         vehicle.setApiSource(vehiclesRecord.getApiSource());
         vehicle.setNotes(vehiclesRecord.getNotes());
 
-        if ("API".equals(RequestContext.getRequestSource()))
+        if (!"EVENT".equals(RequestContext.getRequestSource()))
             eventExecutor.fireEvent("VehicleSaveEvent", vehicle);
         return vehicle;
     }
@@ -62,7 +62,7 @@ public class VehicleRepositoryImpl implements VehicleRepository {
         vehicle.setApiSource(vehiclesRecord.getApiSource());
         vehicle.setNotes(vehiclesRecord.getNotes());
 
-        if ("API".equals(RequestContext.getRequestSource()))
+        if (!"EVENT".equals(RequestContext.getRequestSource()))
             eventExecutor.fireEvent("VehicleUpdateEvent", vehicle);
         return vehicle;
     }
@@ -119,6 +119,15 @@ public class VehicleRepositoryImpl implements VehicleRepository {
         return context.selectFrom(VEHICLES)
                 .where(VEHICLES.ONBOARDING_STATUS.in(VehicleOnboardingStatus.ONBOARDED.name()))
                 .and(VEHICLES.STATUS.eq(status))
+                .and(VEHICLES.IS_ACTIVE.eq(true))
+                .fetchInto(VehicleDao.class);
+    }
+
+    @Override
+    public List<VehicleDao> findAllActiveWithPartnerId() {
+        return context.selectFrom(VEHICLES)
+                .where(VEHICLES.ONBOARDING_STATUS.in(VehicleOnboardingStatus.ONBOARDED.name()))
+                .and(VEHICLES.PARTNER_ID.isNotNull())
                 .and(VEHICLES.IS_ACTIVE.eq(true))
                 .fetchInto(VehicleDao.class);
     }

@@ -18,4 +18,8 @@ public interface ShiftConfigurationRepository {
     List<ShiftConfigurationDao> findAllByIds(List<Integer> ids);
 
     List<ShiftConfigurationDao> findAllActive();
+
+    List<ShiftConfigurationDao> findByShiftId(Integer shiftId);
+
+    ShiftConfigurationDao findByShiftIdAndDay(Integer shiftId, int day);
 }

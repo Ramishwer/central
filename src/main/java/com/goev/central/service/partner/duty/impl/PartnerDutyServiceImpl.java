@@ -55,8 +55,7 @@ public class PartnerDutyServiceImpl implements PartnerDutyService {
         List<PartnerDutyDto> dutyList = new ArrayList<>();
         activeDuties.forEach(x -> {
             PartnerViewDto partnerViewDto = PartnerViewDto.fromDao(partnerDaoMap.get(x.getPartnerId()));
-            PartnerShiftDto partnerShiftDto = PartnerShiftDto.fromDao(partnerShiftDaoMap.get(x.getPartnerShiftId()), partnerViewDto);
-            dutyList.add(PartnerDutyDto.fromDao(x, partnerViewDto, partnerShiftDto));
+            dutyList.add(PartnerDutyDto.fromDao(x, partnerViewDto, partnerShiftDaoMap.get(x.getPartnerShiftId())));
         });
 
         return PaginatedResponseDto.<PartnerDutyDto>builder().elements(dutyList).build();

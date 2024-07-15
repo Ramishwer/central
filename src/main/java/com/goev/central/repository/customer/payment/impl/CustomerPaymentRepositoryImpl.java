@@ -39,7 +39,7 @@ public class CustomerPaymentRepositoryImpl implements CustomerPaymentRepository 
         customerPaymentDao.setApiSource(customerPaymentsRecord.getApiSource());
         customerPaymentDao.setNotes(customerPaymentsRecord.getNotes());
 
-        if ("API".equals(RequestContext.getRequestSource()))
+        if (!"EVENT".equals(RequestContext.getRequestSource()))
             eventExecutor.fireEvent("CustomerPaymentSaveEvent", customerPaymentDao);
         return customerPaymentDao;
     }
@@ -59,7 +59,7 @@ public class CustomerPaymentRepositoryImpl implements CustomerPaymentRepository 
         customerPaymentDao.setApiSource(customerPaymentsRecord.getApiSource());
         customerPaymentDao.setNotes(customerPaymentsRecord.getNotes());
 
-        if ("API".equals(RequestContext.getRequestSource()))
+        if (!"EVENT".equals(RequestContext.getRequestSource()))
             eventExecutor.fireEvent("CustomerPaymentUpdateEvent", customerPaymentDao);
         return customerPaymentDao;
     }

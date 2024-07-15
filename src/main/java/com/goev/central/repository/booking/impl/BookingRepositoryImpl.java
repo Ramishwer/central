@@ -9,6 +9,7 @@ import com.goev.lib.enums.RecordState;
 import com.goev.record.central.tables.records.BookingsRecord;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.joda.time.DateTime;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
@@ -40,7 +41,7 @@ public class BookingRepositoryImpl implements BookingRepository {
         bookingDao.setNotes(bookingsRecord.getNotes());
 
 
-        if ("API".equals(RequestContext.getRequestSource()))
+        if (!"EVENT".equals(RequestContext.getRequestSource()))
             eventExecutor.fireEvent("BookingSaveEvent", bookingDao);
         return bookingDao;
     }
@@ -59,7 +60,7 @@ public class BookingRepositoryImpl implements BookingRepository {
         bookingDao.setState(bookingsRecord.getState());
         bookingDao.setApiSource(bookingsRecord.getApiSource());
         bookingDao.setNotes(bookingsRecord.getNotes());
-        if ("API".equals(RequestContext.getRequestSource()))
+        if (!"EVENT".equals(RequestContext.getRequestSource()))
             eventExecutor.fireEvent("BookingUpdateEvent", bookingDao);
         return bookingDao;
     }
@@ -95,7 +96,7 @@ public class BookingRepositoryImpl implements BookingRepository {
 
     @Override
     public List<BookingDao> findAllActive(String status, String subStatus) {
-        if(subStatus == null)
+        if (subStatus == null)
             return context.selectFrom(BOOKINGS)
                     .where(BOOKINGS.STATUS.eq(status))
                     .and(BOOKINGS.STATE.eq(RecordState.ACTIVE.name()))
@@ -105,6 +106,16 @@ public class BookingRepositoryImpl implements BookingRepository {
         return context.selectFrom(BOOKINGS)
                 .where(BOOKINGS.STATUS.eq(status))
                 .and(BOOKINGS.SUB_STATUS.eq(subStatus))
+                .and(BOOKINGS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(BOOKINGS.IS_ACTIVE.eq(true))
+                .fetchInto(BookingDao.class);
+    }
+
+    @Override
+    public List<BookingDao> findAllActiveWithTime(DateTime start, DateTime end) {
+        return context.selectFrom(BOOKINGS)
+                .where(BOOKINGS.STATUS.eq("CONFIRMED"))
+                .and(BOOKINGS.PLANNED_START_TIME.between(start, end))
                 .and(BOOKINGS.STATE.eq(RecordState.ACTIVE.name()))
                 .and(BOOKINGS.IS_ACTIVE.eq(true))
                 .fetchInto(BookingDao.class);

@@ -86,4 +86,23 @@ public class ShiftConfigurationRepositoryImpl implements ShiftConfigurationRepos
     public List<ShiftConfigurationDao> findAllActive() {
         return context.selectFrom(SHIFT_CONFIGURATIONS).fetchInto(ShiftConfigurationDao.class);
     }
+
+    @Override
+    public List<ShiftConfigurationDao> findByShiftId(Integer shiftId) {
+        return context.selectFrom(SHIFT_CONFIGURATIONS)
+                .where(SHIFT_CONFIGURATIONS.SHIFT_ID.eq(shiftId))
+                .and(SHIFT_CONFIGURATIONS.IS_ACTIVE.eq(true))
+                .and(SHIFT_CONFIGURATIONS.STATE.eq(RecordState.ACTIVE.name()))
+                .fetchInto(ShiftConfigurationDao.class);
+    }
+
+    @Override
+    public ShiftConfigurationDao findByShiftIdAndDay(Integer shiftId, int day) {
+        return context.selectFrom(SHIFT_CONFIGURATIONS)
+                .where(SHIFT_CONFIGURATIONS.SHIFT_ID.eq(shiftId))
+                .and(SHIFT_CONFIGURATIONS.DAY.eq(String.valueOf(day)))
+                .and(SHIFT_CONFIGURATIONS.IS_ACTIVE.eq(true))
+                .and(SHIFT_CONFIGURATIONS.STATE.eq(RecordState.ACTIVE.name()))
+                .fetchOneInto(ShiftConfigurationDao.class);
+    }
 }

@@ -38,7 +38,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
         customer.setApiSource(customersRecord.getApiSource());
         customer.setNotes(customersRecord.getNotes());
 
-        if ("API".equals(RequestContext.getRequestSource()))
+        if (!"EVENT".equals(RequestContext.getRequestSource()))
             eventExecutor.fireEvent("CustomerSaveEvent", customer);
         return customer;
     }
@@ -58,7 +58,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
         customer.setApiSource(customersRecord.getApiSource());
         customer.setNotes(customersRecord.getNotes());
 
-        if ("API".equals(RequestContext.getRequestSource()))
+        if (!"EVENT".equals(RequestContext.getRequestSource()))
             eventExecutor.fireEvent("CustomerUpdateEvent", customer);
         return customer;
     }

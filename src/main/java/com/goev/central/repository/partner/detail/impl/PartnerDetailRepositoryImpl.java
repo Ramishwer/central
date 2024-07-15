@@ -37,7 +37,7 @@ public class PartnerDetailRepositoryImpl implements PartnerDetailRepository {
         detail.setState(partnerDetailsRecord.getState());
         detail.setApiSource(partnerDetailsRecord.getApiSource());
         detail.setNotes(partnerDetailsRecord.getNotes());
-        if ("API".equals(RequestContext.getRequestSource()))
+        if (!"EVENT".equals(RequestContext.getRequestSource()))
             eventExecutor.fireEvent("PartnerDetailSaveEvent", detail);
         return detail;
     }
@@ -57,7 +57,7 @@ public class PartnerDetailRepositoryImpl implements PartnerDetailRepository {
         detail.setApiSource(partnerDetailsRecord.getApiSource());
         detail.setNotes(partnerDetailsRecord.getNotes());
 
-        if ("API".equals(RequestContext.getRequestSource()))
+        if (!"EVENT".equals(RequestContext.getRequestSource()))
             eventExecutor.fireEvent("PartnerDetailUpdateEvent", detail);
 
         return detail;

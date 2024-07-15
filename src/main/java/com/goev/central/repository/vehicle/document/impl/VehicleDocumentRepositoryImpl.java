@@ -40,7 +40,7 @@ public class VehicleDocumentRepositoryImpl implements VehicleDocumentRepository 
         vehicleDocument.setApiSource(vehiclesDocumentRecord.getApiSource());
         vehicleDocument.setNotes(vehiclesDocumentRecord.getNotes());
 
-        if ("API".equals(RequestContext.getRequestSource()))
+        if (!"EVENT".equals(RequestContext.getRequestSource()))
             eventExecutor.fireEvent("VehicleDocumentSaveEvent", vehicleDocument);
 
         return vehicleDocument;
@@ -61,7 +61,7 @@ public class VehicleDocumentRepositoryImpl implements VehicleDocumentRepository 
         vehicleDocument.setApiSource(vehiclesDocumentRecord.getApiSource());
         vehicleDocument.setNotes(vehiclesDocumentRecord.getNotes());
 
-        if ("API".equals(RequestContext.getRequestSource()))
+        if (!"EVENT".equals(RequestContext.getRequestSource()))
             eventExecutor.fireEvent("VehicleDocumentUpdateEvent", vehicleDocument);
         return vehicleDocument;
     }

@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @Slf4j
 @RestController
 @RequestMapping(value = "/api/v1/shift-management")
@@ -18,24 +20,13 @@ public class ShiftConfigurationController {
     private final ShiftConfigurationService shiftConfigurationService;
 
     @GetMapping("/shifts/{shift-uuid}/configurations")
-    public ResponseDto<PaginatedResponseDto<ShiftConfigurationDto>> getShiftConfigurations(@PathVariable(value = "shift-uuid") String shiftUUID, @RequestParam("count") Integer count,
-                                                                                           @RequestParam("start") Integer start,
-                                                                                           @RequestParam("from") Long from,
-                                                                                           @RequestParam("to") Long to,
-                                                                                           @RequestParam("lastUUID") String lastElementUUID) {
+    public ResponseDto<Map<String,ShiftConfigurationDto>> getShiftConfigurations(@PathVariable(value = "shift-uuid") String shiftUUID) {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, shiftConfigurationService.getShiftConfigurations(shiftUUID));
     }
 
-
-    @GetMapping("/shifts/{shift-uuid}/configurations/{configuration-uuid}")
-    public ResponseDto<ShiftConfigurationDto> getShiftConfigurationDetails(@PathVariable(value = "shift-uuid") String shiftUUID, @PathVariable(value = "configuration-uuid") String configurationUUID) {
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, shiftConfigurationService.getShiftConfigurationDetails(shiftUUID, configurationUUID));
-    }
-
-
     @PostMapping("/shifts/{shift-uuid}/configurations")
-    public ResponseDto<ShiftConfigurationDto> createShiftConfiguration(@PathVariable(value = "shift-uuid") String shiftUUID, @RequestBody ShiftConfigurationDto shiftConfigurationDto) {
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, shiftConfigurationService.createShiftConfiguration(shiftUUID, shiftConfigurationDto));
+    public ResponseDto<Map<String,ShiftConfigurationDto>> createShiftConfiguration(@PathVariable(value = "shift-uuid") String shiftUUID, @RequestBody Map<String,ShiftConfigurationDto> shiftConfiguration) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, shiftConfigurationService.createShiftConfiguration(shiftUUID, shiftConfiguration));
     }
 
     @PutMapping("/shifts/{shift-uuid}/configurations/{configuration-uuid}")

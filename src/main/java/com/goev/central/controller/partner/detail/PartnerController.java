@@ -1,7 +1,9 @@
 package com.goev.central.controller.partner.detail;
 
 import com.goev.central.dto.common.PaginatedResponseDto;
+import com.goev.central.dto.partner.ActionDto;
 import com.goev.central.dto.partner.PartnerViewDto;
+import com.goev.central.dto.partner.detail.PartnerDto;
 import com.goev.central.service.partner.detail.PartnerService;
 import com.goev.lib.dto.ResponseDto;
 import com.goev.lib.dto.StatusDto;
@@ -30,5 +32,10 @@ public class PartnerController {
     @DeleteMapping("/partners/{partner-uuid}")
     public ResponseDto<Boolean> deleteAccount(@PathVariable(value = "partner-uuid") String partnerUUID) {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerService.deletePartner(partnerUUID));
+    }
+
+    @PostMapping("/partners/{partner-uuid}")
+    public ResponseDto<PartnerDto> updatePartner(@PathVariable("partner-uuid") String partnerUUID, @RequestBody ActionDto actionDto) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerService.updatePartner(partnerUUID, actionDto));
     }
 }

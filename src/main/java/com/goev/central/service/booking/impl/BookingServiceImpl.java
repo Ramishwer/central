@@ -5,6 +5,7 @@ import com.goev.central.dao.booking.BookingDao;
 import com.goev.central.dto.booking.BookingDto;
 import com.goev.central.dto.booking.BookingViewDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
+import com.goev.central.dto.customer.CustomerViewDto;
 import com.goev.central.dto.partner.PartnerViewDto;
 import com.goev.central.dto.vehicle.VehicleViewDto;
 import com.goev.central.repository.booking.BookingRepository;
@@ -36,6 +37,7 @@ public class BookingServiceImpl implements BookingService {
         for (BookingDao bookingDao : bookingDaos) {
             result.getElements().add(BookingViewDto.builder()
                     .uuid(bookingDao.getUuid())
+                    .customerDetails(ApplicationConstants.GSON.fromJson(bookingDao.getCustomerDetails(), CustomerViewDto.class))
                     .partnerDetails(ApplicationConstants.GSON.fromJson(bookingDao.getPartnerDetails(), PartnerViewDto.class))
                     .vehicleDetails(ApplicationConstants.GSON.fromJson(bookingDao.getVehicleDetails(), VehicleViewDto.class))
                     .status(bookingDao.getStatus())
@@ -43,6 +45,7 @@ public class BookingServiceImpl implements BookingService {
                     .startLocationDetails(ApplicationConstants.GSON.fromJson(bookingDao.getStartLocationDetails(), LatLongDto.class))
                     .endLocationDetails(ApplicationConstants.GSON.fromJson(bookingDao.getEndLocationDetails(), LatLongDto.class))
                     .plannedStartTime(bookingDao.getPlannedStartTime())
+                    .code(bookingDao.getDisplayCode())
                     .build());
         }
         return result;

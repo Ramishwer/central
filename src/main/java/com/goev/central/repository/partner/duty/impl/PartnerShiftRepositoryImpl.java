@@ -40,7 +40,7 @@ public class PartnerShiftRepositoryImpl implements PartnerShiftRepository {
         partnerShiftDao.setApiSource(partnerShiftsRecord.getApiSource());
         partnerShiftDao.setNotes(partnerShiftsRecord.getNotes());
 
-        if ("API".equals(RequestContext.getRequestSource()))
+        if (!"EVENT".equals(RequestContext.getRequestSource()))
             eventExecutor.fireEvent("PartnerShiftSaveEvent", partnerShiftDao);
         return partnerShiftDao;
     }
@@ -59,7 +59,7 @@ public class PartnerShiftRepositoryImpl implements PartnerShiftRepository {
         partnerShiftDao.setState(partnerShiftsRecord.getState());
         partnerShiftDao.setApiSource(partnerShiftsRecord.getApiSource());
         partnerShiftDao.setNotes(partnerShiftsRecord.getNotes());
-        if ("API".equals(RequestContext.getRequestSource()))
+        if (!"EVENT".equals(RequestContext.getRequestSource()))
             eventExecutor.fireEvent("PartnerShiftUpdateEvent", partnerShiftDao);
         return partnerShiftDao;
     }

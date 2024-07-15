@@ -24,4 +24,6 @@ public interface VehicleRepository {
     List<VehicleDao> findAllByOnboardingStatus(String onboardingStatus);
 
     List<VehicleDao> findAllByStatus(String status);
+
+    List<VehicleDao> findAllActiveWithPartnerId();
 }

@@ -38,7 +38,7 @@ public class LocationRepositoryImpl implements LocationRepository {
         location.setApiSource(locationsRecord.getApiSource());
         location.setNotes(locationsRecord.getNotes());
 
-        if ("API".equals(RequestContext.getRequestSource()))
+        if (!"EVENT".equals(RequestContext.getRequestSource()))
             eventExecutor.fireEvent("LocationSaveEvent",location);
         return location;
     }
@@ -57,7 +57,7 @@ public class LocationRepositoryImpl implements LocationRepository {
         location.setState(locationsRecord.getState());
         location.setApiSource(locationsRecord.getApiSource());
         location.setNotes(locationsRecord.getNotes());
-        if ("API".equals(RequestContext.getRequestSource()))
+        if (!"EVENT".equals(RequestContext.getRequestSource()))
             eventExecutor.fireEvent("LocationUpdateEvent",location);
         return location;
     }

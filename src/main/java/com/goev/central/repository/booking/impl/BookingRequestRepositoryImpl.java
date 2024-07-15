@@ -38,7 +38,7 @@ public class BookingRequestRepositoryImpl implements BookingRequestRepository {
         bookingDao.setNotes(bookingsRecord.getNotes());
 
 
-        if ("API".equals(RequestContext.getRequestSource()))
+        if (!"EVENT".equals(RequestContext.getRequestSource()))
             eventExecutor.fireEvent("BookingSaveEvent", bookingDao);
         return bookingDao;
     }
@@ -57,7 +57,7 @@ public class BookingRequestRepositoryImpl implements BookingRequestRepository {
         bookingDao.setState(bookingsRecord.getState());
         bookingDao.setApiSource(bookingsRecord.getApiSource());
         bookingDao.setNotes(bookingsRecord.getNotes());
-        if ("API".equals(RequestContext.getRequestSource()))
+        if (!"EVENT".equals(RequestContext.getRequestSource()))
             eventExecutor.fireEvent("BookingUpdateEvent", bookingDao);
         return bookingDao;
     }

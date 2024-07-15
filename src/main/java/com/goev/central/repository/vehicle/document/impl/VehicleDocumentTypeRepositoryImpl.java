@@ -37,7 +37,7 @@ public class VehicleDocumentTypeRepositoryImpl implements VehicleDocumentTypeRep
         vehicleDocumentType.setApiSource(vehiclesDocumentTypeRecord.getApiSource());
         vehicleDocumentType.setNotes(vehiclesDocumentTypeRecord.getNotes());
 
-        if ("API".equals(RequestContext.getRequestSource()))
+        if (!"EVENT".equals(RequestContext.getRequestSource()))
             eventExecutor.fireEvent("VehicleDocumentTypeSaveEvent", vehicleDocumentType);
 
         return vehicleDocumentType;
@@ -57,7 +57,7 @@ public class VehicleDocumentTypeRepositoryImpl implements VehicleDocumentTypeRep
         vehicleDocumentType.setState(vehiclesDocumentTypeRecord.getState());
         vehicleDocumentType.setApiSource(vehiclesDocumentTypeRecord.getApiSource());
         vehicleDocumentType.setNotes(vehiclesDocumentTypeRecord.getNotes());
-        if ("API".equals(RequestContext.getRequestSource()))
+        if (!"EVENT".equals(RequestContext.getRequestSource()))
             eventExecutor.fireEvent("VehicleDocumentTypeUpdateEvent", vehicleDocumentType);
         return vehicleDocumentType;
     }

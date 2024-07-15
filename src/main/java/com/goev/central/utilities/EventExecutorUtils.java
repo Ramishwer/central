@@ -49,7 +49,6 @@ public class EventExecutorUtils {
     private final ExecutorService executorService;
 
     public boolean fireEvent(String event, Object data) {
-
         return fireEvent(event, data, DateTime.now());
     }
 
@@ -59,13 +58,9 @@ public class EventExecutorUtils {
         eventObj.setActionByUUID(ApplicationContext.getAuthUUID());
         eventObj.setActionByUUID(ApplicationContext.getAuthUUID());
         if (executionTime.isBefore(DateTime.now().plus(1000L))) {
-            executorService.submit(() -> {
-                SpringContext.getBean(EventProcessor.class).sendEvent(eventObj);
-            });
+            executorService.submit(() -> SpringContext.getBean(EventProcessor.class).sendEvent(eventObj));
         } else {
-            executorService.submit(() -> {
-                SpringContext.getBean(EventProcessor.class).scheduleEvent(eventObj);
-            });
+            executorService.submit(() -> SpringContext.getBean(EventProcessor.class).scheduleEvent(eventObj));
         }
         return true;
     }

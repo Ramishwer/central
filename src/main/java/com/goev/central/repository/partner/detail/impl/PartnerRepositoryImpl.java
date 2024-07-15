@@ -41,7 +41,7 @@ public class PartnerRepositoryImpl implements PartnerRepository {
         partner.setApiSource(partnersRecord.getApiSource());
         partner.setNotes(partnersRecord.getNotes());
 
-        if ("API".equals(RequestContext.getRequestSource()))
+        if (!"EVENT".equals(RequestContext.getRequestSource()))
             eventExecutor.fireEvent("PartnerSaveEvent", partner);
 
         return partner;
@@ -61,7 +61,7 @@ public class PartnerRepositoryImpl implements PartnerRepository {
         partner.setState(partnersRecord.getState());
         partner.setApiSource(partnersRecord.getApiSource());
         partner.setNotes(partnersRecord.getNotes());
-        if ("API".equals(RequestContext.getRequestSource()))
+        if (!"EVENT".equals(RequestContext.getRequestSource()))
             eventExecutor.fireEvent("PartnerUpdateEvent", partner);
         return partner;
     }

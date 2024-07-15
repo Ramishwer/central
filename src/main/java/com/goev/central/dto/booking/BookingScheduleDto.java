@@ -1,6 +1,8 @@
 package com.goev.central.dto.booking;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.goev.central.dao.booking.BookingDao;
+import com.goev.central.dao.booking.BookingScheduleDao;
 import com.goev.central.dto.business.BusinessClientDto;
 import com.goev.central.dto.business.BusinessSegmentDto;
 import com.goev.central.dto.customer.detail.CustomerDetailDto;
@@ -16,9 +18,10 @@ import lombok.*;
 @ToString
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class BookingRequestDto {
+public class BookingScheduleDto {
     private String uuid;
     private String status;
+    private String subStatus;
     private BookingTypeDto bookingType;
     private LatLongDto startLocationDetails;
     private LatLongDto endLocationDetails;
@@ -29,4 +32,11 @@ public class BookingRequestDto {
     private SchedulingDetailDto scheduleDetails;
     private CustomerDetailDto customerDetails;
     private PaymentDetailDto paymentDetails;
+
+    public static BookingScheduleDto fromDao(BookingScheduleDao bookingDao) {
+        return BookingScheduleDto.builder()
+                .uuid(bookingDao.getUuid())
+                .build();
+    }
+
 }

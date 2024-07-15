@@ -2,6 +2,7 @@ package com.goev.central.dto.shift;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.goev.central.dao.shift.ShiftConfigurationDao;
 import com.goev.central.dto.payout.PayoutModelDto;
 import lombok.*;
 
@@ -26,6 +27,22 @@ public class ShiftConfigurationDto {
     private PayoutModelDto payoutModel;
     private String startRules;
     private String endRules;
+
+    public static ShiftConfigurationDto fromDao(ShiftConfigurationDao shiftConfigurationDao, ShiftDto shiftDto, PayoutModelDto payoutModelDto) {
+        return ShiftConfigurationDto.builder()
+                .uuid(shiftConfigurationDao.getUuid())
+                .day(shiftConfigurationDao.getDay())
+                .shift(shiftDto)
+                .payoutModel(payoutModelDto)
+                .estimatedIn(shiftConfigurationDao.getEstimatedIn())
+                .estimatedOut(shiftConfigurationDao.getEstimatedOut())
+                .maximumIn(shiftConfigurationDao.getMaximumIn())
+                .minimumIn(shiftConfigurationDao.getMinimumIn())
+                .minimumOut(shiftConfigurationDao.getMinimumOut())
+                .maximumOut(shiftConfigurationDao.getMaximumOut())
+                .autoOut(shiftConfigurationDao.getAutoOut())
+                .build();
+    }
 }
 
 

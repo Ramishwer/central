@@ -1,16 +1,15 @@
 package com.goev.central.service.shift;
 
-import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.shift.ShiftConfigurationDto;
 
+import java.util.Map;
+
 public interface ShiftConfigurationService {
-    PaginatedResponseDto<ShiftConfigurationDto> getShiftConfigurations(String modelUUID);
+    Map<String,ShiftConfigurationDto> getShiftConfigurations(String shiftUUID);
 
-    ShiftConfigurationDto createShiftConfiguration(String modelUUID, ShiftConfigurationDto shiftConfigurationDto);
+    Map<String,ShiftConfigurationDto> createShiftConfiguration(String shiftUUID,  Map<String,ShiftConfigurationDto> shiftConfiguration);
 
-    ShiftConfigurationDto updateShiftConfiguration(String modelUUID, String shiftConfigurationUUID, ShiftConfigurationDto shiftConfigurationDto);
+    ShiftConfigurationDto updateShiftConfiguration(String shiftUUID, String shiftConfigurationUUID, ShiftConfigurationDto shiftConfigurationDto);
 
-    ShiftConfigurationDto getShiftConfigurationDetails(String modelUUID, String shiftConfigurationUUID);
-
-    Boolean deleteShiftConfiguration(String modelUUID, String shiftConfigurationUUID);
+    Boolean deleteShiftConfiguration(String shiftUUID, String shiftConfigurationUUID);
 }

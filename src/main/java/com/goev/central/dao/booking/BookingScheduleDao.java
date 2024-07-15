@@ -1,6 +1,7 @@
 package com.goev.central.dao.booking;
 
 import com.goev.central.dto.booking.BookingDto;
+import com.goev.central.dto.booking.BookingScheduleDto;
 import com.goev.lib.dao.BaseDao;
 import lombok.*;
 import org.joda.time.DateTime;
@@ -10,7 +11,7 @@ import org.joda.time.DateTime;
 @Getter
 @Setter
 @ToString
-public class BookingDao extends BaseDao {
+public class BookingScheduleDao extends BaseDao {
     private Integer bookingTypeId;
     private String bookingTypeDetails;
     private String status;
@@ -18,18 +19,12 @@ public class BookingDao extends BaseDao {
     private String startLocationDetails;
     private String endLocationDetails;
     private Integer bookingDetailsId;
-    private String partnerDetails;
-    private String vehicleDetails;
     private String customerDetails;
     private String viewInfo;
     private Integer customerId;
-    private Integer partnerId;
-    private Integer vehicleId;
-    private DateTime plannedStartTime;
-    private String displayCode;
 
-    public static BookingDao fromDto(BookingDto bookingDto) {
-        BookingDao bookingDao = new BookingDao();
+    public static BookingScheduleDao fromDto(BookingScheduleDto bookingDto) {
+        BookingScheduleDao bookingDao = new BookingScheduleDao();
         bookingDao.setUuid(bookingDto.getUuid());
         return bookingDao;
     }

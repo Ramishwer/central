@@ -38,7 +38,7 @@ public class AssetRepositoryImpl implements AssetRepository {
         assetDao.setApiSource(assetsRecord.getApiSource());
         assetDao.setNotes(assetsRecord.getNotes());
 
-         if ("API".equals(RequestContext.getRequestSource()))
+         if (!"EVENT".equals(RequestContext.getRequestSource()))
              eventExecutor.fireEvent("AssetSaveEvent", assetDao);
         return assetDao;
     }
@@ -58,7 +58,7 @@ public class AssetRepositoryImpl implements AssetRepository {
         assetDao.setApiSource(assetsRecord.getApiSource());
         assetDao.setNotes(assetsRecord.getNotes());
 
-        if ("API".equals(RequestContext.getRequestSource()))
+        if (!"EVENT".equals(RequestContext.getRequestSource()))
             eventExecutor.fireEvent("AssetUpdateEvent", assetDao);
         return assetDao;
     }
