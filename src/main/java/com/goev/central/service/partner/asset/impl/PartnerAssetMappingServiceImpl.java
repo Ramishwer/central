@@ -2,12 +2,15 @@ package com.goev.central.service.partner.asset.impl;
 
 
 import com.goev.central.dao.asset.AssetDao;
+import com.goev.central.dao.asset.AssetTypeDao;
 import com.goev.central.dao.partner.asset.PartnerAssetMappingDao;
 import com.goev.central.dao.partner.detail.PartnerDao;
 import com.goev.central.dto.asset.AssetDto;
+import com.goev.central.dto.asset.AssetTypeDto;
 import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.repository.asset.AssetRepository;
+import com.goev.central.repository.asset.AssetTypeRepository;
 import com.goev.central.repository.partner.asset.PartnerAssetMappingRepository;
 import com.goev.central.repository.partner.detail.PartnerRepository;
 import com.goev.central.service.partner.asset.PartnerAssetMappingService;
@@ -30,6 +33,7 @@ public class PartnerAssetMappingServiceImpl implements PartnerAssetMappingServic
     private final PartnerRepository partnerRepository;
     private final PartnerAssetMappingRepository partnerAssetMappingRepository;
     private final AssetRepository assetRepository;
+    private final AssetTypeRepository assetTypeRepository;
 
 
     @Override
@@ -44,7 +48,10 @@ public class PartnerAssetMappingServiceImpl implements PartnerAssetMappingServic
 
         List<AssetDao> assets = assetRepository.findAllByIds(mappings.stream().map(PartnerAssetMappingDao::getAssetId).collect(Collectors.toList()));
 
-        return PaginatedResponseDto.<AssetDto>builder().elements(assets.stream().map(AssetDto::fromDao).collect(Collectors.toList())).build();
+        return PaginatedResponseDto.<AssetDto>builder().elements(assets.stream().map(x->{
+            AssetTypeDao type = assetTypeRepository.findById(x.getAssetTypeId());
+            return AssetDto.fromDao(x, AssetTypeDto.fromDao(type));
+        }).collect(Collectors.toList())).build();
     }
 
     @Override

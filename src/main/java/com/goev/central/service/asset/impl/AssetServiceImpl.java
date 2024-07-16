@@ -27,6 +27,7 @@ import com.goev.central.repository.partner.detail.PartnerRepository;
 import com.goev.central.repository.vehicle.asset.VehicleAssetMappingRepository;
 import com.goev.central.repository.vehicle.detail.VehicleRepository;
 import com.goev.central.service.asset.AssetService;
+import com.goev.central.utilities.SecretGenerationUtils;
 import com.goev.lib.exceptions.ResponseException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -82,14 +83,14 @@ public class AssetServiceImpl implements AssetService {
         if (type == null)
             throw new ResponseException("Invalid asset type");
         assetDto.setParentType(type.getParentType());
-        return AssetDao.fromDto(assetDto, type.getId());
+        AssetDao dao = AssetDao.fromDto(assetDto, type.getId());
+        dao.setDisplayCode("AST-"+ SecretGenerationUtils.getCode());
+        return dao ;
     }
 
     private AssetDto getAssetDto(AssetDao assetDao) {
         AssetTypeDao type = assetTypeRepository.findById(assetDao.getAssetTypeId());
-        AssetDto assetDto = AssetDto.fromDao(assetDao);
-        assetDto.setType(AssetTypeDto.fromDao(type));
-        return assetDto;
+        return AssetDto.fromDao(assetDao,AssetTypeDto.fromDao(type));
     }
 
     @Override

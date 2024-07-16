@@ -17,6 +17,7 @@ public class AssetDao extends BaseDao {
     private String parentName;
     private String serialNo;
     private Integer assetTypeId;
+    private String displayCode;
 
     public static AssetDao fromDto(AssetDto assetDto, Integer assetTypeId) {
         AssetDao assetDao = new AssetDao();

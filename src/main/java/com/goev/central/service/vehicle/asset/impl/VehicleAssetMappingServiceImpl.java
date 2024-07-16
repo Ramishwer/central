@@ -2,12 +2,15 @@ package com.goev.central.service.vehicle.asset.impl;
 
 
 import com.goev.central.dao.asset.AssetDao;
+import com.goev.central.dao.asset.AssetTypeDao;
 import com.goev.central.dao.vehicle.asset.VehicleAssetMappingDao;
 import com.goev.central.dao.vehicle.detail.VehicleDao;
 import com.goev.central.dto.asset.AssetDto;
+import com.goev.central.dto.asset.AssetTypeDto;
 import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.repository.asset.AssetRepository;
+import com.goev.central.repository.asset.AssetTypeRepository;
 import com.goev.central.repository.vehicle.asset.VehicleAssetMappingRepository;
 import com.goev.central.repository.vehicle.detail.VehicleRepository;
 import com.goev.central.service.vehicle.asset.VehicleAssetMappingService;
@@ -30,6 +33,7 @@ public class VehicleAssetMappingServiceImpl implements VehicleAssetMappingServic
     private final VehicleRepository vehicleRepository;
     private final VehicleAssetMappingRepository vehicleAssetMappingRepository;
     private final AssetRepository assetRepository;
+    private final AssetTypeRepository assetTypeRepository;
 
 
     @Override
@@ -44,7 +48,10 @@ public class VehicleAssetMappingServiceImpl implements VehicleAssetMappingServic
 
         List<AssetDao> assets = assetRepository.findAllByIds(mappings.stream().map(VehicleAssetMappingDao::getAssetId).collect(Collectors.toList()));
 
-        return PaginatedResponseDto.<AssetDto>builder().elements(assets.stream().map(AssetDto::fromDao).collect(Collectors.toList())).build();
+        return PaginatedResponseDto.<AssetDto>builder().elements(assets.stream().map(x->{
+                AssetTypeDao type = assetTypeRepository.findById(x.getAssetTypeId());
+        return AssetDto.fromDao(x, AssetTypeDto.fromDao(type));
+        }).collect(Collectors.toList())).build();
     }
 
     @Override

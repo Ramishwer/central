@@ -20,9 +20,10 @@ public class AssetDto {
     private String parentType;
     private String parentName;
     private String serialNo;
+    private String displayCode;
 
 
-    public static AssetDto fromDao(AssetDao assetDao) {
+    public static AssetDto fromDao(AssetDao assetDao,AssetTypeDto assetTypeDto) {
         return AssetDto.builder()
                 .uuid(assetDao.getUuid())
                 .assetDescription(assetDao.getAssetDescription())
@@ -31,6 +32,8 @@ public class AssetDto {
                 .parentType(assetDao.getParentType())
                 .parentName(assetDao.getParentName())
                 .serialNo(assetDao.getSerialNo())
+                .displayCode(assetDao.getDisplayCode())
+                .type(assetTypeDto)
                 .build();
     }
 }

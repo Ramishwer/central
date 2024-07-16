@@ -23,7 +23,7 @@ import org.joda.time.DateTime;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class BookingViewDto {
     private String uuid;
-    private String code;
+    private String displayCode;
     private BookingTypeDto bookingTypeDetails;
     private String status;
     private String subStatus;
