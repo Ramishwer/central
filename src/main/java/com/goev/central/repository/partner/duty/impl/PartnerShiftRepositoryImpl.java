@@ -123,4 +123,14 @@ public class PartnerShiftRepositoryImpl implements PartnerShiftRepository {
                 .and(PARTNER_SHIFTS.IS_ACTIVE.eq(true))
                 .fetchAnyInto(PartnerShiftDao.class);
     }
+
+    @Override
+    public List<PartnerShiftDao> findAllByPartnerIdAndShiftIdAndStatus(Integer partnerId, Integer shiftId, String status) {
+        return context.selectFrom(PARTNER_SHIFTS)
+                .where(PARTNER_SHIFTS.PARTNER_ID.eq(partnerId))
+                .and(PARTNER_SHIFTS.SHIFT_ID.eq(shiftId))
+                .and(PARTNER_SHIFTS.STATUS.eq(status))
+                .and(PARTNER_SHIFTS.IS_ACTIVE.eq(true))
+                .fetchInto(PartnerShiftDao.class);
+    }
 }

@@ -8,6 +8,7 @@ import com.goev.central.dao.shift.ShiftConfigurationDao;
 import com.goev.central.dto.partner.PartnerViewDto;
 import com.goev.central.dto.partner.duty.PartnerDutyDto;
 import com.goev.central.dto.partner.duty.PartnerShiftDto;
+import com.goev.central.enums.partner.PartnerShiftStatus;
 import com.goev.central.enums.partner.PartnerStatus;
 import com.goev.central.enums.partner.PartnerSubStatus;
 import com.goev.central.repository.partner.detail.PartnerRepository;
@@ -53,12 +54,14 @@ public class PartnerShiftCreationScheduler {
                     partnerShiftDao.setShiftConfig(ApplicationConstants.GSON.toJson(shiftConfigurationDao));
                     partnerShiftDao.setShiftId(partnerShiftMappingDao.getShiftId());
                     partnerShiftDao.setPartnerId(partner.getId());
+                    partnerShiftDao.setStatus(PartnerShiftStatus.PENDING.name());
                     partnerShiftDao = partnerShiftRepository.save(partnerShiftDao);
 
                     partner.setDutyDetails(ApplicationConstants.GSON.toJson(PartnerDutyDto.builder().partner(PartnerViewDto.fromDao(partner))
                             .shiftDetails(PartnerShiftDto.fromDao(partnerShiftDao, PartnerViewDto.fromDao(partner)))
                             .build()));
                     partner.setSubStatus(PartnerSubStatus.DUTY_ASSIGNED.name());
+                    partner.setPartnerShiftId(partnerShiftDao.getId());
                     partnerRepository.update(partner);
 
                 }

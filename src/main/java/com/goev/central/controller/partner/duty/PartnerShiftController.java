@@ -36,7 +36,7 @@ public class PartnerShiftController {
     }
 
     @DeleteMapping("/partners/{partner-uuid}/shift-mappings/{partner-shift-mapping-uuid}")
-    public ResponseDto<Boolean> createShift(@PathVariable(value = "partner-uuid") String partnerUUID,@PathVariable(value = "partner-shift-mapping-uuid") String partnerShiftMappingUUID)  {
+    public ResponseDto<Boolean> deleteShiftMapping(@PathVariable(value = "partner-uuid") String partnerUUID,@PathVariable(value = "partner-shift-mapping-uuid") String partnerShiftMappingUUID)  {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerShiftService.deleteShiftMapping(partnerUUID, partnerShiftMappingUUID));
     }
 

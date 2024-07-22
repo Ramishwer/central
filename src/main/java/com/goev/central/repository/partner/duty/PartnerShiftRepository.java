@@ -26,4 +26,6 @@ public interface PartnerShiftRepository {
     List<PartnerShiftDao> findAllByStatus(String status, PageDto page);
 
     PartnerShiftDao findByPartnerIdShiftIdDayDate(Integer partnerId, Integer shiftId, String currentDay, DateTime date);
+
+    List<PartnerShiftDao> findAllByPartnerIdAndShiftIdAndStatus(Integer id, Integer shiftId, String name);
 }

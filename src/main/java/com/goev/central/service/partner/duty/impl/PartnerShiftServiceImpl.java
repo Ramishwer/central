@@ -16,6 +16,7 @@ import com.goev.central.dto.partner.duty.PartnerShiftMappingDto;
 import com.goev.central.dto.payout.PayoutModelDto;
 import com.goev.central.dto.shift.ShiftConfigurationDto;
 import com.goev.central.dto.shift.ShiftDto;
+import com.goev.central.enums.partner.PartnerShiftStatus;
 import com.goev.central.enums.partner.PartnerStatus;
 import com.goev.central.enums.partner.PartnerSubStatus;
 import com.goev.central.repository.partner.detail.PartnerRepository;
@@ -122,6 +123,14 @@ public class PartnerShiftServiceImpl implements PartnerShiftService {
             throw new ResponseException("No shift mapping found for Id :" + partnerShiftMappingUUID);
 
         partnerShiftMappingRepository.delete(partnerShiftMappingDao.getId());
+
+
+        List<PartnerShiftDao> allPendingShifts = partnerShiftRepository.findAllByPartnerIdAndShiftIdAndStatus(partner.getId(),partnerShiftMappingDao.getShiftId(), PartnerShiftStatus.PENDING.name());
+        if(!CollectionUtils.isEmpty(allPendingShifts)){
+            for(PartnerShiftDao partnerShiftDao : allPendingShifts){
+                partnerRepository.delete(partnerShiftDao.getId());
+            }
+        }
         return true;
     }
 
