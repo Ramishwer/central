@@ -186,7 +186,7 @@ public class PartnerShiftServiceImpl implements PartnerShiftService {
         List<PartnerShiftMappingDto> result = new ArrayList<>();
 
         for (PartnerShiftMappingDao partnerShiftMappingDao : partnerShiftMappingDaoList) {
-            ShiftDao shiftDao = shiftRepository.findById(partnerShiftMappingDao.getId());
+            ShiftDao shiftDao = shiftRepository.findById(partnerShiftMappingDao.getShiftId());
             if (shiftDao == null)
                 continue;
             result.add(PartnerShiftMappingDto.fromDao(partnerShiftMappingDao, PartnerViewDto.fromDao(partner), ShiftDto.fromDao(shiftDao)));
