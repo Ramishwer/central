@@ -101,6 +101,7 @@ public class BookingRepositoryImpl implements BookingRepository {
                     .where(BOOKINGS.STATUS.eq(status))
                     .and(BOOKINGS.STATE.eq(RecordState.ACTIVE.name()))
                     .and(BOOKINGS.IS_ACTIVE.eq(true))
+                    .orderBy(BOOKINGS.PLANNED_START_TIME.asc())
                     .fetchInto(BookingDao.class);
 
         return context.selectFrom(BOOKINGS)
@@ -108,6 +109,7 @@ public class BookingRepositoryImpl implements BookingRepository {
                 .and(BOOKINGS.SUB_STATUS.eq(subStatus))
                 .and(BOOKINGS.STATE.eq(RecordState.ACTIVE.name()))
                 .and(BOOKINGS.IS_ACTIVE.eq(true))
+                .orderBy(BOOKINGS.PLANNED_START_TIME.asc())
                 .fetchInto(BookingDao.class);
     }
 
@@ -118,6 +120,7 @@ public class BookingRepositoryImpl implements BookingRepository {
                 .and(BOOKINGS.PLANNED_START_TIME.between(start, end))
                 .and(BOOKINGS.STATE.eq(RecordState.ACTIVE.name()))
                 .and(BOOKINGS.IS_ACTIVE.eq(true))
+                .orderBy(BOOKINGS.PLANNED_START_TIME.asc())
                 .fetchInto(BookingDao.class);
     }
 }
