@@ -1,5 +1,6 @@
 package com.goev.central.service.booking;
 
+import com.goev.central.dto.booking.BookingActionDto;
 import com.goev.central.dto.booking.BookingDto;
 import com.goev.central.dto.booking.BookingViewDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
@@ -9,7 +10,7 @@ public interface BookingService {
 
     BookingDto createBooking(BookingDto bookingDto);
 
-    BookingDto updateBooking(String bookingUUID, BookingDto bookingDto);
+    BookingDto updateBooking(String bookingUUID, BookingActionDto bookingActionDto);
 
     BookingDto getBookingDetails(String bookingUUID);
 

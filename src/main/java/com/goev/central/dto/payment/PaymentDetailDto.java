@@ -15,6 +15,8 @@ public class PaymentDetailDto {
     private String uuid;
     private PaymentDto payment;
     private String type;
+    private String paymentMethod;
+    private String paymentMode;
     private String status;
     private String request;
     private String response;

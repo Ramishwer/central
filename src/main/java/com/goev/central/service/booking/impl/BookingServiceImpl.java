@@ -2,13 +2,19 @@ package com.goev.central.service.booking.impl;
 
 import com.goev.central.constant.ApplicationConstants;
 import com.goev.central.dao.booking.BookingDao;
+import com.goev.central.dao.partner.detail.PartnerDao;
+import com.goev.central.dto.booking.BookingActionDto;
 import com.goev.central.dto.booking.BookingDto;
 import com.goev.central.dto.booking.BookingViewDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.customer.CustomerViewDto;
 import com.goev.central.dto.partner.PartnerViewDto;
 import com.goev.central.dto.vehicle.VehicleViewDto;
+import com.goev.central.enums.booking.BookingStatus;
+import com.goev.central.enums.partner.PartnerStatus;
+import com.goev.central.enums.partner.PartnerSubStatus;
 import com.goev.central.repository.booking.BookingRepository;
+import com.goev.central.repository.partner.detail.PartnerRepository;
 import com.goev.central.service.booking.BookingService;
 import com.goev.lib.dto.LatLongDto;
 import com.goev.lib.exceptions.ResponseException;
@@ -26,6 +32,7 @@ import java.util.List;
 public class BookingServiceImpl implements BookingService {
 
     private final BookingRepository bookingRepository;
+    private final PartnerRepository partnerRepository;
 
     @Override
     public PaginatedResponseDto<BookingViewDto> getBookings(String status, String subStatus) {
@@ -70,18 +77,47 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public BookingDto updateBooking(String bookingUUID, BookingDto bookingDto) {
+    public BookingDto updateBooking(String bookingUUID, BookingActionDto bookingActionDto) {
         BookingDao bookingDao = bookingRepository.findByUUID(bookingUUID);
         if (bookingDao == null)
             throw new ResponseException("No booking  found for Id :" + bookingUUID);
-        BookingDao newBookingDao = getBookingDao(bookingDto);
+        switch (bookingActionDto.getAction()){
+//            case RESCHEDULE -> {
+//                bookingDao = rescheduleBooking();
+//            }
+            case CANCEL -> {
+                bookingDao =  cancelBooking(bookingDao,bookingActionDto);
+            }
+//            case ADD_STOP -> {
+//            }
+//            case DELETE_STOP -> {
+//            }
+        }
 
-        newBookingDao.setId(bookingDao.getId());
-        newBookingDao.setUuid(bookingDao.getUuid());
-        bookingDao = bookingRepository.update(newBookingDao);
-        if (bookingDao == null)
-            throw new ResponseException("Error in updating details booking ");
         return getBookingDto(bookingDao);
+    }
+
+    private BookingDao cancelBooking(BookingDao bookingDao, BookingActionDto bookingActionDto) {
+
+        if(BookingStatus.COMPLETED.name().equals(bookingDao.getStatus()))
+            throw new ResponseException("Booking already completed");
+
+        bookingDao.setStatus(BookingStatus.CANCELLED.name());
+        bookingDao.setSubStatus(BookingStatus.CANCELLED.name());
+
+        bookingDao = bookingRepository.update(bookingDao);
+
+        if(bookingDao.getPartnerId()!=null){
+            PartnerDao partnerDao = partnerRepository.findById(bookingDao.getPartnerId());
+            if(partnerDao.getBookingId()!=null && partnerDao.getBookingId().equals(bookingDao.getId()) && PartnerStatus.ON_BOOKING.name().equals(partnerDao.getStatus())){
+                partnerDao.setBookingDetails(null);
+                partnerDao.setBookingId(null);
+                partnerDao.setStatus(PartnerStatus.ONLINE.name());
+                partnerDao.setSubStatus(PartnerSubStatus.NO_BOOKING.name());
+                partnerRepository.save(partnerDao);
+            }
+        }
+        return bookingDao;
     }
 
     @Override

@@ -44,13 +44,16 @@ public class PartnerShiftCreationScheduler {
         List<PartnerShiftMappingDao> allPartnerMappings = partnerShiftMappingRepository.findAllActive();
         DateTimeFormatter formatter = DateTimeFormat.forPattern("HH:mm");
 
+        int day = DateTime.now().getDayOfWeek();
+        DateTime date = DateTime.now().withTimeAtStartOfDay();
         for (PartnerShiftMappingDao partnerShiftMappingDao : allPartnerMappings) {
 
             PartnerDao partner = partnerRepository.findById(partnerShiftMappingDao.getPartnerId());
             ShiftDao shift = shiftRepository.findById(partnerShiftMappingDao.getShiftId());
-
             if (PartnerStatus.OFF_DUTY.name().equals(partner.getStatus()) && PartnerSubStatus.NO_DUTY.name().equals(partner.getSubStatus())) {
-                int day = DateTime.now().getDayOfWeek();
+                PartnerShiftDao existingShiftDao = partnerShiftRepository.findByPartnerIdShiftIdDayDate(partner.getId(),shift.getId(),String.valueOf(day),date);
+                if( existingShiftDao !=null)
+                    continue;
                 ShiftConfigurationDao shiftConfigurationDao = shiftConfigurationRepository.findByShiftIdAndDay(partnerShiftMappingDao.getShiftId(), day);
 
                 if (shiftConfigurationDao != null) {
@@ -68,6 +71,7 @@ public class PartnerShiftCreationScheduler {
 
                     partnerShiftDao.setType(shift.getShiftType());
                     partnerShiftDao.setStatus(PartnerShiftStatus.PENDING.name());
+                    partnerShiftDao.setDutyDate(DateTime.now().withTimeAtStartOfDay());
                     partnerShiftDao = partnerShiftRepository.save(partnerShiftDao);
 
                     partner.setDutyDetails(ApplicationConstants.GSON.toJson(PartnerDutyDto.builder().partner(PartnerViewDto.fromDao(partner))

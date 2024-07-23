@@ -1,5 +1,6 @@
 package com.goev.central.controller.booking;
 
+import com.goev.central.dto.booking.BookingActionDto;
 import com.goev.central.dto.booking.BookingDto;
 import com.goev.central.dto.booking.BookingViewDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
@@ -36,7 +37,7 @@ public class BookingController {
     }
 
     @PutMapping("/bookings/{booking-uuid}")
-    public ResponseDto<BookingDto> updateBooking(@PathVariable(value = "booking-uuid") String bookingUUID, @RequestBody BookingDto bookingDto) {
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, bookingService.updateBooking(bookingUUID, bookingDto));
+    public ResponseDto<BookingDto> updateBooking(@PathVariable(value = "booking-uuid") String bookingUUID, @RequestBody BookingActionDto bookingActionDto) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, bookingService.updateBooking(bookingUUID, bookingActionDto));
     }
 }

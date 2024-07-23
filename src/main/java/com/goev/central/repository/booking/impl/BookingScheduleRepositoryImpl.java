@@ -111,11 +111,11 @@ public class BookingScheduleRepositoryImpl implements BookingScheduleRepository 
     }
 
     @Override
-    public List<BookingScheduleDao> findAllActiveWithTimeBetween(DateTime start, DateTime end) {
+    public List<BookingScheduleDao> findAllActiveWithTimeBetween(DateTime start) {
         return context.selectFrom(BOOKING_SCHEDULES)
-                .where(BOOKING_SCHEDULES.STATUS.in("PENDING","IN_PROGRESS"))
-                .and(BOOKING_SCHEDULES.APPLICABLE_FROM_TIME.le(end))
-                .and(BOOKING_SCHEDULES.APPLICABLE_FROM_TIME.ge(start))
+                .where(BOOKING_SCHEDULES.STATUS.in("CONFIRMED","IN_PROGRESS"))
+                .and(BOOKING_SCHEDULES.APPLICABLE_FROM_TIME.le(start))
+                .and(BOOKING_SCHEDULES.APPLICABLE_TO_TIME.ge(start).or(BOOKING_SCHEDULES.APPLICABLE_TO_TIME.isNull()))
                 .and(BOOKING_SCHEDULES.STATE.eq(RecordState.ACTIVE.name()))
                 .and(BOOKING_SCHEDULES.IS_ACTIVE.eq(true))
                 .fetchInto(BookingScheduleDao.class);

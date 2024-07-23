@@ -19,6 +19,8 @@ public class PaymentDto {
     private String payingFor;
     private String paymentUUID;
     private String type;
+    private String paymentMethod;
+    private String paymentMode;
     private String status;
     private BookingViewDto booking;
 }

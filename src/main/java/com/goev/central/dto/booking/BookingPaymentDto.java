@@ -20,6 +20,7 @@ import org.joda.time.DateTime;
 public class BookingPaymentDto {
     private String uuid;
     private String paymentMode;
+    private String paymentMethod;
     private String status;
     private Integer amount;
     @JsonSerialize(using = DateTimeSerializer.class)

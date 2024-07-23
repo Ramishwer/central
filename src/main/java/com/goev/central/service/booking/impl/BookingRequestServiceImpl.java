@@ -56,7 +56,8 @@ public class BookingRequestServiceImpl implements BookingRequestService {
                 .endLocationDetails(ApplicationConstants.GSON.fromJson(bookingDao.getEndLocationDetails(), LatLongDto.class))
                 .plannedStartTime(bookingDao.getPlannedStartTime())
                 .displayCode(bookingDao.getDisplayCode())
-                .payment(BookingPaymentDto.builder().paymentMode(bookingRequest.getPaymentDetails().getType()).build())
+                .payment(BookingPaymentDto.builder()
+                        .paymentMode(bookingRequest.getPaymentDetails().getType()).build())
                 .build();
 
 

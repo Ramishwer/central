@@ -30,11 +30,12 @@ import java.util.List;
 public class PartnerAssignmentScheduler {
 
     private final BookingRepository bookingRepository;
+
     private final PartnerRepository partnerRepository;
 
-    @Scheduled(fixedRate =  2* 60 * 1000)
+    @Scheduled(fixedRate = 60 * 1000)
     public void reportCurrentTime() {
-        log.info("The {} time is now {}",this.getClass().getName() ,DateTime.now());
+        log.info("The {} time is now {}", this.getClass().getName(), DateTime.now());
         List<BookingDao> allBooking = bookingRepository.findAllActive(BookingStatus.IN_PROGRESS.name(), BookingSubStatus.UNASSIGNED.name());
 
         for (BookingDao bookingDao : allBooking) {
@@ -43,10 +44,12 @@ public class PartnerAssignmentScheduler {
             if (CollectionUtils.isEmpty(partners))
                 return;
             PartnerDao partnerDao = partners.get(0);
-            if(bookingDao.getPartnerId()!=null)
+            if (bookingDao.getPartnerId() != null) {
                 partnerDao = partnerRepository.findById(bookingDao.getPartnerId());
-            else
-                continue;
+
+                if (partnerDao == null)
+                    continue;
+            }
 
 
             if (partnerDao != null && PartnerStatus.ONLINE.name().equals(partnerDao.getStatus()) && PartnerSubStatus.NO_BOOKING.name().equals(partnerDao.getSubStatus())) {

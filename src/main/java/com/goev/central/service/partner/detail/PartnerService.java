@@ -1,8 +1,8 @@
 package com.goev.central.service.partner.detail;
 
 import com.goev.central.dto.common.PaginatedResponseDto;
-import com.goev.central.dto.partner.ActionDto;
 import com.goev.central.dto.partner.PartnerViewDto;
+import com.goev.central.dto.partner.detail.PartnerActionDto;
 import com.goev.central.dto.partner.detail.PartnerDto;
 
 public interface PartnerService {
@@ -13,7 +13,7 @@ public interface PartnerService {
 
     Boolean deletePartner(String partnerUUID);
 
-    PartnerDto updatePartner(String partnerUUID, ActionDto actionDto);
+    PartnerDto updatePartner(String partnerUUID, PartnerActionDto actionDto);
 
     PaginatedResponseDto<PartnerDto> getPartnerStatuses(String status);
 

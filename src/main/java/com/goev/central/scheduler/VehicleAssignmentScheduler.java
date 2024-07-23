@@ -22,7 +22,7 @@ import java.util.List;
 public class VehicleAssignmentScheduler {
     private final VehicleRepository vehicleRepository;
     private final PartnerRepository partnerRepository;
-    @Scheduled(fixedRate = 2*60 * 1000)
+    @Scheduled(fixedRate = 1*60 * 1000)
     public void reportCurrentTime() {
         log.info("The {} time is now {}",this.getClass().getName() ,DateTime.now());
         List<VehicleDao> allVehicles =vehicleRepository.findAllActiveWithPartnerId();

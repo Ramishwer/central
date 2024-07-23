@@ -20,5 +20,5 @@ public interface BookingScheduleRepository {
 
     List<BookingScheduleDao> findAllActive(String status, String subStatus);
 
-    List<BookingScheduleDao> findAllActiveWithTimeBetween(DateTime start, DateTime end);
+    List<BookingScheduleDao> findAllActiveWithTimeBetween(DateTime start);
 }
