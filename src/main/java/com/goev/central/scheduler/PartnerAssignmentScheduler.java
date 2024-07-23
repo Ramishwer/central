@@ -38,9 +38,6 @@ public class PartnerAssignmentScheduler {
         List<BookingDao> allBooking = bookingRepository.findAllActive(BookingStatus.IN_PROGRESS.name(), BookingSubStatus.UNASSIGNED.name());
 
         for (BookingDao bookingDao : allBooking) {
-
-
-
             List<PartnerDao> partners = partnerRepository.findAllByStatus(Collections.singletonList("ONLINE"));
 
             if (CollectionUtils.isEmpty(partners))
@@ -48,6 +45,8 @@ public class PartnerAssignmentScheduler {
             PartnerDao partnerDao = partners.get(0);
             if(bookingDao.getPartnerId()!=null)
                 partnerDao = partnerRepository.findById(bookingDao.getPartnerId());
+            else
+                continue;
 
 
             if (partnerDao != null && PartnerStatus.ONLINE.name().equals(partnerDao.getStatus()) && PartnerSubStatus.NO_BOOKING.name().equals(partnerDao.getSubStatus())) {
