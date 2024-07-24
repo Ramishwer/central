@@ -3,6 +3,7 @@ package com.goev.central.scheduler;
 import com.goev.central.constant.ApplicationConstants;
 import com.goev.central.dao.booking.BookingDao;
 import com.goev.central.dao.partner.detail.PartnerDao;
+import com.goev.central.dao.vehicle.detail.VehicleDao;
 import com.goev.central.dto.booking.BookingViewDto;
 import com.goev.central.dto.customer.CustomerViewDto;
 import com.goev.central.dto.partner.PartnerViewDto;
@@ -13,6 +14,7 @@ import com.goev.central.enums.partner.PartnerStatus;
 import com.goev.central.enums.partner.PartnerSubStatus;
 import com.goev.central.repository.booking.BookingRepository;
 import com.goev.central.repository.partner.detail.PartnerRepository;
+import com.goev.central.repository.vehicle.detail.VehicleRepository;
 import com.goev.lib.dto.LatLongDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +34,7 @@ public class PartnerAssignmentScheduler {
     private final BookingRepository bookingRepository;
 
     private final PartnerRepository partnerRepository;
+    private final VehicleRepository vehicleRepository;
 
     @Scheduled(fixedRate = 60 * 1000)
     public void reportCurrentTime() {
@@ -53,17 +56,18 @@ public class PartnerAssignmentScheduler {
 
 
             if (partnerDao != null && PartnerStatus.ONLINE.name().equals(partnerDao.getStatus()) && PartnerSubStatus.NO_BOOKING.name().equals(partnerDao.getSubStatus())) {
+                VehicleDao vehicleDao = vehicleRepository.findById(partnerDao.getVehicleId());
                 bookingDao.setStatus(BookingStatus.IN_PROGRESS.name());
                 bookingDao.setSubStatus(BookingSubStatus.ASSIGNED.name());
                 bookingDao.setPartnerId(partnerDao.getId());
-                bookingDao.setPartnerDetails(partnerDao.getViewInfo());
-                bookingDao.setVehicleDetails(partnerDao.getVehicleDetails());
+                bookingDao.setPartnerDetails(ApplicationConstants.GSON.toJson(PartnerViewDto.fromDao(partnerDao)));
+                bookingDao.setVehicleDetails(ApplicationConstants.GSON.toJson(VehicleViewDto.fromDao(vehicleDao)));
 
 
                 BookingViewDto viewDto = BookingViewDto.builder()
                         .uuid(bookingDao.getUuid())
-                        .partnerDetails(ApplicationConstants.GSON.fromJson(bookingDao.getPartnerDetails(), PartnerViewDto.class))
-                        .vehicleDetails(ApplicationConstants.GSON.fromJson(bookingDao.getVehicleDetails(), VehicleViewDto.class))
+                        .partnerDetails(PartnerViewDto.fromDao(partnerDao))
+                        .vehicleDetails(VehicleViewDto.fromDao(vehicleDao))
                         .status(bookingDao.getStatus())
                         .subStatus(bookingDao.getSubStatus())
                         .customerDetails(ApplicationConstants.GSON.fromJson(bookingDao.getCustomerDetails(), CustomerViewDto.class))

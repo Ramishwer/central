@@ -1,7 +1,9 @@
 package com.goev.central.scheduler;
 
+import com.goev.central.constant.ApplicationConstants;
 import com.goev.central.dao.partner.detail.PartnerDao;
 import com.goev.central.dao.vehicle.detail.VehicleDao;
+import com.goev.central.dto.vehicle.VehicleViewDto;
 import com.goev.central.enums.partner.PartnerStatus;
 import com.goev.central.enums.partner.PartnerSubStatus;
 import com.goev.central.repository.partner.detail.PartnerRepository;
@@ -33,7 +35,7 @@ public class VehicleAssignmentScheduler {
                 partnerDao.setStatus(PartnerStatus.ON_DUTY.name());
                 partnerDao.setSubStatus(PartnerSubStatus.VEHICLE_ALLOTTED.name());
                 partnerDao.setVehicleId(vehicle.getId());
-                partnerDao.setVehicleDetails(vehicle.getViewInfo());
+                partnerDao.setVehicleDetails(ApplicationConstants.GSON.toJson(VehicleViewDto.fromDao(vehicle)));
                 partnerRepository.update(partnerDao);
             }
 

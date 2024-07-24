@@ -39,6 +39,8 @@ public class PartnerViewDto {
     }
 
     public static PartnerViewDto fromDao(PartnerDao partnerDao) {
-        return ApplicationConstants.GSON.fromJson(partnerDao.getViewInfo(), PartnerViewDto.class);
+        PartnerViewDto result =ApplicationConstants.GSON.fromJson(partnerDao.getViewInfo(), PartnerViewDto.class);
+        result.setUuid(partnerDao.getUuid());
+        return result;
     }
 }
