@@ -14,8 +14,8 @@ public class BookingScheduleConfigurationDao extends BaseDao {
     private String status;
     private Integer bookingTypeId;
     private Integer requestedVehicleCategoryId;
-    private String startTime;
-    private String endTime;
+    private String start;
+    private String end;
     private String bookingConfig;
     private String variableValues;
 }

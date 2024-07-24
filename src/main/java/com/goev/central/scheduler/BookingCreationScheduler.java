@@ -72,7 +72,7 @@ public class BookingCreationScheduler {
                 bookingDao.setEndLocationDetails(ApplicationConstants.GSON.toJson(bookingRequest.getEndLocationDetails(), LatLongDto.class));
                 bookingDao.setStatus(BookingStatus.CONFIRMED.name());
 
-                bookingDao.setPlannedStartTime(date.plus(formatter.parseDateTime(bookingScheduleConfigurationDao.getStartTime()).getMillis()));
+                bookingDao.setPlannedStartTime(date.plus(formatter.parseDateTime(bookingScheduleConfigurationDao.getStart()).getMillis()));
 
                 bookingDao.setDisplayCode("BRN-" + SecretGenerationUtils.getCode());
                 bookingDao = bookingRepository.save(bookingDao);
