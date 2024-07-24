@@ -60,6 +60,7 @@ public class PartnerAssignmentScheduler {
                 bookingDao.setStatus(BookingStatus.IN_PROGRESS.name());
                 bookingDao.setSubStatus(BookingSubStatus.ASSIGNED.name());
                 bookingDao.setPartnerId(partnerDao.getId());
+                bookingDao.setVehicleId(vehicleDao.getId());
                 bookingDao.setPartnerDetails(ApplicationConstants.GSON.toJson(PartnerViewDto.fromDao(partnerDao)));
                 bookingDao.setVehicleDetails(ApplicationConstants.GSON.toJson(VehicleViewDto.fromDao(vehicleDao)));
 
