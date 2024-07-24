@@ -41,6 +41,8 @@ public class VehicleViewDto {
     private DateTime deboardingDate;
 
     public static VehicleViewDto fromDao(VehicleDao vehicleDao) {
+        if (vehicleDao.getViewInfo() == null)
+            return null;
         VehicleViewDto result = ApplicationConstants.GSON.fromJson(vehicleDao.getViewInfo(), VehicleViewDto.class);
         result.setUuid(vehicleDao.getUuid());
         return result;

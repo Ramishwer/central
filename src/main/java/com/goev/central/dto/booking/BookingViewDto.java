@@ -49,7 +49,11 @@ public class BookingViewDto {
 
 
 
-    public static BookingViewDto fromDao(BookingDao bookingDao){
-        return ApplicationConstants.GSON.fromJson(bookingDao.getViewInfo(), BookingViewDto.class);
+    public static BookingViewDto fromDao(BookingDao bookingDao) {
+        if (bookingDao.getViewInfo() == null)
+            return null;
+        BookingViewDto result = ApplicationConstants.GSON.fromJson(bookingDao.getViewInfo(), BookingViewDto.class);
+        result.setUuid(bookingDao.getUuid());
+        return result;
     }
 }

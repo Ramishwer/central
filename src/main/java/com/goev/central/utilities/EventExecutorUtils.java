@@ -17,6 +17,8 @@ import com.goev.central.dao.vehicle.detail.VehicleDao;
 import com.goev.central.dao.vehicle.detail.VehicleDetailDao;
 import com.goev.central.dao.vehicle.document.VehicleDocumentDao;
 import com.goev.central.dao.vehicle.document.VehicleDocumentTypeDao;
+import com.goev.central.dao.vehicle.transfer.VehicleAssetTransferDetailDao;
+import com.goev.central.dao.vehicle.transfer.VehicleTransferDetailDao;
 import com.goev.central.event.events.asset.save.AssetTypeSaveEvent;
 import com.goev.central.event.events.asset.update.AssetTypeUpdateEvent;
 import com.goev.central.event.events.booking.BookingSaveEvent;
@@ -118,6 +120,18 @@ public class EventExecutorUtils {
             }
             case "VehicleDocumentUpdateEvent" -> {
                 return fireEvent(SpringContext.getBean(VehicleDocumentUpdateEvent.class), (VehicleDocumentDao) data, executionTime);
+            }
+            case "VehicleTransferDetailSaveEvent" -> {
+                return fireEvent(SpringContext.getBean(VehicleTransferDetailSaveEvent.class), (VehicleTransferDetailDao) data, executionTime);
+            }
+            case "VehicleTransferDetailUpdateEvent" -> {
+                return fireEvent(SpringContext.getBean(VehicleTransferDetailUpdateEvent.class), (VehicleTransferDetailDao) data, executionTime);
+            }
+            case "VehicleAssetTransferDetailSaveEvent" -> {
+                return fireEvent(SpringContext.getBean(VehicleAssetTransferDetailSaveEvent.class), (VehicleAssetTransferDetailDao) data, executionTime);
+            }
+            case "VehicleAssetTransferDetailUpdateEvent" -> {
+                return fireEvent(SpringContext.getBean(VehicleAssetTransferDetailUpdateEvent.class), (VehicleAssetTransferDetailDao) data, executionTime);
             }
             case "PartnerDocumentSaveEvent" -> {
                 return fireEvent(SpringContext.getBean(PartnerDocumentSaveEvent.class), (PartnerDocumentDao) data, executionTime);

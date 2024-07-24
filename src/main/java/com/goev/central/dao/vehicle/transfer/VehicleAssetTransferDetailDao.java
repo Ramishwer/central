@@ -13,4 +13,6 @@ public class VehicleAssetTransferDetailDao extends BaseDao {
     private Integer vehicleTransferId;
     private Integer assetId;
     private String status;
+    private String mappingType;
+    private Integer assetTypeId;
 }

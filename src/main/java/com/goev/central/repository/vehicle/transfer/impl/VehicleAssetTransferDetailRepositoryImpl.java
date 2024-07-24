@@ -2,6 +2,8 @@ package com.goev.central.repository.vehicle.transfer.impl;
 
 import com.goev.central.dao.vehicle.transfer.VehicleAssetTransferDetailDao;
 import com.goev.central.repository.vehicle.transfer.VehicleAssetTransferDetailRepository;
+import com.goev.central.utilities.EventExecutorUtils;
+import com.goev.central.utilities.RequestContext;
 import com.goev.lib.enums.RecordState;
 import com.goev.record.central.tables.records.VehicleAssetTransferDetailsRecord;
 import lombok.AllArgsConstructor;
@@ -18,6 +20,7 @@ import static com.goev.record.central.tables.VehicleAssetTransferDetails.VEHICLE
 @Slf4j
 public class VehicleAssetTransferDetailRepositoryImpl implements VehicleAssetTransferDetailRepository {
     private final DSLContext context;
+    private final EventExecutorUtils eventExecutor;
 
 
     @Override
@@ -34,6 +37,9 @@ public class VehicleAssetTransferDetailRepositoryImpl implements VehicleAssetTra
         assetTransferDetail.setState(vehicleAssetTransferDetailsRecord.getState());
         assetTransferDetail.setApiSource(vehicleAssetTransferDetailsRecord.getApiSource());
         assetTransferDetail.setNotes(vehicleAssetTransferDetailsRecord.getNotes());
+        if(!"EVENT".equals(RequestContext.getRequestSource()))
+            eventExecutor.fireEvent("VehicleAssetTransferDetailSaveEvent", assetTransferDetail);
+
         return assetTransferDetail;
     }
 
@@ -51,6 +57,9 @@ public class VehicleAssetTransferDetailRepositoryImpl implements VehicleAssetTra
         assetTransferDetail.setState(vehicleAssetTransferDetailsRecord.getState());
         assetTransferDetail.setApiSource(vehicleAssetTransferDetailsRecord.getApiSource());
         assetTransferDetail.setNotes(vehicleAssetTransferDetailsRecord.getNotes());
+        if(!"EVENT".equals(RequestContext.getRequestSource()))
+            eventExecutor.fireEvent("VehicleAssetTransferDetailUpdateEvent", assetTransferDetail);
+
         return assetTransferDetail;
     }
 
