@@ -34,9 +34,6 @@ public class BookingScheduleServiceImpl implements BookingScheduleService {
             result.getElements().add(BookingScheduleDto.builder()
                     .uuid(bookingScheduleDao.getUuid())
                     .status(bookingScheduleDao.getStatus())
-                    .subStatus(bookingScheduleDao.getSubStatus())
-                    .startLocationDetails(ApplicationConstants.GSON.fromJson(bookingScheduleDao.getStartLocationDetails(), LatLongDto.class))
-                    .endLocationDetails(ApplicationConstants.GSON.fromJson(bookingScheduleDao.getEndLocationDetails(), LatLongDto.class))
                     .build());
         }
         return result;
