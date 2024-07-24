@@ -11,6 +11,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequestMapping(value = "/api/v1/booking-management")
@@ -25,7 +27,7 @@ public class BookingController {
                                                                          @RequestParam(value = "from", required = false) Long from,
                                                                          @RequestParam(value = "to", required = false) Long to,
                                                                          @RequestParam(value = "lastUUID", required = false) String lastElementUUID,
-                                                                         @RequestParam("status")String status,
+                                                                         @RequestParam("status") List<String> status,
                                                                          @RequestParam(value = "subStatus", required = false)String subStatus) {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, bookingService.getBookings(status,subStatus));
     }

@@ -95,17 +95,17 @@ public class BookingRepositoryImpl implements BookingRepository {
     }
 
     @Override
-    public List<BookingDao> findAllActive(String status, String subStatus) {
+    public List<BookingDao> findAllActive(List<String> status, String subStatus) {
         if (subStatus == null)
             return context.selectFrom(BOOKINGS)
-                    .where(BOOKINGS.STATUS.eq(status))
+                    .where(BOOKINGS.STATUS.in(status))
                     .and(BOOKINGS.STATE.eq(RecordState.ACTIVE.name()))
                     .and(BOOKINGS.IS_ACTIVE.eq(true))
                     .orderBy(BOOKINGS.PLANNED_START_TIME.asc())
                     .fetchInto(BookingDao.class);
 
         return context.selectFrom(BOOKINGS)
-                .where(BOOKINGS.STATUS.eq(status))
+                .where(BOOKINGS.STATUS.in(status))
                 .and(BOOKINGS.SUB_STATUS.eq(subStatus))
                 .and(BOOKINGS.STATE.eq(RecordState.ACTIVE.name()))
                 .and(BOOKINGS.IS_ACTIVE.eq(true))
