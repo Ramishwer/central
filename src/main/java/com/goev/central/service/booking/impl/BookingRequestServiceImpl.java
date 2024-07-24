@@ -9,6 +9,7 @@ import com.goev.central.dto.customer.CustomerViewDto;
 import com.goev.central.dto.partner.PartnerViewDto;
 import com.goev.central.dto.vehicle.VehicleViewDto;
 import com.goev.central.enums.booking.BookingStatus;
+import com.goev.central.enums.booking.BookingSubStatus;
 import com.goev.central.enums.booking.SchedulingTypes;
 import com.goev.central.repository.booking.BookingRepository;
 import com.goev.central.repository.booking.BookingRequestRepository;
@@ -40,6 +41,7 @@ public class BookingRequestServiceImpl implements BookingRequestService {
         bookingDao.setStartLocationDetails(ApplicationConstants.GSON.toJson(bookingRequest.getStartLocationDetails(), LatLongDto.class));
         bookingDao.setEndLocationDetails(ApplicationConstants.GSON.toJson(bookingRequest.getEndLocationDetails(), LatLongDto.class));
         bookingDao.setStatus(BookingStatus.CONFIRMED.name());
+        bookingDao.setSubStatus(BookingSubStatus.UNASSIGNED.name());
         bookingDao.setPlannedStartTime(startTime);
         bookingDao.setDisplayCode("BRN-" + SecretGenerationUtils.getCode());
         bookingDao = bookingRepository.save(bookingDao);

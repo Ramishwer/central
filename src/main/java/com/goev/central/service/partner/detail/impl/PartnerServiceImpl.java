@@ -393,27 +393,6 @@ public class PartnerServiceImpl implements PartnerService {
         partner.setSubStatus(PartnerSubStatus.VEHICLE_NOT_ALLOTTED.name());
         partner = partnerRepository.update(partner);
 
-
-//        VehicleDao vehicle = vehicleRepository.findByPartnerId(partner.getId());
-//        if (vehicle != null) {
-//            final PartnerDao assignVehiclePartner = partner;
-//            executorService.submit(() -> {
-//                try {
-//                    Thread.sleep(2000L);
-//                } catch (InterruptedException e) {
-//                    log.error("Error in sleep", e);
-//                }
-//
-//                assignVehiclePartner.setStatus(PartnerStatus.ON_DUTY.name());
-//                assignVehiclePartner.setSubStatus(PartnerSubStatus.VEHICLE_ALLOTTED.name());
-//                assignVehiclePartner.setVehicleId(vehicle.getId());
-//                assignVehiclePartner.setVehicleDetails(vehicle.getViewInfo());
-//                partnerRepository.update(assignVehiclePartner);
-//
-//            });
-//
-//        }
-
         return partner;
     }
 

@@ -72,6 +72,7 @@ public class PartnerShiftCreationScheduler {
                     partnerShiftDao.setType(shift.getShiftType());
                     partnerShiftDao.setStatus(PartnerShiftStatus.PENDING.name());
                     partnerShiftDao.setDutyDate(date);
+                    log.info("Duty Date : {}",date);
                     partnerShiftDao = partnerShiftRepository.save(partnerShiftDao);
 
                     partner.setDutyDetails(ApplicationConstants.GSON.toJson(PartnerDutyDto.builder().partner(PartnerViewDto.fromDao(partner))
