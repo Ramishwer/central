@@ -114,7 +114,7 @@ public class BookingServiceImpl implements BookingService {
                 partnerDao.setBookingId(null);
                 partnerDao.setStatus(PartnerStatus.ONLINE.name());
                 partnerDao.setSubStatus(PartnerSubStatus.NO_BOOKING.name());
-                partnerRepository.save(partnerDao);
+                partnerRepository.update(partnerDao);
             }
         }
         return bookingDao;
