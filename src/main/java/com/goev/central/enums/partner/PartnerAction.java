@@ -2,6 +2,10 @@ package com.goev.central.enums.partner;
 
 public enum PartnerAction {
     CHECK_IN,
+
+    UNASSIGN,
+    CHANGE_VEHICLE,
+    ASSIGN_VEHICLE,
     SELECT_VEHICLE,
     RETURN_VEHICLE,
     SUBMIT_CHECKLIST,

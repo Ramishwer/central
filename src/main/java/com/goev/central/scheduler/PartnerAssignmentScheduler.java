@@ -42,6 +42,7 @@ public class PartnerAssignmentScheduler {
         List<BookingDao> allBooking = bookingRepository.findAllActive(Collections.singletonList(BookingStatus.IN_PROGRESS.name()), BookingSubStatus.UNASSIGNED.name());
 
         for (BookingDao bookingDao : allBooking) {
+
             List<PartnerDao> partners = partnerRepository.findAllByStatus(Collections.singletonList("ONLINE"));
 
             if (CollectionUtils.isEmpty(partners))

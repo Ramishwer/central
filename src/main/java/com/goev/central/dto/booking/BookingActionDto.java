@@ -16,4 +16,5 @@ public class BookingActionDto {
     private BookingAction action;
     private BookingViewDto booking;
     private String status;
+    private String partnerUUID;
 }

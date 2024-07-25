@@ -115,6 +115,7 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
                 .profileUrl(partnerDao.getProfileUrl())
                 .phoneNumber(partnerDao.getPhoneNumber())
                 .onboardingDate(partnerDetails.getOnboardingDate())
+                .uuid(partnerDetails.getUuid())
                 .build();
         if (partnerDetails.getHomeLocationId() != null) {
             LocationDao locationDao = locationRepository.findById(partnerDetails.getHomeLocationId());

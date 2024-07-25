@@ -6,6 +6,7 @@ import com.goev.central.dao.booking.BookingDao;
 import com.goev.central.dao.partner.detail.PartnerDao;
 import com.goev.central.dao.partner.duty.PartnerDutyDao;
 import com.goev.central.dao.partner.duty.PartnerShiftDao;
+import com.goev.central.dao.vehicle.detail.VehicleDao;
 import com.goev.central.dto.booking.BookingViewDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.location.LocationDto;
@@ -23,6 +24,7 @@ import com.goev.central.repository.booking.BookingRepository;
 import com.goev.central.repository.partner.detail.PartnerRepository;
 import com.goev.central.repository.partner.duty.PartnerDutyRepository;
 import com.goev.central.repository.partner.duty.PartnerShiftRepository;
+import com.goev.central.repository.vehicle.detail.VehicleRepository;
 import com.goev.central.service.partner.detail.PartnerService;
 import com.goev.lib.exceptions.ResponseException;
 import lombok.AllArgsConstructor;
@@ -46,6 +48,7 @@ public class PartnerServiceImpl implements PartnerService {
     private final PartnerDutyRepository partnerDutyRepository;
     private final BookingRepository bookingRepository;
     private final PartnerShiftRepository partnerShiftRepository;
+    private final VehicleRepository vehicleRepository;
 
     @Override
     public Boolean deletePartner(String partnerUUID) {
@@ -152,6 +155,15 @@ public class PartnerServiceImpl implements PartnerService {
             case CHECK_IN -> {
                 partner = checkin(partner, actionDto);
             }
+            case UNASSIGN -> {
+                partner = unassign(partner, actionDto);
+            }
+            case CHANGE_VEHICLE -> {
+                partner = changeVehicle(partner,actionDto);
+            }
+            case ASSIGN_VEHICLE -> {
+                partner = assignVehicle(partner, actionDto);
+            }
             case SELECT_VEHICLE -> {
                 partner = selectVehicle(partner, actionDto);
             }
@@ -194,6 +206,55 @@ public class PartnerServiceImpl implements PartnerService {
         }
 
         return PartnerDto.fromDao(partner);
+    }
+
+    private PartnerDao changeVehicle(PartnerDao partner, PartnerActionDto actionDto) {
+        VehicleDao vehicle = vehicleRepository.findByUUID(actionDto.getVehicleUUID());
+        if(vehicle==null)
+            throw new ResponseException("Vehicle no present for id : "+actionDto.getVehicleUUID());
+
+        PartnerDao existingPartner = partnerRepository.findByVehicleId(vehicle.getId());
+
+        if(existingPartner!=null && !existingPartner.getId().equals(partner.getId()))
+            throw new ResponseException("Vehicle is already assigned to other partner.");
+
+        partner = unassign(partner,actionDto);
+        return assignVehicle(partner,actionDto);
+    }
+
+    private PartnerDao assignVehicle(PartnerDao partnerDao, PartnerActionDto actionDto) {
+
+
+        if (!(PartnerStatus.ON_DUTY.name().equals(partnerDao.getStatus()) && PartnerSubStatus.VEHICLE_NOT_ALLOTTED.name().equals(partnerDao.getSubStatus()))) {
+            throw new ResponseException("Vehicle can only be assigned in on duty state");
+        }
+        VehicleDao vehicle = vehicleRepository.findByUUID(actionDto.getVehicleUUID());
+        if(vehicle==null)
+            throw new ResponseException("Vehicle no present for id : "+actionDto.getVehicleUUID());
+
+        PartnerDao existingPartner = partnerRepository.findByVehicleId(vehicle.getId());
+
+        if(existingPartner!=null)
+            throw new ResponseException("Vehicle is already assigned to other partner.");
+
+        partnerDao.setStatus(PartnerStatus.ON_DUTY.name());
+        partnerDao.setSubStatus(PartnerSubStatus.VEHICLE_ALLOTTED.name());
+        partnerDao.setVehicleId(vehicle.getId());
+        partnerDao.setVehicleDetails(ApplicationConstants.GSON.toJson(VehicleViewDto.fromDao(vehicle)));
+        return partnerRepository.update(partnerDao);
+
+    }
+
+    private PartnerDao unassign(PartnerDao partnerDao, PartnerActionDto actionDto) {
+
+        if(partnerDao.getVehicleId() == null)
+            throw new ResponseException("No vehicle assigned");
+
+        partnerDao.setStatus(PartnerStatus.ON_DUTY.name());
+        partnerDao.setSubStatus(PartnerSubStatus.VEHICLE_NOT_ALLOTTED.name());
+        partnerDao.setVehicleId(null);
+        partnerDao.setVehicleDetails(null);
+        return partnerRepository.update(partnerDao);
     }
 
 

@@ -89,6 +89,7 @@ public class VehicleDetailServiceImpl implements VehicleDetailService {
                 .imageUrl(vehicleDao.getImageUrl())
                 .onboardingDate(vehicleDetails.getOnboardingDate())
                 .deboardingDate(vehicleDetails.getDeboardingDate())
+                .uuid(vehicleDao.getUuid())
                 .build();
 
 

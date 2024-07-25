@@ -18,6 +18,7 @@ public class PartnerActionDto {
     private PartnerAction action;
     private PartnerViewDto partner;
     private String status;
-    protected LatLongDto location;
-    protected String qrString;
+    private LatLongDto location;
+    private String qrString;
+    private String vehicleUUID;
 }

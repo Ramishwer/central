@@ -26,4 +26,6 @@ public interface PartnerRepository {
     List<PartnerDao> findAllByStatus(List<String> status);
 
     List<PartnerDao> findAllByStatusAndShiftIdNotNull(List<String> status);
+
+    PartnerDao findByVehicleId(Integer vehicleId);
 }

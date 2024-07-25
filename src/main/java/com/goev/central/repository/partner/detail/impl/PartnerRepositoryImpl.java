@@ -110,6 +110,7 @@ public class PartnerRepositoryImpl implements PartnerRepository {
         return context.selectFrom(PARTNERS)
                 .where(PARTNERS.PHONE_NUMBER.eq(phoneNumber))
                 .and(PARTNERS.IS_ACTIVE.eq(true))
+                .and(PARTNERS.STATE.eq(RecordState.ACTIVE.name()))
                 .fetchAnyInto(PartnerDao.class);
     }
 
@@ -119,6 +120,7 @@ public class PartnerRepositoryImpl implements PartnerRepository {
         return context.selectFrom(PARTNERS)
                 .where(PARTNERS.ONBOARDING_STATUS.in(onboardingStatus))
                 .and(PARTNERS.IS_ACTIVE.eq(true))
+                .and(PARTNERS.STATE.eq(RecordState.ACTIVE.name()))
                 .fetchInto(PartnerDao.class);
     }
 
@@ -128,6 +130,7 @@ public class PartnerRepositoryImpl implements PartnerRepository {
                 .where(PARTNERS.ONBOARDING_STATUS.in(PartnerOnboardingStatus.ONBOARDED.name()))
                 .and(PARTNERS.STATUS.in(status))
                 .and(PARTNERS.IS_ACTIVE.eq(true))
+                .and(PARTNERS.STATE.eq(RecordState.ACTIVE.name()))
                 .fetchInto(PartnerDao.class);
     }
 
@@ -138,6 +141,16 @@ public class PartnerRepositoryImpl implements PartnerRepository {
                 .and(PARTNERS.STATUS.in(status))
                 .and(PARTNERS.PARTNER_SHIFT_ID.isNotNull())
                 .and(PARTNERS.IS_ACTIVE.eq(true))
+                .and(PARTNERS.STATE.eq(RecordState.ACTIVE.name()))
                 .fetchInto(PartnerDao.class);
+    }
+
+    @Override
+    public PartnerDao findByVehicleId(Integer vehicleId) {
+        return context.selectFrom(PARTNERS)
+                .where(PARTNERS.VEHICLE_ID.eq(vehicleId))
+                .and(PARTNERS.IS_ACTIVE.eq(true))
+                .and(PARTNERS.STATE.eq(RecordState.ACTIVE.name()))
+                .fetchAnyInto(PartnerDao.class);
     }
 }
