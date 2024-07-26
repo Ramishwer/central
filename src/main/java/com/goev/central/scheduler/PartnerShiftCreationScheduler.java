@@ -78,18 +78,18 @@ public class PartnerShiftCreationScheduler {
 
                 }
 
-                if(partnerShiftDao.getEstimatedEndTime()==null || DateTime.now().isAfter(partnerShiftDao.getEstimatedEndTime())){
-                    continue;
+                if (partnerShiftDao != null) {
+                    if (partnerShiftDao.getEstimatedEndTime() != null && DateTime.now().isAfter(partnerShiftDao.getEstimatedEndTime())) {
+                        continue;
+                    }
+
+                    partner.setDutyDetails(ApplicationConstants.GSON.toJson(PartnerDutyDto.builder().partner(PartnerViewDto.fromDao(partner))
+                            .shiftDetails(PartnerShiftDto.fromDao(partnerShiftDao, PartnerViewDto.fromDao(partner)))
+                            .build()));
+                    partner.setSubStatus(PartnerSubStatus.DUTY_ASSIGNED.name());
+                    partner.setPartnerShiftId(partnerShiftDao.getId());
+                    partnerRepository.update(partner);
                 }
-
-
-
-                partner.setDutyDetails(ApplicationConstants.GSON.toJson(PartnerDutyDto.builder().partner(PartnerViewDto.fromDao(partner))
-                        .shiftDetails(PartnerShiftDto.fromDao(partnerShiftDao, PartnerViewDto.fromDao(partner)))
-                        .build()));
-                partner.setSubStatus(PartnerSubStatus.DUTY_ASSIGNED.name());
-                partner.setPartnerShiftId(partnerShiftDao.getId());
-                partnerRepository.update(partner);
             }
 
 

@@ -51,8 +51,10 @@ public class PartnerAssignmentScheduler {
             if (bookingDao.getPartnerId() != null) {
                 partnerDao = partnerRepository.findById(bookingDao.getPartnerId());
 
-                if (partnerDao == null)
-                    continue;
+                if (partnerDao == null || (!(PartnerStatus.ONLINE.name().equals(partnerDao.getStatus()) && PartnerSubStatus.NO_BOOKING.name().equals(partnerDao.getSubStatus())))) {
+                    partnerDao = partners.get(0);
+                }
+
             }
 
 
