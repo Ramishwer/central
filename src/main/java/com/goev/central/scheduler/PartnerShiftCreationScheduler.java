@@ -40,7 +40,7 @@ public class PartnerShiftCreationScheduler {
 
     @Scheduled(fixedRate = 2 * 60 * 1000)
     public void reportCurrentTime() {
-        log.info("The {} time is now {}",this.getClass().getName() ,DateTime.now());
+        log.info("The {} time is now {}", this.getClass().getName(), DateTime.now());
         List<PartnerShiftMappingDao> allPartnerMappings = partnerShiftMappingRepository.findAllActive();
         DateTimeFormatter formatter = DateTimeFormat.forPattern("HH:mm");
 
@@ -51,39 +51,45 @@ public class PartnerShiftCreationScheduler {
             PartnerDao partner = partnerRepository.findById(partnerShiftMappingDao.getPartnerId());
             ShiftDao shift = shiftRepository.findById(partnerShiftMappingDao.getShiftId());
             if (PartnerStatus.OFF_DUTY.name().equals(partner.getStatus()) && PartnerSubStatus.NO_DUTY.name().equals(partner.getSubStatus())) {
-                PartnerShiftDao existingShiftDao = partnerShiftRepository.findByPartnerIdShiftIdDayDate(partner.getId(),shift.getId(),String.valueOf(day),date);
-                if( existingShiftDao !=null)
-                    continue;
-                ShiftConfigurationDao shiftConfigurationDao = shiftConfigurationRepository.findByShiftIdAndDay(partnerShiftMappingDao.getShiftId(), day);
+                PartnerShiftDao partnerShiftDao = partnerShiftRepository.findByPartnerIdShiftIdDayDate(partner.getId(), shift.getId(), String.valueOf(day), date);
+                if (partnerShiftDao == null) {
 
-                if (shiftConfigurationDao != null) {
-                    PartnerShiftDao partnerShiftDao = new PartnerShiftDao();
+                    ShiftConfigurationDao shiftConfigurationDao = shiftConfigurationRepository.findByShiftIdAndDay(partnerShiftMappingDao.getShiftId(), day);
 
-                    partnerShiftDao.setShiftStart(shiftConfigurationDao.getEstimatedIn());
-                    partnerShiftDao.setShiftEnd(shiftConfigurationDao.getEstimatedOut());
-                    partnerShiftDao.setShiftConfig(ApplicationConstants.GSON.toJson(shiftConfigurationDao));
-                    partnerShiftDao.setShiftId(partnerShiftMappingDao.getShiftId());
-                    partnerShiftDao.setPartnerId(partner.getId());
-                    partnerShiftDao.setPayoutModelId(shiftConfigurationDao.getPayoutModelId());
-                    partnerShiftDao.setDay(shiftConfigurationDao.getDay());
-                    partnerShiftDao.setEstimatedStartTime(DateTime.now().withTimeAtStartOfDay().plus(formatter.parseDateTime(shiftConfigurationDao.getEstimatedIn()).getMillis()));
-                    partnerShiftDao.setEstimatedEndTime(DateTime.now().withTimeAtStartOfDay().plus(formatter.parseDateTime(shiftConfigurationDao.getEstimatedOut()).getMillis()));
+                    if (shiftConfigurationDao != null) {
+                        partnerShiftDao = new PartnerShiftDao();
 
-                    partnerShiftDao.setType(shift.getShiftType());
-                    partnerShiftDao.setStatus(PartnerShiftStatus.PENDING.name());
-                    partnerShiftDao.setDutyDate(date);
-                    log.info("Duty Date : {}",date);
-                    partnerShiftDao = partnerShiftRepository.save(partnerShiftDao);
+                        partnerShiftDao.setShiftStart(shiftConfigurationDao.getEstimatedIn());
+                        partnerShiftDao.setShiftEnd(shiftConfigurationDao.getEstimatedOut());
+                        partnerShiftDao.setShiftConfig(ApplicationConstants.GSON.toJson(shiftConfigurationDao));
+                        partnerShiftDao.setShiftId(partnerShiftMappingDao.getShiftId());
+                        partnerShiftDao.setPartnerId(partner.getId());
+                        partnerShiftDao.setPayoutModelId(shiftConfigurationDao.getPayoutModelId());
+                        partnerShiftDao.setDay(shiftConfigurationDao.getDay());
+                        partnerShiftDao.setEstimatedStartTime(DateTime.now().withTimeAtStartOfDay().plus(formatter.parseDateTime(shiftConfigurationDao.getEstimatedIn()).getMillis()));
+                        partnerShiftDao.setEstimatedEndTime(DateTime.now().withTimeAtStartOfDay().plus(formatter.parseDateTime(shiftConfigurationDao.getEstimatedOut()).getMillis()));
 
-                    partner.setDutyDetails(ApplicationConstants.GSON.toJson(PartnerDutyDto.builder().partner(PartnerViewDto.fromDao(partner))
-                            .shiftDetails(PartnerShiftDto.fromDao(partnerShiftDao, PartnerViewDto.fromDao(partner)))
-                            .build()));
-                    partner.setSubStatus(PartnerSubStatus.DUTY_ASSIGNED.name());
-                    partner.setPartnerShiftId(partnerShiftDao.getId());
-                    partnerRepository.update(partner);
+                        partnerShiftDao.setType(shift.getShiftType());
+                        partnerShiftDao.setStatus(PartnerShiftStatus.PENDING.name());
+                        partnerShiftDao.setDutyDate(date);
+                        log.info("Duty Date : {}", date);
+                        partnerShiftDao = partnerShiftRepository.save(partnerShiftDao);
+                    }
 
                 }
 
+                if(partnerShiftDao.getEstimatedEndTime()==null || DateTime.now().isAfter(partnerShiftDao.getEstimatedEndTime())){
+                    continue;
+                }
+
+
+
+                partner.setDutyDetails(ApplicationConstants.GSON.toJson(PartnerDutyDto.builder().partner(PartnerViewDto.fromDao(partner))
+                        .shiftDetails(PartnerShiftDto.fromDao(partnerShiftDao, PartnerViewDto.fromDao(partner)))
+                        .build()));
+                partner.setSubStatus(PartnerSubStatus.DUTY_ASSIGNED.name());
+                partner.setPartnerShiftId(partnerShiftDao.getId());
+                partnerRepository.update(partner);
             }
 
 
