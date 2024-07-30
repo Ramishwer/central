@@ -17,27 +17,27 @@ public class VehicleModelController {
 
     private final VehicleModelService vehicleModelService;
 
-    @GetMapping("/models")
+    @GetMapping("/vehicles/models")
     public ResponseDto<PaginatedResponseDto<VehicleModelDto>> getModels() {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleModelService.getModels());
     }
 
-    @PostMapping("/models")
+    @PostMapping("/vehicles/models")
     public ResponseDto<VehicleModelDto> createModel(@RequestBody VehicleModelDto vehicleModelDto) {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleModelService.createModel(vehicleModelDto));
     }
 
-    @PutMapping("/models/{model-uuid}")
+    @PutMapping("/vehicles/models/{model-uuid}")
     public ResponseDto<VehicleModelDto> updateModel(@PathVariable(value = "model-uuid") String modelUUID, @RequestBody VehicleModelDto vehicleModelDto) {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleModelService.updateModel(modelUUID, vehicleModelDto));
     }
 
-    @GetMapping("/models/{model-uuid}")
+    @GetMapping("/vehicles/models/{model-uuid}")
     public ResponseDto<VehicleModelDto> getModelDetails(@PathVariable(value = "model-uuid") String modelUUID) {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleModelService.getModelDetails(modelUUID));
     }
 
-    @DeleteMapping("/models/{model-uuid}")
+    @DeleteMapping("/vehicles/models/{model-uuid}")
     public ResponseDto<Boolean> deleteModel(@PathVariable(value = "model-uuid") String modelUUID) {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleModelService.deleteModel(modelUUID));
     }

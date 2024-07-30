@@ -1,8 +1,16 @@
 package com.goev.central.service.vehicle.detail.impl;
 
+import com.goev.central.dao.vehicle.detail.VehicleDao;
+import com.goev.central.dao.vehicle.detail.VehicleSegmentDao;
+import com.goev.central.dao.vehicle.detail.VehicleSegmentMappingDao;
 import com.goev.central.dao.vehicle.detail.VehicleSegmentDao;
 import com.goev.central.dto.common.PaginatedResponseDto;
+import com.goev.central.dto.vehicle.VehicleViewDto;
 import com.goev.central.dto.vehicle.detail.VehicleSegmentDto;
+import com.goev.central.dto.vehicle.detail.VehicleSegmentMappingDto;
+import com.goev.central.dto.vehicle.detail.VehicleSegmentDto;
+import com.goev.central.repository.vehicle.detail.VehicleRepository;
+import com.goev.central.repository.vehicle.detail.VehicleSegmentMappingRepository;
 import com.goev.central.repository.vehicle.detail.VehicleSegmentRepository;
 import com.goev.central.service.vehicle.detail.VehicleSegmentService;
 import com.goev.lib.exceptions.ResponseException;
@@ -20,6 +28,8 @@ import java.util.List;
 public class VehicleSegmentServiceImpl implements VehicleSegmentService {
 
     private final VehicleSegmentRepository vehicleSegmentRepository;
+    private final VehicleRepository vehicleRepository;
+    private final VehicleSegmentMappingRepository vehicleSegmentMappingRepository;
 
     @Override
     public PaginatedResponseDto<VehicleSegmentDto> getSegments() {
@@ -90,4 +100,61 @@ public class VehicleSegmentServiceImpl implements VehicleSegmentService {
         vehicleSegmentRepository.delete(vehicleSegmentDao.getId());
         return true;
     }
+
+
+    @Override
+    public VehicleSegmentMappingDto createVehicleMapping(String segmentUUID, VehicleSegmentMappingDto vehicleSegmentMappingDto) {
+        VehicleSegmentDao vehicleSegmentDao = vehicleSegmentRepository.findByUUID(segmentUUID);
+        if (vehicleSegmentDao == null)
+            throw new ResponseException("No vehicle segment found for Id :" + segmentUUID);
+
+        if (vehicleSegmentMappingDto.getVehicle() == null)
+            throw new ResponseException("No vehicle details present.");
+
+        VehicleDao vehicleDao = vehicleRepository.findByUUID(vehicleSegmentMappingDto.getVehicle().getUuid());
+
+        if (vehicleDao == null)
+            throw new ResponseException("No vehicle found for Id :" + vehicleSegmentMappingDto.getVehicle().getUuid());
+
+        VehicleSegmentMappingDao mappingDao = new VehicleSegmentMappingDao();
+
+        mappingDao.setVehicleId(vehicleDao.getId());
+        mappingDao.setVehicleSegmentId(vehicleSegmentDao.getId());
+        vehicleSegmentMappingRepository.save(mappingDao);
+
+        return null;
+    }
+
+    @Override
+    public Boolean deleteVehicleMapping(String segmentUUID, String vehicleSegmentMappingUUID) {
+        VehicleSegmentDao vehicleSegmentDao = vehicleSegmentRepository.findByUUID(segmentUUID);
+        if (vehicleSegmentDao == null)
+            throw new ResponseException("No vehicle segment found for Id :" + segmentUUID);
+
+        VehicleSegmentMappingDao vehicleSegmentMappingDao = vehicleSegmentMappingRepository.findByUUID(vehicleSegmentMappingUUID);
+        if (vehicleSegmentMappingDao == null)
+            throw new ResponseException("No vehicle segment Mapping found for Id :" + vehicleSegmentMappingUUID);
+        vehicleSegmentMappingRepository.delete(vehicleSegmentMappingDao.getId());
+        return true;
+    }
+
+    @Override
+    public List<VehicleSegmentMappingDto> getVehicleMappings(String segmentUUID) {
+        VehicleSegmentDao vehicleSegmentDao = vehicleSegmentRepository.findByUUID(segmentUUID);
+        if (vehicleSegmentDao == null)
+            throw new ResponseException("No vehicle segment found for Id :" + segmentUUID);
+
+        List<VehicleSegmentMappingDao> vehicleSegmentMappingDaoList = vehicleSegmentMappingRepository.findAllBySegmentId(vehicleSegmentDao.getId());
+
+        List<VehicleSegmentMappingDto> result = new ArrayList<>();
+
+        for (VehicleSegmentMappingDao vehicleSegmentMappingDao : vehicleSegmentMappingDaoList) {
+            VehicleDao vehicle = vehicleRepository.findById(vehicleSegmentMappingDao.getVehicleId());
+            if (vehicle == null)
+                continue;
+            result.add(VehicleSegmentMappingDto.fromDao(vehicleSegmentMappingDao, VehicleSegmentDto.fromDao(vehicleSegmentDao),  VehicleViewDto.fromDao(vehicle)));
+        }
+        return result;
+    }
+    
 }

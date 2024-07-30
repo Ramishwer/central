@@ -4,25 +4,26 @@ import com.goev.central.constant.ApplicationConstants;
 import com.goev.central.dao.booking.BookingDao;
 import com.goev.central.dao.partner.detail.PartnerDao;
 import com.goev.central.dao.vehicle.detail.VehicleDao;
-import com.goev.central.dto.booking.BookingActionDto;
-import com.goev.central.dto.booking.BookingDto;
-import com.goev.central.dto.booking.BookingViewDto;
+import com.goev.central.dto.booking.*;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.customer.CustomerViewDto;
 import com.goev.central.dto.partner.PartnerViewDto;
 import com.goev.central.dto.vehicle.VehicleViewDto;
 import com.goev.central.enums.booking.BookingStatus;
 import com.goev.central.enums.booking.BookingSubStatus;
+import com.goev.central.enums.booking.SchedulingTypes;
 import com.goev.central.enums.partner.PartnerStatus;
 import com.goev.central.enums.partner.PartnerSubStatus;
 import com.goev.central.repository.booking.BookingRepository;
 import com.goev.central.repository.partner.detail.PartnerRepository;
 import com.goev.central.repository.vehicle.detail.VehicleRepository;
 import com.goev.central.service.booking.BookingService;
+import com.goev.central.utilities.SecretGenerationUtils;
 import com.goev.lib.dto.LatLongDto;
 import com.goev.lib.exceptions.ResponseException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -63,12 +64,41 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public BookingDto createBooking(BookingDto bookingDto) {
+    public BookingDto createBooking(BookingRequestDto bookingRequest) {
+        DateTime startTime = DateTime.now();
 
-        BookingDao bookingDao = getBookingDao(bookingDto);
+        if (bookingRequest.getScheduleDetails() != null && SchedulingTypes.SCHEDULED.equals(bookingRequest.getScheduleDetails().getType()))
+            startTime = bookingRequest.getScheduleDetails().getStartTime() == null ? DateTime.now() : bookingRequest.getScheduleDetails().getStartTime();
+
+        BookingDao bookingDao = new BookingDao();
+        bookingDao.setCustomerDetails(ApplicationConstants.GSON.toJson(bookingRequest.getCustomerDetails()));
+        bookingDao.setStartLocationDetails(ApplicationConstants.GSON.toJson(bookingRequest.getStartLocationDetails(), LatLongDto.class));
+        bookingDao.setEndLocationDetails(ApplicationConstants.GSON.toJson(bookingRequest.getEndLocationDetails(), LatLongDto.class));
+        bookingDao.setStatus(BookingStatus.CONFIRMED.name());
+        bookingDao.setSubStatus(BookingSubStatus.UNASSIGNED.name());
+        bookingDao.setPlannedStartTime(startTime);
+        bookingDao.setDisplayCode("BRN-" + SecretGenerationUtils.getCode());
         bookingDao = bookingRepository.save(bookingDao);
-        if (bookingDao == null)
-            throw new ResponseException("Error in saving booking");
+
+
+        BookingViewDto viewDto = BookingViewDto.builder()
+                .uuid(bookingDao.getUuid())
+                .customerDetails(ApplicationConstants.GSON.fromJson(bookingDao.getCustomerDetails(), CustomerViewDto.class))
+                .partnerDetails(ApplicationConstants.GSON.fromJson(bookingDao.getPartnerDetails(), PartnerViewDto.class))
+                .vehicleDetails(ApplicationConstants.GSON.fromJson(bookingDao.getVehicleDetails(), VehicleViewDto.class))
+                .status(bookingDao.getStatus())
+                .subStatus(bookingDao.getSubStatus())
+                .startLocationDetails(ApplicationConstants.GSON.fromJson(bookingDao.getStartLocationDetails(), LatLongDto.class))
+                .endLocationDetails(ApplicationConstants.GSON.fromJson(bookingDao.getEndLocationDetails(), LatLongDto.class))
+                .plannedStartTime(bookingDao.getPlannedStartTime())
+                .displayCode(bookingDao.getDisplayCode())
+                .payment(BookingPaymentDto.builder()
+                        .paymentMode(bookingRequest.getPaymentDetails().getType()).build())
+                .build();
+
+
+        bookingDao.setViewInfo(ApplicationConstants.GSON.toJson(viewDto));
+        bookingDao = bookingRepository.update(bookingDao);
         return getBookingDto(bookingDao);
     }
 

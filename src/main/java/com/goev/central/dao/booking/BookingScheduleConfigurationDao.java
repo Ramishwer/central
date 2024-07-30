@@ -18,4 +18,6 @@ public class BookingScheduleConfigurationDao extends BaseDao {
     private String end;
     private String bookingConfig;
     private String variableValues;
+    private String day;
+    private Integer bookingScheduleId;
 }

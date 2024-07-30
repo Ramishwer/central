@@ -18,27 +18,27 @@ public class VehicleManufacturerController {
 
     private final VehicleManufacturerService vehicleManufacturerService;
 
-    @GetMapping("/manufacturers")
+    @GetMapping("/vehicles/manufacturers")
     public ResponseDto<PaginatedResponseDto<VehicleManufacturerDto>> getManufacturers() {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleManufacturerService.getManufacturers());
     }
 
-    @PostMapping("/manufacturers")
+    @PostMapping("/vehicles/manufacturers")
     public ResponseDto<VehicleManufacturerDto> createManufacturer(@RequestBody VehicleManufacturerDto vehicleManufacturerDto) {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleManufacturerService.createManufacturer(vehicleManufacturerDto));
     }
 
-    @PutMapping("/manufacturers/{manufacturer-uuid}")
+    @PutMapping("/vehicles/manufacturers/{manufacturer-uuid}")
     public ResponseDto<VehicleManufacturerDto> updateManufacturer(@PathVariable(value = "manufacturer-uuid") String manufacturerUUID, @RequestBody VehicleManufacturerDto vehicleManufacturerDto) {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleManufacturerService.updateManufacturer(manufacturerUUID, vehicleManufacturerDto));
     }
 
-    @GetMapping("/manufacturers/{manufacturer-uuid}")
+    @GetMapping("/vehicles/manufacturers/{manufacturer-uuid}")
     public ResponseDto<VehicleManufacturerDto> getManufacturerDetails(@PathVariable(value = "manufacturer-uuid") String manufacturerUUID) {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleManufacturerService.getManufacturerDetails(manufacturerUUID));
     }
 
-    @DeleteMapping("/manufacturers/{manufacturer-uuid}")
+    @DeleteMapping("/vehicles/manufacturers/{manufacturer-uuid}")
     public ResponseDto<Boolean> deleteManufacturer(@PathVariable(value = "manufacturer-uuid") String manufacturerUUID) {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleManufacturerService.deleteManufacturer(manufacturerUUID));
     }

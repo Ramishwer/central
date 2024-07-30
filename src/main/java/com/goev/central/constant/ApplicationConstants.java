@@ -30,6 +30,8 @@ public class ApplicationConstants {
     public static String S3_BUCKET_NAME;
     public static String AUTH_URL;
     public static String PARTNER_URL;
+    public static String FIREBASE_CONFIG;
+    public static String FIREBASE_URL;
 
     private final ConstantUtils constantUtils;
 

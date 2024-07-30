@@ -4,6 +4,7 @@ import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.partner.PartnerViewDto;
 import com.goev.central.dto.partner.detail.PartnerActionDto;
 import com.goev.central.dto.partner.detail.PartnerDto;
+import com.goev.central.dto.partner.detail.PartnerTrackingDto;
 import com.goev.central.service.partner.detail.PartnerService;
 import com.goev.lib.dto.ResponseDto;
 import com.goev.lib.dto.StatusDto;
@@ -26,6 +27,12 @@ public class PartnerController {
         if (onboardingStatus == null)
             return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerService.getPartners());
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerService.getPartners(onboardingStatus));
+    }
+
+
+    @GetMapping("/partners/trackings")
+    public ResponseDto<PaginatedResponseDto<PartnerTrackingDto>> getPartnerTrackingss() {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerService.getPartnerTrackings());
     }
 
 

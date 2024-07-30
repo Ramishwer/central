@@ -7,12 +7,14 @@ import com.goev.central.dao.partner.detail.PartnerDao;
 import com.goev.central.dao.partner.duty.PartnerDutyDao;
 import com.goev.central.dao.partner.duty.PartnerShiftDao;
 import com.goev.central.dao.vehicle.detail.VehicleDao;
+import com.goev.central.dto.FirebaseLocationDto;
 import com.goev.central.dto.booking.BookingViewDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.location.LocationDto;
 import com.goev.central.dto.partner.PartnerViewDto;
 import com.goev.central.dto.partner.detail.PartnerActionDto;
 import com.goev.central.dto.partner.detail.PartnerDto;
+import com.goev.central.dto.partner.detail.PartnerTrackingDto;
 import com.goev.central.dto.partner.duty.PartnerDutyDto;
 import com.goev.central.dto.vehicle.VehicleViewDto;
 import com.goev.central.enums.booking.BookingStatus;
@@ -20,6 +22,7 @@ import com.goev.central.enums.booking.BookingSubStatus;
 import com.goev.central.enums.partner.PartnerDutyStatus;
 import com.goev.central.enums.partner.PartnerStatus;
 import com.goev.central.enums.partner.PartnerSubStatus;
+import com.goev.central.repository.FirebaseRepository;
 import com.goev.central.repository.booking.BookingRepository;
 import com.goev.central.repository.partner.detail.PartnerRepository;
 import com.goev.central.repository.partner.duty.PartnerDutyRepository;
@@ -27,16 +30,16 @@ import com.goev.central.repository.partner.duty.PartnerShiftRepository;
 import com.goev.central.repository.vehicle.detail.VehicleRepository;
 import com.goev.central.service.partner.detail.PartnerService;
 import com.goev.lib.exceptions.ResponseException;
+import com.google.common.reflect.TypeToken;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.lang.reflect.Type;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -49,6 +52,7 @@ public class PartnerServiceImpl implements PartnerService {
     private final BookingRepository bookingRepository;
     private final PartnerShiftRepository partnerShiftRepository;
     private final VehicleRepository vehicleRepository;
+    private final FirebaseRepository firebaseRepository;
 
     @Override
     public Boolean deletePartner(String partnerUUID) {
@@ -92,6 +96,42 @@ public class PartnerServiceImpl implements PartnerService {
         partnerDto.setLocationDetails(ApplicationConstants.GSON.fromJson(partner.getLocationDetails(), LocationDto.class));
         partnerDto.setPartnerDetails(PartnerViewDto.fromDao(partner));
         return partnerDto;
+    }
+
+    @Override
+    public PaginatedResponseDto<PartnerTrackingDto> getPartnerTrackings() {
+        PaginatedResponseDto<PartnerTrackingDto> result = PaginatedResponseDto.<PartnerTrackingDto>builder().elements(new ArrayList<>()).build();
+        List<PartnerDao> partners = partnerRepository.findAllByStatus(Arrays.stream(PartnerStatus.values())
+                .filter(x -> !x.equals(PartnerStatus.OFF_DUTY))
+                .map(PartnerStatus::name)
+                .collect(Collectors.toList()));
+
+        try {
+            Map<String, Object> locationData = firebaseRepository.getFromFirebase("/partner");
+
+            for (PartnerDao partnerDao : partners) {
+                PartnerTrackingDto partnerTrackingDto = PartnerTrackingDto.builder()
+                        .partnerDetails(PartnerDto.fromDao(partnerDao))
+                        .build();
+                if (locationData.containsKey(partnerDao.getUuid())) {
+                    Type t = new TypeToken<Map<String, Object>>() {
+                    }.getType();
+                    Map<String, Object> partnerData = ApplicationConstants.GSON.fromJson(ApplicationConstants.GSON.toJson(locationData.get(partnerDao.getUuid())), t);
+                    if (partnerData.containsKey("location")) {
+
+                        FirebaseLocationDto firebaseLocationDto = ApplicationConstants.GSON.fromJson(ApplicationConstants.GSON.toJson(partnerData.get("location")), FirebaseLocationDto.class);
+                        if (firebaseLocationDto.getCoords() != null)
+                            partnerTrackingDto.setLocation(firebaseLocationDto.getCoords());
+                    }
+                }
+                result.getElements().add(partnerTrackingDto);
+            }
+        } catch (Exception e) {
+            log.error("Error in fetching location data");
+        }
+
+        return result;
+
     }
 
 
@@ -159,7 +199,7 @@ public class PartnerServiceImpl implements PartnerService {
                 partner = unassign(partner, actionDto);
             }
             case CHANGE_VEHICLE -> {
-                partner = changeVehicle(partner,actionDto);
+                partner = changeVehicle(partner, actionDto);
             }
             case ASSIGN_VEHICLE -> {
                 partner = assignVehicle(partner, actionDto);
@@ -210,16 +250,16 @@ public class PartnerServiceImpl implements PartnerService {
 
     private PartnerDao changeVehicle(PartnerDao partner, PartnerActionDto actionDto) {
         VehicleDao vehicle = vehicleRepository.findByUUID(actionDto.getVehicleUUID());
-        if(vehicle==null)
-            throw new ResponseException("Vehicle no present for id : "+actionDto.getVehicleUUID());
+        if (vehicle == null)
+            throw new ResponseException("Vehicle no present for id : " + actionDto.getVehicleUUID());
 
         PartnerDao existingPartner = partnerRepository.findByVehicleId(vehicle.getId());
 
-        if(existingPartner!=null && !existingPartner.getId().equals(partner.getId()))
+        if (existingPartner != null && !existingPartner.getId().equals(partner.getId()))
             throw new ResponseException("Vehicle is already assigned to other partner.");
 
-        partner = unassign(partner,actionDto);
-        return assignVehicle(partner,actionDto);
+        partner = unassign(partner, actionDto);
+        return assignVehicle(partner, actionDto);
     }
 
     private PartnerDao assignVehicle(PartnerDao partnerDao, PartnerActionDto actionDto) {
@@ -229,12 +269,12 @@ public class PartnerServiceImpl implements PartnerService {
             throw new ResponseException("Vehicle can only be assigned in on duty state");
         }
         VehicleDao vehicle = vehicleRepository.findByUUID(actionDto.getVehicleUUID());
-        if(vehicle==null)
-            throw new ResponseException("Vehicle no present for id : "+actionDto.getVehicleUUID());
+        if (vehicle == null)
+            throw new ResponseException("Vehicle no present for id : " + actionDto.getVehicleUUID());
 
         PartnerDao existingPartner = partnerRepository.findByVehicleId(vehicle.getId());
 
-        if(existingPartner!=null)
+        if (existingPartner != null)
             throw new ResponseException("Vehicle is already assigned to other partner.");
 
         partnerDao.setStatus(PartnerStatus.ON_DUTY.name());
@@ -247,7 +287,7 @@ public class PartnerServiceImpl implements PartnerService {
 
     private PartnerDao unassign(PartnerDao partnerDao, PartnerActionDto actionDto) {
 
-        if(partnerDao.getVehicleId() == null)
+        if (partnerDao.getVehicleId() == null)
             throw new ResponseException("No vehicle assigned");
 
         partnerDao.setStatus(PartnerStatus.ON_DUTY.name());

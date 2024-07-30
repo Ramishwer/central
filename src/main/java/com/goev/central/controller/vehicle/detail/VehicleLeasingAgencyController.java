@@ -16,27 +16,27 @@ import org.springframework.web.bind.annotation.*;
 public class VehicleLeasingAgencyController {
     private final VehicleLeasingAgencyService vehicleLeasingAgencyService;
 
-    @GetMapping("/leasing-agencies")
+    @GetMapping("/vehicles/leasing-agencies")
     public ResponseDto<PaginatedResponseDto<VehicleLeasingAgencyDto>> getLeasingAgencies() {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleLeasingAgencyService.getLeasingAgencies());
     }
 
-    @PostMapping("/leasing-agencies")
+    @PostMapping("/vehicles/leasing-agencies")
     public ResponseDto<VehicleLeasingAgencyDto> createLeasingAgency(@RequestBody VehicleLeasingAgencyDto vehicleLeasingAgencyDto) {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleLeasingAgencyService.createLeasingAgency(vehicleLeasingAgencyDto));
     }
 
-    @PutMapping("/leasing-agencies/{leasingAgency-uuid}")
+    @PutMapping("/vehicles/leasing-agencies/{leasingAgency-uuid}")
     public ResponseDto<VehicleLeasingAgencyDto> updateLeasingAgency(@PathVariable(value = "leasingAgency-uuid") String leasingAgencyUUID, @RequestBody VehicleLeasingAgencyDto vehicleLeasingAgencyDto) {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleLeasingAgencyService.updateLeasingAgency(leasingAgencyUUID, vehicleLeasingAgencyDto));
     }
 
-    @GetMapping("/leasing-agencies/{leasing-agency-uuid}")
+    @GetMapping("/vehicles/leasing-agencies/{leasing-agency-uuid}")
     public ResponseDto<VehicleLeasingAgencyDto> getLeasingAgencyDetails(@PathVariable(value = "leasing-agency-uuid") String leasingAgencyUUID) {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleLeasingAgencyService.getLeasingAgencyDetails(leasingAgencyUUID));
     }
 
-    @DeleteMapping("/leasing-agencies/{leasing-agency-uuid}")
+    @DeleteMapping("/vehicles/leasing-agencies/{leasing-agency-uuid}")
     public ResponseDto<Boolean> deleteLeasingAgency(@PathVariable(value = "leasing-agency-uuid") String leasingAgencyUUID) {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleLeasingAgencyService.deleteLeasingAgency(leasingAgencyUUID));
     }

@@ -62,6 +62,7 @@ public class PartnerDto {
                 .dutyDetails(ApplicationConstants.GSON.fromJson(partner.getDutyDetails(), PartnerDutyDto.class))
                 .locationStatus(partner.getLocationStatus())
                 .onboardingStatus(partner.getOnboardingStatus())
+                .partnerDetails(PartnerViewDto.fromDao(partner))
                 .build();
 
     }

@@ -1,12 +1,16 @@
 package com.goev.central.service.booking.impl;
 
 import com.goev.central.constant.ApplicationConstants;
+import com.goev.central.dao.booking.BookingScheduleConfigurationDao;
 import com.goev.central.dao.booking.BookingScheduleDao;
+import com.goev.central.dto.booking.BookingRequestDto;
 import com.goev.central.dto.booking.BookingScheduleDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
+import com.goev.central.enums.EntityType;
+import com.goev.central.enums.booking.BookingScheduleStatus;
+import com.goev.central.repository.booking.BookingScheduleConfigurationRepository;
 import com.goev.central.repository.booking.BookingScheduleRepository;
 import com.goev.central.service.booking.BookingScheduleService;
-import com.goev.lib.dto.LatLongDto;
 import com.goev.lib.exceptions.ResponseException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +19,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -22,6 +27,7 @@ import java.util.List;
 public class BookingScheduleServiceImpl implements BookingScheduleService {
 
     private final BookingScheduleRepository bookingScheduleRepository;
+    private final BookingScheduleConfigurationRepository bookingScheduleConfigurationRepository;
 
     @Override
     public PaginatedResponseDto<BookingScheduleDto> getBookingSchedules(String status, String subStatus) {
@@ -40,10 +46,31 @@ public class BookingScheduleServiceImpl implements BookingScheduleService {
     }
 
     @Override
-    public BookingScheduleDto createBookingSchedule(BookingScheduleDto bookingScheduleDto) {
+    public BookingScheduleDto createBookingSchedule(BookingRequestDto bookingRequestDto) {
 
-        BookingScheduleDao bookingScheduleDao = getBookingScheduleDao(bookingScheduleDto);
+        BookingScheduleDao bookingScheduleDao = new BookingScheduleDao();
+
+        bookingScheduleDao.setStatus(BookingScheduleStatus.CONFIRMED.name());
+        bookingScheduleDao.setEntityType(EntityType.BUSINESS.name());
+        bookingScheduleDao.setApplicableFromTime(bookingRequestDto.getScheduleDetails().getStartTime());
+        bookingScheduleDao.setApplicableToTime(bookingRequestDto.getScheduleDetails().getEndTime());
         bookingScheduleDao = bookingScheduleRepository.save(bookingScheduleDao);
+
+        bookingRequestDto.setScheduleDetails(null);
+        for(Map.Entry<String,String> configEntry :bookingRequestDto.getScheduleDetails().getSchedule().entrySet()){
+            String day = configEntry.getKey();
+            String time = configEntry.getValue();
+            BookingScheduleConfigurationDao bookingScheduleConfigurationDao = new BookingScheduleConfigurationDao();
+            bookingScheduleConfigurationDao.setStatus(bookingScheduleDao.getStatus());
+            bookingScheduleConfigurationDao.setDay(day);
+            bookingScheduleConfigurationDao.setBookingScheduleId(bookingScheduleDao.getId());
+            bookingScheduleConfigurationDao.setStart(time);
+
+            bookingScheduleConfigurationDao.setBookingConfig(ApplicationConstants.GSON.toJson(bookingRequestDto));
+
+            bookingScheduleConfigurationRepository.save(bookingScheduleConfigurationDao);
+
+        }
         if (bookingScheduleDao == null)
             throw new ResponseException("Error in saving bookingSchedule");
         return getBookingScheduleDto(bookingScheduleDao);

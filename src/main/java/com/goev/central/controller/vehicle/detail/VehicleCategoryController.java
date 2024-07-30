@@ -16,27 +16,27 @@ import org.springframework.web.bind.annotation.*;
 public class VehicleCategoryController {
     private final VehicleCategoryService vehicleCategoryService;
 
-    @GetMapping("/categories")
+    @GetMapping("/vehicles/categories")
     public ResponseDto<PaginatedResponseDto<VehicleCategoryDto>> getCategories() {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleCategoryService.getCategories());
     }
 
-    @PostMapping("/categories")
+    @PostMapping("/vehicles/categories")
     public ResponseDto<VehicleCategoryDto> createCategory(@RequestBody VehicleCategoryDto vehicleCategoryDto) {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleCategoryService.createCategory(vehicleCategoryDto));
     }
 
-    @PutMapping("/categories/{category-uuid}")
+    @PutMapping("/vehicles/categories/{category-uuid}")
     public ResponseDto<VehicleCategoryDto> updateCategory(@PathVariable(value = "category-uuid") String categoryUUID, @RequestBody VehicleCategoryDto vehicleCategoryDto) {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleCategoryService.updateCategory(categoryUUID, vehicleCategoryDto));
     }
 
-    @GetMapping("/categories/{category-uuid}")
+    @GetMapping("/vehicles/categories/{category-uuid}")
     public ResponseDto<VehicleCategoryDto> getCategoryDetails(@PathVariable(value = "category-uuid") String categoryUUID) {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleCategoryService.getCategoryDetails(categoryUUID));
     }
 
-    @DeleteMapping("/categories/{category-uuid}")
+    @DeleteMapping("/vehicles/categories/{category-uuid}")
     public ResponseDto<Boolean> deleteCategory(@PathVariable(value = "category-uuid") String categoryUUID) {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleCategoryService.deleteCategory(categoryUUID));
     }
