@@ -3,19 +3,11 @@ package com.goev.central.service.vehicle.detail.impl;
 
 import com.goev.central.constant.ApplicationConstants;
 import com.goev.central.dao.vehicle.detail.VehicleDao;
-import com.goev.central.dao.vehicle.detail.VehicleDao;
-import com.goev.central.dao.vehicle.detail.VehicleDao;
-import com.goev.central.dao.vehicle.detail.VehicleDao;
-import com.goev.central.dao.vehicle.detail.VehicleDao;
-import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.partner.PartnerViewDto;
-import com.goev.central.dto.vehicle.detail.VehicleDto;
-import com.goev.central.dto.vehicle.detail.VehicleDto;
-import com.goev.central.dto.vehicle.VehicleViewDto;
-import com.goev.central.dto.vehicle.VehicleViewDto;
 import com.goev.central.dto.vehicle.VehicleViewDto;
 import com.goev.central.dto.vehicle.detail.VehicleDto;
+import com.goev.central.enums.vehicle.VehicleOnboardingStatus;
 import com.goev.central.repository.vehicle.detail.VehicleRepository;
 import com.goev.central.service.vehicle.detail.VehicleService;
 import com.goev.lib.exceptions.ResponseException;
@@ -50,6 +42,17 @@ public class VehicleServiceImpl implements VehicleService {
         PaginatedResponseDto<VehicleDto> result = PaginatedResponseDto.<VehicleDto>builder().elements(new ArrayList<>()).build();
         List<VehicleDao> vehicles = vehicleRepository.findAllByStatus(status);
         return getVehicleDtoPaginatedResponseDto(vehicles, result);
+    }
+
+    @Override
+    public Boolean updateVehicleOnboardingStatus(String vehicleUUID, VehicleOnboardingStatus status) {
+        VehicleDao vehicle = vehicleRepository.findByUUID(vehicleUUID);
+        if (vehicle == null)
+            throw new ResponseException("No vehicle found for Id :" + vehicleUUID);
+
+        vehicle.setOnboardingStatus(status.name());
+        vehicleRepository.update(vehicle);
+        return true;
     }
 
     private PaginatedResponseDto<VehicleDto> getVehicleDtoPaginatedResponseDto(List<VehicleDao> vehicles, PaginatedResponseDto<VehicleDto> result) {

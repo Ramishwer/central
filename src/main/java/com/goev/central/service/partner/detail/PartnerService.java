@@ -5,6 +5,7 @@ import com.goev.central.dto.partner.PartnerViewDto;
 import com.goev.central.dto.partner.detail.PartnerActionDto;
 import com.goev.central.dto.partner.detail.PartnerDto;
 import com.goev.central.dto.partner.detail.PartnerTrackingDto;
+import com.goev.central.enums.partner.PartnerOnboardingStatus;
 
 public interface PartnerService {
 
@@ -13,6 +14,8 @@ public interface PartnerService {
     PaginatedResponseDto<PartnerViewDto> getPartners(String onboardingStatus);
 
     Boolean deletePartner(String partnerUUID);
+
+    Boolean updatePartnerOnboardingStatus(String partnerUUID, PartnerOnboardingStatus status);
 
     PartnerDto updatePartner(String partnerUUID, PartnerActionDto actionDto);
 

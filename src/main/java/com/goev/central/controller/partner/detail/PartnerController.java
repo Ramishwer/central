@@ -5,6 +5,7 @@ import com.goev.central.dto.partner.PartnerViewDto;
 import com.goev.central.dto.partner.detail.PartnerActionDto;
 import com.goev.central.dto.partner.detail.PartnerDto;
 import com.goev.central.dto.partner.detail.PartnerTrackingDto;
+import com.goev.central.enums.partner.PartnerOnboardingStatus;
 import com.goev.central.service.partner.detail.PartnerService;
 import com.goev.lib.dto.ResponseDto;
 import com.goev.lib.dto.StatusDto;
@@ -37,8 +38,14 @@ public class PartnerController {
 
 
     @DeleteMapping("/partners/{partner-uuid}")
-    public ResponseDto<Boolean> deleteAccount(@PathVariable(value = "partner-uuid") String partnerUUID) {
+    public ResponseDto<Boolean> deletePartner(@PathVariable(value = "partner-uuid") String partnerUUID) {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerService.deletePartner(partnerUUID));
+    }
+
+
+    @PostMapping("/partners/{partner-uuid}")
+    public ResponseDto<Boolean> updatePartner(@PathVariable("partner-uuid") String partnerUUID, @RequestBody PartnerOnboardingStatus status) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerService.updatePartnerOnboardingStatus(partnerUUID, status));
     }
 
     @PostMapping("/partners/{partner-uuid}")

@@ -20,6 +20,7 @@ import com.goev.central.dto.vehicle.VehicleViewDto;
 import com.goev.central.enums.booking.BookingStatus;
 import com.goev.central.enums.booking.BookingSubStatus;
 import com.goev.central.enums.partner.PartnerDutyStatus;
+import com.goev.central.enums.partner.PartnerOnboardingStatus;
 import com.goev.central.enums.partner.PartnerStatus;
 import com.goev.central.enums.partner.PartnerSubStatus;
 import com.goev.central.repository.FirebaseRepository;
@@ -60,6 +61,17 @@ public class PartnerServiceImpl implements PartnerService {
         if (partner == null)
             throw new ResponseException("No partner found for Id :" + partnerUUID);
         partnerRepository.delete(partner.getId());
+        return true;
+    }
+
+
+    @Override
+    public Boolean updatePartnerOnboardingStatus(String partnerUUID, PartnerOnboardingStatus status) {
+        PartnerDao partner = partnerRepository.findByUUID(partnerUUID);
+        if (partner == null)
+            throw new ResponseException("No partner found for Id :" + partnerUUID);
+        partner.setOnboardingStatus(status.name());
+        partnerRepository.update(partner);
         return true;
     }
 
@@ -127,7 +139,7 @@ public class PartnerServiceImpl implements PartnerService {
                 result.getElements().add(partnerTrackingDto);
             }
         } catch (Exception e) {
-            log.error("Error in fetching location data",e);
+            log.error("Error in fetching location data", e);
         }
 
         return result;
