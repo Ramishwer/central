@@ -119,7 +119,7 @@ public class PartnerSegmentServiceImpl implements PartnerSegmentService {
         mappingDao.setPartnerSegmentId(partnerSegmentDao.getId());
         partnerSegmentMappingRepository.save(mappingDao);
 
-        return null;
+        return PartnerSegmentMappingDto.fromDao(mappingDao,PartnerSegmentDto.fromDao(partnerSegmentDao),  PartnerViewDto.fromDao(partnerDao));
     }
 
     @Override
