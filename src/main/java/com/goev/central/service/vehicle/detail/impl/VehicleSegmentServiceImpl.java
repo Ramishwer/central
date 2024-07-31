@@ -3,12 +3,10 @@ package com.goev.central.service.vehicle.detail.impl;
 import com.goev.central.dao.vehicle.detail.VehicleDao;
 import com.goev.central.dao.vehicle.detail.VehicleSegmentDao;
 import com.goev.central.dao.vehicle.detail.VehicleSegmentMappingDao;
-import com.goev.central.dao.vehicle.detail.VehicleSegmentDao;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.vehicle.VehicleViewDto;
 import com.goev.central.dto.vehicle.detail.VehicleSegmentDto;
 import com.goev.central.dto.vehicle.detail.VehicleSegmentMappingDto;
-import com.goev.central.dto.vehicle.detail.VehicleSegmentDto;
 import com.goev.central.repository.vehicle.detail.VehicleRepository;
 import com.goev.central.repository.vehicle.detail.VehicleSegmentMappingRepository;
 import com.goev.central.repository.vehicle.detail.VehicleSegmentRepository;
@@ -122,7 +120,7 @@ public class VehicleSegmentServiceImpl implements VehicleSegmentService {
         mappingDao.setVehicleSegmentId(vehicleSegmentDao.getId());
         vehicleSegmentMappingRepository.save(mappingDao);
 
-        return null;
+        return VehicleSegmentMappingDto.fromDao(mappingDao, VehicleSegmentDto.fromDao(vehicleSegmentDao), VehicleViewDto.fromDao(vehicleDao));
     }
 
     @Override
@@ -152,9 +150,9 @@ public class VehicleSegmentServiceImpl implements VehicleSegmentService {
             VehicleDao vehicle = vehicleRepository.findById(vehicleSegmentMappingDao.getVehicleId());
             if (vehicle == null)
                 continue;
-            result.add(VehicleSegmentMappingDto.fromDao(vehicleSegmentMappingDao, VehicleSegmentDto.fromDao(vehicleSegmentDao),  VehicleViewDto.fromDao(vehicle)));
+            result.add(VehicleSegmentMappingDto.fromDao(vehicleSegmentMappingDao, VehicleSegmentDto.fromDao(vehicleSegmentDao), VehicleViewDto.fromDao(vehicle)));
         }
         return result;
     }
-    
+
 }
