@@ -127,7 +127,7 @@ public class PartnerServiceImpl implements PartnerService {
                 result.getElements().add(partnerTrackingDto);
             }
         } catch (Exception e) {
-            log.error("Error in fetching location data");
+            log.error("Error in fetching location data",e);
         }
 
         return result;
