@@ -22,6 +22,7 @@ public class VehicleDao extends BaseDao {
     private DateTime computedChargingTime;
     private String locationStatus;
     private Integer locationId;
+    private String locationDetails;
     private String viewInfo;
     private String imageUrl;
     private String onboardingStatus;

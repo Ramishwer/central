@@ -1,7 +1,9 @@
 package com.goev.central.controller.vehicle.detail;
 
 import com.goev.central.dto.common.PaginatedResponseDto;
+import com.goev.central.dto.vehicle.VehicleActionDto;
 import com.goev.central.dto.vehicle.VehicleViewDto;
+import com.goev.central.dto.vehicle.detail.VehicleDto;
 import com.goev.central.enums.partner.PartnerOnboardingStatus;
 import com.goev.central.enums.vehicle.VehicleOnboardingStatus;
 import com.goev.central.service.vehicle.detail.VehicleService;
@@ -30,8 +32,8 @@ public class VehicleController {
     }
 
     @PostMapping("/vehicles/{vehicle-uuid}")
-    public ResponseDto<Boolean> updateVehicle(@PathVariable("vehicle-uuid") String vehicleUUID, @RequestBody VehicleOnboardingStatus status) {
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleService.updateVehicleOnboardingStatus(vehicleUUID, status));
+    public ResponseDto<VehicleDto> updateVehicle(@PathVariable("vehicle-uuid") String vehicleUUID, @RequestBody VehicleActionDto actionDto) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleService.updateVehicle(vehicleUUID, actionDto));
     }
 
     @DeleteMapping("/vehicles/{vehicle-uuid}")

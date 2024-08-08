@@ -46,6 +46,10 @@ public class BookingViewDto {
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime plannedEndTime;
+    private Integer plannedDistance;
+    private Integer actualDistance;
+    private Integer plannedDuration;
+    private Integer actualDuration;
 
 
 

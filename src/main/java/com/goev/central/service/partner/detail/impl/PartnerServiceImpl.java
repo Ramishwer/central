@@ -65,14 +65,10 @@ public class PartnerServiceImpl implements PartnerService {
     }
 
 
-    @Override
-    public Boolean updatePartnerOnboardingStatus(String partnerUUID, PartnerOnboardingStatus status) {
-        PartnerDao partner = partnerRepository.findByUUID(partnerUUID);
-        if (partner == null)
-            throw new ResponseException("No partner found for Id :" + partnerUUID);
+    public PartnerDao updatePartnerOnboardingStatus(PartnerDao partner, PartnerOnboardingStatus status) {
         partner.setOnboardingStatus(status.name());
-        partnerRepository.update(partner);
-        return true;
+        partner = partnerRepository.update(partner);
+        return partner;
     }
 
     @Override
@@ -204,6 +200,13 @@ public class PartnerServiceImpl implements PartnerService {
             throw new ResponseException("No partner found for Id :" + partnerUUID);
 
         switch (actionDto.getAction()) {
+            case DEBOARD -> {
+                partner = updatePartnerOnboardingStatus(partner, PartnerOnboardingStatus.DEBOARDED);
+            }
+            case SUSPEND -> {
+                partner = updatePartnerOnboardingStatus(partner, PartnerOnboardingStatus.SUSPENDED);
+            }
+
             case CHECK_IN -> {
                 partner = checkin(partner, actionDto);
             }

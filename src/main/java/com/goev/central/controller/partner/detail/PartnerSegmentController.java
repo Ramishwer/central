@@ -1,5 +1,6 @@
 package com.goev.central.controller.partner.detail;
 
+import com.goev.central.dto.business.BusinessSegmentMappingDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.partner.detail.PartnerSegmentDto;
 import com.goev.central.dto.partner.detail.PartnerSegmentMappingDto;
@@ -57,8 +58,24 @@ public class PartnerSegmentController {
     }
 
     @DeleteMapping("/partners/segments/{segment-uuid}/partner-mappings/{partner-segment-mapping-uuid}")
-    public ResponseDto<Boolean> deleteShiftMapping(@PathVariable(value = "segment-uuid") String segmentUUID,@PathVariable(value = "partner-segment-mapping-uuid") String partnerSegmentMappingUUID)  {
+    public ResponseDto<Boolean> deletePartnerMapping(@PathVariable(value = "segment-uuid") String segmentUUID,@PathVariable(value = "partner-segment-mapping-uuid") String partnerSegmentMappingUUID)  {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerSegmentService.deletePartnerMapping(segmentUUID, partnerSegmentMappingUUID));
+    }
+
+
+    @GetMapping("/partners/segments/{segment-uuid}/vehicle-segment-mappings")
+    public ResponseDto<List<PartnerSegmentMappingDto>> getVehicleSegmentMappings(@PathVariable(value = "segment-uuid") String segmentUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerSegmentService.getVehicleSegmentMappings(segmentUUID));
+    }
+
+    @PostMapping("/partners/segments/{segment-uuid}/vehicle-segment-mappings")
+    public ResponseDto<PartnerSegmentMappingDto> createVehicleSegmentMapping(@PathVariable(value = "segment-uuid") String segmentUUID, @RequestBody PartnerSegmentMappingDto partnerSegmentMappingDto) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerSegmentService.createVehicleSegmentMapping(segmentUUID, partnerSegmentMappingDto));
+    }
+
+    @DeleteMapping("/partners/segments/{segment-uuid}/vehicle-segment-mappings/{vehicle-segment-mapping-uuid}")
+    public ResponseDto<Boolean> deleteVehicleSegmentMapping(@PathVariable(value = "segment-uuid") String segmentUUID,@PathVariable(value = "vehicle-segment-mapping-uuid") String vehicleSegmentMappingUUID)  {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerSegmentService.deleteVehicleSegmentMapping(segmentUUID, vehicleSegmentMappingUUID));
     }
 
 }

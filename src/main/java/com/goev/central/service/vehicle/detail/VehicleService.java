@@ -1,6 +1,7 @@
 package com.goev.central.service.vehicle.detail;
 
 import com.goev.central.dto.common.PaginatedResponseDto;
+import com.goev.central.dto.vehicle.VehicleActionDto;
 import com.goev.central.dto.vehicle.VehicleViewDto;
 import com.goev.central.dto.vehicle.detail.VehicleDto;
 import com.goev.central.enums.vehicle.VehicleOnboardingStatus;
@@ -13,5 +14,5 @@ public interface VehicleService {
 
     PaginatedResponseDto<VehicleDto> getVehicleStatus(String status);
 
-    Boolean updateVehicleOnboardingStatus(String vehicleUUID, VehicleOnboardingStatus status);
+    VehicleDto updateVehicle(String vehicleUUID, VehicleActionDto status);
 }

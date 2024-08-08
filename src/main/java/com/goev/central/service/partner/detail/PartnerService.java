@@ -15,8 +15,6 @@ public interface PartnerService {
 
     Boolean deletePartner(String partnerUUID);
 
-    Boolean updatePartnerOnboardingStatus(String partnerUUID, PartnerOnboardingStatus status);
-
     PartnerDto updatePartner(String partnerUUID, PartnerActionDto actionDto);
 
     PaginatedResponseDto<PartnerDto> getPartnerStatuses(String status);

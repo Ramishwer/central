@@ -1,6 +1,8 @@
 package com.goev.central.enums.partner;
 
 public enum PartnerAction {
+    DEBOARD,
+    SUSPEND,
     CHECK_IN,
 
     UNASSIGN,

@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.joda.deser.DateTimeDeserializer;
 import com.fasterxml.jackson.datatype.joda.ser.DateTimeSerializer;
+import com.goev.central.constant.ApplicationConstants;
+import com.goev.central.dao.vehicle.detail.VehicleDao;
 import com.goev.central.dto.common.FileDto;
 import com.goev.central.dto.location.LocationDto;
 import com.goev.central.dto.partner.PartnerViewDto;
@@ -40,4 +42,18 @@ public class VehicleDto {
     private String locationStatus;
     private LocationDto locationDetails;
     private VehicleViewDto vehicle;
+
+    public static VehicleDto fromDao(VehicleDao vehicle) {
+        if(vehicle == null)
+            return null;
+        return VehicleDto.builder()
+                .uuid(vehicle.getUuid())
+                .status(vehicle.getStatus())
+                .subStatus(vehicle.getSubStatus())
+                .locationDetails(ApplicationConstants.GSON.fromJson(vehicle.getLocationDetails(), LocationDto.class))
+                .partnerDetails(ApplicationConstants.GSON.fromJson(vehicle.getPartnerDetails(), PartnerViewDto.class))
+                .vehicleTransferDetails(ApplicationConstants.GSON.fromJson(vehicle.getVehicleTransferDetails(), VehicleTransferDto.class))
+                .vehicle(VehicleViewDto.fromDao(vehicle))
+                .build();
+    }
 }

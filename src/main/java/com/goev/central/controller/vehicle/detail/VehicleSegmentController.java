@@ -56,7 +56,7 @@ public class VehicleSegmentController {
     }
 
     @DeleteMapping("/vehicles/segments/{segment-uuid}/vehicle-mappings/{vehicle-segment-mapping-uuid}")
-    public ResponseDto<Boolean> deleteShiftMapping(@PathVariable(value = "segment-uuid") String segmentUUID,@PathVariable(value = "vehicle-segment-mapping-uuid") String vehicleSegmentMappingUUID)  {
+    public ResponseDto<Boolean> deleteVehicleMapping(@PathVariable(value = "segment-uuid") String segmentUUID,@PathVariable(value = "vehicle-segment-mapping-uuid") String vehicleSegmentMappingUUID)  {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleSegmentService.deleteVehicleMapping(segmentUUID, vehicleSegmentMappingUUID));
     }
 }

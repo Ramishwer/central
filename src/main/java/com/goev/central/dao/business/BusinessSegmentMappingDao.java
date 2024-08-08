@@ -1,4 +1,4 @@
-package com.goev.central.dao.partner.detail;
+package com.goev.central.dao.business;
 
 import com.goev.lib.dao.BaseDao;
 import lombok.*;
@@ -9,9 +9,9 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
-public class PartnerSegmentMappingDao extends BaseDao {
-    private Integer partnerId;
+public class BusinessSegmentMappingDao extends BaseDao {
+    private Integer businessSegmentId;
+    private Integer vehicleSegmentId;
     private Integer partnerSegmentId;
     private String status;
-    private Integer vehicleSegmentId;
 }

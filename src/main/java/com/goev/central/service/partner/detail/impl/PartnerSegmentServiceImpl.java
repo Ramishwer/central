@@ -5,15 +5,18 @@ import com.goev.central.dao.partner.detail.PartnerSegmentDao;
 import com.goev.central.dao.partner.detail.PartnerSegmentMappingDao;
 import com.goev.central.dao.partner.duty.PartnerShiftMappingDao;
 import com.goev.central.dao.shift.ShiftDao;
+import com.goev.central.dao.vehicle.detail.VehicleSegmentDao;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.partner.PartnerViewDto;
 import com.goev.central.dto.partner.detail.PartnerSegmentDto;
 import com.goev.central.dto.partner.detail.PartnerSegmentMappingDto;
 import com.goev.central.dto.partner.duty.PartnerShiftMappingDto;
 import com.goev.central.dto.shift.ShiftDto;
+import com.goev.central.dto.vehicle.detail.VehicleSegmentDto;
 import com.goev.central.repository.partner.detail.PartnerRepository;
 import com.goev.central.repository.partner.detail.PartnerSegmentMappingRepository;
 import com.goev.central.repository.partner.detail.PartnerSegmentRepository;
+import com.goev.central.repository.vehicle.detail.VehicleSegmentRepository;
 import com.goev.central.service.partner.detail.PartnerSegmentService;
 import com.goev.lib.exceptions.ResponseException;
 import lombok.AllArgsConstructor;
@@ -32,6 +35,7 @@ public class PartnerSegmentServiceImpl implements PartnerSegmentService {
     private final PartnerSegmentRepository partnerSegmentRepository;
     private final PartnerRepository partnerRepository;
     private final PartnerSegmentMappingRepository partnerSegmentMappingRepository;
+    private final VehicleSegmentRepository vehicleSegmentRepository;
 
     @Override
     public PaginatedResponseDto<PartnerSegmentDto> getSegments() {
@@ -117,9 +121,9 @@ public class PartnerSegmentServiceImpl implements PartnerSegmentService {
 
         mappingDao.setPartnerId(partnerDao.getId());
         mappingDao.setPartnerSegmentId(partnerSegmentDao.getId());
-        partnerSegmentMappingRepository.save(mappingDao);
+        mappingDao = partnerSegmentMappingRepository.save(mappingDao);
 
-        return PartnerSegmentMappingDto.fromDao(mappingDao,PartnerSegmentDto.fromDao(partnerSegmentDao),  PartnerViewDto.fromDao(partnerDao));
+        return PartnerSegmentMappingDto.fromDao(mappingDao,PartnerSegmentDto.fromDao(partnerSegmentDao),  PartnerViewDto.fromDao(partnerDao),null);
     }
 
     @Override
@@ -141,7 +145,7 @@ public class PartnerSegmentServiceImpl implements PartnerSegmentService {
         if (partnerSegmentDao == null)
             throw new ResponseException("No partner segment found for Id :" + segmentUUID);
 
-        List<PartnerSegmentMappingDao> partnerSegmentMappingDaoList = partnerSegmentMappingRepository.findAllBySegmentId(partnerSegmentDao.getId());
+        List<PartnerSegmentMappingDao> partnerSegmentMappingDaoList = partnerSegmentMappingRepository.findAllPartnerBySegmentId(partnerSegmentDao.getId());
 
         List<PartnerSegmentMappingDto> result = new ArrayList<>();
 
@@ -149,7 +153,63 @@ public class PartnerSegmentServiceImpl implements PartnerSegmentService {
             PartnerDao partner = partnerRepository.findById(partnerSegmentMappingDao.getPartnerId());
             if (partner == null)
                 continue;
-            result.add(PartnerSegmentMappingDto.fromDao(partnerSegmentMappingDao,PartnerSegmentDto.fromDao(partnerSegmentDao),  PartnerViewDto.fromDao(partner)));
+            result.add(PartnerSegmentMappingDto.fromDao(partnerSegmentMappingDao,PartnerSegmentDto.fromDao(partnerSegmentDao),  PartnerViewDto.fromDao(partner),null));
+        }
+        return result;
+    }
+
+
+    @Override
+    public PartnerSegmentMappingDto createVehicleSegmentMapping(String segmentUUID, PartnerSegmentMappingDto partnerSegmentMappingDto) {
+        PartnerSegmentDao partnerSegmentDao = partnerSegmentRepository.findByUUID(segmentUUID);
+        if (partnerSegmentDao == null)
+            throw new ResponseException("No partner segment found for Id :" + segmentUUID);
+
+        if (partnerSegmentMappingDto.getVehicleSegment() == null)
+            throw new ResponseException("No partner details present.");
+
+        VehicleSegmentDao vehicleSegmentDao = vehicleSegmentRepository.findByUUID(partnerSegmentMappingDto.getVehicleSegment().getUuid());
+
+        if (vehicleSegmentDao == null)
+            throw new ResponseException("No vehicle segment found for Id :" + partnerSegmentMappingDto.getVehicleSegment().getUuid());
+
+        PartnerSegmentMappingDao mappingDao = new PartnerSegmentMappingDao();
+
+        mappingDao.setVehicleSegmentId(vehicleSegmentDao.getId());
+        mappingDao.setPartnerSegmentId(partnerSegmentDao.getId());
+        mappingDao = partnerSegmentMappingRepository.save(mappingDao);
+
+        return PartnerSegmentMappingDto.fromDao(mappingDao,PartnerSegmentDto.fromDao(partnerSegmentDao),  null, VehicleSegmentDto.fromDao(vehicleSegmentDao));
+    }
+
+    @Override
+    public Boolean deleteVehicleSegmentMapping(String segmentUUID, String partnerSegmentMappingUUID) {
+        PartnerSegmentDao partnerSegmentDao = partnerSegmentRepository.findByUUID(segmentUUID);
+        if (partnerSegmentDao == null)
+            throw new ResponseException("No partner segment found for Id :" + segmentUUID);
+
+        PartnerSegmentMappingDao partnerSegmentMappingDao = partnerSegmentMappingRepository.findByUUID(partnerSegmentMappingUUID);
+        if (partnerSegmentMappingDao == null)
+            throw new ResponseException("No partner segment Mapping found for Id :" + partnerSegmentMappingUUID);
+        partnerSegmentMappingRepository.delete(partnerSegmentMappingDao.getId());
+        return true;
+    }
+
+    @Override
+    public List<PartnerSegmentMappingDto> getVehicleSegmentMappings(String segmentUUID) {
+        PartnerSegmentDao partnerSegmentDao = partnerSegmentRepository.findByUUID(segmentUUID);
+        if (partnerSegmentDao == null)
+            throw new ResponseException("No partner segment found for Id :" + segmentUUID);
+
+        List<PartnerSegmentMappingDao> partnerSegmentMappingDaoList = partnerSegmentMappingRepository.findAllVehicleSegmentBySegmentId(partnerSegmentDao.getId());
+
+        List<PartnerSegmentMappingDto> result = new ArrayList<>();
+
+        for (PartnerSegmentMappingDao partnerSegmentMappingDao : partnerSegmentMappingDaoList) {
+            VehicleSegmentDao vehicleSegmentDao = vehicleSegmentRepository.findById(partnerSegmentMappingDao.getVehicleSegmentId());
+            if (vehicleSegmentDao == null)
+                continue;
+            result.add(PartnerSegmentMappingDto.fromDao(partnerSegmentMappingDao,PartnerSegmentDto.fromDao(partnerSegmentDao),  null,VehicleSegmentDto.fromDao(vehicleSegmentDao)));
         }
         return result;
     }

@@ -1,5 +1,6 @@
 package com.goev.central.service.partner.detail;
 
+import com.goev.central.dto.business.BusinessSegmentMappingDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.partner.detail.PartnerSegmentDto;
 import com.goev.central.dto.partner.detail.PartnerSegmentMappingDto;
@@ -23,4 +24,10 @@ public interface PartnerSegmentService {
     Boolean deletePartnerMapping(String segmentUUID, String partnerSegmentMappingUUID);
 
     List<PartnerSegmentMappingDto> getPartnerMappings(String segmentUUID);
+
+    List<PartnerSegmentMappingDto> getVehicleSegmentMappings(String segmentUUID);
+
+    PartnerSegmentMappingDto createVehicleSegmentMapping(String segmentUUID, PartnerSegmentMappingDto businessSegmentMappingDto);
+
+    Boolean deleteVehicleSegmentMapping(String segmentUUID, String vehicleSegmentMappingUUID);
 }

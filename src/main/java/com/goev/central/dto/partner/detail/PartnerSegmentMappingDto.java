@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.goev.central.dao.partner.detail.PartnerSegmentMappingDao;
 import com.goev.central.dto.partner.PartnerViewDto;
 
+import com.goev.central.dto.vehicle.detail.VehicleSegmentDto;
 import lombok.*;
 
 @AllArgsConstructor
@@ -17,13 +18,15 @@ public class PartnerSegmentMappingDto {
     private String uuid;
     private PartnerSegmentDto segment;
     private PartnerViewDto partner;
+    private VehicleSegmentDto vehicleSegment;
 
 
-    public static PartnerSegmentMappingDto fromDao(PartnerSegmentMappingDao partnerSegmentMappingDao,PartnerSegmentDto partnerSegmentDto,PartnerViewDto partner){
+    public static PartnerSegmentMappingDto fromDao(PartnerSegmentMappingDao partnerSegmentMappingDao,PartnerSegmentDto partnerSegmentDto,PartnerViewDto partner,VehicleSegmentDto vehicleSegmentDto){
           return PartnerSegmentMappingDto.builder()
                   .uuid(partnerSegmentMappingDao.getUuid())
                   .segment(partnerSegmentDto)
                   .partner(partner)
+                  .vehicleSegment(vehicleSegmentDto)
                   .build();
     }
 }

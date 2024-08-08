@@ -42,12 +42,6 @@ public class PartnerController {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerService.deletePartner(partnerUUID));
     }
 
-
-    @PostMapping("/partners/{partner-uuid}")
-    public ResponseDto<Boolean> updatePartner(@PathVariable("partner-uuid") String partnerUUID, @RequestBody PartnerOnboardingStatus status) {
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerService.updatePartnerOnboardingStatus(partnerUUID, status));
-    }
-
     @PostMapping("/partners/{partner-uuid}")
     public ResponseDto<PartnerDto> updatePartner(@PathVariable("partner-uuid") String partnerUUID, @RequestBody PartnerActionDto actionDto) {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerService.updatePartner(partnerUUID, actionDto));

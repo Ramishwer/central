@@ -118,7 +118,7 @@ public class VehicleSegmentServiceImpl implements VehicleSegmentService {
 
         mappingDao.setVehicleId(vehicleDao.getId());
         mappingDao.setVehicleSegmentId(vehicleSegmentDao.getId());
-        vehicleSegmentMappingRepository.save(mappingDao);
+        mappingDao = vehicleSegmentMappingRepository.save(mappingDao);
 
         return VehicleSegmentMappingDto.fromDao(mappingDao, VehicleSegmentDto.fromDao(vehicleSegmentDao), VehicleViewDto.fromDao(vehicleDao));
     }
