@@ -18,8 +18,8 @@ public class PartnerDocumentTypeDto {
     private String label;
     private String groupKey;
     private String groupDescription;
-    private Boolean isMandatory;
-    private Boolean needsVerification;
+    private Boolean isMandatory = false;
+    private Boolean needsVerification = false;
 
     public static PartnerDocumentTypeDto fromDao(PartnerDocumentTypeDao partnerDocumentTypeDao) {
         return PartnerDocumentTypeDto.builder()

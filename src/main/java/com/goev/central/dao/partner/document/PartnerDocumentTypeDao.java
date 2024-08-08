@@ -16,8 +16,8 @@ public class PartnerDocumentTypeDao extends BaseDao {
     private String label;
     private String groupKey;
     private String groupDescription;
-    private Boolean isMandatory;
-    private Boolean needsVerification;
+    private Boolean isMandatory = false;
+    private Boolean needsVerification = false;
 
     public static PartnerDocumentTypeDao fromDto(PartnerDocumentTypeDto partnerDocumentTypeDto) {
         PartnerDocumentTypeDao partnerDocumentTypeDao = new PartnerDocumentTypeDao();

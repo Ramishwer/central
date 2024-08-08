@@ -15,8 +15,8 @@ public class VehicleDocumentTypeDao extends BaseDao {
     private String label;
     private String groupKey;
     private String groupDescription;
-    private Boolean isMandatory;
-    private Boolean needsVerification;
+    private Boolean isMandatory = false;
+    private Boolean needsVerification = false;
 
     public static VehicleDocumentTypeDao fromDto(VehicleDocumentTypeDto vehicleDocumentTypeDto) {
         VehicleDocumentTypeDao vehicleDocumentTypeDao = new VehicleDocumentTypeDao();
