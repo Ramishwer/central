@@ -110,9 +110,9 @@ public class PartnerServiceImpl implements PartnerService {
     public PaginatedResponseDto<PartnerTrackingDto> getPartnerTrackings() {
         PaginatedResponseDto<PartnerTrackingDto> result = PaginatedResponseDto.<PartnerTrackingDto>builder().elements(new ArrayList<>()).build();
         List<PartnerDao> partners = partnerRepository.findAllByStatus(Arrays.stream(PartnerStatus.values())
-                .filter(x -> !x.equals(PartnerStatus.OFF_DUTY))
+                .filter(x -> (!x.equals(PartnerStatus.OFF_DUTY) && !x.equals(PartnerStatus.ON_DUTY)))
                 .map(PartnerStatus::name)
-                .collect(Collectors.toList()));
+                .toList());
 
         try {
             Map<String, Object> locationData = firebaseRepository.getFromFirebase("/partner");

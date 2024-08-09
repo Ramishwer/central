@@ -32,7 +32,7 @@ public class PartnerController {
 
 
     @GetMapping("/partners/trackings")
-    public ResponseDto<PaginatedResponseDto<PartnerTrackingDto>> getPartnerTrackingss() {
+    public ResponseDto<PaginatedResponseDto<PartnerTrackingDto>> getPartnerTrackings() {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerService.getPartnerTrackings());
     }
 
