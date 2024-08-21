@@ -93,7 +93,7 @@ public class BookingServiceImpl implements BookingService {
                 .plannedStartTime(bookingDao.getPlannedStartTime())
                 .displayCode(bookingDao.getDisplayCode())
                 .payment(BookingPaymentDto.builder()
-                        .paymentMode(bookingRequest.getPaymentDetails().getType()).build())
+                        .paymentMode(bookingRequest.getPaymentDetails().getPaymentMode()).build())
                 .build();
 
 

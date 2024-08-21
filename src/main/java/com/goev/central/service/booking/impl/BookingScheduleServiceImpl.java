@@ -51,7 +51,7 @@ public class BookingScheduleServiceImpl implements BookingScheduleService {
         BookingScheduleDao bookingScheduleDao = new BookingScheduleDao();
 
         bookingScheduleDao.setStatus(BookingScheduleStatus.CONFIRMED.name());
-        bookingScheduleDao.setEntityType(EntityType.BUSINESS.name());
+        bookingScheduleDao.setEntityType(EntityType.CLIENT.name());
         bookingScheduleDao.setApplicableFromTime(bookingRequestDto.getScheduleDetails().getStartTime());
         bookingScheduleDao.setApplicableToTime(bookingRequestDto.getScheduleDetails().getEndTime());
         bookingScheduleDao = bookingScheduleRepository.save(bookingScheduleDao);

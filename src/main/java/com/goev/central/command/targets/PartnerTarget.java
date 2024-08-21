@@ -30,7 +30,7 @@ public class PartnerTarget extends CommandTarget {
         partnerTarget.setConfig(CommandChannelConfiguration.builder()
                 .hostName(ApplicationConstants.PARTNER_URL)
                 .base("/api/v1/internal")
-                .path("/events")
+                .path("/commands")
                 .authKey(ApplicationConstants.CLIENT_ID)
                 .authSecret(ApplicationConstants.CLIENT_SECRET)
                 .processor(commandProcessor)

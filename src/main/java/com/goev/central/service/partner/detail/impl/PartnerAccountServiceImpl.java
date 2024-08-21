@@ -56,8 +56,8 @@ public class PartnerAccountServiceImpl implements PartnerAccountService {
 
         PartnerAccountDetailDao partnerAccountDetailDao = new PartnerAccountDetailDao();
         partnerAccountDetailDao.setAccountNumber(partnerAccountDto.getAccountNumber());
-        partnerAccountDetailDao.setIfscCode(partnerAccountDto.getAccountNumber());
-        partnerAccountDetailDao.setAccountNumber(partnerAccountDto.getAccountNumber());
+        partnerAccountDetailDao.setIfscCode(partnerAccountDto.getIfscCode());
+        partnerAccountDetailDao.setAccountHolderName(partnerAccountDto.getAccountHolderName());
 
         partnerAccountDetailDao.setPartnerId(partner.getId());
         partnerAccountDetailDao = partnerAccountDetailRepository.save(partnerAccountDetailDao);
