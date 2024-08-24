@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import static com.goev.record.central.tables.PartnerAccountDetails.PARTNER_ACCOUNT_DETAILS;
 import static com.goev.record.central.tables.PartnerReferences.PARTNER_REFERENCES;
 
 @Slf4j
@@ -92,6 +93,8 @@ public class PartnerReferenceRepositoryImpl implements PartnerReferenceRepositor
     public List<PartnerReferenceDao> findAllByPartnerId(Integer partnerId) {
         return context.selectFrom(PARTNER_REFERENCES)
                 .where(PARTNER_REFERENCES.PARTNER_ID.in(partnerId))
+                .and(PARTNER_REFERENCES.IS_ACTIVE.eq(true))
+                .and(PARTNER_REFERENCES.STATE.eq(RecordState.ACTIVE.name()))
                 .fetchInto(PartnerReferenceDao.class);
 
     }

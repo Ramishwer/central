@@ -90,6 +90,10 @@ public class PartnerAccountDetailRepositoryImpl implements PartnerAccountDetailR
 
     @Override
     public List<PartnerAccountDetailDao> findAllByPartnerId(Integer partnerId) {
-        return context.selectFrom(PARTNER_ACCOUNT_DETAILS).where(PARTNER_ACCOUNT_DETAILS.PARTNER_ID.in(partnerId)).fetchInto(PartnerAccountDetailDao.class);
+        return context.selectFrom(PARTNER_ACCOUNT_DETAILS)
+                .where(PARTNER_ACCOUNT_DETAILS.PARTNER_ID.in(partnerId))
+                .and(PARTNER_ACCOUNT_DETAILS.IS_ACTIVE.eq(true))
+                .and(PARTNER_ACCOUNT_DETAILS.STATE.eq(RecordState.ACTIVE.name()))
+                .fetchInto(PartnerAccountDetailDao.class);
     }
 }

@@ -56,7 +56,6 @@ public class BookingScheduleServiceImpl implements BookingScheduleService {
         bookingScheduleDao.setApplicableToTime(bookingRequestDto.getScheduleDetails().getEndTime());
         bookingScheduleDao = bookingScheduleRepository.save(bookingScheduleDao);
 
-        bookingRequestDto.setScheduleDetails(null);
         for(Map.Entry<String,String> configEntry :bookingRequestDto.getScheduleDetails().getSchedule().entrySet()){
             String day = configEntry.getKey();
             String time = configEntry.getValue();

@@ -39,7 +39,7 @@ public class PartnerAssignmentScheduler {
     @Scheduled(fixedRate = 60 * 1000)
     public void reportCurrentTime() {
         log.info("The {} time is now {}", this.getClass().getName(), DateTime.now());
-        List<BookingDao> allBooking = bookingRepository.findAllActive(Collections.singletonList(BookingStatus.IN_PROGRESS.name()), BookingSubStatus.UNASSIGNED.name());
+        List<BookingDao> allBooking = bookingRepository.findAllActive(Collections.singletonList(BookingStatus.IN_PROGRESS.name()), BookingSubStatus.UNASSIGNED.name(), null, null);
 
         for (BookingDao bookingDao : allBooking) {
 

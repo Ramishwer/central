@@ -18,7 +18,9 @@ public class VehicleDocumentTypeDto {
     private String label;
     private String groupKey;
     private String groupDescription;
+    @Builder.Default
     private Boolean isMandatory=false;
+    @Builder.Default
     private Boolean needsVerification=false;
 
 

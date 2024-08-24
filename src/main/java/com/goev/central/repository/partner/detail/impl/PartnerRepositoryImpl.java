@@ -2,6 +2,9 @@ package com.goev.central.repository.partner.detail.impl;
 
 import com.goev.central.dao.partner.detail.PartnerDao;
 import com.goev.central.enums.partner.PartnerOnboardingStatus;
+import com.goev.central.enums.partner.PartnerStatus;
+import com.goev.central.enums.partner.PartnerSubStatus;
+import com.goev.central.enums.vehicle.VehicleOnboardingStatus;
 import com.goev.central.repository.partner.detail.PartnerRepository;
 import com.goev.central.utilities.EventExecutorUtils;
 import com.goev.central.utilities.RequestContext;
@@ -15,6 +18,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 import static com.goev.record.central.tables.Partners.PARTNERS;
+import static com.goev.record.central.tables.Vehicles.VEHICLES;
 
 @Slf4j
 @Repository
@@ -152,5 +156,17 @@ public class PartnerRepositoryImpl implements PartnerRepository {
                 .and(PARTNERS.IS_ACTIVE.eq(true))
                 .and(PARTNERS.STATE.eq(RecordState.ACTIVE.name()))
                 .fetchAnyInto(PartnerDao.class);
+    }
+
+    @Override
+    public List<PartnerDao> findAllByVehicleId() {
+        return context.selectFrom(PARTNERS)
+                .where(PARTNERS.VEHICLE_ID.isNotNull())
+                .and(PARTNERS.STATUS.eq(PartnerStatus.ON_DUTY.name()))
+                .and(PARTNERS.SUB_STATUS.eq(PartnerSubStatus.VEHICLE_NOT_ALLOTTED.name()))
+                .and(PARTNERS.ONBOARDING_STATUS.in(PartnerOnboardingStatus.ONBOARDED.name()))
+                .and(PARTNERS.IS_ACTIVE.eq(true))
+                .and(PARTNERS.STATE.eq(RecordState.ACTIVE.name()))
+                .fetchInto(PartnerDao.class);
     }
 }

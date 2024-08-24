@@ -87,7 +87,7 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
         if (partner == null)
             throw new ResponseException("Error in saving details");
 
-        PartnerDetailDao partnerDetailDao = getPartnerDetailDao(partnerDto);
+        PartnerDetailDao partnerDetailDao = getPartnerDetailDao(partnerDto,partner);
         partnerDetailDao.setPartnerId(partner.getId());
         partnerDetailDao = partnerDetailRepository.save(partnerDetailDao);
         if (partnerDetailDao == null)
@@ -160,7 +160,7 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
         if (partnerDetailDao == null)
             throw new ResponseException("No partner details found for Id :" + partnerUUID);
 
-        PartnerDetailDao partnerDetails = getPartnerDetailDao(partnerDetailDto);
+        PartnerDetailDao partnerDetails = getPartnerDetailDao(partnerDetailDto,partner);
         partnerDetails.setPartnerId(partner.getId());
         partnerDetails.setAadhaarCardNumber(partnerDetailDao.getAadhaarCardNumber());
         partnerDetails = partnerDetailRepository.save(partnerDetails);
@@ -224,7 +224,7 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
     }
 
 
-    private PartnerDetailDao getPartnerDetailDao(PartnerDetailDto partnerDto) {
+    private PartnerDetailDao getPartnerDetailDao(PartnerDetailDto partnerDto,PartnerDao partnerDao) {
         PartnerDetailDao newPartnerDetails = new PartnerDetailDao();
 
         newPartnerDetails.setFirstName(partnerDto.getFirstName());
@@ -247,7 +247,7 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
 
 
         if (partnerDto.getProfile() != null) {
-            newPartnerDetails.setProfileUrl(s3.getUrlForPath(partnerDto.getProfile().getPath(), "profile"));
+            newPartnerDetails.setProfileUrl(s3.getUrlForPath(partnerDto.getProfile().getPath(), "images/partner/"+partnerDao.getPunchId()));
         }
         newPartnerDetails.setIsVerified(true);
         newPartnerDetails.setOnboardingDate(partnerDto.getOnboardingDate());

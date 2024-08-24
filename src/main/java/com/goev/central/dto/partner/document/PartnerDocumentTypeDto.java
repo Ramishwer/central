@@ -18,7 +18,9 @@ public class PartnerDocumentTypeDto {
     private String label;
     private String groupKey;
     private String groupDescription;
+    @Builder.Default
     private Boolean isMandatory = false;
+    @Builder.Default
     private Boolean needsVerification = false;
 
     public static PartnerDocumentTypeDto fromDao(PartnerDocumentTypeDao partnerDocumentTypeDao) {

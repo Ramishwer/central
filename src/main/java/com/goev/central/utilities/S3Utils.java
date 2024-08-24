@@ -33,9 +33,9 @@ public class S3Utils {
                 throw new IOException("Not able to create file");
             }
             String uid = UUID.randomUUID() + fileName.substring(fileName.lastIndexOf("."));
-            s3.putObject(new PutObjectRequest(uploadFilePath, "central/" + getMd5("central") + "/" + key + "/" + uid, new File(fileName)));
+            s3.putObject(new PutObjectRequest(uploadFilePath,   key + "/" + uid, new File(fileName)));
             Files.deleteIfExists(Paths.get(fileName));
-            return "https://" + ApplicationConstants.S3_BUCKET_NAME + "/central/" + getMd5("central") + "/" + key + "/" + uid;
+            return "https://" + ApplicationConstants.S3_BUCKET_NAME + "/" + key + "/" + uid;
         } catch (Exception e) {
             log.error("Error in saving file", e);
             throw e;

@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 import org.jooq.DSLContext;
+import org.jooq.SelectQuery;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -95,22 +96,24 @@ public class BookingRepositoryImpl implements BookingRepository {
     }
 
     @Override
-    public List<BookingDao> findAllActive(List<String> status, String subStatus) {
-        if (subStatus == null)
-            return context.selectFrom(BOOKINGS)
-                    .where(BOOKINGS.STATUS.in(status))
-                    .and(BOOKINGS.STATE.eq(RecordState.ACTIVE.name()))
-                    .and(BOOKINGS.IS_ACTIVE.eq(true))
-                    .orderBy(BOOKINGS.PLANNED_START_TIME.asc())
-                    .fetchInto(BookingDao.class);
+    public List<BookingDao> findAllActive(List<String> status, String subStatus, DateTime from, DateTime to) {
 
-        return context.selectFrom(BOOKINGS)
+        SelectQuery<BookingsRecord> query = context.selectFrom(BOOKINGS)
                 .where(BOOKINGS.STATUS.in(status))
-                .and(BOOKINGS.SUB_STATUS.eq(subStatus))
                 .and(BOOKINGS.STATE.eq(RecordState.ACTIVE.name()))
                 .and(BOOKINGS.IS_ACTIVE.eq(true))
-                .orderBy(BOOKINGS.PLANNED_START_TIME.asc())
-                .fetchInto(BookingDao.class);
+                .orderBy(BOOKINGS.PLANNED_START_TIME.asc()).getQuery();
+
+
+
+        if (subStatus != null)
+           query.addConditions(BOOKINGS.SUB_STATUS.eq(subStatus));
+
+        if (from != null && to!=null)
+            query.addConditions(BOOKINGS.PLANNED_START_TIME.between(from,to));
+
+
+        return query.fetchInto(BookingDao.class);
     }
 
     @Override

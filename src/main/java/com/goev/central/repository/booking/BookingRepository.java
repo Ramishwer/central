@@ -18,7 +18,7 @@ public interface BookingRepository {
 
     List<BookingDao> findAllByIds(List<Integer> ids);
 
-    List<BookingDao> findAllActive(List<String> status, String subStatus);
+    List<BookingDao> findAllActive(List<String> status, String subStatus, DateTime from, DateTime to);
 
     List<BookingDao> findAllActiveWithTime(DateTime start, DateTime end);
 }

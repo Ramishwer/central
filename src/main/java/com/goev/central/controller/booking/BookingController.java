@@ -9,6 +9,7 @@ import com.goev.lib.dto.ResponseDto;
 import com.goev.lib.dto.StatusDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.joda.time.DateTime;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,7 +30,13 @@ public class BookingController {
                                                                          @RequestParam(value = "lastUUID", required = false) String lastElementUUID,
                                                                          @RequestParam("status") List<String> status,
                                                                          @RequestParam(value = "subStatus", required = false)String subStatus) {
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, bookingService.getBookings(status,subStatus));
+        DateTime fromDateTime = null;
+        DateTime toDateTime = null;
+        if(from!=null)
+            fromDateTime = new DateTime(from);
+        if(to!=null)
+            toDateTime = new DateTime(to);
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, bookingService.getBookings(status,subStatus,fromDateTime,toDateTime));
     }
 
 

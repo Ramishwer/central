@@ -73,7 +73,7 @@ public class PartnerDocumentServiceImpl implements PartnerDocumentService {
         if (partnerDocumentTypeDao == null || partnerDocumentTypeDao.getId() == null)
             throw new ResponseException("Error in saving partner document: Invalid Document Type");
 
-        partnerDocumentDao.setUrl(s3.getUrlForPath(partnerDocumentDto.getUrl(), partnerDocumentTypeDao.getS3Key()));
+        partnerDocumentDao.setUrl(s3.getUrlForPath(partnerDocumentDto.getUrl(), partnerDocumentTypeDao.getS3Key()+"/"+partnerDao.getPunchId()));
         partnerDocumentDao.setStatus(DocumentStatus.APPROVED.name());
         partnerDocumentDao.setDescription(partnerDocumentDto.getDescription());
         partnerDocumentDao.setFileName(partnerDocumentDto.getFileName());
@@ -121,7 +121,7 @@ public class PartnerDocumentServiceImpl implements PartnerDocumentService {
         newPartnerDocumentDao.setPartnerDocumentTypeId(partnerDocumentTypeDao.getId());
         newPartnerDocumentDao.setFileName(partnerDocumentDto.getFileName());
         newPartnerDocumentDao.setDescription(partnerDocumentDto.getDescription());
-        newPartnerDocumentDao.setUrl(s3.getUrlForPath(partnerDocumentDto.getUrl(), partnerDocumentTypeDao.getS3Key()));
+        newPartnerDocumentDao.setUrl(s3.getUrlForPath(partnerDocumentDto.getUrl(), partnerDocumentTypeDao.getS3Key()+"/"+partnerDao.getPunchId()));
         newPartnerDocumentDao.setStatus(DocumentStatus.APPROVED.name());
         newPartnerDocumentDao.setPartnerId(partnerDao.getId());
         partnerDocumentRepository.delete(partnerDocumentDao.getId());

@@ -40,9 +40,9 @@ public class BookingServiceImpl implements BookingService {
     private final VehicleRepository vehicleRepository;
 
     @Override
-    public PaginatedResponseDto<BookingViewDto> getBookings(List<String> status, String subStatus) {
+    public PaginatedResponseDto<BookingViewDto> getBookings(List<String> status, String subStatus, DateTime from, DateTime to) {
         PaginatedResponseDto<BookingViewDto> result = PaginatedResponseDto.<BookingViewDto>builder().elements(new ArrayList<>()).build();
-        List<BookingDao> bookingDaos = bookingRepository.findAllActive(status, subStatus);
+        List<BookingDao> bookingDaos = bookingRepository.findAllActive(status, subStatus,from,to);
         if (CollectionUtils.isEmpty(bookingDaos))
             return result;
 

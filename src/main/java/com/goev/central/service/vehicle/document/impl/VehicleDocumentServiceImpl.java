@@ -72,7 +72,7 @@ public class VehicleDocumentServiceImpl implements VehicleDocumentService {
         if (vehicleDocumentTypeDao == null || vehicleDocumentTypeDao.getId() == null)
             throw new ResponseException("Error in saving vehicle document: Invalid Document Type");
 
-        vehicleDocumentDao.setUrl(s3.getUrlForPath(vehicleDocumentDto.getUrl(), vehicleDocumentTypeDao.getS3Key()));
+        vehicleDocumentDao.setUrl(s3.getUrlForPath(vehicleDocumentDto.getUrl(), vehicleDocumentTypeDao.getS3Key()+"/"+vehicleDao.getPlateNumber()));
         vehicleDocumentDao.setStatus(vehicleDocumentDto.getStatus());
         vehicleDocumentDao.setDescription(vehicleDocumentDto.getDescription());
         vehicleDocumentDao.setFileName(vehicleDocumentDto.getFileName());
@@ -119,7 +119,7 @@ public class VehicleDocumentServiceImpl implements VehicleDocumentService {
         newVehicleDocumentDao.setVehicleDocumentTypeId(vehicleDocumentTypeDao.getId());
         newVehicleDocumentDao.setFileName(vehicleDocumentDto.getFileName());
         newVehicleDocumentDao.setDescription(vehicleDocumentDto.getDescription());
-        newVehicleDocumentDao.setUrl(s3.getUrlForPath(vehicleDocumentDto.getUrl(), vehicleDocumentTypeDao.getS3Key()));
+        newVehicleDocumentDao.setUrl(s3.getUrlForPath(vehicleDocumentDto.getUrl(), vehicleDocumentTypeDao.getS3Key()+"/"+vehicleDao.getPlateNumber()));
         newVehicleDocumentDao.setStatus(DocumentStatus.UPLOADED.name());
         newVehicleDocumentDao.setVehicleId(vehicleDao.getId());
         vehicleDocumentRepository.delete(vehicleDocumentDao.getId());

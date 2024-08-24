@@ -128,7 +128,7 @@ public class PartnerShiftServiceImpl implements PartnerShiftService {
         List<PartnerShiftDao> allPendingShifts = partnerShiftRepository.findAllByPartnerIdAndShiftIdAndStatus(partner.getId(),partnerShiftMappingDao.getShiftId(), PartnerShiftStatus.PENDING.name());
         if(!CollectionUtils.isEmpty(allPendingShifts)){
             for(PartnerShiftDao partnerShiftDao : allPendingShifts){
-                partnerRepository.delete(partnerShiftDao.getId());
+                partnerShiftRepository.delete(partnerShiftDao.getId());
             }
         }
         return true;

@@ -6,6 +6,7 @@ import com.goev.central.dao.vehicle.detail.VehicleDao;
 import com.goev.central.dto.vehicle.VehicleViewDto;
 import com.goev.central.enums.partner.PartnerStatus;
 import com.goev.central.enums.partner.PartnerSubStatus;
+import com.goev.central.enums.vehicle.VehicleStatus;
 import com.goev.central.repository.partner.detail.PartnerRepository;
 import com.goev.central.repository.partner.duty.PartnerShiftMappingRepository;
 import com.goev.central.repository.partner.duty.PartnerShiftRepository;
@@ -27,20 +28,22 @@ public class VehicleAssignmentScheduler {
     @Scheduled(fixedRate = 1*60 * 1000)
     public void reportCurrentTime() {
         log.info("The {} time is now {}",this.getClass().getName() ,DateTime.now());
-        List<VehicleDao> allVehicles =vehicleRepository.findAllActiveWithPartnerId();
+        List<PartnerDao> allPartners =partnerRepository.findAllByVehicleId();
 
-        for(VehicleDao vehicle:allVehicles){
-            PartnerDao partnerDao = partnerRepository.findById(vehicle.getPartnerId());
+        for(PartnerDao partnerDao:allPartners){
+            VehicleDao vehicle = vehicleRepository.findById(partnerDao.getVehicleId());
             PartnerDao existingPartner = partnerRepository.findByVehicleId(vehicle.getId());
             if(existingPartner!=null)
                 continue;
 
-            if(partnerDao!=null&& PartnerStatus.ON_DUTY.name().equals(partnerDao.getStatus()) &&  PartnerSubStatus.VEHICLE_NOT_ALLOTTED.name().equals(partnerDao.getSubStatus())){
+            if(PartnerStatus.ON_DUTY.name().equals(partnerDao.getStatus()) &&  PartnerSubStatus.VEHICLE_NOT_ALLOTTED.name().equals(partnerDao.getSubStatus())){
                 partnerDao.setStatus(PartnerStatus.ON_DUTY.name());
                 partnerDao.setSubStatus(PartnerSubStatus.VEHICLE_ALLOTTED.name());
                 partnerDao.setVehicleId(vehicle.getId());
                 partnerDao.setVehicleDetails(ApplicationConstants.GSON.toJson(VehicleViewDto.fromDao(vehicle)));
                 partnerRepository.update(partnerDao);
+                vehicle.setStatus(VehicleStatus.ALLOTED.name());
+                vehicleRepository.save(vehicle);
             }
 
         }

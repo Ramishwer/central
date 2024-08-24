@@ -7,11 +7,10 @@ import com.goev.central.dto.booking.BookingViewDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import org.joda.time.DateTime;
 
-import java.util.Date;
 import java.util.List;
 
 public interface BookingService {
-    PaginatedResponseDto<BookingViewDto> getBookings(List<String> status, String subStatus);
+    PaginatedResponseDto<BookingViewDto> getBookings(List<String> status, String subStatus, DateTime from, DateTime to);
 
     BookingDto createBooking(BookingRequestDto bookingRequestDto);
 

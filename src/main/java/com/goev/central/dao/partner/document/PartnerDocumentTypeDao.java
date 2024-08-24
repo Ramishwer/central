@@ -9,7 +9,6 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
-@Builder
 public class PartnerDocumentTypeDao extends BaseDao {
     private String name;
     private String s3Key;
