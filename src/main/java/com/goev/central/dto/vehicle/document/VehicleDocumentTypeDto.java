@@ -25,6 +25,8 @@ public class VehicleDocumentTypeDto {
 
 
     public static VehicleDocumentTypeDto fromDao(VehicleDocumentTypeDao vehicleDocumentTypeDao) {
+        if(vehicleDocumentTypeDao==null)
+            return null;
         return VehicleDocumentTypeDto.builder()
                 .s3Key(vehicleDocumentTypeDao.getS3Key())
                 .label(vehicleDocumentTypeDao.getLabel())

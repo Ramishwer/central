@@ -8,6 +8,8 @@ import com.goev.central.event.events.asset.update.AssetTypeUpdateEvent;
 import com.goev.central.event.events.asset.update.AssetUpdateEvent;
 import com.goev.central.event.events.booking.BookingSaveEvent;
 import com.goev.central.event.events.booking.BookingUpdateEvent;
+import com.goev.central.event.events.customer.save.CustomerSaveEvent;
+import com.goev.central.event.events.customer.update.CustomerUpdateEvent;
 import com.goev.central.event.events.location.save.LocationSaveEvent;
 import com.goev.central.event.events.location.update.LocationUpdateEvent;
 import com.goev.central.event.events.partner.PartnerOnboardingStatusCheckEvent;
@@ -21,6 +23,8 @@ import com.goev.central.event.handlers.asset.update.AssetTypeUpdateEventHandler;
 import com.goev.central.event.handlers.asset.update.AssetUpdateEventHandler;
 import com.goev.central.event.handlers.booking.save.BookingSaveEventHandler;
 import com.goev.central.event.handlers.booking.update.BookingUpdateEventHandler;
+import com.goev.central.event.handlers.customer.save.CustomerSaveEventHandler;
+import com.goev.central.event.handlers.customer.update.CustomerUpdateEventHandler;
 import com.goev.central.event.handlers.location.save.LocationSaveEventHandler;
 import com.goev.central.event.handlers.location.update.LocationUpdateEventHandler;
 import com.goev.central.event.handlers.partner.PartnerOnboardingStatusCheckEventHandler;
@@ -29,6 +33,7 @@ import com.goev.central.event.handlers.partner.update.*;
 import com.goev.central.event.handlers.vehicle.save.*;
 import com.goev.central.event.handlers.vehicle.update.*;
 import com.goev.central.event.targets.CentralTarget;
+import com.goev.central.event.targets.CustomerTarget;
 import com.goev.central.event.targets.PartnerTarget;
 import com.goev.lib.event.service.EventProcessor;
 import lombok.AllArgsConstructor;
@@ -48,6 +53,7 @@ public class EventConfig {
 
             AssetUpdateEventHandler assetUpdateEventHandler,
             AssetTypeUpdateEventHandler assetTypeUpdateEventHandler,
+            CustomerUpdateEventHandler customerUpdateEventHandler,
             PartnerUpdateEventHandler partnerUpdateEventHandler,
             PartnerDetailUpdateEventHandler partnerDetailUpdateEventHandler,
             PartnerDutyUpdateEventHandler partnerDutyUpdateEventHandler,
@@ -67,6 +73,7 @@ public class EventConfig {
 
             AssetSaveEventHandler assetSaveEventHandler,
             AssetTypeSaveEventHandler assetTypeSaveEventHandler,
+            CustomerSaveEventHandler customerSaveEventHandler,
             PartnerSaveEventHandler partnerSaveEventHandler,
             PartnerDetailSaveEventHandler partnerDetailSaveEventHandler,
             PartnerDutySaveEventHandler partnerDutySaveEventHandler,
@@ -93,6 +100,7 @@ public class EventConfig {
 
         eventProcessor.registerEvents(new AssetUpdateEvent());
         eventProcessor.registerEvents(new AssetTypeUpdateEvent());
+        eventProcessor.registerEvents(new CustomerUpdateEvent());
         eventProcessor.registerEvents(new PartnerUpdateEvent());
         eventProcessor.registerEvents(new PartnerDetailUpdateEvent());
         eventProcessor.registerEvents(new PartnerDutyUpdateEvent());
@@ -112,6 +120,7 @@ public class EventConfig {
 
         eventProcessor.registerEventHandlers(new AssetUpdateEvent(), assetUpdateEventHandler);
         eventProcessor.registerEventHandlers(new AssetTypeUpdateEvent(), assetTypeUpdateEventHandler);
+        eventProcessor.registerEventHandlers(new CustomerUpdateEvent(), customerUpdateEventHandler);
         eventProcessor.registerEventHandlers(new PartnerUpdateEvent(), partnerUpdateEventHandler);
         eventProcessor.registerEventHandlers(new PartnerDetailUpdateEvent(), partnerDetailUpdateEventHandler);
         eventProcessor.registerEventHandlers(new PartnerDutyUpdateEvent(), partnerDutyUpdateEventHandler);
@@ -131,6 +140,7 @@ public class EventConfig {
 
         eventProcessor.registerEvents(new AssetSaveEvent());
         eventProcessor.registerEvents(new AssetTypeSaveEvent());
+        eventProcessor.registerEvents(new CustomerSaveEvent());
         eventProcessor.registerEvents(new PartnerSaveEvent());
         eventProcessor.registerEvents(new PartnerDetailSaveEvent());
         eventProcessor.registerEvents(new PartnerDutySaveEvent());
@@ -149,6 +159,7 @@ public class EventConfig {
 
         eventProcessor.registerEventHandlers(new AssetSaveEvent(), assetSaveEventHandler);
         eventProcessor.registerEventHandlers(new AssetTypeSaveEvent(), assetTypeSaveEventHandler);
+        eventProcessor.registerEventHandlers(new CustomerSaveEvent(), customerSaveEventHandler);
         eventProcessor.registerEventHandlers(new PartnerSaveEvent(), partnerSaveEventHandler);
         eventProcessor.registerEventHandlers(new PartnerDetailSaveEvent(), partnerDetailSaveEventHandler);
         eventProcessor.registerEventHandlers(new PartnerDutySaveEvent(), partnerDutySaveEventHandler);
@@ -167,6 +178,7 @@ public class EventConfig {
 
         eventProcessor.registerTargets(PartnerTarget.getTarget(eventProcessor));
         eventProcessor.registerTargets(CentralTarget.getTarget(eventProcessor));
+        eventProcessor.registerTargets(CustomerTarget.getTarget(eventProcessor));
         return eventProcessor;
     }
 

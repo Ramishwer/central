@@ -73,7 +73,7 @@ public class VehicleDocumentServiceImpl implements VehicleDocumentService {
             throw new ResponseException("Error in saving vehicle document: Invalid Document Type");
 
         vehicleDocumentDao.setUrl(s3.getUrlForPath(vehicleDocumentDto.getUrl(), vehicleDocumentTypeDao.getS3Key()+"/"+vehicleDao.getPlateNumber()));
-        vehicleDocumentDao.setStatus(vehicleDocumentDto.getStatus());
+        vehicleDocumentDao.setStatus(DocumentStatus.APPROVED.name());
         vehicleDocumentDao.setDescription(vehicleDocumentDto.getDescription());
         vehicleDocumentDao.setFileName(vehicleDocumentDto.getFileName());
         vehicleDocumentDao.setVehicleId(vehicleDao.getId());
@@ -82,20 +82,7 @@ public class VehicleDocumentServiceImpl implements VehicleDocumentService {
         vehicleDocumentDao = vehicleDocumentRepository.save(vehicleDocumentDao);
         if (vehicleDocumentDao == null)
             throw new ResponseException("Error in saving vehicle document");
-        return VehicleDocumentDto.builder()
-                .uuid(vehicleDocumentDto.getUuid())
-                .type(VehicleDocumentTypeDto.builder()
-                        .uuid(vehicleDocumentTypeDao.getUuid())
-                        .label(vehicleDocumentTypeDao.getLabel())
-                        .groupKey(vehicleDocumentTypeDao.getGroupKey())
-                        .groupDescription(vehicleDocumentTypeDao.getGroupDescription())
-                        .name(vehicleDocumentTypeDao.getName())
-                        .build())
-                .fileName(vehicleDocumentTypeDao.getName())
-                .description(vehicleDocumentDao.getDescription())
-                .status(vehicleDocumentDao.getStatus())
-                .url(vehicleDocumentDao.getUrl())
-                .build();
+        return VehicleDocumentDto.fromDao(vehicleDocumentDao,VehicleDocumentTypeDto.fromDao(vehicleDocumentTypeDao));
     }
 
     @Override
@@ -120,7 +107,7 @@ public class VehicleDocumentServiceImpl implements VehicleDocumentService {
         newVehicleDocumentDao.setFileName(vehicleDocumentDto.getFileName());
         newVehicleDocumentDao.setDescription(vehicleDocumentDto.getDescription());
         newVehicleDocumentDao.setUrl(s3.getUrlForPath(vehicleDocumentDto.getUrl(), vehicleDocumentTypeDao.getS3Key()+"/"+vehicleDao.getPlateNumber()));
-        newVehicleDocumentDao.setStatus(DocumentStatus.UPLOADED.name());
+        newVehicleDocumentDao.setStatus(DocumentStatus.APPROVED.name());
         newVehicleDocumentDao.setVehicleId(vehicleDao.getId());
         vehicleDocumentRepository.delete(vehicleDocumentDao.getId());
         newVehicleDocumentDao = vehicleDocumentRepository.save(newVehicleDocumentDao);
@@ -128,20 +115,7 @@ public class VehicleDocumentServiceImpl implements VehicleDocumentService {
             throw new ResponseException("Error in updating details vehicle manufacturer");
 
 
-        return VehicleDocumentDto.builder()
-                .uuid(newVehicleDocumentDao.getUuid())
-                .type(VehicleDocumentTypeDto.builder()
-                        .uuid(vehicleDocumentTypeDao.getUuid())
-                        .label(vehicleDocumentTypeDao.getLabel())
-                        .groupKey(vehicleDocumentTypeDao.getGroupKey())
-                        .groupDescription(vehicleDocumentTypeDao.getGroupDescription())
-                        .name(vehicleDocumentTypeDao.getName())
-                        .build())
-                .fileName(vehicleDocumentTypeDao.getName())
-                .description(newVehicleDocumentDao.getDescription())
-                .status(newVehicleDocumentDao.getStatus())
-                .url(newVehicleDocumentDao.getUrl())
-                .build();
+        return VehicleDocumentDto.fromDao(vehicleDocumentDao,VehicleDocumentTypeDto.fromDao(vehicleDocumentTypeDao));
     }
 
     @Override
@@ -160,20 +134,7 @@ public class VehicleDocumentServiceImpl implements VehicleDocumentService {
         if (vehicleDocumentTypeDao == null || vehicleDocumentTypeDao.getId() == null)
             throw new ResponseException("Error in saving vehicle document: Invalid Document Type");
 
-        return VehicleDocumentDto.builder()
-                .uuid(vehicleDocumentDao.getUuid())
-                .type(VehicleDocumentTypeDto.builder()
-                        .uuid(vehicleDocumentTypeDao.getUuid())
-                        .label(vehicleDocumentTypeDao.getLabel())
-                        .groupKey(vehicleDocumentTypeDao.getGroupKey())
-                        .groupDescription(vehicleDocumentTypeDao.getGroupDescription())
-                        .name(vehicleDocumentTypeDao.getName())
-                        .build())
-                .fileName(vehicleDocumentTypeDao.getName())
-                .description(vehicleDocumentDao.getDescription())
-                .status(vehicleDocumentDao.getStatus())
-                .url(vehicleDocumentDao.getUrl())
-                .build();
+        return VehicleDocumentDto.fromDao(vehicleDocumentDao,VehicleDocumentTypeDto.fromDao(vehicleDocumentTypeDao));
     }
 
     @Override

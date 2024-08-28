@@ -32,6 +32,7 @@ public class ApplicationConstants {
     public static String PARTNER_URL;
     public static String TIMER_URL;
     public static String BOOKING_URL;
+    public static String CUSTOMER_URL;
     public static String FIREBASE_CONFIG;
     public static String FIREBASE_URL;
 

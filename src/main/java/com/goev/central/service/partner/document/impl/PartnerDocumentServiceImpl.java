@@ -3,7 +3,6 @@ package com.goev.central.service.partner.document.impl;
 import com.goev.central.dao.partner.detail.PartnerDao;
 import com.goev.central.dao.partner.document.PartnerDocumentDao;
 import com.goev.central.dao.partner.document.PartnerDocumentTypeDao;
-import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.partner.detail.PartnerDetailDto;
 import com.goev.central.dto.partner.document.PartnerDocumentDto;
@@ -82,22 +81,7 @@ public class PartnerDocumentServiceImpl implements PartnerDocumentService {
         partnerDocumentDao = partnerDocumentRepository.save(partnerDocumentDao);
         if (partnerDocumentDao == null)
             throw new ResponseException("Error in saving partner document");
-        return PartnerDocumentDto.builder()
-                .uuid(partnerDocumentDto.getUuid())
-                .type(PartnerDocumentTypeDto.builder()
-                        .uuid(partnerDocumentTypeDao.getUuid())
-                        .label(partnerDocumentTypeDao.getLabel())
-                        .groupKey(partnerDocumentTypeDao.getGroupKey())
-                        .groupDescription(partnerDocumentTypeDao.getGroupDescription())
-                        .name(partnerDocumentTypeDao.getName())
-                        .isMandatory(partnerDocumentTypeDao.getIsMandatory())
-                        .needsVerification(partnerDocumentTypeDao.getNeedsVerification())
-                        .build())
-                .fileName(partnerDocumentTypeDao.getName())
-                .description(partnerDocumentDao.getDescription())
-                .status(partnerDocumentDao.getStatus())
-                .url(partnerDocumentDao.getUrl())
-                .build();
+        return PartnerDocumentDto.fromDao(partnerDocumentDao,PartnerDocumentTypeDto.fromDao(partnerDocumentTypeDao));
     }
 
     @Override
@@ -130,22 +114,7 @@ public class PartnerDocumentServiceImpl implements PartnerDocumentService {
             throw new ResponseException("Error in updating details partner manufacturer");
 
 
-        return PartnerDocumentDto.builder()
-                .uuid(newPartnerDocumentDao.getUuid())
-                .type(PartnerDocumentTypeDto.builder()
-                        .uuid(partnerDocumentTypeDao.getUuid())
-                        .label(partnerDocumentTypeDao.getLabel())
-                        .groupKey(partnerDocumentTypeDao.getGroupKey())
-                        .groupDescription(partnerDocumentTypeDao.getGroupDescription())
-                        .name(partnerDocumentTypeDao.getName())
-                        .isMandatory(partnerDocumentTypeDao.getIsMandatory())
-                        .needsVerification(partnerDocumentTypeDao.getNeedsVerification())
-                        .build())
-                .fileName(partnerDocumentTypeDao.getName())
-                .description(newPartnerDocumentDao.getDescription())
-                .status(newPartnerDocumentDao.getStatus())
-                .url(newPartnerDocumentDao.getUrl())
-                .build();
+        return PartnerDocumentDto.fromDao(partnerDocumentDao,PartnerDocumentTypeDto.fromDao(partnerDocumentTypeDao));
     }
 
     @Override
@@ -164,22 +133,7 @@ public class PartnerDocumentServiceImpl implements PartnerDocumentService {
         if (partnerDocumentTypeDao == null || partnerDocumentTypeDao.getId() == null)
             throw new ResponseException("Error in saving partner document: Invalid Document Type");
 
-        return PartnerDocumentDto.builder()
-                .uuid(partnerDocumentDao.getUuid())
-                .type(PartnerDocumentTypeDto.builder()
-                        .uuid(partnerDocumentTypeDao.getUuid())
-                        .label(partnerDocumentTypeDao.getLabel())
-                        .groupKey(partnerDocumentTypeDao.getGroupKey())
-                        .groupDescription(partnerDocumentTypeDao.getGroupDescription())
-                        .isMandatory(partnerDocumentTypeDao.getIsMandatory())
-                        .needsVerification(partnerDocumentTypeDao.getNeedsVerification())
-                        .name(partnerDocumentTypeDao.getName())
-                        .build())
-                .fileName(partnerDocumentTypeDao.getName())
-                .description(partnerDocumentDao.getDescription())
-                .status(partnerDocumentDao.getStatus())
-                .url(partnerDocumentDao.getUrl())
-                .build();
+        return PartnerDocumentDto.fromDao(partnerDocumentDao,PartnerDocumentTypeDto.fromDao(partnerDocumentTypeDao));
     }
 
     @Override
@@ -240,22 +194,7 @@ public class PartnerDocumentServiceImpl implements PartnerDocumentService {
         }
         PartnerDocumentTypeDao partnerDocumentTypeDao = partnerDocumentTypeRepository.findById(partnerDocumentDao.getPartnerDocumentTypeId());
 
-        return PartnerDocumentDto.builder()
-                .uuid(partnerDocumentDao.getUuid())
-                .type(PartnerDocumentTypeDto.builder()
-                        .uuid(partnerDocumentTypeDao.getUuid())
-                        .label(partnerDocumentTypeDao.getLabel())
-                        .groupKey(partnerDocumentTypeDao.getGroupKey())
-                        .groupDescription(partnerDocumentTypeDao.getGroupDescription())
-                        .name(partnerDocumentTypeDao.getName())
-                        .isMandatory(partnerDocumentTypeDao.getIsMandatory())
-                        .needsVerification(partnerDocumentTypeDao.getNeedsVerification())
-                        .build())
-                .fileName(partnerDocumentTypeDao.getName())
-                .description(partnerDocumentDao.getDescription())
-                .status(partnerDocumentDao.getStatus())
-                .url(partnerDocumentDao.getUrl())
-                .build();
+        return PartnerDocumentDto.fromDao(partnerDocumentDao,PartnerDocumentTypeDto.fromDao(partnerDocumentTypeDao));
     }
 
 

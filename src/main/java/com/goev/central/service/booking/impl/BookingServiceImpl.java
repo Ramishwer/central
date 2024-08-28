@@ -92,7 +92,7 @@ public class BookingServiceImpl implements BookingService {
                 .endLocationDetails(ApplicationConstants.GSON.fromJson(bookingDao.getEndLocationDetails(), LatLongDto.class))
                 .plannedStartTime(bookingDao.getPlannedStartTime())
                 .displayCode(bookingDao.getDisplayCode())
-                .payment(BookingPaymentDto.builder()
+                .paymentDetails(BookingPaymentDto.builder()
                         .paymentMode(bookingRequest.getPaymentDetails().getPaymentMode()).build())
                 .build();
 

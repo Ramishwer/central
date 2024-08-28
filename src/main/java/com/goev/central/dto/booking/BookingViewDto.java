@@ -33,7 +33,7 @@ public class BookingViewDto {
     private VehicleViewDto vehicleDetails;
     private CustomerViewDto customerDetails;
     private BookingPricingDetailDto pricingDetails;
-    private BookingPaymentDto payment;
+    private BookingPaymentDto paymentDetails;
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime actualStartTime;
@@ -46,10 +46,10 @@ public class BookingViewDto {
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime plannedEndTime;
-    private Integer plannedDistance;
-    private Integer actualDistance;
-    private Integer plannedDuration;
-    private Integer actualDuration;
+    private Long distance;
+    private Long duration;
+    private CustomerViewDto startContact;
+    private CustomerViewDto endContact;
 
 
 

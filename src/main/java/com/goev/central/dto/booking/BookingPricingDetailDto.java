@@ -15,15 +15,12 @@ import lombok.*;
 public class BookingPricingDetailDto {
     private String uuid;
     private BookingViewDto booking;
-    private Integer plannedTotalAmount;
-    private Integer plannedTotalAmountExcludingTax;
-    private Integer plannedTaxAmount;
-    private Integer plannedTaxPercentage;
-    private Integer actualTotalAmount;
-    private Integer actualTotalAmountExcludingTax;
-    private Integer actualTaxAmount;
-    private Integer actualTaxPercentage;
+    private Integer totalAmount;
+    private Integer totalAmountExcludingTax;
+    private Integer taxAmount;
+    private Integer taxPercentage;
+    private Integer discountAmount;
+    private String type;
     private String status;
     private PricingModelDto pricingModel;
-    private PricingElementDto pricingElement;
 }

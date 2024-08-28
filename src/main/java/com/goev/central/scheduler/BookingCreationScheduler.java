@@ -1,12 +1,15 @@
 package com.goev.central.scheduler;
 
 import com.goev.central.constant.ApplicationConstants;
+import com.goev.central.dao.booking.BookingDao;
 import com.goev.central.dao.booking.BookingScheduleConfigurationDao;
 import com.goev.central.dao.booking.BookingScheduleDao;
 import com.goev.central.dao.booking.BookingScheduleTrackingDetailDao;
+import com.goev.central.dto.booking.BookingDto;
 import com.goev.central.dto.booking.BookingRequestDto;
 import com.goev.central.dto.booking.SchedulingDetailDto;
 import com.goev.central.enums.booking.SchedulingTypes;
+import com.goev.central.repository.booking.BookingRepository;
 import com.goev.central.repository.booking.BookingScheduleConfigurationRepository;
 import com.goev.central.repository.booking.BookingScheduleRepository;
 import com.goev.central.repository.booking.BookingScheduleTrackingDetailRepository;
@@ -30,6 +33,7 @@ public class BookingCreationScheduler {
     private final BookingScheduleConfigurationRepository bookingScheduleConfigurationRepository;
     private final BookingScheduleTrackingDetailRepository bookingScheduleTrackingDetailRepository;
     private final BookingService bookingService;
+    private final BookingRepository bookingRepository;
 
     @Scheduled(fixedRate = 10 * 60 * 1000)
     public void reportCurrentTime() {
@@ -41,8 +45,8 @@ public class BookingCreationScheduler {
         int day = DateTime.now().getDayOfWeek();
         DateTime date = DateTime.now().withTimeAtStartOfDay();
         for (BookingScheduleDao scheduleDao : allSchedule) {
-            BookingScheduleTrackingDetailDao existingShiftDao = bookingScheduleTrackingDetailRepository.findByBookingScheduleIdDayDate(scheduleDao.getId(), String.valueOf(day), date);
-            if (existingShiftDao != null)
+            BookingScheduleTrackingDetailDao existingBooking = bookingScheduleTrackingDetailRepository.findByBookingScheduleIdDayDate(scheduleDao.getId(), String.valueOf(day), date);
+            if (existingBooking != null)
                 continue;
 
             BookingScheduleConfigurationDao bookingScheduleConfigurationDao = bookingScheduleConfigurationRepository.findByBookingScheduleIdAndDay(scheduleDao.getId(), String.valueOf(day));
@@ -54,7 +58,7 @@ public class BookingCreationScheduler {
                 bookingScheduleTrackingDetailDao.setBookingDate(date);
                 bookingScheduleTrackingDetailDao.setDay(String.valueOf(day));
                 bookingScheduleTrackingDetailDao.setStatus("PENDING");
-                bookingScheduleTrackingDetailRepository.save(bookingScheduleTrackingDetailDao);
+                bookingScheduleTrackingDetailDao =bookingScheduleTrackingDetailRepository.save(bookingScheduleTrackingDetailDao);
 
 
                 BookingRequestDto bookingRequest = ApplicationConstants.GSON.fromJson(bookingScheduleConfigurationDao.getBookingConfig(), BookingRequestDto.class);
@@ -64,7 +68,13 @@ public class BookingCreationScheduler {
                         .type(SchedulingTypes.SCHEDULED)
                         .build());
 
-                bookingService.createBooking(bookingRequest);
+                BookingDto bookingDto = bookingService.createBooking(bookingRequest);
+                BookingDao booking = bookingRepository.findByUUID(bookingDto.getUuid());
+                if(booking!=null){
+                    bookingScheduleTrackingDetailDao.setStatus("CONFIRMED");
+                    bookingScheduleTrackingDetailDao.setBookingId(booking.getId());
+                    bookingScheduleTrackingDetailDao = bookingScheduleTrackingDetailRepository.update(bookingScheduleTrackingDetailDao);
+                }
 
             }
 
