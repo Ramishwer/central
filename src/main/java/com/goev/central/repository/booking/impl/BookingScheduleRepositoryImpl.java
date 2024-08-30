@@ -105,6 +105,7 @@ public class BookingScheduleRepositoryImpl implements BookingScheduleRepository 
 
         return context.selectFrom(BOOKING_SCHEDULES)
                 .where(BOOKING_SCHEDULES.STATUS.eq(status))
+                .and(BOOKING_SCHEDULES.SUB_STATUS.eq(subStatus))
                 .and(BOOKING_SCHEDULES.STATE.eq(RecordState.ACTIVE.name()))
                 .and(BOOKING_SCHEDULES.IS_ACTIVE.eq(true))
                 .fetchInto(BookingScheduleDao.class);
