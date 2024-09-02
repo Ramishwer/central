@@ -65,6 +65,7 @@ public class PartnerDutyDto {
                 .actualDutyStartTime(dutyDao.getActualDutyStartTime())
                 .actualDutyEndTime(dutyDao.getActualDutyEndTime())
                 .actualDutyStartLocationDetails(ApplicationConstants.GSON.fromJson(dutyDao.getActualDutyStartLocationDetails(), LocationDto.class))
+                .actualDutyEndLocationDetails(ApplicationConstants.GSON.fromJson(dutyDao.getActualDutyEndLocationDetails(), LocationDto.class))
                 .build();
 
         if (shift != null) {

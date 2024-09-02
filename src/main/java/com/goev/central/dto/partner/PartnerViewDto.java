@@ -24,10 +24,14 @@ public class PartnerViewDto {
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime onboardingDate;
+    @JsonSerialize(using = DateTimeSerializer.class)
+    @JsonDeserialize(using = DateTimeDeserializer.class)
+    private DateTime deboardingDate;
     private String uuid;
     private String state;
     private String profileUrl;
     private LocationDto homeLocation;
+    private PartnerStatsDto stats;
 
 
     public static String getPartnerName(PartnerViewDto partnerViewDto) {

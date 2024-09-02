@@ -11,6 +11,8 @@ import com.goev.central.dto.vehicle.VehicleActionDto;
 import com.goev.central.dto.vehicle.VehicleViewDto;
 import com.goev.central.dto.vehicle.detail.VehicleDto;
 import com.goev.central.enums.vehicle.VehicleOnboardingStatus;
+import com.goev.central.enums.vehicle.VehicleStatus;
+import com.goev.central.enums.vehicle.VehicleSubStatus;
 import com.goev.central.repository.vehicle.detail.VehicleRepository;
 import com.goev.central.service.vehicle.detail.VehicleService;
 import com.goev.lib.exceptions.ResponseException;
@@ -57,18 +59,30 @@ public class VehicleServiceImpl implements VehicleService {
             case DEBOARD -> {
                 vehicle = updateOnboardingStatus(vehicle,VehicleOnboardingStatus.DEBOARDED);
             }
-            case RELEASE_VEHICLE -> {
-                vehicle = releaseVehicle(vehicle,vehicleActionDto);
-            }
+            case MARK_AVAILABLE, RELEASE_VEHICLE -> { vehicle = releaseVehicle(vehicle,vehicleActionDto);}
             case SEND_TO_MAINTENANCE -> {
+                vehicle = sendToMaintenance(vehicle,vehicleActionDto);
             }
-            case MARK_AVAILABLE -> {
-            }
+
         }
         return VehicleDto.fromDao(vehicle);
     }
 
+    private VehicleDao sendToMaintenance(VehicleDao vehicle, VehicleActionDto vehicleActionDto) {
+        vehicle.setStatus(VehicleStatus.MAINTENANCE.name());
+        vehicle.setSubStatus(VehicleSubStatus.NOT_ASSIGNED.name());
+        vehicle.setPartnerDetails(null);
+        vehicle.setPartnerId(null);
+        vehicle = vehicleRepository.update(vehicle);
+        return vehicle;
+    }
+
     private VehicleDao releaseVehicle(VehicleDao vehicle, VehicleActionDto vehicleActionDto) {
+        vehicle.setStatus(VehicleStatus.AVAILABLE.name());
+        vehicle.setSubStatus(VehicleSubStatus.NOT_ASSIGNED.name());
+        vehicle.setPartnerDetails(null);
+        vehicle.setPartnerId(null);
+        vehicle =vehicleRepository.update(vehicle);
         return vehicle;
     }
 

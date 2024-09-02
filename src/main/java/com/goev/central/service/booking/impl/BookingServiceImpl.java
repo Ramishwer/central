@@ -47,18 +47,7 @@ public class BookingServiceImpl implements BookingService {
             return result;
 
         for (BookingDao bookingDao : bookingDaos) {
-            result.getElements().add(BookingViewDto.builder()
-                    .uuid(bookingDao.getUuid())
-                    .customerDetails(ApplicationConstants.GSON.fromJson(bookingDao.getCustomerDetails(), CustomerViewDto.class))
-                    .partnerDetails(ApplicationConstants.GSON.fromJson(bookingDao.getPartnerDetails(), PartnerViewDto.class))
-                    .vehicleDetails(ApplicationConstants.GSON.fromJson(bookingDao.getVehicleDetails(), VehicleViewDto.class))
-                    .status(bookingDao.getStatus())
-                    .subStatus(bookingDao.getSubStatus())
-                    .startLocationDetails(ApplicationConstants.GSON.fromJson(bookingDao.getStartLocationDetails(), LatLongDto.class))
-                    .endLocationDetails(ApplicationConstants.GSON.fromJson(bookingDao.getEndLocationDetails(), LatLongDto.class))
-                    .plannedStartTime(bookingDao.getPlannedStartTime())
-                    .displayCode(bookingDao.getDisplayCode())
-                    .build());
+            result.getElements().add(BookingViewDto.fromDao(bookingDao));
         }
         return result;
     }

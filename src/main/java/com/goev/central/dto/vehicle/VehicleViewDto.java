@@ -39,6 +39,7 @@ public class VehicleViewDto {
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime deboardingDate;
+    private VehicleStatsDto stats;
 
     public static VehicleViewDto fromDao(VehicleDao vehicleDao) {
         if (vehicleDao.getViewInfo() == null)

@@ -41,7 +41,7 @@ public class VehicleDto {
     private DateTime computedChargingTime;
     private String locationStatus;
     private LocationDto locationDetails;
-    private VehicleViewDto vehicle;
+    private VehicleViewDto vehicleDetails;
 
     public static VehicleDto fromDao(VehicleDao vehicle) {
         if(vehicle == null)
@@ -53,7 +53,7 @@ public class VehicleDto {
                 .locationDetails(ApplicationConstants.GSON.fromJson(vehicle.getLocationDetails(), LocationDto.class))
                 .partnerDetails(ApplicationConstants.GSON.fromJson(vehicle.getPartnerDetails(), PartnerViewDto.class))
                 .vehicleTransferDetails(ApplicationConstants.GSON.fromJson(vehicle.getVehicleTransferDetails(), VehicleTransferDto.class))
-                .vehicle(VehicleViewDto.fromDao(vehicle))
+                .vehicleDetails(VehicleViewDto.fromDao(vehicle))
                 .build();
     }
 }

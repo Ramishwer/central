@@ -7,6 +7,8 @@ import com.fasterxml.jackson.datatype.joda.deser.DateTimeDeserializer;
 import com.fasterxml.jackson.datatype.joda.ser.DateTimeSerializer;
 import com.goev.central.constant.ApplicationConstants;
 import com.goev.central.dao.booking.BookingDao;
+import com.goev.central.dto.business.BusinessClientDto;
+import com.goev.central.dto.business.BusinessSegmentDto;
 import com.goev.central.dto.customer.CustomerViewDto;
 import com.goev.central.dto.partner.PartnerViewDto;
 import com.goev.central.dto.vehicle.VehicleViewDto;
@@ -50,6 +52,8 @@ public class BookingViewDto {
     private Long duration;
     private CustomerViewDto startContact;
     private CustomerViewDto endContact;
+    private BusinessClientDto businessClient;
+    private BusinessSegmentDto businessSegment;
 
 
 

@@ -3,7 +3,9 @@ package com.goev.central.service.partner.detail.impl;
 
 import com.goev.central.constant.ApplicationConstants;
 import com.goev.central.dao.booking.BookingDao;
+import com.goev.central.dao.location.LocationDao;
 import com.goev.central.dao.partner.detail.PartnerDao;
+import com.goev.central.dao.partner.detail.PartnerDetailDao;
 import com.goev.central.dao.partner.duty.PartnerDutyDao;
 import com.goev.central.dao.partner.duty.PartnerShiftDao;
 import com.goev.central.dao.vehicle.detail.VehicleDao;
@@ -25,6 +27,7 @@ import com.goev.central.enums.partner.PartnerStatus;
 import com.goev.central.enums.partner.PartnerSubStatus;
 import com.goev.central.repository.FirebaseRepository;
 import com.goev.central.repository.booking.BookingRepository;
+import com.goev.central.repository.location.LocationRepository;
 import com.goev.central.repository.partner.detail.PartnerRepository;
 import com.goev.central.repository.partner.duty.PartnerDutyRepository;
 import com.goev.central.repository.partner.duty.PartnerShiftRepository;
@@ -54,6 +57,7 @@ public class PartnerServiceImpl implements PartnerService {
     private final PartnerShiftRepository partnerShiftRepository;
     private final VehicleRepository vehicleRepository;
     private final FirebaseRepository firebaseRepository;
+    private final LocationRepository locationRepository;
 
     @Override
     public Boolean deletePartner(String partnerUUID) {
@@ -476,10 +480,10 @@ public class PartnerServiceImpl implements PartnerService {
         if (partnerShiftDao == null)
             throw new ResponseException("Invalid action: Shift Details Incorrect");
 
-//        LocationDao expectedInLocation = locationRepository.findById(partnerShiftDao.getInLocationId());
-//        if (expectedInLocation == null)
-//            throw new ResponseException("Invalid action: Shift Details Incorrect No Location present");
-
+        LocationDao expectedInLocation = locationRepository.findById(partnerShiftDao.getInLocationId());
+        if (expectedInLocation == null) {
+            throw new ResponseException("Invalid action: Shift Details Incorrect No Location present");
+        }
 //        validateLocationQr(actionDto.getQrString(),expectedInLocation);
 //        validateLocationGps(actionDto.getLocation(),expectedInLocation);
 
@@ -490,7 +494,7 @@ public class PartnerServiceImpl implements PartnerService {
         newDuty.setPartnerShiftId(partnerShiftDao.getId());
 
         newDuty.setActualDutyStartTime(DateTime.now());
-//        newDuty.setActualDutyStartLocationDetails(ApplicationConstants.GSON.toJson(expectedInLocation));
+        newDuty.setActualDutyStartLocationDetails(ApplicationConstants.GSON.toJson(expectedInLocation));
 
         newDuty.setPlannedDutyStartTime(partnerShiftDao.getEstimatedStartTime());
         newDuty.setPlannedOnlineTime(partnerShiftDao.getEstimatedOnlineTime());
