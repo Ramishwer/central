@@ -54,6 +54,8 @@ public class BookingViewDto {
     private CustomerViewDto endContact;
     private BusinessClientDto businessClient;
     private BusinessSegmentDto businessSegment;
+    private Long eta;
+    private Long dta;
 
 
 

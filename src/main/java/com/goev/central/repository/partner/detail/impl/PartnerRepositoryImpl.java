@@ -159,9 +159,9 @@ public class PartnerRepositoryImpl implements PartnerRepository {
     }
 
     @Override
-    public List<PartnerDao> findAllByVehicleId() {
+    public List<PartnerDao> findAllUnAssignedPartners() {
         return context.selectFrom(PARTNERS)
-                .where(PARTNERS.VEHICLE_ID.isNotNull())
+                .where(PARTNERS.VEHICLE_ID.isNull())
                 .and(PARTNERS.STATUS.eq(PartnerStatus.ON_DUTY.name()))
                 .and(PARTNERS.SUB_STATUS.eq(PartnerSubStatus.VEHICLE_NOT_ALLOTTED.name()))
                 .and(PARTNERS.ONBOARDING_STATUS.in(PartnerOnboardingStatus.ONBOARDED.name()))

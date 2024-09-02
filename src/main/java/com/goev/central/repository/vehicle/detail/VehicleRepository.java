@@ -26,4 +26,6 @@ public interface VehicleRepository {
     List<VehicleDao> findAllByStatus(String status);
 
     List<VehicleDao> findAllActiveWithPartnerId();
+
+    List<VehicleDao> findEligibleVehicleForPartnerId(Integer partnerId);
 }

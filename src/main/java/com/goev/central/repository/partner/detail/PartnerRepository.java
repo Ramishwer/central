@@ -1,7 +1,6 @@
 package com.goev.central.repository.partner.detail;
 
 import com.goev.central.dao.partner.detail.PartnerDao;
-import com.goev.central.dao.vehicle.detail.VehicleDao;
 
 import java.util.List;
 
@@ -30,5 +29,5 @@ public interface PartnerRepository {
 
     PartnerDao findByVehicleId(Integer vehicleId);
 
-    List<PartnerDao> findAllByVehicleId();
+    List<PartnerDao> findAllUnAssignedPartners();
 }

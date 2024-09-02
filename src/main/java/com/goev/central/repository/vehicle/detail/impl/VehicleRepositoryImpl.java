@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import static com.goev.record.central.Tables.*;
 import static com.goev.record.central.tables.Vehicles.VEHICLES;
 import static com.goev.record.central.tables.Vehicles.VEHICLES;
 import static com.goev.record.central.tables.Vehicles.VEHICLES;
@@ -129,6 +130,33 @@ public class VehicleRepositoryImpl implements VehicleRepository {
                 .where(VEHICLES.ONBOARDING_STATUS.in(VehicleOnboardingStatus.ONBOARDED.name()))
                 .and(VEHICLES.PARTNER_ID.isNotNull())
                 .and(VEHICLES.IS_ACTIVE.eq(true))
+                .fetchInto(VehicleDao.class);
+    }
+
+    @Override
+    public List<VehicleDao> findEligibleVehicleForPartnerId(Integer partnerId) {
+        return context.selectFrom(VEHICLES)
+                .where(VEHICLES.ONBOARDING_STATUS.in(VehicleOnboardingStatus.ONBOARDED.name()))
+                .and(VEHICLES.ID.in(
+                        context.select(VEHICLE_SEGMENT_MAPPINGS.VEHICLE_ID)
+                                .from(VEHICLE_SEGMENT_MAPPINGS)
+                                .where(VEHICLE_SEGMENT_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
+                                .and(VEHICLE_SEGMENT_MAPPINGS.VEHICLE_SEGMENT_ID.in(
+                                        context.select(PARTNER_SEGMENT_MAPPINGS.VEHICLE_SEGMENT_ID)
+                                                .from(PARTNER_SEGMENT_MAPPINGS)
+                                                .where(PARTNER_SEGMENT_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
+                                                .and(PARTNER_SEGMENT_MAPPINGS.VEHICLE_SEGMENT_ID.isNotNull()))
+                                                .and(PARTNER_SEGMENT_MAPPINGS.PARTNER_SEGMENT_ID.in(
+                                                        context.select(PARTNER_SEGMENT_MAPPINGS.PARTNER_SEGMENT_ID)
+                                                                .from(PARTNER_SEGMENT_MAPPINGS)
+                                                                .where(PARTNER_SEGMENT_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
+                                                                .and(PARTNER_SEGMENT_MAPPINGS.PARTNER_ID.eq(partnerId))
+                                                )
+
+                                ))
+                ))
+                .and(VEHICLES.IS_ACTIVE.eq(true))
+                .and(VEHICLES.STATE.eq(RecordState.ACTIVE.name()))
                 .fetchInto(VehicleDao.class);
     }
 }

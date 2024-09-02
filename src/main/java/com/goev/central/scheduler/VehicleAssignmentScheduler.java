@@ -8,8 +8,6 @@ import com.goev.central.enums.partner.PartnerStatus;
 import com.goev.central.enums.partner.PartnerSubStatus;
 import com.goev.central.enums.vehicle.VehicleStatus;
 import com.goev.central.repository.partner.detail.PartnerRepository;
-import com.goev.central.repository.partner.duty.PartnerShiftMappingRepository;
-import com.goev.central.repository.partner.duty.PartnerShiftRepository;
 import com.goev.central.repository.vehicle.detail.VehicleRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,26 +23,29 @@ import java.util.List;
 public class VehicleAssignmentScheduler {
     private final VehicleRepository vehicleRepository;
     private final PartnerRepository partnerRepository;
-    @Scheduled(fixedRate = 1*60 * 1000)
+
+    @Scheduled(fixedRate = 60 * 1000)
     public void reportCurrentTime() {
-        log.info("The {} time is now {}",this.getClass().getName() ,DateTime.now());
-        List<PartnerDao> allPartners =partnerRepository.findAllByVehicleId();
+        log.info("The {} time is now {}", this.getClass().getName(), DateTime.now());
+        List<PartnerDao> allPartners = partnerRepository.findAllUnAssignedPartners();
 
-        for(PartnerDao partnerDao:allPartners){
-            VehicleDao vehicle = vehicleRepository.findById(partnerDao.getVehicleId());
-            PartnerDao existingPartner = partnerRepository.findByVehicleId(vehicle.getId());
-            if(existingPartner!=null && !partnerDao.getId().equals(existingPartner.getId()))
-                continue;
+        for (PartnerDao partnerDao : allPartners) {
+            List<VehicleDao> eligibleVehicles = vehicleRepository.findEligibleVehicleForPartnerId(partnerDao.getId());
+            for (VehicleDao vehicle : eligibleVehicles) {
+                PartnerDao existingPartner = partnerRepository.findByVehicleId(vehicle.getId());
+                if (existingPartner != null)
+                    continue;
 
-            if(PartnerStatus.ON_DUTY.name().equals(partnerDao.getStatus()) &&  PartnerSubStatus.VEHICLE_NOT_ALLOTTED.name().equals(partnerDao.getSubStatus())){
-                log.info("Assigning Partner {} to Vehicle {}",partnerDao.getPunchId(),vehicle.getPlateNumber());
-                partnerDao.setStatus(PartnerStatus.ON_DUTY.name());
-                partnerDao.setSubStatus(PartnerSubStatus.VEHICLE_ALLOTTED.name());
-                partnerDao.setVehicleId(vehicle.getId());
-                partnerDao.setVehicleDetails(ApplicationConstants.GSON.toJson(VehicleViewDto.fromDao(vehicle)));
-                partnerRepository.update(partnerDao);
-                vehicle.setStatus(VehicleStatus.ALLOTED.name());
-                vehicleRepository.update(vehicle);
+                if (PartnerStatus.ON_DUTY.name().equals(partnerDao.getStatus()) && PartnerSubStatus.VEHICLE_NOT_ALLOTTED.name().equals(partnerDao.getSubStatus())) {
+                    log.info("Assigning Partner {} to Vehicle {}", partnerDao.getPunchId(), vehicle.getPlateNumber());
+                    partnerDao.setStatus(PartnerStatus.ON_DUTY.name());
+                    partnerDao.setSubStatus(PartnerSubStatus.VEHICLE_ALLOTTED.name());
+                    partnerDao.setVehicleId(vehicle.getId());
+                    partnerDao.setVehicleDetails(ApplicationConstants.GSON.toJson(VehicleViewDto.fromDao(vehicle)));
+                    partnerRepository.update(partnerDao);
+                    vehicle.setStatus(VehicleStatus.ALLOTED.name());
+                    vehicleRepository.update(vehicle);
+                }
             }
 
         }
