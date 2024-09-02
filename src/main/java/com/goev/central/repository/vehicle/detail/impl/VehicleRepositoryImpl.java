@@ -145,13 +145,13 @@ public class VehicleRepositoryImpl implements VehicleRepository {
                                         context.select(PARTNER_SEGMENT_MAPPINGS.VEHICLE_SEGMENT_ID)
                                                 .from(PARTNER_SEGMENT_MAPPINGS)
                                                 .where(PARTNER_SEGMENT_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
-                                                .and(PARTNER_SEGMENT_MAPPINGS.VEHICLE_SEGMENT_ID.isNotNull()))
+                                                .and(PARTNER_SEGMENT_MAPPINGS.VEHICLE_SEGMENT_ID.isNotNull())
                                                 .and(PARTNER_SEGMENT_MAPPINGS.PARTNER_SEGMENT_ID.in(
                                                         context.select(PARTNER_SEGMENT_MAPPINGS.PARTNER_SEGMENT_ID)
                                                                 .from(PARTNER_SEGMENT_MAPPINGS)
                                                                 .where(PARTNER_SEGMENT_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
                                                                 .and(PARTNER_SEGMENT_MAPPINGS.PARTNER_ID.eq(partnerId))
-                                                )
+                                                ))
 
                                 ))
                 ))

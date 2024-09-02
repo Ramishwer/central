@@ -14,8 +14,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -31,6 +33,11 @@ public class VehicleAssignmentScheduler {
 
         for (PartnerDao partnerDao : allPartners) {
             List<VehicleDao> eligibleVehicles = vehicleRepository.findEligibleVehicleForPartnerId(partnerDao.getId());
+            if(CollectionUtils.isEmpty(eligibleVehicles)) {
+                log.info("Eligible Vehicles For Partner {} []",partnerDao.getId());
+                continue;
+            }
+            log.info("Eligible Vehicles For Partner {} {}",partnerDao.getId(),eligibleVehicles.stream().map(VehicleDao::getPlateNumber).collect(Collectors.toList()));
             for (VehicleDao vehicle : eligibleVehicles) {
                 PartnerDao existingPartner = partnerRepository.findByVehicleId(vehicle.getId());
                 if (existingPartner != null)
