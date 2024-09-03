@@ -89,12 +89,19 @@ public class CustomerRepositoryImpl implements CustomerRepository {
 
     @Override
     public List<CustomerDao> findAllByIds(List<Integer> ids) {
-        return context.selectFrom(CUSTOMERS).where(CUSTOMERS.ID.in(ids)).fetchInto(CustomerDao.class);
+        return context.selectFrom(CUSTOMERS)
+                .where(CUSTOMERS.ID.in(ids))
+                .and(CUSTOMERS.IS_ACTIVE.eq(true))
+                .fetchInto(CustomerDao.class);
     }
 
     @Override
-    public List<CustomerDao> findAllActive() {
-        return context.selectFrom(CUSTOMERS).fetchInto(CustomerDao.class);
+    public List<CustomerDao> findAllActive(String onboardingStatus) {
+        return context.selectFrom(CUSTOMERS)
+                .where(CUSTOMERS.ONBOARDING_STATUS.eq(onboardingStatus))
+                .and(CUSTOMERS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(CUSTOMERS.IS_ACTIVE.eq(true))
+                .fetchInto(CustomerDao.class);
     }
 
     @Override

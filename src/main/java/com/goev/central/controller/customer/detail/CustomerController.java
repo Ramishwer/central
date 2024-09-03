@@ -27,7 +27,8 @@ public class CustomerController {
                                                                            @RequestParam(value = "start", required = false) Integer start,
                                                                            @RequestParam(value = "from", required = false) Long from,
                                                                            @RequestParam(value = "to", required = false) Long to,
-                                                                           @RequestParam(value = "lastUUID", required = false) String lastElementUUID) {
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, customerService.getCustomers());
+                                                                           @RequestParam(value = "lastUUID", required = false) String lastElementUUID,
+     @RequestParam(value = "onboardingStatus") String onboardingStatus) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, customerService.getCustomers(onboardingStatus));
     }
 }

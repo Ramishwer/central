@@ -2,7 +2,6 @@ package com.goev.central.service.customer.detail.impl;
 
 import com.goev.central.constant.ApplicationConstants;
 import com.goev.central.dao.customer.detail.CustomerDao;
-import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.customer.CustomerViewDto;
 import com.goev.central.repository.customer.detail.CustomerRepository;
@@ -23,9 +22,9 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
 
     @Override
-    public PaginatedResponseDto<CustomerViewDto> getCustomers() {
+    public PaginatedResponseDto<CustomerViewDto> getCustomers(String onboardingStatus) {
         PaginatedResponseDto<CustomerViewDto> result = PaginatedResponseDto.<CustomerViewDto>builder().elements(new ArrayList<>()).build();
-        List<CustomerDao> customerDaos = customerRepository.findAllActive();
+        List<CustomerDao> customerDaos = customerRepository.findAllActive(onboardingStatus);
         if (CollectionUtils.isEmpty(customerDaos))
             return result;
 
