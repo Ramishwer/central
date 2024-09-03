@@ -17,4 +17,5 @@ public class CustomerDao extends BaseDao {
     private String bookingDetails;
     private Integer customerDetailsId;
     private String viewInfo;
+    private String onboardingStatus;
 }
