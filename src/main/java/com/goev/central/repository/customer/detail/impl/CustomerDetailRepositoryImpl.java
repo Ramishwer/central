@@ -2,6 +2,8 @@ package com.goev.central.repository.customer.detail.impl;
 
 import com.goev.central.dao.customer.detail.CustomerDetailDao;
 import com.goev.central.repository.customer.detail.CustomerDetailRepository;
+import com.goev.central.utilities.EventExecutorUtils;
+import com.goev.central.utilities.RequestContext;
 import com.goev.lib.enums.RecordState;
 import com.goev.record.central.tables.records.CustomerDetailsRecord;
 import lombok.AllArgsConstructor;
@@ -19,6 +21,7 @@ import static com.goev.record.central.tables.CustomerDetails.CUSTOMER_DETAILS;
 public class CustomerDetailRepositoryImpl implements CustomerDetailRepository {
 
     private final DSLContext context;
+    private final EventExecutorUtils eventExecutor;
 
     @Override
     public CustomerDetailDao save(CustomerDetailDao customerDetail) {
@@ -34,6 +37,8 @@ public class CustomerDetailRepositoryImpl implements CustomerDetailRepository {
         customerDetail.setState(customerDetailsRecord.getState());
         customerDetail.setApiSource(customerDetailsRecord.getApiSource());
         customerDetail.setNotes(customerDetailsRecord.getNotes());
+        if (!"EVENT".equals(RequestContext.getRequestSource()))
+            eventExecutor.fireEvent("CustomerDetailSaveEvent", customerDetail);
         return customerDetail;
     }
 
@@ -51,6 +56,9 @@ public class CustomerDetailRepositoryImpl implements CustomerDetailRepository {
         customerDetail.setState(customerDetailsRecord.getState());
         customerDetail.setApiSource(customerDetailsRecord.getApiSource());
         customerDetail.setNotes(customerDetailsRecord.getNotes());
+
+        if (!"EVENT".equals(RequestContext.getRequestSource()))
+            eventExecutor.fireEvent("CustomerDetailUpdateEvent", customerDetail);
         return customerDetail;
     }
 

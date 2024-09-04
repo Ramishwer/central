@@ -4,6 +4,7 @@ import com.goev.central.config.SpringContext;
 import com.goev.central.dao.asset.AssetTypeDao;
 import com.goev.central.dao.booking.BookingDao;
 import com.goev.central.dao.customer.detail.CustomerDao;
+import com.goev.central.dao.customer.detail.CustomerDetailDao;
 import com.goev.central.dao.customer.payment.CustomerPaymentDao;
 import com.goev.central.dao.location.LocationDao;
 import com.goev.central.dao.partner.detail.PartnerDao;
@@ -23,8 +24,10 @@ import com.goev.central.event.events.asset.save.AssetTypeSaveEvent;
 import com.goev.central.event.events.asset.update.AssetTypeUpdateEvent;
 import com.goev.central.event.events.booking.BookingSaveEvent;
 import com.goev.central.event.events.booking.BookingUpdateEvent;
+import com.goev.central.event.events.customer.save.CustomerDetailSaveEvent;
 import com.goev.central.event.events.customer.save.CustomerPaymentSaveEvent;
 import com.goev.central.event.events.customer.save.CustomerSaveEvent;
+import com.goev.central.event.events.customer.update.CustomerDetailUpdateEvent;
 import com.goev.central.event.events.customer.update.CustomerPaymentUpdateEvent;
 import com.goev.central.event.events.customer.update.CustomerUpdateEvent;
 import com.goev.central.event.events.location.save.LocationSaveEvent;
@@ -156,6 +159,12 @@ public class EventExecutorUtils {
             }
             case "CustomerUpdateEvent" -> {
                 return fireEvent(SpringContext.getBean(CustomerUpdateEvent.class), (CustomerDao) data, executionTime);
+            }
+            case "CustomerDetailSaveEvent" -> {
+                return fireEvent(SpringContext.getBean(CustomerDetailSaveEvent.class), (CustomerDetailDao) data, executionTime);
+            }
+            case "CustomerDetailUpdateEvent" -> {
+                return fireEvent(SpringContext.getBean(CustomerDetailUpdateEvent.class), (CustomerDetailDao) data, executionTime);
             }
             case "CustomerPaymentSaveEvent" -> {
                 return fireEvent(SpringContext.getBean(CustomerPaymentSaveEvent.class), (CustomerPaymentDao) data, executionTime);
