@@ -13,6 +13,7 @@ import com.goev.central.dto.customer.CustomerViewDto;
 import com.goev.central.dto.partner.PartnerViewDto;
 import com.goev.central.dto.vehicle.VehicleViewDto;
 import com.goev.central.dto.vehicle.detail.VehicleCategoryDto;
+import com.goev.lib.dto.ContactDetailsDto;
 import com.goev.lib.dto.LatLongDto;
 import lombok.*;
 import org.joda.time.DateTime;
@@ -54,8 +55,8 @@ public class BookingViewDto {
     private DateTime plannedEndTime;
     private Long distance;
     private Long duration;
-    private CustomerViewDto startContact;
-    private CustomerViewDto endContact;
+    private ContactDetailsDto startContact;
+    private ContactDetailsDto endContact;
     private BusinessClientDto businessClient;
     private BusinessSegmentDto businessSegment;
     private VehicleCategoryDto requestedVehicleCategory;
