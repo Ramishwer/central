@@ -70,6 +70,12 @@ public class PartnerDetailDto {
     private String permanentAddress;
     private String profileUrl;
     private FileDto profile;
+    private PartnerCategoryDto partnerCategory;
+    private Boolean inTraining;
+    private String trainingStatus;
+    @JsonSerialize(using = DateTimeSerializer.class)
+    @JsonDeserialize(using = DateTimeDeserializer.class)
+    private DateTime trainingDate;
 
 
     public static List<PartnerDocumentDto> getPartnerDocumentDtoList(Map<Integer, PartnerDocumentTypeDao> documentTypeIdToDocumentTypeMap, Map<Integer, PartnerDocumentDao> existingDocumentMap) {

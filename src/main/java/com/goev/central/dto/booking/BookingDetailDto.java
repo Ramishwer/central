@@ -24,14 +24,9 @@ import org.joda.time.DateTime;
 public class BookingDetailDto {
     private String uuid;
     private BookingViewDto booking;
-    private CustomerViewDto customer;
-    private PartnerViewDto partner;
-    private VehicleViewDto vehicle;
-    private BookingPaymentDto payment;
     private PricingModelDto pricingModel;
-    private BookingTypeDto bookingType;
-    private BookingPricingDetailDto bookingPricingDetail;
-    private VehicleCategoryDto requestedVehicleCategory;
+    private BookingFeedbackDto bookingFeedback;
+    private BookingInvoicingDetailDto bookingInvoicingDetail;
     private String startGeohash;
     private String endGeohash;
     private String startRegions;
@@ -96,8 +91,7 @@ public class BookingDetailDto {
     private Integer actualArrivalSoc;
     private Integer actualStartSoc;
     private Integer actualEndSoc;
-    private BookingFeedbackDto bookingFeedback;
-    private BookingInvoicingDetailDto bookingInvoicingDetail;
+
     private String platform;
     private String appVersion;
     private String deviceUUID;

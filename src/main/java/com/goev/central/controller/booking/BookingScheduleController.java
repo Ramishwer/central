@@ -1,11 +1,8 @@
 package com.goev.central.controller.booking;
 
-import com.goev.central.dto.booking.BookingDto;
 import com.goev.central.dto.booking.BookingScheduleDto;
-import com.goev.central.dto.booking.BookingViewDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.service.booking.BookingScheduleService;
-import com.goev.central.service.booking.BookingService;
 import com.goev.lib.dto.ResponseDto;
 import com.goev.lib.dto.StatusDto;
 import lombok.AllArgsConstructor;
@@ -26,9 +23,9 @@ public class BookingScheduleController {
                                                                                      @RequestParam(value = "from", required = false) Long from,
                                                                                      @RequestParam(value = "to", required = false) Long to,
                                                                                      @RequestParam(value = "lastUUID", required = false) String lastElementUUID,
-                                                                                     @RequestParam("status")String status,
-                                                                                     @RequestParam(value = "subStatus", required = false)String subStatus) {
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, bookingScheduleService.getBookingSchedules(status,subStatus));
+                                                                                     @RequestParam("status") String status,
+                                                                                     @RequestParam(value = "subStatus", required = false) String subStatus) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, bookingScheduleService.getBookingSchedules(status, subStatus));
     }
 
 

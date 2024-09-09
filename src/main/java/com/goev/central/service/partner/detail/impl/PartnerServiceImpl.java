@@ -351,6 +351,12 @@ public class PartnerServiceImpl implements PartnerService {
             BookingDao bookingDao = bookingRepository.findById(partner.getBookingId());
             bookingDao.setStatus(BookingStatus.COMPLETED.name());
             bookingDao.setSubStatus(BookingSubStatus.COMPLETED.name());
+            BookingViewDto viewDto = BookingViewDto.fromDao(bookingDao);
+            if (viewDto != null) {
+                viewDto.setStatus(bookingDao.getStatus());
+                viewDto.setSubStatus(bookingDao.getSubStatus());
+            }
+            bookingDao.setViewInfo(ApplicationConstants.GSON.toJson(viewDto));
             bookingRepository.update(bookingDao);
         }
         return partner;
@@ -364,6 +370,12 @@ public class PartnerServiceImpl implements PartnerService {
             BookingDao bookingDao = bookingRepository.findById(partner.getBookingId());
             bookingDao.setStatus(BookingStatus.COMPLETED.name());
             bookingDao.setSubStatus(BookingSubStatus.ENDED.name());
+            BookingViewDto viewDto = BookingViewDto.fromDao(bookingDao);
+            if (viewDto != null) {
+                viewDto.setStatus(bookingDao.getStatus());
+                viewDto.setSubStatus(bookingDao.getSubStatus());
+            }
+            bookingDao.setViewInfo(ApplicationConstants.GSON.toJson(viewDto));
             bookingRepository.update(bookingDao);
         }
         return partner;
@@ -377,6 +389,12 @@ public class PartnerServiceImpl implements PartnerService {
             BookingDao bookingDao = bookingRepository.findById(partner.getBookingId());
             bookingDao.setStatus(BookingStatus.IN_PROGRESS.name());
             bookingDao.setSubStatus(BookingSubStatus.STARTED.name());
+            BookingViewDto viewDto = BookingViewDto.fromDao(bookingDao);
+            if (viewDto != null) {
+                viewDto.setStatus(bookingDao.getStatus());
+                viewDto.setSubStatus(bookingDao.getSubStatus());
+            }
+            bookingDao.setViewInfo(ApplicationConstants.GSON.toJson(viewDto));
             bookingRepository.update(bookingDao);
         }
         return partner;
@@ -390,6 +408,12 @@ public class PartnerServiceImpl implements PartnerService {
             BookingDao bookingDao = bookingRepository.findById(partner.getBookingId());
             bookingDao.setStatus(BookingStatus.IN_PROGRESS.name());
             bookingDao.setSubStatus(BookingSubStatus.ARRIVED.name());
+            BookingViewDto viewDto = BookingViewDto.fromDao(bookingDao);
+            if (viewDto != null) {
+                viewDto.setStatus(bookingDao.getStatus());
+                viewDto.setSubStatus(bookingDao.getSubStatus());
+            }
+            bookingDao.setViewInfo(ApplicationConstants.GSON.toJson(viewDto));
             bookingRepository.update(bookingDao);
         }
         return partner;
@@ -403,6 +427,12 @@ public class PartnerServiceImpl implements PartnerService {
             BookingDao bookingDao = bookingRepository.findById(partner.getBookingId());
             bookingDao.setStatus(BookingStatus.IN_PROGRESS.name());
             bookingDao.setSubStatus(BookingSubStatus.ENROUTE.name());
+            BookingViewDto viewDto = BookingViewDto.fromDao(bookingDao);
+            if (viewDto != null) {
+                viewDto.setStatus(bookingDao.getStatus());
+                viewDto.setSubStatus(bookingDao.getSubStatus());
+            }
+            bookingDao.setViewInfo(ApplicationConstants.GSON.toJson(viewDto));
             bookingRepository.update(bookingDao);
         }
         return partner;

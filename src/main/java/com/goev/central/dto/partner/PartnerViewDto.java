@@ -10,6 +10,8 @@ import com.goev.central.dto.location.LocationDto;
 import lombok.*;
 import org.joda.time.DateTime;
 
+import java.util.Map;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -17,6 +19,9 @@ import org.joda.time.DateTime;
 @ToString
 @Builder
 public class PartnerViewDto {
+    private String uuid;
+    private String state;
+    private String profileUrl;
     private String firstName;
     private String lastName;
     private String phoneNumber;
@@ -27,11 +32,10 @@ public class PartnerViewDto {
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime deboardingDate;
-    private String uuid;
-    private String state;
-    private String profileUrl;
     private LocationDto homeLocation;
     private PartnerStatsDto stats;
+    private String remark;
+    private Map<String,Object> fields;
 
 
     public static String getPartnerName(PartnerViewDto partnerViewDto) {

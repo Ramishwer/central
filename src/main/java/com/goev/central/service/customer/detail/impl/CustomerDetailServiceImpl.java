@@ -5,6 +5,7 @@ import com.goev.central.dao.customer.detail.CustomerDao;
 import com.goev.central.dao.customer.detail.CustomerDetailDao;
 import com.goev.central.dto.customer.CustomerViewDto;
 import com.goev.central.dto.customer.detail.CustomerDetailDto;
+import com.goev.central.enums.customer.CustomerOnboardingStatus;
 import com.goev.central.repository.customer.detail.CustomerDetailRepository;
 import com.goev.central.repository.customer.detail.CustomerRepository;
 import com.goev.central.service.customer.detail.CustomerDetailService;
@@ -31,6 +32,7 @@ public class CustomerDetailServiceImpl implements CustomerDetailService {
         }
         CustomerDao customerDao = new CustomerDao();
         customerDao.setPhoneNumber(customerDto.getPhoneNumber());
+        customerDao.setStatus(CustomerOnboardingStatus.ONBOARDED.name());
         CustomerDao customer = customerRepository.save(customerDao);
 
         if (customer == null)

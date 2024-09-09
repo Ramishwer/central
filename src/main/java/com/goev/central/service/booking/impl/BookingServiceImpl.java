@@ -42,7 +42,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public PaginatedResponseDto<BookingViewDto> getBookings(List<String> status, String subStatus, DateTime from, DateTime to) {
         PaginatedResponseDto<BookingViewDto> result = PaginatedResponseDto.<BookingViewDto>builder().elements(new ArrayList<>()).build();
-        List<BookingDao> bookingDaos = bookingRepository.findAllActive(status, subStatus,from,to);
+        List<BookingDao> bookingDaos = bookingRepository.findAllActive(status, subStatus, from, to);
         if (CollectionUtils.isEmpty(bookingDaos))
             return result;
 
@@ -83,6 +83,11 @@ public class BookingServiceImpl implements BookingService {
                 .displayCode(bookingDao.getDisplayCode())
                 .paymentDetails(BookingPaymentDto.builder()
                         .paymentMode(bookingRequest.getPaymentDetails().getPaymentMode()).build())
+                .pricingDetails(bookingRequest.getPricingDetails())
+                .startContact(bookingRequest.getStartContact())
+                .endContact(bookingRequest.getEndContact())
+                .duration(bookingRequest.getDuration())
+                .distance(bookingRequest.getDistance())
                 .build();
 
 
@@ -151,16 +156,12 @@ public class BookingServiceImpl implements BookingService {
         bookingDao.setVehicleDetails(null);
         bookingDao.setVehicleId(null);
 
-        BookingViewDto viewDto = BookingViewDto.builder()
-                .uuid(bookingDao.getUuid())
-                .status(bookingDao.getStatus())
-                .subStatus(bookingDao.getSubStatus())
-                .customerDetails(ApplicationConstants.GSON.fromJson(bookingDao.getCustomerDetails(), CustomerViewDto.class))
-                .startLocationDetails(ApplicationConstants.GSON.fromJson(bookingDao.getStartLocationDetails(), LatLongDto.class))
-                .endLocationDetails(ApplicationConstants.GSON.fromJson(bookingDao.getEndLocationDetails(), LatLongDto.class))
-                .plannedStartTime(bookingDao.getPlannedStartTime())
-                .displayCode(bookingDao.getDisplayCode())
-                .build();
+        BookingViewDto viewDto = BookingViewDto.fromDao(bookingDao);
+        if (viewDto != null) {
+            viewDto.setStatus(bookingDao.getStatus());
+            viewDto.setSubStatus(bookingDao.getSubStatus());
+            viewDto.setPartnerDetails(null);
+        }
         bookingDao.setViewInfo(ApplicationConstants.GSON.toJson(viewDto));
         return bookingRepository.update(bookingDao);
 
@@ -188,25 +189,22 @@ public class BookingServiceImpl implements BookingService {
         bookingDao.setVehicleDetails(ApplicationConstants.GSON.toJson(VehicleViewDto.fromDao(vehicleDao)));
 
 
-        BookingViewDto viewDto = BookingViewDto.builder()
-                .uuid(bookingDao.getUuid())
-                .partnerDetails(PartnerViewDto.fromDao(partnerDao))
-                .vehicleDetails(VehicleViewDto.fromDao(vehicleDao))
-                .status(bookingDao.getStatus())
-                .subStatus(bookingDao.getSubStatus())
-                .customerDetails(ApplicationConstants.GSON.fromJson(bookingDao.getCustomerDetails(), CustomerViewDto.class))
-                .startLocationDetails(ApplicationConstants.GSON.fromJson(bookingDao.getStartLocationDetails(), LatLongDto.class))
-                .endLocationDetails(ApplicationConstants.GSON.fromJson(bookingDao.getEndLocationDetails(), LatLongDto.class))
-                .plannedStartTime(bookingDao.getPlannedStartTime())
-                .displayCode(bookingDao.getDisplayCode())
-                .build();
+        BookingViewDto viewDto = BookingViewDto.fromDao(bookingDao);
+        if (viewDto != null) {
+            viewDto.setStatus(bookingDao.getStatus());
+            viewDto.setSubStatus(bookingDao.getSubStatus());
+            viewDto.setPartnerDetails(PartnerViewDto.fromDao(partnerDao));
+            viewDto.setVehicleDetails(VehicleViewDto.fromDao(vehicleDao));
+        }
+        bookingDao.setViewInfo(ApplicationConstants.GSON.toJson(viewDto));
+        bookingDao = bookingRepository.update(bookingDao);
         partnerDao.setStatus(PartnerStatus.ON_BOOKING.name());
         partnerDao.setBookingId(bookingDao.getId());
         partnerDao.setSubStatus(PartnerSubStatus.ASSIGNED.name());
         partnerDao.setBookingDetails(ApplicationConstants.GSON.toJson(viewDto));
         partnerRepository.update(partnerDao);
-        bookingDao.setViewInfo(ApplicationConstants.GSON.toJson(viewDto));
-        return bookingRepository.update(bookingDao);
+        return bookingDao;
+
     }
 
     private BookingDao cancelBooking(BookingDao bookingDao, BookingActionDto bookingActionDto) {
@@ -217,6 +215,12 @@ public class BookingServiceImpl implements BookingService {
         bookingDao.setStatus(BookingStatus.CANCELLED.name());
         bookingDao.setSubStatus(BookingStatus.CANCELLED.name());
 
+        BookingViewDto viewDto = BookingViewDto.fromDao(bookingDao);
+        if (viewDto != null) {
+            viewDto.setStatus(bookingDao.getStatus());
+            viewDto.setSubStatus(bookingDao.getSubStatus());
+        }
+        bookingDao.setViewInfo(ApplicationConstants.GSON.toJson(viewDto));
         bookingDao = bookingRepository.update(bookingDao);
 
         if (bookingDao.getPartnerId() != null) {

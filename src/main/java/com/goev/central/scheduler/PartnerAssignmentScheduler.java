@@ -68,18 +68,13 @@ public class PartnerAssignmentScheduler {
                 bookingDao.setVehicleDetails(ApplicationConstants.GSON.toJson(VehicleViewDto.fromDao(vehicleDao)));
 
 
-                BookingViewDto viewDto = BookingViewDto.builder()
-                        .uuid(bookingDao.getUuid())
-                        .partnerDetails(PartnerViewDto.fromDao(partnerDao))
-                        .vehicleDetails(VehicleViewDto.fromDao(vehicleDao))
-                        .status(bookingDao.getStatus())
-                        .subStatus(bookingDao.getSubStatus())
-                        .customerDetails(ApplicationConstants.GSON.fromJson(bookingDao.getCustomerDetails(), CustomerViewDto.class))
-                        .startLocationDetails(ApplicationConstants.GSON.fromJson(bookingDao.getStartLocationDetails(), LatLongDto.class))
-                        .endLocationDetails(ApplicationConstants.GSON.fromJson(bookingDao.getEndLocationDetails(), LatLongDto.class))
-                        .plannedStartTime(bookingDao.getPlannedStartTime())
-                        .displayCode(bookingDao.getDisplayCode())
-                        .build();
+                BookingViewDto viewDto = BookingViewDto.fromDao(bookingDao);
+                if (viewDto != null) {
+                    viewDto.setStatus(bookingDao.getStatus());
+                    viewDto.setSubStatus(bookingDao.getSubStatus());
+                    viewDto.setPartnerDetails(PartnerViewDto.fromDao(partnerDao));
+                    viewDto.setVehicleDetails(VehicleViewDto.fromDao(vehicleDao));
+                }
                 partnerDao.setStatus(PartnerStatus.ON_BOOKING.name());
                 partnerDao.setBookingId(bookingDao.getId());
                 partnerDao.setSubStatus(PartnerSubStatus.ASSIGNED.name());

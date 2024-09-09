@@ -12,9 +12,12 @@ import com.goev.central.dto.business.BusinessSegmentDto;
 import com.goev.central.dto.customer.CustomerViewDto;
 import com.goev.central.dto.partner.PartnerViewDto;
 import com.goev.central.dto.vehicle.VehicleViewDto;
+import com.goev.central.dto.vehicle.detail.VehicleCategoryDto;
 import com.goev.lib.dto.LatLongDto;
 import lombok.*;
 import org.joda.time.DateTime;
+
+import java.util.Map;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,9 +29,10 @@ import org.joda.time.DateTime;
 public class BookingViewDto {
     private String uuid;
     private String displayCode;
-    private BookingTypeDto bookingTypeDetails;
     private String status;
     private String subStatus;
+    private SchedulingDetailDto schedulingDetails;
+    private BookingTypeDto bookingTypeDetails;
     private LatLongDto startLocationDetails;
     private LatLongDto endLocationDetails;
     private PartnerViewDto partnerDetails;
@@ -54,8 +58,11 @@ public class BookingViewDto {
     private CustomerViewDto endContact;
     private BusinessClientDto businessClient;
     private BusinessSegmentDto businessSegment;
-    private Long eta;
-    private Long dta;
+    private VehicleCategoryDto requestedVehicleCategory;
+    private Long timeToReach;
+    private Long distanceToReach;
+    private String remark;
+    private Map<String,Object> fields;
 
 
 

@@ -1,22 +1,18 @@
 package com.goev.central.service.partner.detail.impl;
 
 import com.goev.central.constant.ApplicationConstants;
-import com.goev.central.dao.business.BusinessClientDao;
-import com.goev.central.dao.business.BusinessSegmentDao;
 import com.goev.central.dao.location.LocationDao;
 import com.goev.central.dao.partner.detail.PartnerDao;
 import com.goev.central.dao.partner.detail.PartnerDetailDao;
 import com.goev.central.dto.auth.AuthUserDto;
-import com.goev.central.dto.business.BusinessClientDto;
-import com.goev.central.dto.business.BusinessSegmentDto;
 import com.goev.central.dto.location.LocationDto;
+import com.goev.central.dto.partner.PartnerStatsDto;
 import com.goev.central.dto.partner.PartnerViewDto;
 import com.goev.central.dto.partner.detail.PartnerDetailDto;
 import com.goev.central.enums.DocumentStatus;
 import com.goev.central.enums.partner.PartnerOnboardingStatus;
 import com.goev.central.enums.partner.PartnerStatus;
 import com.goev.central.enums.partner.PartnerSubStatus;
-import com.goev.central.event.events.partner.update.PartnerUpdateEvent;
 import com.goev.central.repository.business.BusinessClientRepository;
 import com.goev.central.repository.business.BusinessSegmentRepository;
 import com.goev.central.repository.location.LocationRepository;
@@ -34,6 +30,8 @@ import com.goev.lib.utilities.ApplicationContext;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
 
 @Slf4j
 @Service
@@ -87,7 +85,7 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
         if (partner == null)
             throw new ResponseException("Error in saving details");
 
-        PartnerDetailDao partnerDetailDao = getPartnerDetailDao(partnerDto,partner);
+        PartnerDetailDao partnerDetailDao = getPartnerDetailDao(partnerDto, partner);
         partnerDetailDao.setPartnerId(partner.getId());
         partnerDetailDao = partnerDetailRepository.save(partnerDetailDao);
         if (partnerDetailDao == null)
@@ -115,6 +113,9 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
                 .profileUrl(partnerDao.getProfileUrl())
                 .phoneNumber(partnerDao.getPhoneNumber())
                 .onboardingDate(partnerDetails.getOnboardingDate())
+                .deboardingDate(partnerDetails.getDeboardingDate())
+                .remark(partnerDetails.getRemark())
+                .fields(new HashMap<>())
                 .uuid(partnerDetails.getUuid())
                 .build();
         if (partnerDetails.getHomeLocationId() != null) {
@@ -122,6 +123,17 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
             if (locationDao != null) {
                 result.setHomeLocation(LocationDto.builder().uuid(locationDao.getUuid()).name(locationDao.getName()).build());
             }
+        }
+
+        if (partnerDetails.getInTraining() != null) {
+            result.getFields().put("inTraining", partnerDetails.getInTraining());
+        }
+
+        if (partnerDetails.getTrainingStatus() != null)
+            result.getFields().put("trainingStatus", partnerDetails.getTrainingStatus());
+
+        if (partnerDao.getStats() != null) {
+            result.setStats(ApplicationConstants.GSON.fromJson(partnerDao.getStats(), PartnerStatsDto.class));
         }
         return result;
     }
@@ -160,9 +172,28 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
         if (partnerDetailDao == null)
             throw new ResponseException("No partner details found for Id :" + partnerUUID);
 
-        PartnerDetailDao partnerDetails = getPartnerDetailDao(partnerDetailDto,partner);
+        if (!partnerDetailDao.getAadhaarCardNumber().equals(partnerDetailDto.getAadhaarCardNumber())) {
+            PartnerDetailDao existingPartnerDetail = partnerDetailRepository.findByAadhaarCardNumber(partnerDetailDto.getAadhaarCardNumber());
+
+            if (existingPartnerDetail != null && !existingPartnerDetail.getPartnerId().equals(partnerDetailDao.getPartnerId())) {
+                throw new ResponseException("Error in saving partner: Partner with Aadhaar :" + partnerDetailDto.getAadhaarCardNumber() + " already exist");
+            }
+        }
+
+        if (!partner.getPhoneNumber().equals(partnerDetailDto.getPartner().getPhoneNumber())) {
+
+            PartnerDao existingPartnerDao = partnerRepository.findByPhoneNumber(partnerDetailDto.getPartner().getPhoneNumber());
+
+            if (existingPartnerDao != null) {
+                throw new ResponseException("Error in saving partner: Partner with phone number :" + partnerDetailDto.getPartner().getPhoneNumber() + " already exist");
+            }
+            partner.setPhoneNumber(partnerDetailDto.getPartner().getPhoneNumber());
+            authService.updateUser(AuthUserDto.builder().uuid(partner.getAuthUuid()).phoneNumber(partnerDetailDto.getPartner().getPhoneNumber()).build());
+        }
+
+
+        PartnerDetailDao partnerDetails = getPartnerDetailDao(partnerDetailDto, partner);
         partnerDetails.setPartnerId(partner.getId());
-        partnerDetails.setAadhaarCardNumber(partnerDetailDao.getAadhaarCardNumber());
         partnerDetails = partnerDetailRepository.save(partnerDetails);
         if (partnerDetails == null)
             throw new ResponseException("Error in saving partner details");
@@ -179,7 +210,7 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
     }
 
     @Override
-    public  boolean updateOnboardingStatus(String partnerUUID){
+    public boolean updateOnboardingStatus(String partnerUUID) {
         PartnerDao partner = partnerRepository.findByUUID(partnerUUID);
         if (partner == null)
             throw new ResponseException("No partner found for Id :" + partnerUUID);
@@ -189,11 +220,11 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
             throw new ResponseException("No partner details found for Id :" + partnerUUID);
 
         String status = getOnboardingStatus(partner, partnerDetailDao);
-        if(!status.equals(partner.getOnboardingStatus())) {
+        if (!status.equals(partner.getOnboardingStatus())) {
             partner.setOnboardingStatus(status);
             partner = partnerRepository.update(partner);
         }
-        eventExecutor.fireEvent("PartnerUpdateEvent",partner);
+        eventExecutor.fireEvent("PartnerUpdateEvent", partner);
         return true;
     }
 
@@ -224,7 +255,7 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
     }
 
 
-    private PartnerDetailDao getPartnerDetailDao(PartnerDetailDto partnerDto,PartnerDao partnerDao) {
+    private PartnerDetailDao getPartnerDetailDao(PartnerDetailDto partnerDto, PartnerDao partnerDao) {
         PartnerDetailDao newPartnerDetails = new PartnerDetailDao();
 
         newPartnerDetails.setFirstName(partnerDto.getFirstName());
@@ -247,7 +278,7 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
 
 
         if (partnerDto.getProfile() != null) {
-            newPartnerDetails.setProfileUrl(s3.getUrlForPath(partnerDto.getProfile().getPath(), "images/partner/"+partnerDao.getPunchId()));
+            newPartnerDetails.setProfileUrl(s3.getUrlForPath(partnerDto.getProfile().getPath(), "images/partner/" + partnerDao.getPunchId()));
         }
         newPartnerDetails.setIsVerified(true);
         newPartnerDetails.setOnboardingDate(partnerDto.getOnboardingDate());
@@ -262,7 +293,9 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
         newPartnerDetails.setRemark(partnerDto.getRemark());
         newPartnerDetails.setSelectionStatus(partnerDto.getSelectionStatus());
         newPartnerDetails.setDrivingTestStatus(partnerDto.getDrivingTestStatus());
-
+        newPartnerDetails.setInTraining(partnerDto.getInTraining());
+        newPartnerDetails.setTrainingStatus(partnerDto.getTrainingStatus());
+        newPartnerDetails.setTrainingDate(partnerDto.getTrainingDate());
 
         return newPartnerDetails;
     }

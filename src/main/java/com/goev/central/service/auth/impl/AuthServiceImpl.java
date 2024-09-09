@@ -4,12 +4,12 @@ import com.amazonaws.util.Base64;
 import com.goev.central.constant.ApplicationConstants;
 import com.goev.central.dao.user.detail.UserSessionDao;
 import com.goev.central.dto.auth.AuthClientDto;
+import com.goev.central.dto.auth.AuthCredentialDto;
+import com.goev.central.dto.auth.AuthCredentialTypeDto;
 import com.goev.central.dto.auth.AuthUserDto;
 import com.goev.central.dto.session.ExchangeTokenRequestDto;
 import com.goev.central.dto.session.SessionDetailsDto;
 import com.goev.central.dto.session.SessionDto;
-import com.goev.central.dto.auth.AuthCredentialDto;
-import com.goev.central.dto.auth.AuthCredentialTypeDto;
 import com.goev.central.service.auth.AuthService;
 import com.goev.central.utilities.RequestContext;
 import com.goev.lib.dto.PasswordCredentialsDto;
@@ -61,17 +61,29 @@ public class AuthServiceImpl implements AuthService {
         String url = ApplicationConstants.AUTH_URL + "/api/v1/user-management/users";
         HttpHeaders header = new HttpHeaders();
         header.set(HttpHeaders.AUTHORIZATION, "Basic " + Base64.encodeAsString((ApplicationConstants.CLIENT_ID + ":" + ApplicationConstants.CLIENT_SECRET).getBytes(StandardCharsets.UTF_8)));
-        String responseStr = restClient.post(url, header, userDto,String.class, true);
+        String responseStr = restClient.post(url, header, userDto, String.class, true);
         ResponseDto<AuthUserDto> user = ApplicationConstants.GSON.fromJson(responseStr, new TypeToken<ResponseDto<AuthUserDto>>() {
         }.getType());
-        if (user == null || user.getData()==null)
+        if (user == null || user.getData() == null)
             return null;
         return user.getData().getUuid();
     }
 
+    @Override
+    public String updateUser(AuthUserDto userDto) {
+        String url = ApplicationConstants.AUTH_URL + "/api/v1/user-management/users/" + userDto.getUuid();
+        HttpHeaders header = new HttpHeaders();
+        header.set(HttpHeaders.AUTHORIZATION, "Basic " + Base64.encodeAsString((ApplicationConstants.CLIENT_ID + ":" + ApplicationConstants.CLIENT_SECRET).getBytes(StandardCharsets.UTF_8)));
+        String responseStr = restClient.put(url, header, userDto, String.class, true);
+        ResponseDto<AuthUserDto> user = ApplicationConstants.GSON.fromJson(responseStr, new TypeToken<ResponseDto<AuthUserDto>>() {
+        }.getType());
+        if (user == null || user.getData() == null)
+            return null;
+        return user.getData().getUuid();
+    }
 
     @Override
-    public SessionDto createSessionForToken(ExchangeTokenRequestDto token){
+    public SessionDto createSessionForToken(ExchangeTokenRequestDto token) {
         String url = ApplicationConstants.AUTH_URL + "/api/v1/session-management/sessions/tokens";
         HttpHeaders header = new HttpHeaders();
         header.set(HttpHeaders.AUTHORIZATION, "Basic " + Base64.encodeAsString((ApplicationConstants.CLIENT_ID + ":" + ApplicationConstants.CLIENT_SECRET).getBytes(StandardCharsets.UTF_8)));
@@ -79,13 +91,13 @@ public class AuthServiceImpl implements AuthService {
         ResponseDto<SessionDto> session = ApplicationConstants.GSON.fromJson(response, new TypeToken<ResponseDto<SessionDto>>() {
         }.getType());
 
-        if(session == null)
+        if (session == null)
             return null;
         return session.getData();
     }
 
     @Override
-    public boolean deleteSession(UserSessionDao userSessionDao){
+    public boolean deleteSession(UserSessionDao userSessionDao) {
         String url = ApplicationConstants.AUTH_URL + "/api/v1/session-management/sessions/" + userSessionDao.getAuthSessionUuid();
         HttpHeaders header = new HttpHeaders();
         header.set("Refresh-Token", RequestContext.getRefreshToken());
@@ -96,7 +108,7 @@ public class AuthServiceImpl implements AuthService {
 
 
     @Override
-    public SessionDto refreshSession(UserSessionDao userSessionDao){
+    public SessionDto refreshSession(UserSessionDao userSessionDao) {
         String url = ApplicationConstants.AUTH_URL + "/api/v1/session-management/sessions/" + userSessionDao.getAuthSessionUuid() + "/token";
         HttpHeaders header = new HttpHeaders();
         header.set(HttpHeaders.AUTHORIZATION, "Basic " + Base64.encodeAsString((ApplicationConstants.CLIENT_ID + ":" + ApplicationConstants.CLIENT_SECRET).getBytes(StandardCharsets.UTF_8)));
@@ -104,7 +116,7 @@ public class AuthServiceImpl implements AuthService {
         String response = restClient.get(url, header, String.class, true);
         ResponseDto<SessionDto> session = ApplicationConstants.GSON.fromJson(response, new TypeToken<ResponseDto<SessionDto>>() {
         }.getType());
-        if(session == null)
+        if (session == null)
             return null;
         return session.getData();
     }
@@ -126,7 +138,7 @@ public class AuthServiceImpl implements AuthService {
         ResponseDto<SessionDto> session = ApplicationConstants.GSON.fromJson(response, new TypeToken<ResponseDto<SessionDto>>() {
         }.getType());
 
-        if(session==null)
+        if (session == null)
             return null;
         return session.getData();
     }

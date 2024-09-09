@@ -3,12 +3,15 @@ package com.goev.central.listener;
 import com.goev.central.constant.ApplicationConstants;
 import com.goev.central.dao.booking.BookingDao;
 import com.goev.central.dao.partner.detail.PartnerDao;
+import com.goev.central.dto.FirebaseDetailDto;
 import com.goev.central.dto.booking.BookingViewDto;
 import com.goev.central.enums.booking.BookingStatus;
 import com.goev.central.enums.booking.BookingSubStatus;
 import com.goev.central.repository.booking.BookingRepository;
 import com.goev.central.repository.partner.detail.PartnerRepository;
 import com.goev.lib.dto.LatLongDto;
+import com.goev.lib.utilities.DistanceUtils;
+import com.google.common.reflect.TypeToken;
 import com.google.firebase.database.*;
 import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
@@ -16,7 +19,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
+import java.lang.reflect.Type;
+import java.math.BigDecimal;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Semaphore;
 
@@ -55,29 +62,40 @@ public class FirebaseListener {
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                Object data = dataSnapshot.getValue();
+
+                FirebaseDetailDto data = dataSnapshot.getValue(FirebaseDetailDto.class);
                 log.info("Firebase Changed Data:{} {}", data, dataSnapshot.getKey());
 
 
                 String partnerUUID = dataSnapshot.getKey();
 
-//                PartnerDao partnerDao = partnerRepository.findByUUID(partnerUUID);
-//
-//                if (partnerDao != null && partnerDao.getBookingId() != null) {
-//                    BookingDao booking = bookingRepository.findById(partnerDao.getBookingId());
-//                    if (booking != null && booking.getPartnerId() != null && booking.getPartnerId().equals(partnerDao.getId()) && BookingStatus.IN_PROGRESS.name().equals(booking.getStatus())) {
-//                        BookingViewDto viewDto = BookingViewDto.fromDao(booking);
-//                        if (BookingSubStatus.ENROUTE.name().equals(booking.getSubStatus())) {
-//                            booking.setViewInfo(ApplicationConstants.GSON.toJson(viewDto));
-//                            bookingRepository.update(booking);
-//                        }else if(BookingSubStatus.STARTED.name().equals(booking.getSubStatus())){
-//                            viewDto.setEta(, viewDto.getEndLocationDetails());
-//                            booking.setViewInfo(ApplicationConstants.GSON.toJson(viewDto));
-//                            bookingRepository.update(booking);
-//                        }
-//
-//                    }
-//                }
+                if (data==null || data.getLocation()==null || data.getLocation().getCoords()==null) {
+                    log.info("{}", data);
+                    return;
+                }
+
+
+                PartnerDao partnerDao = partnerRepository.findByUUID(partnerUUID);
+
+                if (partnerDao != null && partnerDao.getBookingId() != null) {
+                    BookingDao booking = bookingRepository.findById(partnerDao.getBookingId());
+                    if (booking != null && booking.getPartnerId() != null && booking.getPartnerId().equals(partnerDao.getId()) && BookingStatus.IN_PROGRESS.name().equals(booking.getStatus())) {
+                        BookingViewDto viewDto = BookingViewDto.fromDao(booking);
+                        if (viewDto != null) {
+                            if (BookingSubStatus.ENROUTE.name().equals(booking.getSubStatus())) {
+                                viewDto.setDistanceToReach(BigDecimal.valueOf(DistanceUtils.calculateDistance(data.getLocation().getCoords(), viewDto.getStartLocationDetails()) * 1.3).longValue());
+                            } else if (BookingSubStatus.STARTED.name().equals(booking.getSubStatus())) {
+                                viewDto.setDistanceToReach(BigDecimal.valueOf(DistanceUtils.calculateDistance(data.getLocation().getCoords(), viewDto.getEndLocationDetails()) * 1.3).longValue());
+
+                            }
+                            viewDto.setTimeToReach(BigDecimal.valueOf((viewDto.getDistanceToReach()/1000.0 / 40.0) * 3600000).longValue());
+                            booking.setViewInfo(ApplicationConstants.GSON.toJson(viewDto));
+                            bookingRepository.update(booking);
+                        }
+
+
+                    }
+                }
 
 
             }

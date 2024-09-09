@@ -15,6 +15,8 @@ public interface AuthService {
 
     String createUser(AuthUserDto userDto);
 
+    String updateUser(AuthUserDto userDto);
+
     SessionDto createSessionForToken(ExchangeTokenRequestDto token);
 
     boolean deleteSession(UserSessionDao userSessionDao);

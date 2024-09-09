@@ -34,4 +34,8 @@ public class PartnerDetailDao extends BaseDao {
     private String remark;
     private DateTime onboardingDate;
     private DateTime deboardingDate;
+    private Integer partnerCategoryId;
+    private Boolean inTraining;
+    private String trainingStatus;
+    private DateTime trainingDate;
 }

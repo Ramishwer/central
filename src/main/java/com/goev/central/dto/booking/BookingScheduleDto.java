@@ -5,6 +5,7 @@ import com.goev.central.dao.booking.BookingDao;
 import com.goev.central.dao.booking.BookingScheduleDao;
 import com.goev.central.dto.business.BusinessClientDto;
 import com.goev.central.dto.business.BusinessSegmentDto;
+import com.goev.central.dto.customer.CustomerViewDto;
 import com.goev.central.dto.customer.detail.CustomerDetailDto;
 import com.goev.central.dto.payment.PaymentDetailDto;
 import com.goev.central.dto.vehicle.detail.VehicleCategoryDto;
@@ -30,8 +31,13 @@ public class BookingScheduleDto {
     private BusinessClientDto businessClient;
     private BookingSlabGroupDto slabDetails;
     private SchedulingDetailDto scheduleDetails;
-    private CustomerDetailDto customerDetails;
-    private PaymentDetailDto paymentDetails;
+    private CustomerViewDto customerDetails;
+    private BookingPaymentDto paymentDetails;
+    private BookingPricingDetailDto pricingDetails;
+    private CustomerViewDto startContact;
+    private CustomerViewDto endContact;
+    private Long distance;
+    private Long duration;
 
     public static BookingScheduleDto fromDao(BookingScheduleDao bookingDao) {
         return BookingScheduleDto.builder()

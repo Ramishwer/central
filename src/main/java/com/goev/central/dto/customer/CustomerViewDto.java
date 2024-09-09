@@ -4,6 +4,8 @@ package com.goev.central.dto.customer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
+import java.util.Map;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -14,6 +16,7 @@ import lombok.*;
 public class CustomerViewDto {
 
     private String uuid;
+    private String state;
     private String phoneNumber;
     private String firstName;
     private String lastName;
@@ -21,4 +24,6 @@ public class CustomerViewDto {
     private String status;
     private String email;
     private String preferredLanguage;
+    private String remark;
+    private Map<String,Object> fields;
 }
