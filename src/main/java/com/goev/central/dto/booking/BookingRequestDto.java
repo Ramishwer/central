@@ -8,6 +8,7 @@ import com.goev.central.dto.customer.detail.CustomerDetailDto;
 import com.goev.central.dto.payment.PaymentDetailDto;
 import com.goev.central.dto.vehicle.detail.VehicleCategoryDto;
 import com.goev.central.enums.booking.BookingRequestAction;
+import com.goev.lib.dto.ContactDetailsDto;
 import com.goev.lib.dto.LatLongDto;
 import lombok.*;
 
@@ -28,8 +29,8 @@ public class BookingRequestDto {
     private SchedulingDetailDto scheduleDetails;
     private CustomerViewDto customerDetails;
     private BookingPaymentDto paymentDetails;
-    private CustomerViewDto startContact;
-    private CustomerViewDto endContact;
+    private ContactDetailsDto startContact;
+    private ContactDetailsDto endContact;
     private Long duration;
     private Long distance;
     private BookingPricingDetailDto pricingDetails;
