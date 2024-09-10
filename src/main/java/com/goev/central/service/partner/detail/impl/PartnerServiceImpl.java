@@ -507,10 +507,10 @@ public class PartnerServiceImpl implements PartnerService {
         if (partnerShiftDao == null)
             throw new ResponseException("Invalid action: Shift Details Incorrect");
 
-        LocationDao expectedInLocation = locationRepository.findById(partnerShiftDao.getInLocationId());
-        if (expectedInLocation == null) {
-            throw new ResponseException("Invalid action: Shift Details Incorrect No Location present");
-        }
+//        LocationDao expectedInLocation = locationRepository.findById(partnerShiftDao.getInLocationId());
+//        if (expectedInLocation == null) {
+//            throw new ResponseException("Invalid action: Shift Details Incorrect No Location present");
+//        }
 //        validateLocationQr(actionDto.getQrString(),expectedInLocation);
 //        validateLocationGps(actionDto.getLocation(),expectedInLocation);
 
@@ -521,7 +521,7 @@ public class PartnerServiceImpl implements PartnerService {
         newDuty.setPartnerShiftId(partnerShiftDao.getId());
 
         newDuty.setActualDutyStartTime(DateTime.now());
-        newDuty.setActualDutyStartLocationDetails(ApplicationConstants.GSON.toJson(expectedInLocation));
+//        newDuty.setActualDutyStartLocationDetails(ApplicationConstants.GSON.toJson(expectedInLocation));
 
         newDuty.setPlannedDutyStartTime(partnerShiftDao.getEstimatedStartTime());
         newDuty.setPlannedOnlineTime(partnerShiftDao.getEstimatedOnlineTime());
