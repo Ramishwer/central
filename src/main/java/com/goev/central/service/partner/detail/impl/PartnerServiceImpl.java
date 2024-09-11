@@ -322,11 +322,17 @@ public class PartnerServiceImpl implements PartnerService {
         partner.setStatus(PartnerStatus.OFF_DUTY.name());
         partner.setSubStatus(PartnerSubStatus.NO_DUTY.name());
         partner.setPartnerDutyId(null);
+        partner.setBookingDetails(null);
+        partner.setBookingId(null);
+        partner.setPartnerShiftId(null);
         partner.setVehicleId(null);
         partner.setVehicleDetails(null);
-        if (partner.getPartnerShiftId() == null)
+        if (partner.getPartnerDutyId() == null)
             partner.setDutyDetails(null);
-
+        if (partner.getVehicleId() == null)
+            partner.setVehicleDetails(null);
+        if (partner.getBookingId() == null)
+            partner.setBookingDetails(null);
         partner = partnerRepository.update(partner);
 
         return partner;
