@@ -42,8 +42,8 @@ public class BookingCreationScheduler {
 
         DateTimeFormatter formatter = DateTimeFormat.forPattern("HH:mm");
 
-        int day = DateTime.now().getDayOfWeek();
-        DateTime date = DateTime.now().withTimeAtStartOfDay();
+        int day = DateTime.now().withZone(ApplicationConstants.TIME_ZONE).getDayOfWeek();
+        DateTime date = DateTime.now().withZone(ApplicationConstants.TIME_ZONE).withTimeAtStartOfDay();
         for (BookingScheduleDao scheduleDao : allSchedule) {
             BookingScheduleTrackingDetailDao existingBooking = bookingScheduleTrackingDetailRepository.findByBookingScheduleIdDayDate(scheduleDao.getId(), String.valueOf(day), date);
             if (existingBooking != null)

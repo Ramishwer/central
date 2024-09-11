@@ -100,7 +100,7 @@ public class PartnerShiftCreationScheduler {
                 }
 
                 if (partnerShiftDao != null) {
-                    if (partnerShiftDao.getEstimatedEndTime() != null && DateTime.now().withZone(ApplicationConstants.TIME_ZONE).isAfter(partnerShiftDao.getEstimatedEndTime())) {
+                    if (partnerShiftDao.getEstimatedEndTime() != null && DateTime.now().isAfter(partnerShiftDao.getEstimatedEndTime())) {
                         continue;
                     }
 
