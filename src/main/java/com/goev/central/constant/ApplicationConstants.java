@@ -8,6 +8,7 @@ import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 public class ApplicationConstants {
     public static final Gson GSON = new GsonBuilder().registerTypeAdapter(DateTime.class, new GsonDateTimeSerializer()).create();
+    public static final DateTimeZone TIME_ZONE = DateTimeZone.forID("Asia/Kolkata");
 
     public static String CLIENT_UUID;
     public static String PARTNER_CLIENT_UUID;
@@ -35,6 +37,7 @@ public class ApplicationConstants {
     public static String CUSTOMER_URL;
     public static String FIREBASE_CONFIG;
     public static String FIREBASE_URL;
+
 
     private final ConstantUtils constantUtils;
 

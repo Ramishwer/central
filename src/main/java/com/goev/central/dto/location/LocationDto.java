@@ -1,6 +1,7 @@
 package com.goev.central.dto.location;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.goev.central.dao.location.LocationDao;
 import com.goev.lib.dto.LatLongDto;
 import lombok.*;
 
@@ -18,4 +19,5 @@ public class LocationDto {
     private LatLongDto coordinates;
     private String address;
     private OwnerDetailDto ownerDetail;
+
 }

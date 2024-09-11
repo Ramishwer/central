@@ -51,6 +51,7 @@ public class PartnerShiftDto {
     private VehicleCategoryDto assignableVehicleCategoryDetails;
     private String type;
     private String status;
+    private String subStatus;
     private String dutyConfig;
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
@@ -76,6 +77,7 @@ public class PartnerShiftDto {
                 .dutyDate(shift.getDutyDate())
                 .partner(partner)
                 .status(shift.getStatus())
+                .subStatus(shift.getSubStatus())
                 .build();
     }
 }

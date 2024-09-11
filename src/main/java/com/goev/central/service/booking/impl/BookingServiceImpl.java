@@ -129,7 +129,7 @@ public class BookingServiceImpl implements BookingService {
             case CHANGE_PARTNER -> {
                 bookingDao = changePartner(bookingDao, bookingActionDto);
             }
-            case UNASSIGN -> {
+            case UNASSIGN_PARTNER -> {
                 bookingDao = unassignPartner(bookingDao, bookingActionDto);
             }
         }
@@ -161,6 +161,7 @@ public class BookingServiceImpl implements BookingService {
             viewDto.setStatus(bookingDao.getStatus());
             viewDto.setSubStatus(bookingDao.getSubStatus());
             viewDto.setPartnerDetails(null);
+            viewDto.setVehicleDetails(null);
         }
         bookingDao.setViewInfo(ApplicationConstants.GSON.toJson(viewDto));
         return bookingRepository.update(bookingDao);

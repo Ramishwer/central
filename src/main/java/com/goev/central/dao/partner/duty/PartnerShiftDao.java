@@ -37,6 +37,7 @@ public class PartnerShiftDao extends BaseDao {
     private String offlineLocationDetails;
     private String assignableVehicleCategoryDetails;
     private String status;
+    private String subStatus;
 
 }
 

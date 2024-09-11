@@ -72,6 +72,8 @@ public class BookingViewDto {
             return null;
         BookingViewDto result = ApplicationConstants.GSON.fromJson(bookingDao.getViewInfo(), BookingViewDto.class);
         result.setUuid(bookingDao.getUuid());
+        result.setStatus(bookingDao.getStatus());
+        result.setSubStatus(bookingDao.getSubStatus());
         return result;
     }
 }

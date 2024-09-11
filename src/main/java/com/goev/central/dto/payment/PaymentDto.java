@@ -22,7 +22,7 @@ public class PaymentDto {
     private String paymentMethod;
     private String paymentMode;
     private String status;
-    private BookingViewDto booking;
+    private String qrCodeUrl;
 }
 
 

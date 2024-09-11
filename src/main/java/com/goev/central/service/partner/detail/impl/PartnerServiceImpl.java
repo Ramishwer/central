@@ -21,10 +21,7 @@ import com.goev.central.dto.partner.duty.PartnerDutyDto;
 import com.goev.central.dto.vehicle.VehicleViewDto;
 import com.goev.central.enums.booking.BookingStatus;
 import com.goev.central.enums.booking.BookingSubStatus;
-import com.goev.central.enums.partner.PartnerDutyStatus;
-import com.goev.central.enums.partner.PartnerOnboardingStatus;
-import com.goev.central.enums.partner.PartnerStatus;
-import com.goev.central.enums.partner.PartnerSubStatus;
+import com.goev.central.enums.partner.*;
 import com.goev.central.repository.FirebaseRepository;
 import com.goev.central.repository.booking.BookingRepository;
 import com.goev.central.repository.location.LocationRepository;
@@ -211,7 +208,7 @@ public class PartnerServiceImpl implements PartnerService {
             case CHECK_IN -> {
                 partner = checkin(partner, actionDto);
             }
-            case UNASSIGN -> {
+            case UNASSIGN_VEHICLE -> {
                 partner = unassign(partner, actionDto);
             }
             case CHANGE_VEHICLE -> {
@@ -521,8 +518,7 @@ public class PartnerServiceImpl implements PartnerService {
         newDuty.setPartnerShiftId(partnerShiftDao.getId());
 
         newDuty.setActualDutyStartTime(DateTime.now());
-//        newDuty.setActualDutyStartLocationDetails(ApplicationConstants.GSON.toJson(expectedInLocation));
-
+        newDuty.setActualDutyStartLocationDetails(partnerShiftDao.getInLocationDetails());
         newDuty.setPlannedDutyStartTime(partnerShiftDao.getEstimatedStartTime());
         newDuty.setPlannedOnlineTime(partnerShiftDao.getEstimatedOnlineTime());
         newDuty.setPlannedDutyEndTime(partnerShiftDao.getEstimatedEndTime());
@@ -537,11 +533,14 @@ public class PartnerServiceImpl implements PartnerService {
 
         newDuty = partnerDutyRepository.save(newDuty);
 
-        partner.setDutyDetails(ApplicationConstants.GSON.toJson(PartnerDutyDto.fromDao(newDuty, PartnerViewDto.fromDao(partner), partnerShiftDao)));
+        partner.setLocationDetails(partnerShiftDao.getInLocationDetails());
         partner.setPartnerDutyId(newDuty.getId());
         partner.setStatus(PartnerStatus.ON_DUTY.name());
         partner.setSubStatus(PartnerSubStatus.VEHICLE_NOT_ALLOTTED.name());
         partner = partnerRepository.update(partner);
+        partnerShiftDao.setStatus(PartnerShiftStatus.IN_PROGRESS.name());
+        partnerShiftDao.setSubStatus(PartnerShiftSubStatus.PRESENT.name());
+        partnerShiftRepository.update(partnerShiftDao);
 
         return partner;
     }

@@ -9,6 +9,6 @@ public enum BookingAction {
     NO_SHOW,
     ASSIGN_PARTNER,
     CHANGE_PARTNER,
-    UNASSIGN
+    UNASSIGN_PARTNER
 
 }

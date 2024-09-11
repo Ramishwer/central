@@ -13,5 +13,6 @@ import lombok.*;
 public class VehicleStatsDto {
     private LatLongDto gps;
     private StatsDto soc;
+    private StatsDto dte;
     private StatsDto odometer;
 }

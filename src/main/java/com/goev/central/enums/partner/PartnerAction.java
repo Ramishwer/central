@@ -5,7 +5,7 @@ public enum PartnerAction {
     SUSPEND,
     CHECK_IN,
 
-    UNASSIGN,
+    UNASSIGN_VEHICLE,
     CHANGE_VEHICLE,
     ASSIGN_VEHICLE,
     SELECT_VEHICLE,
