@@ -314,6 +314,9 @@ public class PartnerServiceImpl implements PartnerService {
     private PartnerDao checkOut(PartnerDao partner, PartnerActionDto actionDto) {
         PartnerDutyDao currentDuty = partnerDutyRepository.findById(partner.getPartnerDutyId());
         if (currentDuty != null) {
+            PartnerShiftDao shiftDao = partnerShiftRepository.findById(currentDuty.getPartnerShiftId());
+            if(shiftDao!=null)
+                currentDuty.setActualDutyEndLocationDetails(shiftDao.getOutLocationDetails());
             currentDuty.setStatus(PartnerDutyStatus.COMPLETED.name());
             currentDuty.setActualDutyEndTime(DateTime.now());
             partnerDutyRepository.update(currentDuty);
