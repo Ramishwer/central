@@ -20,4 +20,5 @@ public class VehicleActionDto {
     private LatLongDto location;
     private String qrString;
     private String partnerUUID;
+    private String remark;
 }

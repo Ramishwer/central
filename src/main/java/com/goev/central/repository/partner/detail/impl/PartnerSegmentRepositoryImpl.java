@@ -84,6 +84,9 @@ public class PartnerSegmentRepositoryImpl implements PartnerSegmentRepository {
 
     @Override
     public List<PartnerSegmentDao> findAllActive() {
-        return context.selectFrom(PARTNER_SEGMENTS).fetchInto(PartnerSegmentDao.class);
+        return context.selectFrom(PARTNER_SEGMENTS)
+                .where(PARTNER_SEGMENTS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(PARTNER_SEGMENTS.IS_ACTIVE.eq(true))
+                .fetchInto(PartnerSegmentDao.class);
     }
 }

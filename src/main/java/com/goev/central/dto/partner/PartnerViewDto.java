@@ -51,6 +51,7 @@ public class PartnerViewDto {
             return null;
         PartnerViewDto result =ApplicationConstants.GSON.fromJson(partnerDao.getViewInfo(), PartnerViewDto.class);
         result.setUuid(partnerDao.getUuid());
+        result.setState(partnerDao.getOnboardingStatus());
         return result;
     }
 }

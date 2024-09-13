@@ -3,7 +3,6 @@ package com.goev.central.service.partner.detail.impl;
 
 import com.goev.central.constant.ApplicationConstants;
 import com.goev.central.dao.booking.BookingDao;
-import com.goev.central.dao.location.LocationDao;
 import com.goev.central.dao.partner.detail.PartnerDao;
 import com.goev.central.dao.partner.detail.PartnerDetailDao;
 import com.goev.central.dao.partner.duty.PartnerDutyDao;
@@ -25,6 +24,7 @@ import com.goev.central.enums.partner.*;
 import com.goev.central.repository.FirebaseRepository;
 import com.goev.central.repository.booking.BookingRepository;
 import com.goev.central.repository.location.LocationRepository;
+import com.goev.central.repository.partner.detail.PartnerDetailRepository;
 import com.goev.central.repository.partner.detail.PartnerRepository;
 import com.goev.central.repository.partner.duty.PartnerDutyRepository;
 import com.goev.central.repository.partner.duty.PartnerShiftRepository;
@@ -40,7 +40,6 @@ import org.springframework.util.CollectionUtils;
 
 import java.lang.reflect.Type;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -55,6 +54,7 @@ public class PartnerServiceImpl implements PartnerService {
     private final VehicleRepository vehicleRepository;
     private final FirebaseRepository firebaseRepository;
     private final LocationRepository locationRepository;
+    private final PartnerDetailRepository partnerDetailRepository;
 
     @Override
     public Boolean deletePartner(String partnerUUID) {
@@ -110,7 +110,7 @@ public class PartnerServiceImpl implements PartnerService {
     @Override
     public PaginatedResponseDto<PartnerTrackingDto> getPartnerTrackings() {
         PaginatedResponseDto<PartnerTrackingDto> result = PaginatedResponseDto.<PartnerTrackingDto>builder().elements(new ArrayList<>()).build();
-        List<PartnerDao> partners = partnerRepository.findAllByStatus(Arrays.asList(PartnerStatus.ONLINE.name(),PartnerStatus.ON_BOOKING.name(),PartnerStatus.VEHICLE_ASSIGNED.name()));
+        List<PartnerDao> partners = partnerRepository.findAllByStatus(Arrays.asList(PartnerStatus.ONLINE.name(), PartnerStatus.ON_BOOKING.name(), PartnerStatus.VEHICLE_ASSIGNED.name()));
 
         try {
             Map<String, Object> locationData = firebaseRepository.getFromFirebase("/partner");
@@ -199,12 +199,11 @@ public class PartnerServiceImpl implements PartnerService {
 
         switch (actionDto.getAction()) {
             case DEBOARD -> {
-                partner = updatePartnerOnboardingStatus(partner, PartnerOnboardingStatus.DEBOARDED);
+                partner = deboardPartner(partner, actionDto);
             }
             case SUSPEND -> {
-                partner = updatePartnerOnboardingStatus(partner, PartnerOnboardingStatus.SUSPENDED);
+                partner = suspendPartner(partner, actionDto);
             }
-
             case CHECK_IN -> {
                 partner = checkin(partner, actionDto);
             }
@@ -261,6 +260,21 @@ public class PartnerServiceImpl implements PartnerService {
         return PartnerDto.fromDao(partner);
     }
 
+    private PartnerDao suspendPartner(PartnerDao partner, PartnerActionDto actionDto) {
+
+//        PartnerDetailDao partnerDetailDao = partnerDetailRepository.findById(partner.getPartnerDetailsId());
+//        if(partnerDetailDao!=null){
+//            partnerDetailDao.setRemark(actionDto.getRemark());
+//            partnerDetailDao.setSuspensionDate(DateTime.now());
+//
+//        }
+        return updatePartnerOnboardingStatus(partner, PartnerOnboardingStatus.SUSPENDED);
+    }
+
+    private PartnerDao deboardPartner(PartnerDao partner, PartnerActionDto actionDto) {
+        return updatePartnerOnboardingStatus(partner, PartnerOnboardingStatus.DEBOARDED);
+    }
+
     private PartnerDao changeVehicle(PartnerDao partner, PartnerActionDto actionDto) {
         VehicleDao vehicle = vehicleRepository.findByUUID(actionDto.getVehicleUUID());
         if (vehicle == null)
@@ -315,7 +329,7 @@ public class PartnerServiceImpl implements PartnerService {
         PartnerDutyDao currentDuty = partnerDutyRepository.findById(partner.getPartnerDutyId());
         if (currentDuty != null) {
             PartnerShiftDao shiftDao = partnerShiftRepository.findById(currentDuty.getPartnerShiftId());
-            if(shiftDao!=null)
+            if (shiftDao != null)
                 currentDuty.setActualDutyEndLocationDetails(shiftDao.getOutLocationDetails());
             currentDuty.setStatus(PartnerDutyStatus.COMPLETED.name());
             currentDuty.setActualDutyEndTime(DateTime.now());

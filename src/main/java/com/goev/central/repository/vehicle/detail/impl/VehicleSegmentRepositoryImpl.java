@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import static com.goev.record.central.tables.PartnerSegments.PARTNER_SEGMENTS;
 import static com.goev.record.central.tables.VehicleSegments.VEHICLE_SEGMENTS;
 
 @Repository
@@ -84,6 +85,9 @@ public class VehicleSegmentRepositoryImpl implements VehicleSegmentRepository {
 
     @Override
     public List<VehicleSegmentDao> findAllActive() {
-        return context.selectFrom(VEHICLE_SEGMENTS).fetchInto(VehicleSegmentDao.class);
+        return context.selectFrom(VEHICLE_SEGMENTS)
+                .where(VEHICLE_SEGMENTS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(VEHICLE_SEGMENTS.IS_ACTIVE.eq(true))
+                .fetchInto(VehicleSegmentDao.class);
     }
 }

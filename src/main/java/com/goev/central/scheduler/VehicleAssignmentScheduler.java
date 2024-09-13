@@ -50,7 +50,7 @@ public class VehicleAssignmentScheduler {
                     partnerDao.setVehicleId(vehicle.getId());
                     partnerDao.setVehicleDetails(ApplicationConstants.GSON.toJson(VehicleViewDto.fromDao(vehicle)));
                     partnerRepository.update(partnerDao);
-                    vehicle.setStatus(VehicleStatus.ALLOTED.name());
+                    vehicle.setStatus(VehicleStatus.ALLOTTED.name());
                     vehicleRepository.update(vehicle);
                 }
             }
