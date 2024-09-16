@@ -13,6 +13,7 @@ import com.goev.central.repository.booking.BookingScheduleConfigurationRepositor
 import com.goev.central.repository.booking.BookingScheduleRepository;
 import com.goev.central.repository.customer.detail.CustomerRepository;
 import com.goev.central.service.booking.BookingScheduleService;
+import com.goev.lib.dto.ContactDetailsDto;
 import com.goev.lib.exceptions.ResponseException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -62,6 +63,11 @@ public class BookingScheduleServiceImpl implements BookingScheduleService {
             customer = customerRepository.save(customer);
             bookingRequestDto.getCustomerDetails().setUuid(customer.getUuid());
         }
+        bookingRequestDto.setStartContact(ContactDetailsDto.builder()
+                .firstName(bookingRequestDto.getCustomerDetails().getFirstName())
+                .lastName(bookingRequestDto.getCustomerDetails().getLastName())
+                .phoneNumber(bookingRequestDto.getCustomerDetails().getPhoneNumber()).build());
+        bookingRequestDto.setEndContact(bookingRequestDto.getStartContact());
         BookingScheduleDao bookingScheduleDao = new BookingScheduleDao();
 
         bookingScheduleDao.setCustomerId(customer.getId());

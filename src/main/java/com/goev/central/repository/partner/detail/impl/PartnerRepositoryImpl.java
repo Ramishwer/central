@@ -190,6 +190,7 @@ public class PartnerRepositoryImpl implements PartnerRepository {
 
                                 ))
                                 .and(PARTNER_SEGMENT_MAPPINGS.IS_ACTIVE.eq(true))
+                                .and(PARTNER_SEGMENT_MAPPINGS.PARTNER_ID.isNotNull())
                                 .and(PARTNER_SEGMENT_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
                 ))
                 .and(PARTNERS.STATUS.eq(PartnerStatus.ONLINE.name()))

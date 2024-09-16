@@ -26,6 +26,7 @@ import com.goev.central.repository.partner.detail.PartnerRepository;
 import com.goev.central.repository.vehicle.detail.VehicleRepository;
 import com.goev.central.service.booking.BookingService;
 import com.goev.central.utilities.SecretGenerationUtils;
+import com.goev.lib.dto.ContactDetailsDto;
 import com.goev.lib.dto.LatLongDto;
 import com.goev.lib.exceptions.ResponseException;
 import lombok.AllArgsConstructor;
@@ -77,6 +78,12 @@ public class BookingServiceImpl implements BookingService {
 
         }
 
+        bookingRequest.setStartContact(ContactDetailsDto.builder()
+                .firstName(bookingRequest.getCustomerDetails().getFirstName())
+                .lastName(bookingRequest.getCustomerDetails().getLastName())
+                .phoneNumber(bookingRequest.getCustomerDetails().getPhoneNumber()).build());
+        bookingRequest.setEndContact(bookingRequest.getStartContact());
+
         if (bookingRequest.getScheduleDetails() != null && SchedulingTypes.SCHEDULED.equals(bookingRequest.getScheduleDetails().getType()))
             startTime = bookingRequest.getScheduleDetails().getStartTime() == null ? DateTime.now() : bookingRequest.getScheduleDetails().getStartTime();
 
@@ -114,13 +121,14 @@ public class BookingServiceImpl implements BookingService {
                 .plannedStartTime(bookingDao.getPlannedStartTime())
                 .displayCode(bookingDao.getDisplayCode())
                 .paymentDetails(BookingPaymentDto.builder()
+                        .paymentMethod(bookingRequest.getPaymentDetails().getPaymentMethod())
                         .paymentMode(bookingRequest.getPaymentDetails().getPaymentMode()).build())
                 .pricingDetails(bookingRequest.getPricingDetails())
                 .startContact(bookingRequest.getStartContact())
                 .endContact(bookingRequest.getEndContact())
                 .duration(bookingRequest.getDuration())
                 .distance(bookingRequest.getDistance())
-                .businessClient(bookingRequest.getBusinessClient())
+                .businessClient(BusinessClientDto.builder().uuid(clientDao.getUuid()).name(clientDao.getName()).build())
                 .businessSegment(bookingRequest.getBusinessSegment())
                 .build();
 
