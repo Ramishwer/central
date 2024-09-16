@@ -91,6 +91,9 @@ public class FirebaseListener {
                             viewDto.setTimeToReach(BigDecimal.valueOf((viewDto.getDistanceToReach()/1000.0 / 40.0) * 3600000).longValue());
                             booking.setViewInfo(ApplicationConstants.GSON.toJson(viewDto));
                             bookingRepository.update(booking);
+
+                            partnerDao.setBookingDetails(ApplicationConstants.GSON.toJson(viewDto));
+                            partnerRepository.update(partnerDao);
                         }
 
 
