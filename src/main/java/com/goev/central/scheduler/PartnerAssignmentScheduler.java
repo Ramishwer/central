@@ -44,7 +44,7 @@ public class PartnerAssignmentScheduler {
                 continue;
             }
             List<PartnerDao> eligiblePartners = partnerRepository.findAllEligiblePartnersForBusinessSegment(bookingDao.getBusinessSegmentId());
-
+            log.info("Eligible for Booking : {} {}",bookingDao.getUuid(),eligiblePartners.size());
             for (PartnerDao partnerDao : eligiblePartners) {
                 if (partnerDao != null && PartnerStatus.ONLINE.name().equals(partnerDao.getStatus()) && PartnerSubStatus.NO_BOOKING.name().equals(partnerDao.getSubStatus())) {
                     VehicleDao vehicleDao = vehicleRepository.findById(partnerDao.getVehicleId());

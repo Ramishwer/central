@@ -35,7 +35,7 @@ public class BookingCreationScheduler {
     private final BookingService bookingService;
     private final BookingRepository bookingRepository;
 
-    @Scheduled(fixedRate = 10 * 60 * 1000)
+    @Scheduled(fixedRate = 3 * 60 * 1000)
     public void reportCurrentTime() {
         log.info("The {} time is now {}", this.getClass().getName(), DateTime.now());
         List<BookingScheduleDao> allSchedule = bookingScheduleRepository.findAllActiveWithTimeBetween(DateTime.now());

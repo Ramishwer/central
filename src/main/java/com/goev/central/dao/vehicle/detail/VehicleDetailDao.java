@@ -27,4 +27,5 @@ public class VehicleDetailDao extends BaseDao {
     private String hasDuplicateKeys;
     private String plateNumber;
     private String imageUrl;
+    private String remark;
 }

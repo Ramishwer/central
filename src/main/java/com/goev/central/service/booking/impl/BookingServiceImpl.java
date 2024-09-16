@@ -97,20 +97,20 @@ public class BookingServiceImpl implements BookingService {
         bookingDao.setSubStatus(BookingSubStatus.UNASSIGNED.name());
         bookingDao.setPlannedStartTime(startTime);
         bookingDao.setDisplayCode("BRN-" + SecretGenerationUtils.getCode());
-
+        bookingDao.setBookingTypeDetails(ApplicationConstants.GSON.toJson(bookingRequest.getBookingType()));
 
         BusinessClientDao clientDao =businessClientRepository.findByUUID(bookingRequest.getBusinessClient().getUuid());
         bookingDao.setBusinessClientId(clientDao.getId());
 
-        BusinessClientDetailDao clientDetailDao = businessClientDetailRepository.findById(clientDao.getId());
+        BusinessClientDetailDao clientDetailDao = businessClientDetailRepository.findById(clientDao.getBusinessClientDetailsId());
         bookingDao.setBusinessSegmentId(clientDetailDao.getBusinessSegmentId());
-
 
         bookingDao = bookingRepository.save(bookingDao);
 
 
         BookingViewDto viewDto = BookingViewDto.builder()
                 .uuid(bookingDao.getUuid())
+                .bookingTypeDetails(bookingRequest.getBookingType())
                 .customerDetails(ApplicationConstants.GSON.fromJson(bookingDao.getCustomerDetails(), CustomerViewDto.class))
                 .partnerDetails(ApplicationConstants.GSON.fromJson(bookingDao.getPartnerDetails(), PartnerViewDto.class))
                 .vehicleDetails(ApplicationConstants.GSON.fromJson(bookingDao.getVehicleDetails(), VehicleViewDto.class))

@@ -85,6 +85,9 @@ public class BusinessSegmentRepositoryImpl implements BusinessSegmentRepository 
 
     @Override
     public List<BusinessSegmentDao> findAllActive() {
-        return context.selectFrom(BUSINESS_SEGMENTS).fetchInto(BusinessSegmentDao.class);
+        return context.selectFrom(BUSINESS_SEGMENTS)
+                .where(BUSINESS_SEGMENTS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(BUSINESS_SEGMENTS.IS_ACTIVE.eq(true))
+                .fetchInto(BusinessSegmentDao.class);
     }
 }

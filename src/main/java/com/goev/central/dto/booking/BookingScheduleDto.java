@@ -9,6 +9,7 @@ import com.goev.central.dto.customer.CustomerViewDto;
 import com.goev.central.dto.customer.detail.CustomerDetailDto;
 import com.goev.central.dto.payment.PaymentDetailDto;
 import com.goev.central.dto.vehicle.detail.VehicleCategoryDto;
+import com.goev.lib.dto.ContactDetailsDto;
 import com.goev.lib.dto.LatLongDto;
 import lombok.*;
 
@@ -21,9 +22,10 @@ import lombok.*;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class BookingScheduleDto {
     private String uuid;
+    private String displayCode;
     private String status;
     private String subStatus;
-    private BookingTypeDto bookingType;
+    private BookingTypeDto bookingTypeDetails;
     private LatLongDto startLocationDetails;
     private LatLongDto endLocationDetails;
     private VehicleCategoryDto requestedVehicleCategory;
@@ -34,15 +36,9 @@ public class BookingScheduleDto {
     private CustomerViewDto customerDetails;
     private BookingPaymentDto paymentDetails;
     private BookingPricingDetailDto pricingDetails;
-    private CustomerViewDto startContact;
-    private CustomerViewDto endContact;
+    private ContactDetailsDto startContact;
+    private ContactDetailsDto endContact;
     private Long distance;
     private Long duration;
-
-    public static BookingScheduleDto fromDao(BookingScheduleDao bookingDao) {
-        return BookingScheduleDto.builder()
-                .uuid(bookingDao.getUuid())
-                .build();
-    }
 
 }

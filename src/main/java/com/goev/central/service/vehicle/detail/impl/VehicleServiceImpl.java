@@ -4,6 +4,7 @@ package com.goev.central.service.vehicle.detail.impl;
 import com.goev.central.constant.ApplicationConstants;
 import com.goev.central.dao.partner.detail.PartnerDao;
 import com.goev.central.dao.vehicle.detail.VehicleDao;
+import com.goev.central.dao.vehicle.detail.VehicleDetailDao;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.partner.PartnerViewDto;
 import com.goev.central.dto.partner.detail.PartnerDto;
@@ -16,6 +17,7 @@ import com.goev.central.dto.vehicle.detail.VehicleSegmentDto;
 import com.goev.central.enums.vehicle.VehicleOnboardingStatus;
 import com.goev.central.enums.vehicle.VehicleStatus;
 import com.goev.central.enums.vehicle.VehicleSubStatus;
+import com.goev.central.repository.vehicle.detail.VehicleDetailRepository;
 import com.goev.central.repository.vehicle.detail.VehicleRepository;
 import com.goev.central.service.vehicle.detail.VehicleService;
 import com.goev.lib.exceptions.ResponseException;
@@ -36,6 +38,7 @@ public class VehicleServiceImpl implements VehicleService {
 
 
     private final VehicleRepository vehicleRepository;
+    private final VehicleDetailRepository vehicleDetailRepository;
 
     @Override
     public Boolean deleteVehicle(String vehicleUUID) {
@@ -79,6 +82,19 @@ public class VehicleServiceImpl implements VehicleService {
         vehicle.setPartnerDetails(null);
         vehicle.setPartnerId(null);
         vehicle = vehicleRepository.update(vehicle);
+        VehicleDetailDao vehicleDetailDao = vehicleDetailRepository.findById(vehicle.getVehicleDetailsId());
+        if(vehicleDetailDao!=null) {
+            vehicleDetailDao.setRemark(vehicleActionDto.getRemark());
+            vehicleDetailDao = vehicleDetailRepository.save(vehicleDetailDao);
+            vehicle.setVehicleDetailsId(vehicleDetailDao.getVehicleId());
+        }
+        VehicleViewDto vehicleViewDto = VehicleViewDto.fromDao(vehicle);
+        if(vehicleViewDto!=null) {
+            vehicleViewDto.setRemark(vehicleActionDto.getRemark());
+            vehicle.setViewInfo(ApplicationConstants.GSON.toJson(vehicleViewDto));
+        }
+        vehicle =vehicleRepository.update(vehicle);
+
         return vehicle;
     }
 

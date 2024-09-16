@@ -13,12 +13,15 @@ import org.joda.time.DateTime;
 @ToString
 public class BookingScheduleDao extends BaseDao {
     private String status;
+    private String subStatus;
     private Integer customerId;
     private Integer businessSegmentId;
     private Integer businessClientId;
     private String entityType;
     private DateTime applicableFromTime;
     private DateTime applicableToTime;
+    private String displayCode;
+    private String viewInfo;
 
     public static BookingScheduleDao fromDto(BookingScheduleDto bookingDto) {
         BookingScheduleDao bookingDao = new BookingScheduleDao();

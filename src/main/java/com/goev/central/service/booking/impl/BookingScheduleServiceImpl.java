@@ -3,16 +3,23 @@ package com.goev.central.service.booking.impl;
 import com.goev.central.constant.ApplicationConstants;
 import com.goev.central.dao.booking.BookingScheduleConfigurationDao;
 import com.goev.central.dao.booking.BookingScheduleDao;
+import com.goev.central.dao.business.BusinessClientDao;
+import com.goev.central.dao.business.BusinessClientDetailDao;
 import com.goev.central.dao.customer.detail.CustomerDao;
 import com.goev.central.dto.booking.BookingRequestDto;
 import com.goev.central.dto.booking.BookingScheduleDto;
+import com.goev.central.dto.business.BusinessClientDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.enums.EntityType;
 import com.goev.central.enums.booking.BookingScheduleStatus;
 import com.goev.central.repository.booking.BookingScheduleConfigurationRepository;
 import com.goev.central.repository.booking.BookingScheduleRepository;
+import com.goev.central.repository.business.BusinessClientDetailRepository;
+import com.goev.central.repository.business.BusinessClientRepository;
+import com.goev.central.repository.business.BusinessSegmentRepository;
 import com.goev.central.repository.customer.detail.CustomerRepository;
 import com.goev.central.service.booking.BookingScheduleService;
+import com.goev.central.utilities.SecretGenerationUtils;
 import com.goev.lib.dto.ContactDetailsDto;
 import com.goev.lib.exceptions.ResponseException;
 import lombok.AllArgsConstructor;
@@ -32,6 +39,8 @@ public class BookingScheduleServiceImpl implements BookingScheduleService {
     private final BookingScheduleRepository bookingScheduleRepository;
     private final BookingScheduleConfigurationRepository bookingScheduleConfigurationRepository;
     private final CustomerRepository customerRepository;
+    private final BusinessClientRepository businessClientRepository;
+    private final BusinessClientDetailRepository businessClientDetailRepository;
 
     @Override
     public PaginatedResponseDto<BookingScheduleDto> getBookingSchedules(String status, String subStatus) {
@@ -41,17 +50,13 @@ public class BookingScheduleServiceImpl implements BookingScheduleService {
             return result;
 
         for (BookingScheduleDao bookingScheduleDao : bookingScheduleDaos) {
-            result.getElements().add(BookingScheduleDto.builder()
-                    .uuid(bookingScheduleDao.getUuid())
-                    .status(bookingScheduleDao.getStatus())
-                    .build());
+            result.getElements().add(getBookingScheduleDto(bookingScheduleDao));
         }
         return result;
     }
 
     @Override
     public BookingScheduleDto createBookingSchedule(BookingRequestDto bookingRequestDto) {
-
 
         if(bookingRequestDto.getCustomerDetails().getPhoneNumber()==null)
             throw new ResponseException("Invalid Customer Details");
@@ -63,6 +68,7 @@ public class BookingScheduleServiceImpl implements BookingScheduleService {
             customer = customerRepository.save(customer);
             bookingRequestDto.getCustomerDetails().setUuid(customer.getUuid());
         }
+
         bookingRequestDto.setStartContact(ContactDetailsDto.builder()
                 .firstName(bookingRequestDto.getCustomerDetails().getFirstName())
                 .lastName(bookingRequestDto.getCustomerDetails().getLastName())
@@ -75,7 +81,19 @@ public class BookingScheduleServiceImpl implements BookingScheduleService {
         bookingScheduleDao.setEntityType(EntityType.CLIENT.name());
         bookingScheduleDao.setApplicableFromTime(bookingRequestDto.getScheduleDetails().getStartTime());
         bookingScheduleDao.setApplicableToTime(bookingRequestDto.getScheduleDetails().getEndTime());
+
+        BusinessClientDao clientDao =businessClientRepository.findByUUID(bookingRequestDto.getBusinessClient().getUuid());
+        bookingScheduleDao.setBusinessClientId(clientDao.getId());
+        bookingRequestDto.setBusinessClient(BusinessClientDto.builder().uuid(clientDao.getUuid()).name(clientDao.getName()).build());
+
+        BusinessClientDetailDao clientDetailDao = businessClientDetailRepository.findById(clientDao.getBusinessClientDetailsId());
+        bookingScheduleDao.setBusinessSegmentId(clientDetailDao.getBusinessSegmentId());
+
+        bookingScheduleDao.setDisplayCode("SCH-"+SecretGenerationUtils.getCode());
+        bookingScheduleDao.setViewInfo(ApplicationConstants.GSON.toJson(bookingRequestDto));
         bookingScheduleDao = bookingScheduleRepository.save(bookingScheduleDao);
+
+
 
         for(Map.Entry<String,String> configEntry :bookingRequestDto.getScheduleDetails().getSchedule().entrySet()){
             String day = configEntry.getKey();
@@ -101,7 +119,31 @@ public class BookingScheduleServiceImpl implements BookingScheduleService {
     }
 
     private BookingScheduleDto getBookingScheduleDto(BookingScheduleDao bookingScheduleDao) {
-        return BookingScheduleDto.fromDao(bookingScheduleDao);
+
+        BookingRequestDto bookingRequestDto = ApplicationConstants.GSON.fromJson(bookingScheduleDao.getViewInfo(),BookingRequestDto.class);
+        if(bookingRequestDto!=null){
+            return BookingScheduleDto.builder()
+                    .uuid(bookingScheduleDao.getUuid())
+                    .bookingTypeDetails(bookingRequestDto.getBookingType())
+                    .scheduleDetails(bookingRequestDto.getScheduleDetails())
+                    .status(bookingScheduleDao.getStatus())
+                    .subStatus(bookingScheduleDao.getSubStatus())
+                    .startLocationDetails(bookingRequestDto.getStartLocationDetails())
+                    .endLocationDetails(bookingRequestDto.getEndLocationDetails())
+                    .startContact(bookingRequestDto.getStartContact())
+                    .endContact(bookingRequestDto.getEndContact())
+                    .businessClient(bookingRequestDto.getBusinessClient())
+                    .businessSegment(bookingRequestDto.getBusinessSegment())
+                    .customerDetails(bookingRequestDto.getCustomerDetails())
+                    .displayCode(bookingScheduleDao.getDisplayCode())
+                    .distance(bookingRequestDto.getDistance())
+                    .duration(bookingRequestDto.getDuration())
+                    .paymentDetails(bookingRequestDto.getPaymentDetails())
+                    .scheduleDetails(bookingRequestDto.getScheduleDetails())
+                    .build();
+        }
+
+        return null;
     }
 
     @Override
