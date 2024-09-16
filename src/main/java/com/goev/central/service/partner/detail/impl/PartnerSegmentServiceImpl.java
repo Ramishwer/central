@@ -5,6 +5,7 @@ import com.goev.central.dao.partner.detail.PartnerSegmentDao;
 import com.goev.central.dao.partner.detail.PartnerSegmentMappingDao;
 import com.goev.central.dao.partner.duty.PartnerShiftMappingDao;
 import com.goev.central.dao.shift.ShiftDao;
+import com.goev.central.dao.vehicle.detail.VehicleDao;
 import com.goev.central.dao.vehicle.detail.VehicleSegmentDao;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.partner.PartnerViewDto;
@@ -54,6 +55,20 @@ public class PartnerSegmentServiceImpl implements PartnerSegmentService {
         return PartnerSegmentDto.fromDao(partnerSegmentDao);
     }
 
+
+    @Override
+    public List<PartnerSegmentDto> getSegmentsForPartner(String partnerUUID) {
+        PartnerDao partnerDao = partnerRepository.findByUUID(partnerUUID);
+        if (partnerDao == null)
+            throw new ResponseException("No partner found for Id :" + partnerUUID);
+        List<PartnerSegmentDao> partnerSegmentDaoList = partnerSegmentRepository.findAllByPartnerId(partnerDao.getId());
+        List<PartnerSegmentDto> result = new ArrayList<>();
+
+        for (PartnerSegmentDao partnerSegmentDao : partnerSegmentDaoList) {
+            result.add(PartnerSegmentDto.fromDao(partnerSegmentDao));
+        }
+        return result;
+    }
     @Override
     public PartnerSegmentDto createSegment(PartnerSegmentDto partnerSegmentDto) {
 

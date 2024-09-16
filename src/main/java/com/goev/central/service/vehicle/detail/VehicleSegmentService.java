@@ -23,4 +23,5 @@ public interface VehicleSegmentService {
 
     List<VehicleSegmentMappingDto> getVehicleMappings(String segmentUUID);
 
+    List<VehicleSegmentDto> getSegmentsForVehicle(String vehicleUUID);
 }

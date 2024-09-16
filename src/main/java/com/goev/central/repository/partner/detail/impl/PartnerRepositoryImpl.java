@@ -17,6 +17,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import static com.goev.record.central.Tables.BUSINESS_SEGMENT_MAPPINGS;
+import static com.goev.record.central.Tables.PARTNER_SEGMENT_MAPPINGS;
 import static com.goev.record.central.tables.Partners.PARTNERS;
 import static com.goev.record.central.tables.Vehicles.VEHICLES;
 
@@ -164,6 +166,34 @@ public class PartnerRepositoryImpl implements PartnerRepository {
                 .where(PARTNERS.VEHICLE_ID.isNull())
                 .and(PARTNERS.STATUS.eq(PartnerStatus.ON_DUTY.name()))
                 .and(PARTNERS.SUB_STATUS.eq(PartnerSubStatus.VEHICLE_NOT_ALLOTTED.name()))
+                .and(PARTNERS.ONBOARDING_STATUS.in(PartnerOnboardingStatus.ONBOARDED.name()))
+                .and(PARTNERS.IS_ACTIVE.eq(true))
+                .and(PARTNERS.STATE.eq(RecordState.ACTIVE.name()))
+                .fetchInto(PartnerDao.class);
+    }
+
+
+    @Override
+    public List<PartnerDao> findAllEligiblePartnersForBusinessSegment(Integer businessSegmentId) {
+        return context.selectFrom(PARTNERS)
+                .where(PARTNERS.VEHICLE_ID.isNotNull())
+                .and(PARTNERS.ID.in(
+                        context.select(PARTNER_SEGMENT_MAPPINGS.PARTNER_ID)
+                                .from(PARTNER_SEGMENT_MAPPINGS)
+                                .where(PARTNER_SEGMENT_MAPPINGS.PARTNER_SEGMENT_ID.in(
+                                       context.select(BUSINESS_SEGMENT_MAPPINGS.PARTNER_SEGMENT_ID)
+                                               .from(BUSINESS_SEGMENT_MAPPINGS)
+                                               .where(BUSINESS_SEGMENT_MAPPINGS.BUSINESS_SEGMENT_ID.eq(businessSegmentId))
+                                               .and(BUSINESS_SEGMENT_MAPPINGS.PARTNER_SEGMENT_ID.isNotNull())
+                                               .and(BUSINESS_SEGMENT_MAPPINGS.IS_ACTIVE.eq(true))
+                                               .and(BUSINESS_SEGMENT_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
+
+                                ))
+                                .and(PARTNER_SEGMENT_MAPPINGS.IS_ACTIVE.eq(true))
+                                .and(PARTNER_SEGMENT_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
+                ))
+                .and(PARTNERS.STATUS.eq(PartnerStatus.ONLINE.name()))
+                .and(PARTNERS.SUB_STATUS.eq(PartnerSubStatus.NO_BOOKING.name()))
                 .and(PARTNERS.ONBOARDING_STATUS.in(PartnerOnboardingStatus.ONBOARDED.name()))
                 .and(PARTNERS.IS_ACTIVE.eq(true))
                 .and(PARTNERS.STATE.eq(RecordState.ACTIVE.name()))

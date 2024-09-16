@@ -155,4 +155,18 @@ public class VehicleSegmentServiceImpl implements VehicleSegmentService {
         return result;
     }
 
+    @Override
+    public List<VehicleSegmentDto> getSegmentsForVehicle(String vehicleUUID) {
+        VehicleDao vehicle = vehicleRepository.findByUUID(vehicleUUID);
+        if (vehicle == null)
+            throw new ResponseException("No vehicle found for Id :" + vehicleUUID);
+        List<VehicleSegmentDao> vehicleSegmentDaoList = vehicleSegmentRepository.findAllByVehicleId(vehicle.getId());
+        List<VehicleSegmentDto> result = new ArrayList<>();
+
+        for (VehicleSegmentDao vehicleSegmentDao : vehicleSegmentDaoList) {
+            result.add(VehicleSegmentDto.fromDao(vehicleSegmentDao));
+        }
+        return result;
+    }
+
 }

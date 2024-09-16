@@ -18,4 +18,6 @@ public interface PartnerSegmentRepository {
     List<PartnerSegmentDao> findAllByIds(List<Integer> ids);
 
     List<PartnerSegmentDao> findAllActive();
+
+    List<PartnerSegmentDao> findAllByPartnerId(Integer partnerId);
 }

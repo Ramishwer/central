@@ -30,4 +30,5 @@ public interface PartnerRepository {
     PartnerDao findByVehicleId(Integer vehicleId);
 
     List<PartnerDao> findAllUnAssignedPartners();
+    List<PartnerDao> findAllEligiblePartnersForBusinessSegment(Integer businessSegmentId);
 }

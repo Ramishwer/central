@@ -11,6 +11,8 @@ import java.util.List;
 public interface PartnerSegmentService {
     PaginatedResponseDto<PartnerSegmentDto> getSegments();
 
+    List<PartnerSegmentDto> getSegmentsForPartner(String partnerUUID);
+
     PartnerSegmentDto createSegment(PartnerSegmentDto partnerSegmentDto);
 
     PartnerSegmentDto updateSegment(String segmentUUID, PartnerSegmentDto partnerSegmentDto);

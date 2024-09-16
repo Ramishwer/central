@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import static com.goev.record.central.Tables.PARTNER_SEGMENT_MAPPINGS;
 import static com.goev.record.central.tables.PartnerSegments.PARTNER_SEGMENTS;
 
 @Repository
@@ -86,6 +87,20 @@ public class PartnerSegmentRepositoryImpl implements PartnerSegmentRepository {
     public List<PartnerSegmentDao> findAllActive() {
         return context.selectFrom(PARTNER_SEGMENTS)
                 .where(PARTNER_SEGMENTS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(PARTNER_SEGMENTS.IS_ACTIVE.eq(true))
+                .fetchInto(PartnerSegmentDao.class);
+    }
+
+    @Override
+    public List<PartnerSegmentDao> findAllByPartnerId(Integer partnerId) {
+        return context.selectFrom(PARTNER_SEGMENTS)
+                .where(PARTNER_SEGMENTS.ID.in(context.select(PARTNER_SEGMENT_MAPPINGS.PARTNER_SEGMENT_ID)
+                        .from(PARTNER_SEGMENT_MAPPINGS)
+                        .where(PARTNER_SEGMENT_MAPPINGS.PARTNER_ID.eq(partnerId))
+                        .and(PARTNER_SEGMENT_MAPPINGS.PARTNER_SEGMENT_ID.isNotNull())
+                        .and(PARTNER_SEGMENT_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
+                        .and(PARTNER_SEGMENT_MAPPINGS.IS_ACTIVE.eq(true))))
+                .and(PARTNER_SEGMENTS.STATE.eq(RecordState.ACTIVE.name()))
                 .and(PARTNER_SEGMENTS.IS_ACTIVE.eq(true))
                 .fetchInto(PartnerSegmentDao.class);
     }

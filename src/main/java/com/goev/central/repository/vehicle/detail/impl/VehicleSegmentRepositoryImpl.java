@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static com.goev.record.central.tables.PartnerSegments.PARTNER_SEGMENTS;
+import static com.goev.record.central.Tables.VEHICLE_SEGMENT_MAPPINGS;
 import static com.goev.record.central.tables.VehicleSegments.VEHICLE_SEGMENTS;
 
 @Repository
@@ -87,6 +87,20 @@ public class VehicleSegmentRepositoryImpl implements VehicleSegmentRepository {
     public List<VehicleSegmentDao> findAllActive() {
         return context.selectFrom(VEHICLE_SEGMENTS)
                 .where(VEHICLE_SEGMENTS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(VEHICLE_SEGMENTS.IS_ACTIVE.eq(true))
+                .fetchInto(VehicleSegmentDao.class);
+    }
+
+    @Override
+    public List<VehicleSegmentDao> findAllByVehicleId(Integer vehicleId) {
+        return context.selectFrom(VEHICLE_SEGMENTS)
+                .where(VEHICLE_SEGMENTS.ID.in(context.select(VEHICLE_SEGMENT_MAPPINGS.VEHICLE_SEGMENT_ID)
+                        .from(VEHICLE_SEGMENT_MAPPINGS)
+                        .where(VEHICLE_SEGMENT_MAPPINGS.VEHICLE_ID.eq(vehicleId))
+                        .and(VEHICLE_SEGMENT_MAPPINGS.VEHICLE_SEGMENT_ID.isNotNull())
+                        .and(VEHICLE_SEGMENT_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
+                        .and(VEHICLE_SEGMENT_MAPPINGS.IS_ACTIVE.eq(true))))
+                .and(VEHICLE_SEGMENTS.STATE.eq(RecordState.ACTIVE.name()))
                 .and(VEHICLE_SEGMENTS.IS_ACTIVE.eq(true))
                 .fetchInto(VehicleSegmentDao.class);
     }

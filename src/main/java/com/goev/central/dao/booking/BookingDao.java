@@ -27,6 +27,8 @@ public class BookingDao extends BaseDao {
     private Integer vehicleId;
     private DateTime plannedStartTime;
     private String displayCode;
+    private Integer businessClientId;
+    private Integer businessSegmentId;
 
     public static BookingDao fromDto(BookingDto bookingDto) {
         BookingDao bookingDao = new BookingDao();
