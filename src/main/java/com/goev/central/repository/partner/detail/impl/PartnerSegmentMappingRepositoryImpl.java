@@ -117,4 +117,13 @@ public class PartnerSegmentMappingRepositoryImpl implements PartnerSegmentMappin
                 .and(PARTNER_SEGMENT_MAPPINGS.IS_ACTIVE.eq(true))
                 .fetchInto(PartnerSegmentMappingDao.class);
     }
+
+    @Override
+    public List<PartnerSegmentMappingDao> findAllByPartnerId(Integer id) {
+        return context.selectFrom(PARTNER_SEGMENT_MAPPINGS)
+                .where(PARTNER_SEGMENT_MAPPINGS.PARTNER_ID.eq(id))
+                .and(PARTNER_SEGMENT_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(PARTNER_SEGMENT_MAPPINGS.IS_ACTIVE.eq(true))
+                .fetchInto(PartnerSegmentMappingDao.class);
+    }
 }

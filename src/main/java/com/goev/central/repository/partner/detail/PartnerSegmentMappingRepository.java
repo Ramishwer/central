@@ -23,4 +23,6 @@ public interface PartnerSegmentMappingRepository {
     List<PartnerSegmentMappingDao> findAllPartnerBySegmentId(Integer partnerSegmentId);
 
     List<PartnerSegmentMappingDao> findAllVehicleSegmentBySegmentId(Integer partnerSegmentId);
+
+    List<PartnerSegmentMappingDao> findAllByPartnerId(Integer id);
 }

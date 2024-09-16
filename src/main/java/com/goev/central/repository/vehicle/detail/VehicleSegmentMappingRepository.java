@@ -20,4 +20,6 @@ public interface VehicleSegmentMappingRepository {
     List<VehicleSegmentMappingDao> findAllActive();
 
     List<VehicleSegmentMappingDao> findAllBySegmentId(Integer vehicleSegmentId);
+
+    List<VehicleSegmentMappingDao> findAllByVehicleId(Integer vehicleId);
 }

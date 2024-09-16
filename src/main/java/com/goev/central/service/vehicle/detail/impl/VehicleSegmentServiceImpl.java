@@ -1,5 +1,6 @@
 package com.goev.central.service.vehicle.detail.impl;
 
+import com.goev.central.dao.partner.detail.PartnerSegmentMappingDao;
 import com.goev.central.dao.vehicle.detail.VehicleDao;
 import com.goev.central.dao.vehicle.detail.VehicleSegmentDao;
 import com.goev.central.dao.vehicle.detail.VehicleSegmentMappingDao;
@@ -113,6 +114,10 @@ public class VehicleSegmentServiceImpl implements VehicleSegmentService {
 
         if (vehicleDao == null)
             throw new ResponseException("No vehicle found for Id :" + vehicleSegmentMappingDto.getVehicle().getUuid());
+
+        List<VehicleSegmentMappingDao> mappings = vehicleSegmentMappingRepository.findAllByVehicleId(vehicleDao.getId());
+        if(!CollectionUtils.isEmpty(mappings))
+            throw new ResponseException("Only one mapping can be created for a vehicle :" + vehicleSegmentMappingDto.getVehicle().getUuid());
 
         VehicleSegmentMappingDao mappingDao = new VehicleSegmentMappingDao();
 

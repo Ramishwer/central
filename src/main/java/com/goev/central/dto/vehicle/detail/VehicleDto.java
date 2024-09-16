@@ -11,10 +11,13 @@ import com.goev.central.dao.vehicle.detail.VehicleDao;
 import com.goev.central.dto.common.FileDto;
 import com.goev.central.dto.location.LocationDto;
 import com.goev.central.dto.partner.PartnerViewDto;
+import com.goev.central.dto.partner.detail.PartnerSegmentDto;
 import com.goev.central.dto.vehicle.VehicleViewDto;
 import com.goev.central.dto.vehicle.transfer.VehicleTransferDto;
 import lombok.*;
 import org.joda.time.DateTime;
+
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -42,6 +45,7 @@ public class VehicleDto {
     private String locationStatus;
     private LocationDto locationDetails;
     private VehicleViewDto vehicleDetails;
+    private List<VehicleSegmentDto> segments;
 
     public static VehicleDto fromDao(VehicleDao vehicle) {
         if(vehicle == null)

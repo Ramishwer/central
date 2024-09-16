@@ -98,4 +98,13 @@ public class VehicleSegmentMappingRepositoryImpl implements VehicleSegmentMappin
                 .and(VEHICLE_SEGMENT_MAPPINGS.IS_ACTIVE.eq(true))
                 .fetchInto(VehicleSegmentMappingDao.class);
     }
+
+    @Override
+    public List<VehicleSegmentMappingDao> findAllByVehicleId(Integer vehicleId) {
+        return context.selectFrom(VEHICLE_SEGMENT_MAPPINGS)
+                .where(VEHICLE_SEGMENT_MAPPINGS.VEHICLE_ID.eq(vehicleId))
+                .and(VEHICLE_SEGMENT_MAPPINGS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(VEHICLE_SEGMENT_MAPPINGS.IS_ACTIVE.eq(true))
+                .fetchInto(VehicleSegmentMappingDao.class);
+    }
 }

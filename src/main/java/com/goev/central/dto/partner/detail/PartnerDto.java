@@ -17,6 +17,8 @@ import com.goev.central.dto.vehicle.VehicleViewDto;
 import lombok.*;
 import org.joda.time.DateTime;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -46,6 +48,7 @@ public class PartnerDto {
     private String locationStatus;
     private PartnerViewDto partnerDetails;
     private String onboardingStatus;
+    private List<PartnerSegmentDto> segments;
     public static PartnerDto fromDao(PartnerDao partner) {
         if (partner == null)
             return null;
