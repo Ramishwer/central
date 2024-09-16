@@ -15,6 +15,7 @@ import com.goev.central.dto.location.LocationDto;
 import com.goev.central.dto.partner.PartnerViewDto;
 import com.goev.central.dto.partner.detail.PartnerActionDto;
 import com.goev.central.dto.partner.detail.PartnerDto;
+import com.goev.central.dto.partner.detail.PartnerSegmentDto;
 import com.goev.central.dto.partner.detail.PartnerTrackingDto;
 import com.goev.central.dto.partner.duty.PartnerDutyDto;
 import com.goev.central.dto.vehicle.VehicleViewDto;
@@ -157,6 +158,10 @@ public class PartnerServiceImpl implements PartnerService {
             partnerDto.setBookingDetails(ApplicationConstants.GSON.fromJson(partner.getBookingDetails(), BookingViewDto.class));
             partnerDto.setLocationDetails(ApplicationConstants.GSON.fromJson(partner.getLocationDetails(), LocationDto.class));
             partnerDto.setPartnerDetails(PartnerViewDto.fromDao(partner));
+            if(partner.getSegments()!=null) {
+                Type t = new TypeToken<List<PartnerSegmentDto>>(){}.getRawType();
+                partnerDto.setSegments(ApplicationConstants.GSON.fromJson(partner.getSegments(),t ));
+            }
             result.getElements().add(partnerDto);
         }
         return result;

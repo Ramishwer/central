@@ -35,4 +35,6 @@ public class BookingRequestDto {
     private Long distance;
     private BookingPricingDetailDto pricingDetails;
     private BookingViewDto booking;
+    private BusinessClientDto businessClient;
+    private BusinessSegmentDto businessSegment;
 }

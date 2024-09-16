@@ -2,9 +2,12 @@ package com.goev.central.service.booking.impl;
 
 import com.goev.central.constant.ApplicationConstants;
 import com.goev.central.dao.booking.BookingDao;
+import com.goev.central.dao.business.BusinessClientDao;
+import com.goev.central.dao.business.BusinessClientDetailDao;
 import com.goev.central.dao.partner.detail.PartnerDao;
 import com.goev.central.dao.vehicle.detail.VehicleDao;
 import com.goev.central.dto.booking.*;
+import com.goev.central.dto.business.BusinessClientDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.customer.CustomerViewDto;
 import com.goev.central.dto.partner.PartnerViewDto;
@@ -15,6 +18,8 @@ import com.goev.central.enums.booking.SchedulingTypes;
 import com.goev.central.enums.partner.PartnerStatus;
 import com.goev.central.enums.partner.PartnerSubStatus;
 import com.goev.central.repository.booking.BookingRepository;
+import com.goev.central.repository.business.BusinessClientDetailRepository;
+import com.goev.central.repository.business.BusinessClientRepository;
 import com.goev.central.repository.partner.detail.PartnerRepository;
 import com.goev.central.repository.vehicle.detail.VehicleRepository;
 import com.goev.central.service.booking.BookingService;
@@ -38,6 +43,8 @@ public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
     private final PartnerRepository partnerRepository;
     private final VehicleRepository vehicleRepository;
+    private final BusinessClientRepository businessClientRepository;
+    private final BusinessClientDetailRepository businessClientDetailRepository;
 
     @Override
     public PaginatedResponseDto<BookingViewDto> getBookings(List<String> status, String subStatus, DateTime from, DateTime to) {
@@ -67,6 +74,15 @@ public class BookingServiceImpl implements BookingService {
         bookingDao.setSubStatus(BookingSubStatus.UNASSIGNED.name());
         bookingDao.setPlannedStartTime(startTime);
         bookingDao.setDisplayCode("BRN-" + SecretGenerationUtils.getCode());
+
+
+        BusinessClientDao clientDao =businessClientRepository.findByUUID(bookingRequest.getBusinessClient().getUuid());
+        bookingDao.setBusinessClientId(clientDao.getId());
+
+        BusinessClientDetailDao clientDetailDao = businessClientDetailRepository.findById(clientDao.getId());
+        bookingDao.setBusinessSegmentId(clientDetailDao.getBusinessSegmentId());
+
+
         bookingDao = bookingRepository.save(bookingDao);
 
 
@@ -88,6 +104,8 @@ public class BookingServiceImpl implements BookingService {
                 .endContact(bookingRequest.getEndContact())
                 .duration(bookingRequest.getDuration())
                 .distance(bookingRequest.getDistance())
+                .businessClient(bookingRequest.getBusinessClient())
+                .businessSegment(bookingRequest.getBusinessSegment())
                 .build();
 
 

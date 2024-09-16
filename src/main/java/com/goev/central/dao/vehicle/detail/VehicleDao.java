@@ -27,5 +27,6 @@ public class VehicleDao extends BaseDao {
     private String imageUrl;
     private String onboardingStatus;
     private String stats;
+    private String segments;
 
 }
