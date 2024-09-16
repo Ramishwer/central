@@ -85,6 +85,9 @@ public class BusinessClientRepositoryImpl implements BusinessClientRepository {
 
     @Override
     public List<BusinessClientDao> findAllActive() {
-        return context.selectFrom(BUSINESS_CLIENTS).fetchInto(BusinessClientDao.class);
+        return context.selectFrom(BUSINESS_CLIENTS)
+                .where(BUSINESS_CLIENTS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(BUSINESS_CLIENTS.IS_ACTIVE.eq(true))
+                .fetchInto(BusinessClientDao.class);
     }
 }
