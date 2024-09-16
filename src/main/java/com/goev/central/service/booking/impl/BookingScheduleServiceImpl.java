@@ -3,6 +3,7 @@ package com.goev.central.service.booking.impl;
 import com.goev.central.constant.ApplicationConstants;
 import com.goev.central.dao.booking.BookingScheduleConfigurationDao;
 import com.goev.central.dao.booking.BookingScheduleDao;
+import com.goev.central.dao.customer.detail.CustomerDao;
 import com.goev.central.dto.booking.BookingRequestDto;
 import com.goev.central.dto.booking.BookingScheduleDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
@@ -10,6 +11,7 @@ import com.goev.central.enums.EntityType;
 import com.goev.central.enums.booking.BookingScheduleStatus;
 import com.goev.central.repository.booking.BookingScheduleConfigurationRepository;
 import com.goev.central.repository.booking.BookingScheduleRepository;
+import com.goev.central.repository.customer.detail.CustomerRepository;
 import com.goev.central.service.booking.BookingScheduleService;
 import com.goev.lib.exceptions.ResponseException;
 import lombok.AllArgsConstructor;
@@ -28,6 +30,7 @@ public class BookingScheduleServiceImpl implements BookingScheduleService {
 
     private final BookingScheduleRepository bookingScheduleRepository;
     private final BookingScheduleConfigurationRepository bookingScheduleConfigurationRepository;
+    private final CustomerRepository customerRepository;
 
     @Override
     public PaginatedResponseDto<BookingScheduleDto> getBookingSchedules(String status, String subStatus) {
@@ -48,8 +51,20 @@ public class BookingScheduleServiceImpl implements BookingScheduleService {
     @Override
     public BookingScheduleDto createBookingSchedule(BookingRequestDto bookingRequestDto) {
 
+
+        if(bookingRequestDto.getCustomerDetails().getPhoneNumber()==null)
+            throw new ResponseException("Invalid Customer Details");
+        CustomerDao customer = customerRepository.findByPhoneNumber(bookingRequestDto.getCustomerDetails().getPhoneNumber());
+
+        if(customer == null){
+            customer = new CustomerDao();
+            customer.setPhoneNumber(customer.getPhoneNumber());
+            customer = customerRepository.save(customer);
+            bookingRequestDto.getCustomerDetails().setUuid(customer.getUuid());
+        }
         BookingScheduleDao bookingScheduleDao = new BookingScheduleDao();
 
+        bookingScheduleDao.setCustomerId(customer.getId());
         bookingScheduleDao.setStatus(BookingScheduleStatus.CONFIRMED.name());
         bookingScheduleDao.setEntityType(EntityType.CLIENT.name());
         bookingScheduleDao.setApplicableFromTime(bookingRequestDto.getScheduleDetails().getStartTime());

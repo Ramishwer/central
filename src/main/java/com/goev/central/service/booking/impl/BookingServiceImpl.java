@@ -4,6 +4,7 @@ import com.goev.central.constant.ApplicationConstants;
 import com.goev.central.dao.booking.BookingDao;
 import com.goev.central.dao.business.BusinessClientDao;
 import com.goev.central.dao.business.BusinessClientDetailDao;
+import com.goev.central.dao.customer.detail.CustomerDao;
 import com.goev.central.dao.partner.detail.PartnerDao;
 import com.goev.central.dao.vehicle.detail.VehicleDao;
 import com.goev.central.dto.booking.*;
@@ -20,6 +21,7 @@ import com.goev.central.enums.partner.PartnerSubStatus;
 import com.goev.central.repository.booking.BookingRepository;
 import com.goev.central.repository.business.BusinessClientDetailRepository;
 import com.goev.central.repository.business.BusinessClientRepository;
+import com.goev.central.repository.customer.detail.CustomerRepository;
 import com.goev.central.repository.partner.detail.PartnerRepository;
 import com.goev.central.repository.vehicle.detail.VehicleRepository;
 import com.goev.central.service.booking.BookingService;
@@ -45,6 +47,7 @@ public class BookingServiceImpl implements BookingService {
     private final VehicleRepository vehicleRepository;
     private final BusinessClientRepository businessClientRepository;
     private final BusinessClientDetailRepository businessClientDetailRepository;
+    private final CustomerRepository customerRepository;
 
     @Override
     public PaginatedResponseDto<BookingViewDto> getBookings(List<String> status, String subStatus, DateTime from, DateTime to) {
@@ -63,10 +66,23 @@ public class BookingServiceImpl implements BookingService {
     public BookingDto createBooking(BookingRequestDto bookingRequest) {
         DateTime startTime = DateTime.now();
 
+        if(bookingRequest.getCustomerDetails().getPhoneNumber()==null)
+            throw new ResponseException("Invalid Customer Details");
+        CustomerDao customer = customerRepository.findByPhoneNumber(bookingRequest.getCustomerDetails().getPhoneNumber());
+
+        if(customer == null){
+            customer = new CustomerDao();
+            customer.setPhoneNumber(customer.getPhoneNumber());
+            customer = customerRepository.save(customer);
+
+        }
+
         if (bookingRequest.getScheduleDetails() != null && SchedulingTypes.SCHEDULED.equals(bookingRequest.getScheduleDetails().getType()))
             startTime = bookingRequest.getScheduleDetails().getStartTime() == null ? DateTime.now() : bookingRequest.getScheduleDetails().getStartTime();
 
         BookingDao bookingDao = new BookingDao();
+        bookingDao.setCustomerId(customer.getId());
+        bookingRequest.getCustomerDetails().setUuid(customer.getUuid());
         bookingDao.setCustomerDetails(ApplicationConstants.GSON.toJson(bookingRequest.getCustomerDetails()));
         bookingDao.setStartLocationDetails(ApplicationConstants.GSON.toJson(bookingRequest.getStartLocationDetails(), LatLongDto.class));
         bookingDao.setEndLocationDetails(ApplicationConstants.GSON.toJson(bookingRequest.getEndLocationDetails(), LatLongDto.class));
