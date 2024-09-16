@@ -1,6 +1,7 @@
 package com.goev.central.controller.vehicle.detail;
 
 import com.goev.central.dto.common.PaginatedResponseDto;
+import com.goev.central.dto.partner.detail.PartnerSegmentDto;
 import com.goev.central.dto.vehicle.detail.VehicleSegmentMappingDto;
 import com.goev.central.dto.vehicle.detail.VehicleSegmentDto;
 import com.goev.central.service.vehicle.detail.VehicleSegmentService;
@@ -37,6 +38,10 @@ public class VehicleSegmentController {
     @GetMapping("/vehicles/segments/{segment-uuid}")
     public ResponseDto<VehicleSegmentDto> getSegmentDetails(@PathVariable(value = "segment-uuid") String segmentUUID) {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleSegmentService.getSegmentDetails(segmentUUID));
+    }
+    @GetMapping("/vehicles/{vehicle-uuid}/segments")
+    public ResponseDto<List<VehicleSegmentDto>> getSegmentsForVehicle(@PathVariable(value = "vehicle-uuid") String vehicleUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleSegmentService.getSegmentsForVehicle(vehicleUUID));
     }
 
     @DeleteMapping("/vehicles/segments/{segment-uuid}")

@@ -41,6 +41,11 @@ public class PartnerSegmentController {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerSegmentService.getSegmentDetails(segmentUUID));
     }
 
+    @GetMapping("/partners/{partner-uuid}/segments")
+    public ResponseDto<List<PartnerSegmentDto>> getSegmentsForPartner(@PathVariable(value = "partner-uuid") String partnerUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerSegmentService.getSegmentsForPartner(partnerUUID));
+    }
+
     @DeleteMapping("/partners/segments/{segment-uuid}")
     public ResponseDto<Boolean> deleteSegment(@PathVariable(value = "segment-uuid") String segmentUUID) {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerSegmentService.deleteSegment(segmentUUID));
