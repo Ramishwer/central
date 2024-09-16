@@ -9,6 +9,7 @@ import com.goev.central.dto.partner.PartnerViewDto;
 import com.goev.central.dto.partner.detail.PartnerDto;
 import com.goev.central.dto.partner.detail.PartnerSegmentDto;
 import com.goev.central.dto.vehicle.VehicleActionDto;
+import com.goev.central.dto.vehicle.VehicleStatsDto;
 import com.goev.central.dto.vehicle.VehicleViewDto;
 import com.goev.central.dto.vehicle.detail.VehicleDto;
 import com.goev.central.dto.vehicle.detail.VehicleSegmentDto;
@@ -106,6 +107,9 @@ public class VehicleServiceImpl implements VehicleService {
             vehicleDto.setStatus(vehicle.getStatus());
             vehicleDto.setPartnerDetails(ApplicationConstants.GSON.fromJson(vehicle.getPartnerDetails(), PartnerViewDto.class));
             vehicleDto.setSubStatus(vehicle.getSubStatus());
+            if(vehicle.getStats()!=null) {
+                vehicleDto.setStats(ApplicationConstants.GSON.fromJson(vehicle.getStats(), VehicleStatsDto.class ));
+            }
             if(vehicle.getSegments()!=null) {
                 Type t = new TypeToken<List<VehicleSegmentDto>>(){}.getRawType();
                 vehicleDto.setSegments(ApplicationConstants.GSON.fromJson(vehicle.getSegments(),t ));

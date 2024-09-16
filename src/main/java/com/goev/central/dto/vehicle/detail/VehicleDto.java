@@ -12,6 +12,7 @@ import com.goev.central.dto.common.FileDto;
 import com.goev.central.dto.location.LocationDto;
 import com.goev.central.dto.partner.PartnerViewDto;
 import com.goev.central.dto.partner.detail.PartnerSegmentDto;
+import com.goev.central.dto.vehicle.VehicleStatsDto;
 import com.goev.central.dto.vehicle.VehicleViewDto;
 import com.goev.central.dto.vehicle.transfer.VehicleTransferDto;
 import lombok.*;
@@ -46,6 +47,7 @@ public class VehicleDto {
     private LocationDto locationDetails;
     private VehicleViewDto vehicleDetails;
     private List<VehicleSegmentDto> segments;
+    private VehicleStatsDto stats;
 
     public static VehicleDto fromDao(VehicleDao vehicle) {
         if(vehicle == null)
