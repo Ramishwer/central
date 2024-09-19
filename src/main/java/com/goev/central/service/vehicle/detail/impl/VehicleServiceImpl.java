@@ -130,6 +130,7 @@ public class VehicleServiceImpl implements VehicleService {
                 Type t = new TypeToken<List<VehicleSegmentDto>>(){}.getRawType();
                 vehicleDto.setSegments(ApplicationConstants.GSON.fromJson(vehicle.getSegments(),t ));
             }
+            vehicleDto.setVehicleDetails(VehicleViewDto.fromDao(vehicle));
             result.getElements().add(vehicleDto);
         }
         return result;

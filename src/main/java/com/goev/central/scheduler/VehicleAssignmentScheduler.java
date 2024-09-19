@@ -37,7 +37,7 @@ public class VehicleAssignmentScheduler {
                 log.info("Eligible Vehicles For Partner {} []",partnerDao.getId());
                 continue;
             }
-            log.info("Eligible Vehicles For Partner {} {}",partnerDao.getId(),eligibleVehicles.stream().map(VehicleDao::getPlateNumber).collect(Collectors.toList()));
+            log.info("Eligible Vehicles For Partner {} {}",partnerDao.getId(),eligibleVehicles.stream().map(VehicleDao::getPlateNumber).toList());
             for (VehicleDao vehicle : eligibleVehicles) {
                 PartnerDao existingPartner = partnerRepository.findByVehicleId(vehicle.getId());
                 if (existingPartner != null)

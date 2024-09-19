@@ -39,6 +39,10 @@ public class ShiftServiceImpl implements ShiftService {
     public ShiftDto createShift(ShiftDto shiftDto) {
 
         ShiftDao shiftDao = new ShiftDao();
+
+        shiftDao.setName(shiftDto.getName());
+        shiftDao.setDescription(shiftDto.getDescription());
+        shiftDao.setShiftType(shiftDto.getShiftType());
         shiftDao = shiftRepository.save(shiftDao);
         if (shiftDao == null)
             throw new ResponseException("Error in saving shift shift");
@@ -51,7 +55,9 @@ public class ShiftServiceImpl implements ShiftService {
         if (shiftDao == null)
             throw new ResponseException("No shift  found for Id :" + shiftUUID);
         ShiftDao newShiftDao = new ShiftDao();
-
+        newShiftDao.setName(shiftDto.getName());
+        newShiftDao.setDescription(shiftDto.getDescription());
+        newShiftDao.setShiftType(shiftDto.getShiftType());
 
         newShiftDao.setId(shiftDao.getId());
         newShiftDao.setUuid(shiftDao.getUuid());
