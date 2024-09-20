@@ -19,6 +19,7 @@ public class PartnerDao extends BaseDao {
     private Integer bookingId;
     private String bookingDetails;
     private String locationDetails;
+    private String homeLocationDetails;
     private String dutyDetails;
     private Integer partnerDetailsId;
     private String profileUrl;
@@ -30,6 +31,7 @@ public class PartnerDao extends BaseDao {
     private Integer partnerShiftId;
     private String locationStatus;
     private Integer locationId;
+    private Integer homeLocationId;
     private String viewInfo;
     private String stats;
     private String segments;

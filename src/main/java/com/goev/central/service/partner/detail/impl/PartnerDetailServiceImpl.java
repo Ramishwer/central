@@ -192,18 +192,18 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
         }
 
 
-        PartnerDetailDao partnerDetails = getPartnerDetailDao(partnerDetailDto, partner);
-        partnerDetails.setPartnerId(partner.getId());
-        partnerDetails = partnerDetailRepository.save(partnerDetails);
-        if (partnerDetails == null)
+        PartnerDetailDao newPartnerDetails = getPartnerDetailDao(partnerDetailDto, partner);
+        newPartnerDetails.setPartnerId(partner.getId());
+        newPartnerDetails = partnerDetailRepository.save(newPartnerDetails);
+        if (newPartnerDetails == null)
             throw new ResponseException("Error in saving partner details");
 
         partnerDetailRepository.delete(partnerDetailDao.getId());
-        partner.setProfileUrl(partnerDetails.getProfileUrl());
-        partner.setPartnerDetailsId(partnerDetails.getId());
-        partner.setOnboardingStatus(getOnboardingStatus(partner, partnerDetailDao));
+        partner.setProfileUrl(newPartnerDetails.getProfileUrl());
+        partner.setPartnerDetailsId(newPartnerDetails.getId());
+        partner.setOnboardingStatus(getOnboardingStatus(partner, newPartnerDetails));
 
-        partner.setViewInfo(ApplicationConstants.GSON.toJson(getPartnerViewDto(partnerDetails, partner)));
+        partner.setViewInfo(ApplicationConstants.GSON.toJson(getPartnerViewDto(newPartnerDetails, partner)));
         partnerRepository.update(partner);
 
         return getPartnerDetailDto(partnerDetailDao, partner);
@@ -238,8 +238,8 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
 
         if (partnerDetailDao.getFirstName() == null)
             return PartnerOnboardingStatus.PENDING.name();
-        if (partnerDetailDao.getLastName() == null)
-            return PartnerOnboardingStatus.PENDING.name();
+//        if (partnerDetailDao.getLastName() == null)
+//            return PartnerOnboardingStatus.PENDING.name();
 
         DocumentStatus documentStatus = partnerDocumentService.isAllMandatoryDocumentsUploaded(partner.getId());
 

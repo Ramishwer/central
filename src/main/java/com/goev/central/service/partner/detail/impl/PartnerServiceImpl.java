@@ -267,16 +267,22 @@ public class PartnerServiceImpl implements PartnerService {
 
     private PartnerDao suspendPartner(PartnerDao partner, PartnerActionDto actionDto) {
 
-//        PartnerDetailDao partnerDetailDao = partnerDetailRepository.findById(partner.getPartnerDetailsId());
-//        if(partnerDetailDao!=null){
-//            partnerDetailDao.setRemark(actionDto.getRemark());
-//            partnerDetailDao.setSuspensionDate(DateTime.now());
-//
-//        }
+        PartnerDetailDao partnerDetailDao = partnerDetailRepository.findById(partner.getPartnerDetailsId());
+        if(partnerDetailDao!=null){
+            partnerDetailDao.setRemark(actionDto.getRemark());
+            partnerDetailDao.setSuspensionDate(DateTime.now());
+            partnerDetailRepository.update(partnerDetailDao);
+        }
         return updatePartnerOnboardingStatus(partner, PartnerOnboardingStatus.SUSPENDED);
     }
 
     private PartnerDao deboardPartner(PartnerDao partner, PartnerActionDto actionDto) {
+        PartnerDetailDao partnerDetailDao = partnerDetailRepository.findById(partner.getPartnerDetailsId());
+        if(partnerDetailDao!=null) {
+            partnerDetailDao.setRemark(actionDto.getRemark());
+            partnerDetailDao.setDeboardingDate(DateTime.now());
+            partnerDetailRepository.update(partnerDetailDao);
+        }
         return updatePartnerOnboardingStatus(partner, PartnerOnboardingStatus.DEBOARDED);
     }
 
