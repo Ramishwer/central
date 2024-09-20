@@ -62,9 +62,9 @@ public class ShiftConfigurationServiceImpl implements ShiftConfigurationService 
 
         for(Map.Entry<String,ShiftConfigurationDto> entry:shiftConfiguration.entrySet()) {
             ShiftConfigurationDto configurationDto = entry.getValue();
-            PayoutModelDao payoutModelDao = payoutModelRepository.findByUUID(configurationDto.getPayoutModel().getUuid());
+//            PayoutModelDao payoutModelDao = payoutModelRepository.findByUUID(configurationDto.getPayoutModel().getUuid());
 
-            ShiftConfigurationDao shiftConfigurationDao = ShiftConfigurationDao.fromDto(configurationDto,shiftDao.getId(),payoutModelDao.getId());
+            ShiftConfigurationDao shiftConfigurationDao = ShiftConfigurationDao.fromDto(configurationDto,shiftDao.getId(),null);
             shiftConfigurationDao = shiftConfigurationRepository.save(shiftConfigurationDao);
             if (shiftConfigurationDao == null) {
                 log.error("Error in saving shiftConfiguration shiftConfiguration");
