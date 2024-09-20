@@ -40,7 +40,7 @@ public class ShiftConfigurationServiceImpl implements ShiftConfigurationService 
 
         List<ShiftConfigurationDao> shiftConfigurationDaoList = shiftConfigurationRepository.findByShiftId(shiftDao.getId());
         if (CollectionUtils.isEmpty(shiftConfigurationDaoList))
-            return new HashMap<>();
+            return null;
 
         List<ShiftConfigurationDto> shiftConfigurationDtoList = shiftConfigurationDaoList.stream().map(x -> {
             PayoutModelDao payoutModelDao = payoutModelRepository.findById(x.getPayoutModelId());
