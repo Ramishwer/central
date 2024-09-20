@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +41,7 @@ public class ShiftConfigurationServiceImpl implements ShiftConfigurationService 
 
         List<ShiftConfigurationDao> shiftConfigurationDaoList = shiftConfigurationRepository.findByShiftId(shiftDao.getId());
         if (CollectionUtils.isEmpty(shiftConfigurationDaoList))
-            return null;
+            return Collections.emptyMap();
 
         List<ShiftConfigurationDto> shiftConfigurationDtoList = shiftConfigurationDaoList.stream().map(x -> {
             PayoutModelDao payoutModelDao = payoutModelRepository.findById(x.getPayoutModelId());
