@@ -29,15 +29,15 @@ public class ShiftConfigurationDao extends BaseDao {
 
         shiftConfigurationDao.setUuid(shiftConfigurationDto.getUuid());
         shiftConfigurationDao.setShiftId(shiftId);
-        shiftConfigurationDao.setEstimatedIn(shiftConfigurationDao.getEstimatedIn());
-        shiftConfigurationDao.setEstimatedOut(shiftConfigurationDao.getEstimatedOut());
-        shiftConfigurationDao.setMaximumIn(shiftConfigurationDao.getMaximumIn());
-        shiftConfigurationDao.setMinimumIn(shiftConfigurationDao.getMinimumIn());
-        shiftConfigurationDao.setMinimumOut(shiftConfigurationDao.getMinimumOut());
-        shiftConfigurationDao.setMaximumOut(shiftConfigurationDao.getMaximumOut());
+        shiftConfigurationDao.setEstimatedIn(shiftConfigurationDto.getEstimatedIn());
+        shiftConfigurationDao.setEstimatedOut(shiftConfigurationDto.getEstimatedOut());
+        shiftConfigurationDao.setMaximumIn(shiftConfigurationDto.getMaximumIn());
+        shiftConfigurationDao.setMinimumIn(shiftConfigurationDto.getMinimumIn());
+        shiftConfigurationDao.setMinimumOut(shiftConfigurationDto.getMinimumOut());
+        shiftConfigurationDao.setMaximumOut(shiftConfigurationDto.getMaximumOut());
         shiftConfigurationDao.setPayoutModelId(payoutModelId);
-        shiftConfigurationDao.setDay(shiftConfigurationDao.getDay());
-        shiftConfigurationDao.setAutoOut(shiftConfigurationDao.getAutoOut());
+        shiftConfigurationDao.setDay(shiftConfigurationDto.getDay());
+        shiftConfigurationDao.setAutoOut(shiftConfigurationDto.getAutoOut());
 
         return shiftConfigurationDao;
     }

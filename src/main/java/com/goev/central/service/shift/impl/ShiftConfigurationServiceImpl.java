@@ -44,8 +44,8 @@ public class ShiftConfigurationServiceImpl implements ShiftConfigurationService 
             return Collections.emptyMap();
 
         List<ShiftConfigurationDto> shiftConfigurationDtoList = shiftConfigurationDaoList.stream().map(x -> {
-            PayoutModelDao payoutModelDao = payoutModelRepository.findById(x.getPayoutModelId());
-            return ShiftConfigurationDto.fromDao(x, ShiftDto.fromDao(shiftDao), PayoutModelDto.fromDao(payoutModelDao));
+//            PayoutModelDao payoutModelDao = payoutModelRepository.findById(x.getPayoutModelId());
+            return ShiftConfigurationDto.fromDao(x, ShiftDto.fromDao(shiftDao),null);
         }).toList();
         return shiftConfigurationDtoList.stream().collect(Collectors.toMap(ShiftConfigurationDto::getDay, Function.identity()));
 
@@ -65,6 +65,7 @@ public class ShiftConfigurationServiceImpl implements ShiftConfigurationService 
 //            PayoutModelDao payoutModelDao = payoutModelRepository.findByUUID(configurationDto.getPayoutModel().getUuid());
 
             ShiftConfigurationDao shiftConfigurationDao = ShiftConfigurationDao.fromDto(configurationDto,shiftDao.getId(),null);
+            shiftConfigurationDao.setDay(entry.getKey());
             shiftConfigurationDao = shiftConfigurationRepository.save(shiftConfigurationDao);
             if (shiftConfigurationDao == null) {
                 log.error("Error in saving shiftConfiguration shiftConfiguration");

@@ -270,8 +270,16 @@ public class PartnerServiceImpl implements PartnerService {
         PartnerDetailDao partnerDetailDao = partnerDetailRepository.findById(partner.getPartnerDetailsId());
         if(partnerDetailDao!=null){
             partnerDetailDao.setRemark(actionDto.getRemark());
-            partnerDetailDao.setSuspensionDate(DateTime.now());
+            partnerDetailDao.setSuspensionDate(actionDto.getTimestamp()!=null?actionDto.getTimestamp():DateTime.now());
             partnerDetailRepository.update(partnerDetailDao);
+            PartnerViewDto viewDto = PartnerViewDto.fromDao(partner);
+            if(viewDto!=null){
+                viewDto.setRemark(actionDto.getRemark());
+                if(CollectionUtils.isEmpty(viewDto.getFields()))
+                    viewDto.setFields(new HashMap<>());
+                viewDto.getFields().put("suspensionDate",partnerDetailDao.getSuspensionDate());
+                partner.setViewInfo(ApplicationConstants.GSON.toJson(viewDto));
+            }
         }
         return updatePartnerOnboardingStatus(partner, PartnerOnboardingStatus.SUSPENDED);
     }
@@ -282,6 +290,11 @@ public class PartnerServiceImpl implements PartnerService {
             partnerDetailDao.setRemark(actionDto.getRemark());
             partnerDetailDao.setDeboardingDate(DateTime.now());
             partnerDetailRepository.update(partnerDetailDao);
+            PartnerViewDto viewDto = PartnerViewDto.fromDao(partner);
+            if(viewDto!=null){
+                viewDto.setRemark(actionDto.getRemark());
+                partner.setViewInfo(ApplicationConstants.GSON.toJson(viewDto));
+            }
         }
         return updatePartnerOnboardingStatus(partner, PartnerOnboardingStatus.DEBOARDED);
     }

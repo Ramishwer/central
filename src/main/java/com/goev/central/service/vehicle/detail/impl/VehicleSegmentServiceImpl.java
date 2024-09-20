@@ -8,6 +8,7 @@ import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.vehicle.VehicleViewDto;
 import com.goev.central.dto.vehicle.detail.VehicleSegmentDto;
 import com.goev.central.dto.vehicle.detail.VehicleSegmentMappingDto;
+import com.goev.central.enums.vehicle.VehicleOnboardingStatus;
 import com.goev.central.repository.vehicle.detail.VehicleRepository;
 import com.goev.central.repository.vehicle.detail.VehicleSegmentMappingRepository;
 import com.goev.central.repository.vehicle.detail.VehicleSegmentRepository;
@@ -153,7 +154,7 @@ public class VehicleSegmentServiceImpl implements VehicleSegmentService {
 
         for (VehicleSegmentMappingDao vehicleSegmentMappingDao : vehicleSegmentMappingDaoList) {
             VehicleDao vehicle = vehicleRepository.findById(vehicleSegmentMappingDao.getVehicleId());
-            if (vehicle == null)
+            if (vehicle == null || VehicleOnboardingStatus.DEBOARDED.name().equals(vehicle.getOnboardingStatus()))
                 continue;
             result.add(VehicleSegmentMappingDto.fromDao(vehicleSegmentMappingDao, VehicleSegmentDto.fromDao(vehicleSegmentDao), VehicleViewDto.fromDao(vehicle)));
         }

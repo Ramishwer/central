@@ -14,6 +14,8 @@ import com.goev.central.dto.partner.detail.PartnerSegmentMappingDto;
 import com.goev.central.dto.partner.duty.PartnerShiftMappingDto;
 import com.goev.central.dto.shift.ShiftDto;
 import com.goev.central.dto.vehicle.detail.VehicleSegmentDto;
+import com.goev.central.enums.partner.PartnerOnboardingStatus;
+import com.goev.central.enums.vehicle.VehicleOnboardingStatus;
 import com.goev.central.repository.partner.detail.PartnerRepository;
 import com.goev.central.repository.partner.detail.PartnerSegmentMappingRepository;
 import com.goev.central.repository.partner.detail.PartnerSegmentRepository;
@@ -171,8 +173,9 @@ public class PartnerSegmentServiceImpl implements PartnerSegmentService {
 
         for (PartnerSegmentMappingDao partnerSegmentMappingDao : partnerSegmentMappingDaoList) {
             PartnerDao partner = partnerRepository.findById(partnerSegmentMappingDao.getPartnerId());
-            if (partner == null)
+            if (partner == null || PartnerOnboardingStatus.DEBOARDED.name().equals(partner.getOnboardingStatus()))
                 continue;
+
             result.add(PartnerSegmentMappingDto.fromDao(partnerSegmentMappingDao,PartnerSegmentDto.fromDao(partnerSegmentDao),  PartnerViewDto.fromDao(partner),null));
         }
         return result;
