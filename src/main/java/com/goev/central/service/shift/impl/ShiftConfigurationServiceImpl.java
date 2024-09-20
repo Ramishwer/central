@@ -74,8 +74,8 @@ public class ShiftConfigurationServiceImpl implements ShiftConfigurationService 
 
         }
         List<ShiftConfigurationDto> shiftConfigurationDtoList = shiftConfigurationDaoList.stream().map(x -> {
-            PayoutModelDao payoutModelDao = payoutModelRepository.findById(x.getPayoutModelId());
-            return ShiftConfigurationDto.fromDao(x, ShiftDto.fromDao(shiftDao), PayoutModelDto.fromDao(payoutModelDao));
+//            PayoutModelDao payoutModelDao = payoutModelRepository.findById(x.getPayoutModelId());
+            return ShiftConfigurationDto.fromDao(x, ShiftDto.fromDao(shiftDao),null);
         }).toList();
         return shiftConfigurationDtoList.stream().collect(Collectors.toMap(ShiftConfigurationDto::getDay, Function.identity()));
 
