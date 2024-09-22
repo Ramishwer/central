@@ -1,5 +1,6 @@
 package com.goev.central.controller.partner.duty;
 
+import com.goev.central.dto.common.FilterDto;
 import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.partner.duty.PartnerShiftDto;
@@ -21,8 +22,8 @@ public class PartnerShiftController {
     private final PartnerShiftService partnerShiftService;
 
     @GetMapping("/partners/shifts")
-    public ResponseDto<PaginatedResponseDto<PartnerShiftDto>> getShifts(@RequestParam("status")String status, PageDto page) {
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerShiftService.getShifts(status,page));
+    public ResponseDto<PaginatedResponseDto<PartnerShiftDto>> getShifts(@RequestParam("status")String status, PageDto page,FilterDto filter) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerShiftService.getShifts(status,page,filter));
     }
 
 

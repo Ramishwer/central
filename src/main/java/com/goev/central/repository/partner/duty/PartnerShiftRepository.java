@@ -1,6 +1,8 @@
 package com.goev.central.repository.partner.duty;
 
+import com.goev.central.dao.partner.duty.PartnerDutyDao;
 import com.goev.central.dao.partner.duty.PartnerShiftDao;
+import com.goev.central.dto.common.FilterDto;
 import com.goev.central.dto.common.PageDto;
 import org.joda.time.DateTime;
 
@@ -23,6 +25,7 @@ public interface PartnerShiftRepository {
 
     List<PartnerShiftDao> findAllByPartnerId(Integer id);
 
+    List<PartnerShiftDao> findAllByStatus(String status, PageDto page, FilterDto filter);
     List<PartnerShiftDao> findAllByStatus(String status, PageDto page);
 
     PartnerShiftDao findByPartnerIdShiftIdDayDate(Integer partnerId, Integer shiftId, String currentDay, DateTime date);

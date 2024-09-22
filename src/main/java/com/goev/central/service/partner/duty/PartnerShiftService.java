@@ -1,5 +1,6 @@
 package com.goev.central.service.partner.duty;
 
+import com.goev.central.dto.common.FilterDto;
 import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.partner.duty.PartnerShiftDto;
@@ -8,7 +9,7 @@ import com.goev.central.dto.partner.duty.PartnerShiftMappingDto;
 import java.util.List;
 
 public interface PartnerShiftService {
-    PaginatedResponseDto<PartnerShiftDto> getShifts(String status, PageDto page);
+    PaginatedResponseDto<PartnerShiftDto> getShifts(String status, PageDto page, FilterDto filter);
 
     PartnerShiftMappingDto createShiftMapping(String partnerUUID, PartnerShiftMappingDto partnerShiftDto);
     Boolean deleteShiftMapping(String partnerUUID, String partnerShiftMappingUUID);

@@ -7,18 +7,17 @@ import com.goev.central.dao.partner.duty.PartnerShiftMappingDao;
 import com.goev.central.dao.payout.PayoutModelDao;
 import com.goev.central.dao.shift.ShiftConfigurationDao;
 import com.goev.central.dao.shift.ShiftDao;
+import com.goev.central.dto.common.FilterDto;
 import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.partner.PartnerViewDto;
-import com.goev.central.dto.partner.duty.PartnerDutyDto;
 import com.goev.central.dto.partner.duty.PartnerShiftDto;
 import com.goev.central.dto.partner.duty.PartnerShiftMappingDto;
 import com.goev.central.dto.payout.PayoutModelDto;
 import com.goev.central.dto.shift.ShiftConfigurationDto;
 import com.goev.central.dto.shift.ShiftDto;
+import com.goev.central.enums.partner.PartnerDutyStatus;
 import com.goev.central.enums.partner.PartnerShiftStatus;
-import com.goev.central.enums.partner.PartnerStatus;
-import com.goev.central.enums.partner.PartnerSubStatus;
 import com.goev.central.repository.partner.detail.PartnerRepository;
 import com.goev.central.repository.partner.duty.PartnerShiftMappingRepository;
 import com.goev.central.repository.partner.duty.PartnerShiftRepository;
@@ -29,7 +28,6 @@ import com.goev.central.service.partner.duty.PartnerShiftService;
 import com.goev.lib.exceptions.ResponseException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -52,9 +50,15 @@ public class PartnerShiftServiceImpl implements PartnerShiftService {
     private final PayoutModelRepository payoutModelRepository;
 
     @Override
-    public PaginatedResponseDto<PartnerShiftDto> getShifts(String status, PageDto page) {
+    public PaginatedResponseDto<PartnerShiftDto> getShifts(String status, PageDto page, FilterDto filter) {
 
-        List<PartnerShiftDao> activeShifts = partnerShiftRepository.findAllByStatus(status, page);
+        List<PartnerShiftDao> activeShifts ;
+
+        if(PartnerShiftStatus.IN_PROGRESS.name().equals(status) || PartnerShiftStatus.PENDING.name().equals(status)  )
+          activeShifts = partnerShiftRepository.findAllByStatus(status, page);
+        else
+            activeShifts = partnerShiftRepository.findAllByStatus(status, page,filter);
+
         if (CollectionUtils.isEmpty(activeShifts))
             return PaginatedResponseDto.<PartnerShiftDto>builder().elements(new ArrayList<>()).build();
 
