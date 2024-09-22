@@ -86,9 +86,7 @@ public class PartnerServiceImpl implements PartnerService {
             else if (PartnerStatus.ONLINE.name().equals(status))
                 partners = partnerRepository.findAllByStatus(Arrays.asList(PartnerStatus.ONLINE.name(), PartnerStatus.ON_BOOKING.name()));
         }else{
-            log.info("Recommendations For : {}",recommendationForBookingUUID);
             BookingDao bookingDao = bookingRepository.findByUUID(recommendationForBookingUUID);
-            log.info("Booking Dao : {}",bookingDao);
             if(bookingDao!=null){
                 partners = partnerRepository.findAllEligiblePartnersForBusinessSegment(bookingDao.getBusinessSegmentId());
             }
