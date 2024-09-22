@@ -82,8 +82,7 @@ public class VehicleServiceImpl implements VehicleService {
         VehicleDetailDao vehicleDetailDao = vehicleDetailRepository.findById(vehicle.getVehicleDetailsId());
         if(vehicleDetailDao!=null) {
             vehicleDetailDao.setRemark(vehicleActionDto.getRemark());
-            vehicleDetailDao = vehicleDetailRepository.update(vehicleDetailDao);
-            vehicle.setVehicleDetailsId(vehicleDetailDao.getVehicleId());
+            vehicleDetailRepository.update(vehicleDetailDao);
         }
         VehicleViewDto vehicleViewDto = VehicleViewDto.fromDao(vehicle);
         if(vehicleViewDto!=null) {
