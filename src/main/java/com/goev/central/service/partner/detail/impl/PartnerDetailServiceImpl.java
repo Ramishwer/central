@@ -128,6 +128,10 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
             result.getFields().put("joiningDate", partnerDetails.getJoiningDate());
         }
 
+        if(partnerDetails.getDrivingTestStatus()!=null){
+            result.getFields().put("drivingTestStatus", partnerDetails.getDrivingTestStatus());
+        }
+
         if (partnerDetails.getInTraining() != null) {
             result.getFields().put("inTraining", partnerDetails.getInTraining());
         }
