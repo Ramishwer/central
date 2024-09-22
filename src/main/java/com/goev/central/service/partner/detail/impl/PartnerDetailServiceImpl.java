@@ -124,6 +124,9 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
                 result.setHomeLocation(LocationDto.builder().uuid(locationDao.getUuid()).name(locationDao.getName()).build());
             }
         }
+        if(partnerDetails.getJoiningDate()!=null){
+            result.getFields().put("joiningDate", partnerDetails.getJoiningDate());
+        }
 
         if (partnerDetails.getInTraining() != null) {
             result.getFields().put("inTraining", partnerDetails.getInTraining());
