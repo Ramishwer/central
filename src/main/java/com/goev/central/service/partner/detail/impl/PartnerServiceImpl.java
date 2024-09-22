@@ -74,16 +74,23 @@ public class PartnerServiceImpl implements PartnerService {
     }
 
     @Override
-    public PaginatedResponseDto<PartnerDto> getPartnerStatuses(String status) {
+    public PaginatedResponseDto<PartnerDto> getPartnerStatuses(String status, String recommendationForBookingUUID) {
         PaginatedResponseDto<PartnerDto> result = PaginatedResponseDto.<PartnerDto>builder().elements(new ArrayList<>()).build();
         List<PartnerDao> partners = null;
-        if (PartnerStatus.OFF_DUTY.name().equals(status))
-            partners = partnerRepository.findAllByStatusAndShiftIdNotNull(Collections.singletonList(status));
-        else if (PartnerStatus.ON_DUTY.name().equals(status))
-            partners = partnerRepository.findAllByStatus(Arrays.asList(PartnerStatus.ON_DUTY.name(), PartnerStatus.VEHICLE_ASSIGNED.name(),
-                    PartnerStatus.CHECKLIST.name(), PartnerStatus.RETURN_CHECKLIST.name()));
-        else if (PartnerStatus.ONLINE.name().equals(status))
-            partners = partnerRepository.findAllByStatus(Arrays.asList(PartnerStatus.ONLINE.name(), PartnerStatus.ON_BOOKING.name()));
+        if(recommendationForBookingUUID ==null) {
+            if (PartnerStatus.OFF_DUTY.name().equals(status))
+                partners = partnerRepository.findAllByStatusAndShiftIdNotNull(Collections.singletonList(status));
+            else if (PartnerStatus.ON_DUTY.name().equals(status))
+                partners = partnerRepository.findAllByStatus(Arrays.asList(PartnerStatus.ON_DUTY.name(), PartnerStatus.VEHICLE_ASSIGNED.name(),
+                        PartnerStatus.CHECKLIST.name(), PartnerStatus.RETURN_CHECKLIST.name()));
+            else if (PartnerStatus.ONLINE.name().equals(status))
+                partners = partnerRepository.findAllByStatus(Arrays.asList(PartnerStatus.ONLINE.name(), PartnerStatus.ON_BOOKING.name()));
+        }else{
+            BookingDao bookingDao = bookingRepository.findByUUID(recommendationForBookingUUID);
+            if(bookingDao!=null){
+                partners = partnerRepository.findAllEligiblePartnersForBusinessSegment(bookingDao.getBusinessSegmentId());
+            }
+        }
         return getPartnerDtoPaginatedResponseDto(partners, result);
     }
 

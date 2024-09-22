@@ -2,6 +2,7 @@ package com.goev.central.service.vehicle.detail.impl;
 
 
 import com.goev.central.constant.ApplicationConstants;
+import com.goev.central.dao.partner.detail.PartnerDao;
 import com.goev.central.dao.vehicle.detail.VehicleDao;
 import com.goev.central.dao.vehicle.detail.VehicleDetailDao;
 import com.goev.central.dto.common.PaginatedResponseDto;
@@ -14,6 +15,7 @@ import com.goev.central.dto.vehicle.detail.VehicleSegmentDto;
 import com.goev.central.enums.vehicle.VehicleOnboardingStatus;
 import com.goev.central.enums.vehicle.VehicleStatus;
 import com.goev.central.enums.vehicle.VehicleSubStatus;
+import com.goev.central.repository.partner.detail.PartnerRepository;
 import com.goev.central.repository.vehicle.detail.VehicleDetailRepository;
 import com.goev.central.repository.vehicle.detail.VehicleRepository;
 import com.goev.central.service.vehicle.detail.VehicleService;
@@ -35,6 +37,7 @@ public class VehicleServiceImpl implements VehicleService {
 
 
     private final VehicleRepository vehicleRepository;
+    private final PartnerRepository partnerRepository;
     private final VehicleDetailRepository vehicleDetailRepository;
 
     @Override
@@ -50,7 +53,15 @@ public class VehicleServiceImpl implements VehicleService {
     @Override
     public PaginatedResponseDto<VehicleDto> getVehicleStatus(String status, String recommendationForPartnerUUID) {
         PaginatedResponseDto<VehicleDto> result = PaginatedResponseDto.<VehicleDto>builder().elements(new ArrayList<>()).build();
-        List<VehicleDao> vehicles = vehicleRepository.findAllByStatus(status);
+        List<VehicleDao> vehicles = new ArrayList<>();
+        if (recommendationForPartnerUUID == null)
+            vehicles = vehicleRepository.findAllByStatus(status);
+        else {
+            PartnerDao partnerDao =partnerRepository.findByUUID(recommendationForPartnerUUID);
+            if(partnerDao!=null) {
+                vehicles = vehicleRepository.findEligibleVehicleForPartnerId(partnerDao.getId());
+            }
+        }
         return getVehicleDtoPaginatedResponseDto(vehicles, result);
     }
 
@@ -60,13 +71,15 @@ public class VehicleServiceImpl implements VehicleService {
         if (vehicle == null)
             throw new ResponseException("No vehicle found for Id :" + vehicleUUID);
 
-        switch (vehicleActionDto.getAction()){
+        switch (vehicleActionDto.getAction()) {
             case DEBOARD -> {
-                vehicle = updateOnboardingStatus(vehicle,VehicleOnboardingStatus.DEBOARDED);
+                vehicle = updateOnboardingStatus(vehicle, VehicleOnboardingStatus.DEBOARDED);
             }
-            case MARK_AVAILABLE, RELEASE_VEHICLE -> { vehicle = releaseVehicle(vehicle,vehicleActionDto);}
+            case MARK_AVAILABLE, RELEASE_VEHICLE -> {
+                vehicle = releaseVehicle(vehicle, vehicleActionDto);
+            }
             case SEND_TO_MAINTENANCE -> {
-                vehicle = sendToMaintenance(vehicle,vehicleActionDto);
+                vehicle = sendToMaintenance(vehicle, vehicleActionDto);
             }
 
         }
@@ -80,16 +93,16 @@ public class VehicleServiceImpl implements VehicleService {
         vehicle.setPartnerId(null);
         vehicle = vehicleRepository.update(vehicle);
         VehicleDetailDao vehicleDetailDao = vehicleDetailRepository.findById(vehicle.getVehicleDetailsId());
-        if(vehicleDetailDao!=null) {
+        if (vehicleDetailDao != null) {
             vehicleDetailDao.setRemark(vehicleActionDto.getRemark());
             vehicleDetailRepository.update(vehicleDetailDao);
         }
         VehicleViewDto vehicleViewDto = VehicleViewDto.fromDao(vehicle);
-        if(vehicleViewDto!=null) {
+        if (vehicleViewDto != null) {
             vehicleViewDto.setRemark(vehicleActionDto.getRemark());
             vehicle.setViewInfo(ApplicationConstants.GSON.toJson(vehicleViewDto));
         }
-        vehicle =vehicleRepository.update(vehicle);
+        vehicle = vehicleRepository.update(vehicle);
 
         return vehicle;
     }
@@ -99,7 +112,7 @@ public class VehicleServiceImpl implements VehicleService {
         vehicle.setSubStatus(VehicleSubStatus.NOT_ASSIGNED.name());
         vehicle.setPartnerDetails(null);
         vehicle.setPartnerId(null);
-        vehicle =vehicleRepository.update(vehicle);
+        vehicle = vehicleRepository.update(vehicle);
         return vehicle;
     }
 
@@ -119,12 +132,13 @@ public class VehicleServiceImpl implements VehicleService {
             vehicleDto.setStatus(vehicle.getStatus());
             vehicleDto.setPartnerDetails(ApplicationConstants.GSON.fromJson(vehicle.getPartnerDetails(), PartnerViewDto.class));
             vehicleDto.setSubStatus(vehicle.getSubStatus());
-            if(vehicle.getStats()!=null) {
-                vehicleDto.setStats(ApplicationConstants.GSON.fromJson(vehicle.getStats(), VehicleStatsDto.class ));
+            if (vehicle.getStats() != null) {
+                vehicleDto.setStats(ApplicationConstants.GSON.fromJson(vehicle.getStats(), VehicleStatsDto.class));
             }
-            if(vehicle.getSegments()!=null) {
-                Type t = new TypeToken<List<VehicleSegmentDto>>(){}.getRawType();
-                vehicleDto.setSegments(ApplicationConstants.GSON.fromJson(vehicle.getSegments(),t ));
+            if (vehicle.getSegments() != null) {
+                Type t = new TypeToken<List<VehicleSegmentDto>>() {
+                }.getRawType();
+                vehicleDto.setSegments(ApplicationConstants.GSON.fromJson(vehicle.getSegments(), t));
             }
             vehicleDto.setVehicleDetails(VehicleViewDto.fromDao(vehicle));
             result.getElements().add(vehicleDto);

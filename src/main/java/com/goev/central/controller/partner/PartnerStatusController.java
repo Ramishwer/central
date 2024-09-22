@@ -21,7 +21,7 @@ public class PartnerStatusController {
     @GetMapping("/partners/status")
     public ResponseDto<PaginatedResponseDto<PartnerDto>> getPartnerStatus(@RequestParam("dutyStatus")String status,
                                                                           @RequestParam(value = "recommendationsFor",required = false)String recommendationForBookingUUID) {
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerService.getPartnerStatuses(status));
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerService.getPartnerStatuses(status,recommendationForBookingUUID));
     }
 
 

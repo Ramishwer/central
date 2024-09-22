@@ -5,7 +5,6 @@ import com.goev.central.dto.partner.PartnerViewDto;
 import com.goev.central.dto.partner.detail.PartnerActionDto;
 import com.goev.central.dto.partner.detail.PartnerDto;
 import com.goev.central.dto.partner.detail.PartnerTrackingDto;
-import com.goev.central.enums.partner.PartnerOnboardingStatus;
 
 public interface PartnerService {
 
@@ -17,7 +16,7 @@ public interface PartnerService {
 
     PartnerDto updatePartner(String partnerUUID, PartnerActionDto actionDto);
 
-    PaginatedResponseDto<PartnerDto> getPartnerStatuses(String status);
+    PaginatedResponseDto<PartnerDto> getPartnerStatuses(String status, String recommendationForBookingUUID);
 
     PartnerDto getPartnerStatus(String partnerUUID);
 
