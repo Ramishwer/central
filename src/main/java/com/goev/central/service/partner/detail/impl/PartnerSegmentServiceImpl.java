@@ -146,6 +146,7 @@ public class PartnerSegmentServiceImpl implements PartnerSegmentService {
         mappingDao.setPartnerSegmentId(partnerSegmentDao.getId());
         mappingDao = partnerSegmentMappingRepository.save(mappingDao);
 
+        mappings = partnerSegmentMappingRepository.findAllByPartnerId(partnerDao.getId());
         if(!CollectionUtils.isEmpty(mappings)) {
             List<PartnerSegmentDao> allSegments = partnerSegmentRepository.findAllByIds(mappings.stream().map(PartnerSegmentMappingDao::getPartnerSegmentId).toList());
             List<PartnerSegmentDto> segmentDto = allSegments.stream().map(PartnerSegmentDto::fromDao).toList();

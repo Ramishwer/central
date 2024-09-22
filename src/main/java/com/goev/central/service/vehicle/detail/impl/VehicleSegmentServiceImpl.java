@@ -130,6 +130,7 @@ public class VehicleSegmentServiceImpl implements VehicleSegmentService {
         mappingDao.setVehicleSegmentId(vehicleSegmentDao.getId());
         mappingDao = vehicleSegmentMappingRepository.save(mappingDao);
 
+        mappings = vehicleSegmentMappingRepository.findAllByVehicleId(vehicleDao.getId());
         if(!CollectionUtils.isEmpty(mappings)) {
             List<VehicleSegmentDao> allSegments = vehicleSegmentRepository.findAllByIds(mappings.stream().map(VehicleSegmentMappingDao::getVehicleSegmentId).toList());
             List<VehicleSegmentDto> segmentDto = allSegments.stream().map(VehicleSegmentDto::fromDao).toList();
