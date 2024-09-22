@@ -107,7 +107,7 @@ public class PartnerShiftRepositoryImpl implements PartnerShiftRepository {
     @Override
     public List<PartnerShiftDao> findAllByStatus(String status, PageDto page, FilterDto filter) {
         return context.selectFrom(PARTNER_SHIFTS)
-                .where(PARTNER_SHIFTS.ESTIMATED_START_TIME.between(filter.getStartTime(), filter.getEndTime()))
+                .where(PARTNER_SHIFTS.DUTY_DATE.between(filter.getStartTime(), filter.getEndTime()))
                 .and(PARTNER_SHIFTS.STATUS.eq(status))
                 .and(PARTNER_SHIFTS.IS_ACTIVE.eq(true))
                 .limit(page.getLimit())
