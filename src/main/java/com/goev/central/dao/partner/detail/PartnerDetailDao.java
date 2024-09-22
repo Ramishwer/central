@@ -28,7 +28,6 @@ public class PartnerDetailDao extends BaseDao {
     private DateTime interviewDate;
     private String sourceOfLeadType;
     private String sourceOfLead;
-    private Integer shiftId;
     private String drivingTestStatus;
     private String selectionStatus;
     private String remark;

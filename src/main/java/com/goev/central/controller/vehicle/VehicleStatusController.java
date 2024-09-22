@@ -23,6 +23,6 @@ public class VehicleStatusController {
 
     @GetMapping("/vehicles/status")
     public ResponseDto<PaginatedResponseDto<VehicleDto>> getVehicleStatus(@RequestParam("status")String status,@RequestParam(value = "recommendationsFor",required = false)String recommendationForPartnerUUID) {
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleService.getVehicleStatus(status));
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, vehicleService.getVehicleStatus(status,recommendationForPartnerUUID));
     }
 }

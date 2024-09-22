@@ -42,6 +42,8 @@ public class VehicleAssignmentScheduler {
                 PartnerDao existingPartner = partnerRepository.findByVehicleId(vehicle.getId());
                 if (existingPartner != null)
                     continue;
+                if(partnerDao.getLocationId()==null || vehicle.getLocationId() ==null ||!vehicle.getLocationId().equals(partnerDao.getLocationId()))
+                    continue;
 
                 if (PartnerStatus.ON_DUTY.name().equals(partnerDao.getStatus()) && PartnerSubStatus.VEHICLE_NOT_ALLOTTED.name().equals(partnerDao.getSubStatus())) {
                     log.info("Assigning Partner {} to Vehicle {}", partnerDao.getPunchId(), vehicle.getPlateNumber());

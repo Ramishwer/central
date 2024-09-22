@@ -1,5 +1,6 @@
 package com.goev.central.service.partner.detail.impl;
 
+import com.goev.central.constant.ApplicationConstants;
 import com.goev.central.dao.partner.detail.PartnerDao;
 import com.goev.central.dao.partner.detail.PartnerSegmentDao;
 import com.goev.central.dao.partner.detail.PartnerSegmentMappingDao;
@@ -145,6 +146,14 @@ public class PartnerSegmentServiceImpl implements PartnerSegmentService {
         mappingDao.setPartnerSegmentId(partnerSegmentDao.getId());
         mappingDao = partnerSegmentMappingRepository.save(mappingDao);
 
+        if(!CollectionUtils.isEmpty(mappings)) {
+            List<PartnerSegmentDao> allSegments = partnerSegmentRepository.findAllByIds(mappings.stream().map(PartnerSegmentMappingDao::getPartnerSegmentId).toList());
+            List<PartnerSegmentDto> segmentDto = allSegments.stream().map(PartnerSegmentDto::fromDao).toList();
+            partnerDao.setSegments(ApplicationConstants.GSON.toJson(segmentDto));
+        }else{
+            partnerDao.setSegments(ApplicationConstants.GSON.toJson(new ArrayList<>()));
+        }
+        partnerRepository.update(partnerDao);
         return PartnerSegmentMappingDto.fromDao(mappingDao,PartnerSegmentDto.fromDao(partnerSegmentDao),  PartnerViewDto.fromDao(partnerDao),null);
     }
 
@@ -158,6 +167,22 @@ public class PartnerSegmentServiceImpl implements PartnerSegmentService {
         if (partnerSegmentMappingDao == null)
             throw new ResponseException("No partner segment Mapping found for Id :" + partnerSegmentMappingUUID);
         partnerSegmentMappingRepository.delete(partnerSegmentMappingDao.getId());
+
+        PartnerDao partnerDao = partnerRepository.findById(partnerSegmentMappingDao.getPartnerId());
+
+        if (partnerDao == null)
+            throw new ResponseException("No partner found");
+
+        List<PartnerSegmentMappingDao> mappings = partnerSegmentMappingRepository.findAllByPartnerId(partnerDao.getId());
+
+        if(!CollectionUtils.isEmpty(mappings)) {
+            List<PartnerSegmentDao> allSegments = partnerSegmentRepository.findAllByIds(mappings.stream().map(PartnerSegmentMappingDao::getPartnerSegmentId).toList());
+            List<PartnerSegmentDto> segmentDto = allSegments.stream().map(PartnerSegmentDto::fromDao).toList();
+            partnerDao.setSegments(ApplicationConstants.GSON.toJson(segmentDto));
+        }else{
+            partnerDao.setSegments(ApplicationConstants.GSON.toJson(new ArrayList<>()));
+        }
+        partnerRepository.update(partnerDao);
         return true;
     }
 

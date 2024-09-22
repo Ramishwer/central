@@ -1,10 +1,14 @@
 package com.goev.central.service.vehicle.detail.impl;
 
+import com.goev.central.constant.ApplicationConstants;
+import com.goev.central.dao.partner.detail.PartnerDao;
+import com.goev.central.dao.partner.detail.PartnerSegmentDao;
 import com.goev.central.dao.partner.detail.PartnerSegmentMappingDao;
 import com.goev.central.dao.vehicle.detail.VehicleDao;
 import com.goev.central.dao.vehicle.detail.VehicleSegmentDao;
 import com.goev.central.dao.vehicle.detail.VehicleSegmentMappingDao;
 import com.goev.central.dto.common.PaginatedResponseDto;
+import com.goev.central.dto.partner.detail.PartnerSegmentDto;
 import com.goev.central.dto.vehicle.VehicleViewDto;
 import com.goev.central.dto.vehicle.detail.VehicleSegmentDto;
 import com.goev.central.dto.vehicle.detail.VehicleSegmentMappingDto;
@@ -126,6 +130,14 @@ public class VehicleSegmentServiceImpl implements VehicleSegmentService {
         mappingDao.setVehicleSegmentId(vehicleSegmentDao.getId());
         mappingDao = vehicleSegmentMappingRepository.save(mappingDao);
 
+        if(!CollectionUtils.isEmpty(mappings)) {
+            List<VehicleSegmentDao> allSegments = vehicleSegmentRepository.findAllByIds(mappings.stream().map(VehicleSegmentMappingDao::getVehicleSegmentId).toList());
+            List<VehicleSegmentDto> segmentDto = allSegments.stream().map(VehicleSegmentDto::fromDao).toList();
+            vehicleDao.setSegments(ApplicationConstants.GSON.toJson(segmentDto));
+        }else{
+            vehicleDao.setSegments(ApplicationConstants.GSON.toJson(new ArrayList<>()));
+        }
+        vehicleRepository.update(vehicleDao);
         return VehicleSegmentMappingDto.fromDao(mappingDao, VehicleSegmentDto.fromDao(vehicleSegmentDao), VehicleViewDto.fromDao(vehicleDao));
     }
 
@@ -139,6 +151,22 @@ public class VehicleSegmentServiceImpl implements VehicleSegmentService {
         if (vehicleSegmentMappingDao == null)
             throw new ResponseException("No vehicle segment Mapping found for Id :" + vehicleSegmentMappingUUID);
         vehicleSegmentMappingRepository.delete(vehicleSegmentMappingDao.getId());
+
+        VehicleDao vehicleDao = vehicleRepository.findById(vehicleSegmentMappingDao.getVehicleId());
+
+        if (vehicleDao == null)
+            throw new ResponseException("No partner found");
+
+        List<VehicleSegmentMappingDao> mappings = vehicleSegmentMappingRepository.findAllByVehicleId(vehicleDao.getId());
+
+        if(!CollectionUtils.isEmpty(mappings)) {
+            List<VehicleSegmentDao> allSegments = vehicleSegmentRepository.findAllByIds(mappings.stream().map(VehicleSegmentMappingDao::getVehicleSegmentId).toList());
+            List<VehicleSegmentDto> segmentDto = allSegments.stream().map(VehicleSegmentDto::fromDao).toList();
+            vehicleDao.setSegments(ApplicationConstants.GSON.toJson(segmentDto));
+        }else{
+            vehicleDao.setSegments(ApplicationConstants.GSON.toJson(new ArrayList<>()));
+        }
+        vehicleRepository.update(vehicleDao);
         return true;
     }
 

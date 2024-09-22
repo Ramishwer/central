@@ -53,9 +53,6 @@ public class PartnerDetailDto {
     private DateTime interviewDate;
     private String sourceOfLeadType;
     private String sourceOfLead;
-    private PartnerShiftDto shiftDetails;
-    private BusinessSegmentDto businessSegment;
-    private BusinessClientDto businessClient;
     private String drivingTestStatus;
     private String selectionStatus;
     private String remark;

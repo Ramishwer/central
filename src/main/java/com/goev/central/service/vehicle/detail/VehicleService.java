@@ -4,7 +4,6 @@ import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.vehicle.VehicleActionDto;
 import com.goev.central.dto.vehicle.VehicleViewDto;
 import com.goev.central.dto.vehicle.detail.VehicleDto;
-import com.goev.central.enums.vehicle.VehicleOnboardingStatus;
 
 public interface VehicleService {
     PaginatedResponseDto<VehicleViewDto> getVehicles();
@@ -12,7 +11,7 @@ public interface VehicleService {
 
     Boolean deleteVehicle(String vehicleUUID);
 
-    PaginatedResponseDto<VehicleDto> getVehicleStatus(String status);
+    PaginatedResponseDto<VehicleDto> getVehicleStatus(String status, String recommendationForPartnerUUID);
 
     VehicleDto updateVehicle(String vehicleUUID, VehicleActionDto status);
 }

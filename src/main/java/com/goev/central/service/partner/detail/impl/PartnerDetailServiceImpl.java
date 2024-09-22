@@ -316,7 +316,7 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
         result.getPartner().setProfileUrl(partnerDetails.getProfileUrl());
         result.getPartner().setFirstName(partnerDetails.getFirstName());
         result.getPartner().setLastName(partnerDetails.getLastName());
-        result.setState(partnerDetails.getState());
+        result.setState(partnerDao.getOnboardingStatus());
         result.setJoiningDate(partnerDetails.getJoiningDate());
         result.setDlNumber(partnerDetails.getDlNumber());
         result.setDlExpiryDate(partnerDetails.getDlExpiryDate());
@@ -337,6 +337,10 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
         result.setPermanentAddress(partnerDetails.getPermanentAddress());
         result.setAadhaarCardNumber(partnerDetails.getAadhaarCardNumber());
         result.setProfileUrl(partnerDetails.getProfileUrl());
+        result.setInTraining(partnerDetails.getInTraining());
+        result.setTrainingStatus(partnerDetails.getTrainingStatus());
+        result.setTrainingDate(partnerDetails.getTrainingDate());
+
     }
 
     private void setPartnerHomeLocation(PartnerDetailDto result, Integer homeLocationId) {
