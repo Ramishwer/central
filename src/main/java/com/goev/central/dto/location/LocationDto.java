@@ -20,4 +20,14 @@ public class LocationDto {
     private String address;
     private OwnerDetailDto ownerDetail;
 
+    public  static LocationDto fromDao(LocationDao locationDao){
+        if(locationDao == null)
+            return null;
+        return LocationDto.builder()
+                .name(locationDao.getName())
+                .uuid(locationDao.getUuid())
+                .build();
+
+    }
+
 }

@@ -1,12 +1,8 @@
 package com.goev.central.service.vehicle.detail.impl;
 
 import com.goev.central.constant.ApplicationConstants;
-import com.goev.central.dao.business.BusinessClientDao;
-import com.goev.central.dao.business.BusinessSegmentDao;
 import com.goev.central.dao.location.LocationDao;
 import com.goev.central.dao.vehicle.detail.*;
-import com.goev.central.dto.business.BusinessClientDto;
-import com.goev.central.dto.business.BusinessSegmentDto;
 import com.goev.central.dto.common.QrValueDto;
 import com.goev.central.dto.location.LocationDto;
 import com.goev.central.dto.vehicle.VehicleViewDto;
@@ -57,7 +53,7 @@ public class VehicleDetailServiceImpl implements VehicleDetailService {
         if (vehicle == null)
             throw new ResponseException("Error in saving details");
 
-        VehicleDetailDao vehicleDetails = getVehicleDetailDao(vehicleDto);
+        VehicleDetailDao vehicleDetails = getVehicleDetailDao(vehicleDto,vehicleDao);
         vehicleDetails.setVehicleId(vehicle.getId());
         vehicleDetails = vehicleDetailRepository.save(vehicleDetails);
         if (vehicleDetails == null)
@@ -147,7 +143,7 @@ public class VehicleDetailServiceImpl implements VehicleDetailService {
         if (vehicleDetailDao == null)
             throw new ResponseException("No vehicle details found for Id :" + vehicleUUID);
 
-        VehicleDetailDao vehicleDetails = getVehicleDetailDao(vehicleDetailDto);
+        VehicleDetailDao vehicleDetails = getVehicleDetailDao(vehicleDetailDto, vehicle);
         vehicleDetails.setVehicleId(vehicle.getId());
         vehicleDetails = vehicleDetailRepository.save(vehicleDetails);
         if (vehicleDetails == null)
@@ -186,7 +182,7 @@ public class VehicleDetailServiceImpl implements VehicleDetailService {
     }
 
 
-    private VehicleDetailDao getVehicleDetailDao(VehicleDetailDto vehicleDto) {
+    private VehicleDetailDao getVehicleDetailDao(VehicleDetailDto vehicleDto, VehicleDao vehicleDao) {
         VehicleDetailDao newVehicleDetails = new VehicleDetailDao();
 
 
@@ -220,6 +216,9 @@ public class VehicleDetailServiceImpl implements VehicleDetailService {
             if (locationDao == null)
                 throw new ResponseException("No location found for Id :" + vehicleDto.getHomeLocation().getUuid());
             newVehicleDetails.setHomeLocationId(locationDao.getId());
+            vehicleDao.setHomeLocationId(locationDao.getId());
+            vehicleDao.setHomeLocationDetails(ApplicationConstants.GSON.toJson(LocationDto.fromDao(locationDao)));
+
         }
 
         if (vehicleDto.getVehicleFinancer() != null) {
@@ -240,7 +239,7 @@ public class VehicleDetailServiceImpl implements VehicleDetailService {
 
         newVehicleDetails.setImageUrl(vehicleDto.getImageUrl());
         if (vehicleDto.getImage() != null) {
-            newVehicleDetails.setImageUrl(s3.getUrlForPath(vehicleDto.getImage().getPath(), "image/vehicle/"+newVehicleDetails.getPlateNumber()));
+            newVehicleDetails.setImageUrl(s3.getUrlForPath(vehicleDto.getImage().getPath(), "image/vehicle/"+vehicleDao.getPlateNumber()));
         }
         newVehicleDetails.setOnboardingDate(vehicleDto.getOnboardingDate());
         newVehicleDetails.setDeboardingDate(vehicleDto.getDeboardingDate());

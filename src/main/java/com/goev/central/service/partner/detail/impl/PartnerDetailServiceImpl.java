@@ -281,6 +281,9 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
                 throw new ResponseException("No location found for Id :" + partnerDto.getHomeLocation().getUuid());
             newPartnerDetails.setHomeLocationId(locationDao.getId());
             newPartnerDetails.setHomeLocationName(locationDao.getName());
+
+            partnerDao.setHomeLocationId(locationDao.getId());
+            partnerDao.setHomeLocationDetails(ApplicationConstants.GSON.toJson(LocationDto.fromDao(locationDao)));
         }
 
 
