@@ -26,7 +26,7 @@ public class PartnerShiftEndScheduler {
     private final PartnerShiftRepository partnerShiftRepository;
 
 
-    @Scheduled(fixedRate = 30 * 60 * 1000)
+    @Scheduled(fixedRate = 15 * 60 * 1000)
     public void reportCurrentTime() {
         log.info("The {} time is now {}", this.getClass().getName(), DateTime.now());
         List<PartnerShiftDao> shifts = partnerShiftRepository.findAllByStatuses(Arrays.asList(PartnerShiftStatus.PENDING.name(),PartnerShiftStatus.IN_PROGRESS.name()));
