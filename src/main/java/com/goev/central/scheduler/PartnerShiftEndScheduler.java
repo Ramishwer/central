@@ -32,7 +32,7 @@ public class PartnerShiftEndScheduler {
         List<PartnerShiftDao> shifts = partnerShiftRepository.findAllByStatuses(Arrays.asList(PartnerShiftStatus.PENDING.name(),PartnerShiftStatus.IN_PROGRESS.name()));
 
         for(PartnerShiftDao shiftDao:shifts){
-            if(shiftDao.getEstimatedEndTime().isBeforeNow())
+            if(shiftDao.getEstimatedEndTime().isAfterNow())
                 continue;
             PartnerDao partnerDao = partnerRepository.findById(shiftDao.getPartnerId());
 

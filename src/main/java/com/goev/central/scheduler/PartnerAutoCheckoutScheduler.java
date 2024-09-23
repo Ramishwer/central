@@ -34,7 +34,7 @@ public class PartnerAutoCheckoutScheduler {
 
         for(PartnerDao partner : partnerDaoList){
             PartnerShiftDao shiftDao = partnerShiftRepository.findById(partner.getPartnerShiftId());
-            if(shiftDao!=null && shiftDao.getEstimatedEndTime().isAfterNow()){
+            if(shiftDao!=null && shiftDao.getEstimatedEndTime().isBeforeNow()){
                 partnerService.updatePartner(partner.getUuid(), PartnerActionDto.builder().action(PartnerAction.CHECK_OUT).build());
             }
         }
