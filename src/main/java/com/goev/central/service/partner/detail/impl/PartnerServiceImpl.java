@@ -22,6 +22,7 @@ import com.goev.central.dto.vehicle.VehicleViewDto;
 import com.goev.central.enums.booking.BookingStatus;
 import com.goev.central.enums.booking.BookingSubStatus;
 import com.goev.central.enums.partner.*;
+import com.goev.central.enums.vehicle.VehicleStatus;
 import com.goev.central.repository.FirebaseRepository;
 import com.goev.central.repository.booking.BookingRepository;
 import com.goev.central.repository.location.LocationRepository;
@@ -77,7 +78,7 @@ public class PartnerServiceImpl implements PartnerService {
     public PaginatedResponseDto<PartnerDto> getPartnerStatuses(String status, String recommendationForBookingUUID) {
         PaginatedResponseDto<PartnerDto> result = PaginatedResponseDto.<PartnerDto>builder().elements(new ArrayList<>()).build();
         List<PartnerDao> partners = null;
-        if(recommendationForBookingUUID ==null) {
+        if (recommendationForBookingUUID == null) {
             if (PartnerStatus.OFF_DUTY.name().equals(status))
                 partners = partnerRepository.findAllByStatusAndShiftIdNotNull(Collections.singletonList(status));
             else if (PartnerStatus.ON_DUTY.name().equals(status))
@@ -85,9 +86,9 @@ public class PartnerServiceImpl implements PartnerService {
                         PartnerStatus.CHECKLIST.name(), PartnerStatus.RETURN_CHECKLIST.name()));
             else if (PartnerStatus.ONLINE.name().equals(status))
                 partners = partnerRepository.findAllByStatus(Arrays.asList(PartnerStatus.ONLINE.name(), PartnerStatus.ON_BOOKING.name()));
-        }else{
+        } else {
             BookingDao bookingDao = bookingRepository.findByUUID(recommendationForBookingUUID);
-            if(bookingDao!=null){
+            if (bookingDao != null) {
                 partners = partnerRepository.findAllEligiblePartnersForBusinessSegment(bookingDao.getBusinessSegmentId());
             }
         }
@@ -165,9 +166,10 @@ public class PartnerServiceImpl implements PartnerService {
             partnerDto.setBookingDetails(ApplicationConstants.GSON.fromJson(partner.getBookingDetails(), BookingViewDto.class));
             partnerDto.setLocationDetails(ApplicationConstants.GSON.fromJson(partner.getLocationDetails(), LocationDto.class));
             partnerDto.setPartnerDetails(PartnerViewDto.fromDao(partner));
-            if(partner.getSegments()!=null) {
-                Type t = new TypeToken<List<PartnerSegmentDto>>(){}.getRawType();
-                partnerDto.setSegments(ApplicationConstants.GSON.fromJson(partner.getSegments(),t ));
+            if (partner.getSegments() != null) {
+                Type t = new TypeToken<List<PartnerSegmentDto>>() {
+                }.getRawType();
+                partnerDto.setSegments(ApplicationConstants.GSON.fromJson(partner.getSegments(), t));
             }
             result.getElements().add(partnerDto);
         }
@@ -275,16 +277,16 @@ public class PartnerServiceImpl implements PartnerService {
     private PartnerDao suspendPartner(PartnerDao partner, PartnerActionDto actionDto) {
 
         PartnerDetailDao partnerDetailDao = partnerDetailRepository.findById(partner.getPartnerDetailsId());
-        if(partnerDetailDao!=null){
+        if (partnerDetailDao != null) {
             partnerDetailDao.setRemark(actionDto.getRemark());
-            partnerDetailDao.setSuspensionDate(actionDto.getTimestamp()!=null?actionDto.getTimestamp():DateTime.now());
+            partnerDetailDao.setSuspensionDate(actionDto.getTimestamp() != null ? actionDto.getTimestamp() : DateTime.now());
             partnerDetailRepository.update(partnerDetailDao);
             PartnerViewDto viewDto = PartnerViewDto.fromDao(partner);
-            if(viewDto!=null){
+            if (viewDto != null) {
                 viewDto.setRemark(actionDto.getRemark());
-                if(CollectionUtils.isEmpty(viewDto.getFields()))
+                if (CollectionUtils.isEmpty(viewDto.getFields()))
                     viewDto.setFields(new HashMap<>());
-                viewDto.getFields().put("suspensionDate",partnerDetailDao.getSuspensionDate());
+                viewDto.getFields().put("suspensionDate", partnerDetailDao.getSuspensionDate());
                 partner.setViewInfo(ApplicationConstants.GSON.toJson(viewDto));
             }
         }
@@ -293,12 +295,12 @@ public class PartnerServiceImpl implements PartnerService {
 
     private PartnerDao deboardPartner(PartnerDao partner, PartnerActionDto actionDto) {
         PartnerDetailDao partnerDetailDao = partnerDetailRepository.findById(partner.getPartnerDetailsId());
-        if(partnerDetailDao!=null) {
+        if (partnerDetailDao != null) {
             partnerDetailDao.setRemark(actionDto.getRemark());
             partnerDetailDao.setDeboardingDate(DateTime.now());
             partnerDetailRepository.update(partnerDetailDao);
             PartnerViewDto viewDto = PartnerViewDto.fromDao(partner);
-            if(viewDto!=null){
+            if (viewDto != null) {
                 viewDto.setRemark(actionDto.getRemark());
                 partner.setViewInfo(ApplicationConstants.GSON.toJson(viewDto));
             }
@@ -335,6 +337,10 @@ public class PartnerServiceImpl implements PartnerService {
         if (existingPartner != null)
             throw new ResponseException("Vehicle is already assigned to other partner.");
 
+
+        vehicle.setStatus(VehicleStatus.ALLOTTED.name());
+        vehicleRepository.update(vehicle);
+
         partnerDao.setStatus(PartnerStatus.ON_DUTY.name());
         partnerDao.setSubStatus(PartnerSubStatus.VEHICLE_ALLOTTED.name());
         partnerDao.setVehicleId(vehicle.getId());
@@ -348,6 +354,9 @@ public class PartnerServiceImpl implements PartnerService {
         if (partnerDao.getVehicleId() == null)
             throw new ResponseException("No vehicle assigned");
 
+        VehicleDao vehicle = vehicleRepository.findById(partnerDao.getVehicleId());
+        vehicle.setStatus(VehicleStatus.AVAILABLE.name());
+        vehicleRepository.update(vehicle);
         partnerDao.setStatus(PartnerStatus.ON_DUTY.name());
         partnerDao.setSubStatus(PartnerSubStatus.VEHICLE_NOT_ALLOTTED.name());
         partnerDao.setVehicleId(null);
@@ -373,12 +382,17 @@ public class PartnerServiceImpl implements PartnerService {
         partner.setBookingDetails(null);
         partner.setBookingId(null);
         partner.setPartnerShiftId(null);
+        if (partner.getVehicleId() != null) {
+            VehicleDao vehicle = vehicleRepository.findById(partner.getVehicleId());
+            vehicle.setStatus(VehicleStatus.AVAILABLE.name());
+            vehicleRepository.update(vehicle);
+        }
         partner.setVehicleId(null);
-        partner.setVehicleDetails(null);
         if (partner.getPartnerDutyId() == null)
             partner.setDutyDetails(null);
-        if (partner.getVehicleId() == null)
+        if (partner.getVehicleId() == null) {
             partner.setVehicleDetails(null);
+        }
         if (partner.getBookingId() == null)
             partner.setBookingDetails(null);
         partner = partnerRepository.update(partner);
@@ -516,6 +530,12 @@ public class PartnerServiceImpl implements PartnerService {
             partner.setSubStatus(PartnerSubStatus.WAITING_FOR_ONLINE.name());
             partner = partnerRepository.update(partner);
         } else if (PartnerStatus.RETURN_CHECKLIST.name().equals(partner.getStatus())) {
+            if (partner.getVehicleId() != null) {
+                VehicleDao vehicle = vehicleRepository.findById(partner.getVehicleId());
+                vehicle.setStatus(VehicleStatus.AVAILABLE.name());
+                vehicleRepository.update(vehicle);
+            }
+
             partner.setStatus(PartnerStatus.ON_DUTY.name());
             partner.setSubStatus(PartnerSubStatus.VEHICLE_NOT_ALLOTTED.name());
             partner.setVehicleDetails(null);

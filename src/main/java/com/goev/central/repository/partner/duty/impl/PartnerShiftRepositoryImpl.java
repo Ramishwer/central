@@ -126,6 +126,14 @@ public class PartnerShiftRepositoryImpl implements PartnerShiftRepository {
     }
 
     @Override
+    public List<PartnerShiftDao> findAllByStatuses(List<String> status) {
+        return context.selectFrom(PARTNER_SHIFTS)
+                .where(PARTNER_SHIFTS.STATUS.in(status))
+                .and(PARTNER_SHIFTS.IS_ACTIVE.eq(true))
+                .fetchInto(PartnerShiftDao.class);
+    }
+
+    @Override
     public PartnerShiftDao findByPartnerIdShiftIdDayDate(Integer partnerId, Integer shiftId, String currentDay, DateTime date) {
         return context.selectFrom(PARTNER_SHIFTS)
                 .where(PARTNER_SHIFTS.PARTNER_ID.eq(partnerId))
