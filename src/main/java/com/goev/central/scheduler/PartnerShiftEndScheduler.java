@@ -34,7 +34,7 @@ public class PartnerShiftEndScheduler {
         for(PartnerShiftDao shiftDao:shifts){
             if(shiftDao.getEstimatedEndTime().isBeforeNow())
                 continue;
-            PartnerDao partnerDao = partnerRepository.findById(shiftDao.getId());
+            PartnerDao partnerDao = partnerRepository.findById(shiftDao.getPartnerId());
 
             if(PartnerStatus.OFF_DUTY.name().equals(partnerDao.getStatus()) && shiftDao.getId().equals(partnerDao.getPartnerShiftId())){
                 partnerDao.setPartnerShiftId(null);
