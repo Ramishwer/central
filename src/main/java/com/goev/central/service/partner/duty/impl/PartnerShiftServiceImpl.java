@@ -103,8 +103,8 @@ public class PartnerShiftServiceImpl implements PartnerShiftService {
 
         if (!CollectionUtils.isEmpty(shiftConfigurationDaoList)) {
             List<ShiftConfigurationDto> shiftConfigurationDtoList = shiftConfigurationDaoList.stream().map(x -> {
-                PayoutModelDao payoutModelDao = payoutModelRepository.findById(x.getPayoutModelId());
-                return ShiftConfigurationDto.fromDao(x, ShiftDto.fromDao(shiftDao), PayoutModelDto.fromDao(payoutModelDao));
+//                PayoutModelDao payoutModelDao = payoutModelRepository.findById(x.getPayoutModelId());
+                return ShiftConfigurationDto.fromDao(x, ShiftDto.fromDao(shiftDao),null);
             }).toList();
 
             partnerShiftMappingDao.setShiftConfig(ApplicationConstants.GSON.toJson(shiftConfigurationDtoList.stream().collect(Collectors.toMap(ShiftConfigurationDto::getDay,Function.identity()))));
