@@ -96,7 +96,10 @@ public class PartnerShiftRepositoryImpl implements PartnerShiftRepository {
 
     @Override
     public List<PartnerShiftDao> findAllActive() {
-        return context.selectFrom(PARTNER_SHIFTS).fetchInto(PartnerShiftDao.class);
+        return context.selectFrom(PARTNER_SHIFTS)
+                .where(PARTNER_SHIFTS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(PARTNER_SHIFTS.IS_ACTIVE.eq(true))
+                .fetchInto(PartnerShiftDao.class);
     }
 
     @Override
@@ -109,6 +112,7 @@ public class PartnerShiftRepositoryImpl implements PartnerShiftRepository {
         return context.selectFrom(PARTNER_SHIFTS)
                 .where(PARTNER_SHIFTS.DUTY_DATE.between(filter.getStartTime(), filter.getEndTime()))
                 .and(PARTNER_SHIFTS.STATUS.eq(status))
+                .and(PARTNER_SHIFTS.STATE.eq(RecordState.ACTIVE.name()))
                 .and(PARTNER_SHIFTS.IS_ACTIVE.eq(true))
                 .limit(page.getLimit())
                 .offset(page.getStart())
@@ -119,6 +123,7 @@ public class PartnerShiftRepositoryImpl implements PartnerShiftRepository {
     public List<PartnerShiftDao> findAllByStatus(String status, PageDto page) {
         return context.selectFrom(PARTNER_SHIFTS)
                 .where(PARTNER_SHIFTS.STATUS.eq(status))
+                .and(PARTNER_SHIFTS.STATE.eq(RecordState.ACTIVE.name()))
                 .and(PARTNER_SHIFTS.IS_ACTIVE.eq(true))
                 .limit(page.getLimit())
                 .offset(page.getStart())
@@ -129,6 +134,7 @@ public class PartnerShiftRepositoryImpl implements PartnerShiftRepository {
     public List<PartnerShiftDao> findAllByStatuses(List<String> status) {
         return context.selectFrom(PARTNER_SHIFTS)
                 .where(PARTNER_SHIFTS.STATUS.in(status))
+                .and(PARTNER_SHIFTS.STATE.eq(RecordState.ACTIVE.name()))
                 .and(PARTNER_SHIFTS.IS_ACTIVE.eq(true))
                 .fetchInto(PartnerShiftDao.class);
     }
@@ -140,6 +146,7 @@ public class PartnerShiftRepositoryImpl implements PartnerShiftRepository {
                 .and(PARTNER_SHIFTS.SHIFT_ID.eq(shiftId))
                 .and(PARTNER_SHIFTS.DAY.eq(currentDay))
                 .and(PARTNER_SHIFTS.DUTY_DATE.eq(date))
+                .and(PARTNER_SHIFTS.STATE.eq(RecordState.ACTIVE.name()))
                 .and(PARTNER_SHIFTS.IS_ACTIVE.eq(true))
                 .fetchAnyInto(PartnerShiftDao.class);
     }
@@ -150,6 +157,7 @@ public class PartnerShiftRepositoryImpl implements PartnerShiftRepository {
                 .where(PARTNER_SHIFTS.PARTNER_ID.eq(partnerId))
                 .and(PARTNER_SHIFTS.SHIFT_ID.eq(shiftId))
                 .and(PARTNER_SHIFTS.STATUS.eq(status))
+                .and(PARTNER_SHIFTS.STATE.eq(RecordState.ACTIVE.name()))
                 .and(PARTNER_SHIFTS.IS_ACTIVE.eq(true))
                 .fetchInto(PartnerShiftDao.class);
     }

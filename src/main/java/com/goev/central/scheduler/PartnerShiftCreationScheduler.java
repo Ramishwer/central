@@ -12,10 +12,7 @@ import com.goev.central.dto.location.LocationDto;
 import com.goev.central.dto.partner.PartnerViewDto;
 import com.goev.central.dto.partner.duty.PartnerDutyDto;
 import com.goev.central.dto.partner.duty.PartnerShiftDto;
-import com.goev.central.enums.partner.PartnerShiftStatus;
-import com.goev.central.enums.partner.PartnerShiftSubStatus;
-import com.goev.central.enums.partner.PartnerStatus;
-import com.goev.central.enums.partner.PartnerSubStatus;
+import com.goev.central.enums.partner.*;
 import com.goev.central.repository.location.LocationRepository;
 import com.goev.central.repository.partner.detail.PartnerDetailRepository;
 import com.goev.central.repository.partner.detail.PartnerRepository;
@@ -59,6 +56,9 @@ public class PartnerShiftCreationScheduler {
         for (PartnerShiftMappingDao partnerShiftMappingDao : allPartnerMappings) {
 
             PartnerDao partner = partnerRepository.findById(partnerShiftMappingDao.getPartnerId());
+
+            if(!PartnerOnboardingStatus.ONBOARDED.name().equals(partner.getOnboardingStatus()))
+                continue;
             ShiftDao shift = shiftRepository.findById(partnerShiftMappingDao.getShiftId());
             if (PartnerStatus.OFF_DUTY.name().equals(partner.getStatus()) && PartnerSubStatus.NO_DUTY.name().equals(partner.getSubStatus())) {
                 PartnerShiftDao partnerShiftDao = partnerShiftRepository.findByPartnerIdShiftIdDayDate(partner.getId(), shift.getId(), String.valueOf(day), date);

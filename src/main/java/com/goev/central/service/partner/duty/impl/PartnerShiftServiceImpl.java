@@ -17,6 +17,7 @@ import com.goev.central.dto.payout.PayoutModelDto;
 import com.goev.central.dto.shift.ShiftConfigurationDto;
 import com.goev.central.dto.shift.ShiftDto;
 import com.goev.central.enums.partner.PartnerDutyStatus;
+import com.goev.central.enums.partner.PartnerOnboardingStatus;
 import com.goev.central.enums.partner.PartnerShiftStatus;
 import com.goev.central.repository.partner.detail.PartnerRepository;
 import com.goev.central.repository.partner.duty.PartnerShiftMappingRepository;
@@ -96,7 +97,8 @@ public class PartnerShiftServiceImpl implements PartnerShiftService {
 
         partnerShiftMappingDao.setPartnerId(partner.getId());
         partnerShiftMappingDao.setShiftId(shiftDao.getId());
-        partnerShiftMappingDao.setLocationConfig(ApplicationConstants.GSON.toJson(partnerShiftMappingDto.getLocationConfig()));
+        if(partnerShiftMappingDto.getLocationConfig()!=null)
+            partnerShiftMappingDao.setLocationConfig(ApplicationConstants.GSON.toJson(partnerShiftMappingDto.getLocationConfig()));
         partnerShiftMappingDao.setDutyConfig(partnerShiftMappingDto.getDutyConfig());
 
         if (!CollectionUtils.isEmpty(shiftConfigurationDaoList)) {

@@ -337,6 +337,7 @@ public class PartnerServiceImpl implements PartnerService {
         if (existingPartner != null)
             throw new ResponseException("Vehicle is already assigned to other partner.");
 
+        log.info("Assigning Partner {} to Vehicle {}", partnerDao.getPunchId(), vehicle.getPlateNumber());
 
         vehicle.setStatus(VehicleStatus.ALLOTTED.name());
         vehicleRepository.update(vehicle);

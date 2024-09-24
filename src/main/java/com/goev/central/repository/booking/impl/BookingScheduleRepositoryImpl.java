@@ -2,6 +2,7 @@ package com.goev.central.repository.booking.impl;
 
 
 import com.goev.central.dao.booking.BookingScheduleDao;
+import com.goev.central.enums.booking.BookingScheduleStatus;
 import com.goev.central.repository.booking.BookingScheduleRepository;
 import com.goev.central.utilities.EventExecutorUtils;
 import com.goev.central.utilities.RequestContext;
@@ -114,7 +115,7 @@ public class BookingScheduleRepositoryImpl implements BookingScheduleRepository 
     @Override
     public List<BookingScheduleDao> findAllActiveWithTimeBetween(DateTime start) {
         return context.selectFrom(BOOKING_SCHEDULES)
-                .where(BOOKING_SCHEDULES.STATUS.in("CONFIRMED","IN_PROGRESS"))
+                .where(BOOKING_SCHEDULES.STATUS.in(BookingScheduleStatus.CONFIRMED.name(),BookingScheduleStatus.IN_PROGRESS.name()))
                 .and(BOOKING_SCHEDULES.APPLICABLE_FROM_TIME.le(start))
                 .and(BOOKING_SCHEDULES.APPLICABLE_TO_TIME.ge(start).or(BOOKING_SCHEDULES.APPLICABLE_TO_TIME.isNull()))
                 .and(BOOKING_SCHEDULES.STATE.eq(RecordState.ACTIVE.name()))
