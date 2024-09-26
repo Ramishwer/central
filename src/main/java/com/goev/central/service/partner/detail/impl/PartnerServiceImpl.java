@@ -32,6 +32,7 @@ import com.goev.central.repository.partner.duty.PartnerDutyRepository;
 import com.goev.central.repository.partner.duty.PartnerShiftRepository;
 import com.goev.central.repository.vehicle.detail.VehicleRepository;
 import com.goev.central.service.partner.detail.PartnerService;
+import com.goev.central.utilities.RequestContext;
 import com.goev.lib.exceptions.ResponseException;
 import com.google.common.reflect.TypeToken;
 import lombok.AllArgsConstructor;
@@ -210,6 +211,7 @@ public class PartnerServiceImpl implements PartnerService {
         PartnerDao partner = partnerRepository.findByUUID(partnerUUID);
         if (partner == null)
             throw new ResponseException("No partner found for Id :" + partnerUUID);
+        log.info("Action By User {} By Partner : {} {}", RequestContext.getUserSession().getUserId(),partner.getPunchId(),ApplicationConstants.GSON.toJson(actionDto));
 
         switch (actionDto.getAction()) {
             case DEBOARD -> {
@@ -383,6 +385,8 @@ public class PartnerServiceImpl implements PartnerService {
         partner.setBookingDetails(null);
         partner.setBookingId(null);
         partner.setPartnerShiftId(null);
+        partner.setLocationDetails(null);
+        partner.setLocationId(null);
         if (partner.getVehicleId() != null) {
             VehicleDao vehicle = vehicleRepository.findById(partner.getVehicleId());
             vehicle.setStatus(VehicleStatus.AVAILABLE.name());
@@ -412,6 +416,8 @@ public class PartnerServiceImpl implements PartnerService {
     private PartnerDao complete(PartnerDao partner, PartnerActionDto actionDto) {
         partner.setStatus(PartnerStatus.ONLINE.name());
         partner.setSubStatus(PartnerSubStatus.NO_BOOKING.name());
+        partner.setBookingId(null);
+        partner.setBookingDetails(null);
         partner = partnerRepository.update(partner);
         if (partner.getBookingId() != null) {
             BookingDao bookingDao = bookingRepository.findById(partner.getBookingId());
@@ -431,6 +437,8 @@ public class PartnerServiceImpl implements PartnerService {
     private PartnerDao end(PartnerDao partner, PartnerActionDto actionDto) {
         partner.setStatus(PartnerStatus.ONLINE.name());
         partner.setSubStatus(PartnerSubStatus.NO_BOOKING.name());
+        partner.setBookingId(null);
+        partner.setBookingDetails(null);
         partner = partnerRepository.update(partner);
         if (partner.getBookingId() != null) {
             BookingDao bookingDao = bookingRepository.findById(partner.getBookingId());
@@ -521,6 +529,8 @@ public class PartnerServiceImpl implements PartnerService {
     private PartnerDao goOnline(PartnerDao partner, PartnerActionDto actionDto) {
         partner.setStatus(PartnerStatus.ONLINE.name());
         partner.setSubStatus(PartnerSubStatus.NO_BOOKING.name());
+        partner.setBookingId(null);
+        partner.setBookingDetails(null);
         partner = partnerRepository.update(partner);
         return partner;
     }

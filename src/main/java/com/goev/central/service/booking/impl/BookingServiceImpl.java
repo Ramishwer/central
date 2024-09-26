@@ -189,6 +189,8 @@ public class BookingServiceImpl implements BookingService {
             partnerDao.setBookingDetails(null);
             partnerDao.setSubStatus(PartnerSubStatus.NO_BOOKING.name());
             partnerDao.setStatus(PartnerStatus.ONLINE.name());
+            partnerDao.setBookingId(null);
+            partnerDao.setBookingDetails(null);
             partnerRepository.update(partnerDao);
         }
 
@@ -273,6 +275,8 @@ public class BookingServiceImpl implements BookingService {
                 partnerDao.setBookingId(null);
                 partnerDao.setStatus(PartnerStatus.ONLINE.name());
                 partnerDao.setSubStatus(PartnerSubStatus.NO_BOOKING.name());
+                partnerDao.setBookingId(null);
+                partnerDao.setBookingDetails(null);
                 partnerRepository.update(partnerDao);
             }
         }

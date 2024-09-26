@@ -36,14 +36,12 @@ public class PartnerShiftEndScheduler {
                 continue;
             PartnerDao partnerDao = partnerRepository.findById(shiftDao.getPartnerId());
 
-            if(PartnerStatus.OFF_DUTY.name().equals(partnerDao.getStatus()) && shiftDao.getId().equals(partnerDao.getPartnerShiftId())){
+            if(PartnerStatus.OFF_DUTY.name().equals(partnerDao.getStatus())){
                 partnerDao.setPartnerShiftId(null);
                 partnerDao.setDutyDetails(null);
                 partnerDao.setSubStatus(PartnerSubStatus.NO_DUTY.name());
                 partnerRepository.update(partnerDao);
             }
-
-
 
             if(PartnerShiftStatus.PENDING.name().equals(shiftDao.getStatus())){
                 shiftDao.setSubStatus(PartnerShiftSubStatus.ABSENT.name());
