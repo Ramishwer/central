@@ -24,13 +24,21 @@ public class BookingPaymentDto {
     private String paymentMethod;
     private String status;
     private Integer amount;
+    private Integer pendingAmount;
+    private Integer paidAmount;
+    private String transactionPurpose;
+    private String gatewayUniqueIdentifier;
+    private String gatewayTransactionIdentifier;
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime transactionTime;
-    private String transactionPurpose;
-    private CustomerViewDto customerDetails;
-    private BookingViewDto booking;
-    private PaymentDto payment;
+    @JsonSerialize(using = DateTimeSerializer.class)
+    @JsonDeserialize(using = DateTimeDeserializer.class)
+    private DateTime expiryTime;
+    private String paymentType;
+    private String paymentUUID;
+    private BookingViewDto bookingDetails;
+    private PaymentDto paymentDetails;
 }
 
 
