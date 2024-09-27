@@ -22,7 +22,7 @@ import org.joda.time.DateTime;
 public class PartnerPayoutDto {
 
     private String uuid;
-    private PartnerViewDto partner;
+    private PartnerViewDto partnerDetails;
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime payoutStartDate;
@@ -44,7 +44,7 @@ public class PartnerPayoutDto {
        if(payoutDao == null)
         return null;
        return PartnerPayoutDto.builder()
-               .partner(partnerViewDto)
+               .partnerDetails(partnerViewDto)
                .payoutStartDate(payoutDao.getPayoutStartDate())
                .payoutEndDate(payoutDao.getPayoutEndDate())
                .payoutTotalAmount(payoutDao.getPayoutTotalAmount())
