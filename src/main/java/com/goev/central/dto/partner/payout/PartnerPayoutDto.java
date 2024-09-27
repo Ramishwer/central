@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.joda.deser.DateTimeDeserializer;
 import com.fasterxml.jackson.datatype.joda.ser.DateTimeSerializer;
+import com.goev.central.constant.ApplicationConstants;
+import com.goev.central.dao.partner.payout.PartnerPayoutDao;
 import com.goev.central.dto.partner.PartnerViewDto;
 import lombok.*;
 import org.joda.time.DateTime;
@@ -38,4 +40,20 @@ public class PartnerPayoutDto {
     private Integer payoutTotalCreditAmount;
     private Integer payoutTotalDebitAmount;
 
+    public static PartnerPayoutDto fromDao(PartnerPayoutDao payoutDao, PartnerViewDto partnerViewDto) {
+       if(payoutDao == null)
+        return null;
+       return PartnerPayoutDto.builder()
+               .partner(partnerViewDto)
+               .payoutStartDate(payoutDao.getPayoutStartDate())
+               .payoutEndDate(payoutDao.getPayoutEndDate())
+               .payoutTotalAmount(payoutDao.getPayoutTotalAmount())
+               .payoutTotalBookingAmount(payoutDao.getPayoutTotalBookingAmount())
+               .payoutTotalDeductionAmount(payoutDao.getPayoutTotalDeductionAmount())
+               .payoutTotalCreditAmount(payoutDao.getPayoutTotalCreditAmount())
+               .finalizationDate(payoutDao.getFinalizationDate())
+               .status(payoutDao.getStatus())
+               .payoutSummary(ApplicationConstants.GSON.fromJson(payoutDao.getPayoutSummary(),PartnerPayoutSummaryDto.class))
+               .build();
+    }
 }

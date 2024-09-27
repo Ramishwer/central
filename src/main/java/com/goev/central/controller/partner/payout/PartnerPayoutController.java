@@ -1,5 +1,7 @@
 package com.goev.central.controller.partner.payout;
 
+import com.goev.central.dto.common.FilterDto;
+import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.partner.payout.PartnerPayoutDto;
 import com.goev.central.dto.partner.payout.PartnerPayoutSummaryDto;
@@ -21,8 +23,8 @@ public class PartnerPayoutController {
 
 
     @GetMapping("/partners/payouts")
-    public ResponseDto<PaginatedResponseDto<PartnerPayoutDto>> getPayouts() {
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerPayoutService.getPayouts());
+    public ResponseDto<PaginatedResponseDto<PartnerPayoutDto>> getPayouts(@RequestParam("status")String status, PageDto page, FilterDto filter) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerPayoutService.getPayouts(status,page,filter));
     }
 
     @GetMapping("/partners/{partner-uuid}/payouts")

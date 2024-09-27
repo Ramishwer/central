@@ -10,6 +10,7 @@ import lombok.*;
 import org.joda.time.DateTime;
 
 import java.util.List;
+import java.util.Map;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,7 +27,7 @@ public class PartnerPayoutSummaryDto {
     private Integer totalDeductionAmount;
     private Integer totalCashbookAmount;
     private Integer totalGstAmount;
-    private List<PayoutElementDto> elements;
+    private Map<String,String> elements;
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime payoutStartDate;

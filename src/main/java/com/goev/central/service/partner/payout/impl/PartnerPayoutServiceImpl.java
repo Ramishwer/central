@@ -1,13 +1,18 @@
 package com.goev.central.service.partner.payout.impl;
 
 import com.goev.central.dao.partner.detail.PartnerDao;
+import com.goev.central.dao.partner.duty.PartnerShiftDao;
 import com.goev.central.dao.partner.payout.PartnerPayoutDao;
 import com.goev.central.dao.partner.payout.PartnerPayoutTransactionDao;
+import com.goev.central.dto.common.FilterDto;
 import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
+import com.goev.central.dto.partner.PartnerViewDto;
+import com.goev.central.dto.partner.duty.PartnerShiftDto;
 import com.goev.central.dto.partner.payout.PartnerPayoutDto;
 import com.goev.central.dto.partner.payout.PartnerPayoutSummaryDto;
 import com.goev.central.dto.partner.payout.PartnerPayoutTransactionDto;
+import com.goev.central.enums.partner.PartnerShiftStatus;
 import com.goev.central.repository.partner.detail.PartnerRepository;
 import com.goev.central.repository.partner.payout.PartnerPayoutRepository;
 import com.goev.central.repository.partner.payout.PartnerPayoutTransactionRepository;
@@ -21,6 +26,9 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Slf4j
@@ -87,9 +95,28 @@ public class PartnerPayoutServiceImpl implements PartnerPayoutService {
     }
 
     @Override
-    public PaginatedResponseDto<PartnerPayoutDto> getPayouts() {
-        PaginatedResponseDto<PartnerPayoutDto> result = PaginatedResponseDto.<PartnerPayoutDto>builder().elements(new ArrayList<>()).build();
-        return result;
+    public PaginatedResponseDto<PartnerPayoutDto> getPayouts(String status, PageDto page, FilterDto filter) {
+
+        List<PartnerPayoutDao> activePayouts;
+        if(PartnerShiftStatus.IN_PROGRESS.name().equals(status) || PartnerShiftStatus.PENDING.name().equals(status)  )
+            activePayouts = partnerPayoutRepository.findAllByStatus(status,page);
+        else
+            activePayouts = partnerPayoutRepository.findAllByStatus(status,page,filter);
+
+        if (CollectionUtils.isEmpty(activePayouts))
+            return PaginatedResponseDto.<PartnerPayoutDto>builder().elements(new ArrayList<>()).build();
+
+
+        List<PartnerDao> partners = partnerRepository.findAllByIds(activePayouts.stream().map(PartnerPayoutDao::getPartnerId).toList());
+        Map<Integer, PartnerDao> partnerDaoMap = partners.stream().collect(Collectors.toMap(PartnerDao::getId, Function.identity()));
+
+        List<PartnerPayoutDto> payoutList = new ArrayList<>();
+        activePayouts.forEach(x -> {
+            PartnerViewDto partnerViewDto = PartnerViewDto.fromDao(partnerDaoMap.get(x.getPartnerId()));
+            payoutList.add(PartnerPayoutDto.fromDao(x, partnerViewDto));
+        });
+        return PaginatedResponseDto.<PartnerPayoutDto>builder().elements(payoutList).build();
+
     }
 
 

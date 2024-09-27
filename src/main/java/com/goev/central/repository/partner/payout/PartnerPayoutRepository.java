@@ -1,6 +1,8 @@
 package com.goev.central.repository.partner.payout;
 
 import com.goev.central.dao.partner.payout.PartnerPayoutDao;
+import com.goev.central.dto.common.FilterDto;
+import com.goev.central.dto.common.PageDto;
 
 import java.util.List;
 
@@ -20,4 +22,8 @@ public interface PartnerPayoutRepository {
     List<PartnerPayoutDao> findAllActive();
 
     List<PartnerPayoutDao> findAllByPartnerId(Integer id);
+
+    List<PartnerPayoutDao> findAllByStatus(String status, PageDto page, FilterDto filter);
+
+    List<PartnerPayoutDao> findAllByStatus(String status, PageDto page);
 }

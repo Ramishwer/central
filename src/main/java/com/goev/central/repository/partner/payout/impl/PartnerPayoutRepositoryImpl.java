@@ -1,6 +1,9 @@
 package com.goev.central.repository.partner.payout.impl;
 
+import com.goev.central.dao.partner.duty.PartnerShiftDao;
 import com.goev.central.dao.partner.payout.PartnerPayoutDao;
+import com.goev.central.dto.common.FilterDto;
+import com.goev.central.dto.common.PageDto;
 import com.goev.central.repository.partner.payout.PartnerPayoutRepository;
 import com.goev.lib.enums.RecordState;
 import com.goev.record.central.tables.records.PartnerPayoutsRecord;
@@ -12,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 import static com.goev.record.central.tables.PartnerPayouts.PARTNER_PAYOUTS;
+import static com.goev.record.central.tables.PartnerShifts.PARTNER_SHIFTS;
 
 @Slf4j
 @Repository
@@ -91,5 +95,28 @@ public class PartnerPayoutRepositoryImpl implements PartnerPayoutRepository {
     @Override
     public List<PartnerPayoutDao> findAllByPartnerId(Integer id) {
         return context.selectFrom(PARTNER_PAYOUTS).where(PARTNER_PAYOUTS.PARTNER_ID.eq(id)).fetchInto(PartnerPayoutDao.class);
+    }
+
+    @Override
+    public List<PartnerPayoutDao> findAllByStatus(String status, PageDto page, FilterDto filter) {
+        return context.selectFrom(PARTNER_PAYOUTS)
+                .where(PARTNER_PAYOUTS.PAYOUT_START_DATE.between(filter.getStartTime(), filter.getEndTime()))
+                .and(PARTNER_PAYOUTS.STATUS.eq(status))
+                .and(PARTNER_PAYOUTS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(PARTNER_PAYOUTS.IS_ACTIVE.eq(true))
+                .limit(page.getLimit())
+                .offset(page.getStart())
+                .fetchInto(PartnerPayoutDao.class);
+    }
+
+    @Override
+    public List<PartnerPayoutDao> findAllByStatus(String status, PageDto page) {
+        return context.selectFrom(PARTNER_PAYOUTS)
+                .where(PARTNER_PAYOUTS.STATUS.eq(status))
+                .and(PARTNER_PAYOUTS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(PARTNER_PAYOUTS.IS_ACTIVE.eq(true))
+                .limit(page.getLimit())
+                .offset(page.getStart())
+                .fetchInto(PartnerPayoutDao.class);
     }
 }
