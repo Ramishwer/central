@@ -211,7 +211,8 @@ public class PartnerServiceImpl implements PartnerService {
         PartnerDao partner = partnerRepository.findByUUID(partnerUUID);
         if (partner == null)
             throw new ResponseException("No partner found for Id :" + partnerUUID);
-        log.info("Action By User {} By Partner : {} {}", RequestContext.getUserSession().getUserId(),partner.getPunchId(),ApplicationConstants.GSON.toJson(actionDto));
+        if(RequestContext.getUserSession()!=null)
+            log.info("Action By User {} By Partner : {} {}", RequestContext.getUserSession().getUserId(),partner.getPunchId(),ApplicationConstants.GSON.toJson(actionDto));
 
         switch (actionDto.getAction()) {
             case DEBOARD -> {
