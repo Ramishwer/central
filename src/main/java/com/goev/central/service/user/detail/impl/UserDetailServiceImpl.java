@@ -10,6 +10,7 @@ import com.goev.central.repository.user.detail.UserDetailRepository;
 import com.goev.central.repository.user.detail.UserRepository;
 import com.goev.central.service.auth.AuthService;
 import com.goev.central.service.user.detail.UserDetailService;
+import com.goev.central.utilities.SecretGenerationUtils;
 import com.goev.lib.exceptions.ResponseException;
 import com.goev.lib.utilities.ApplicationContext;
 import lombok.AllArgsConstructor;
@@ -35,6 +36,8 @@ public class UserDetailServiceImpl implements UserDetailService {
         UserDao userDao = new UserDao();
 
         userDao.setPhoneNumber(userDto.getUserDetails().getPhoneNumber());
+        userDao.setEmail(userDto.getUserDetails().getEmail());
+        userDao.setDisplayCode("USR-"+SecretGenerationUtils.getCode());
         UserDao user = userRepository.save(userDao);
 
         if (user == null)
