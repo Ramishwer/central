@@ -27,7 +27,7 @@ public class PartnerPayoutSummaryDto {
     private Integer totalDeductionAmount;
     private Integer totalCashbookAmount;
     private Integer totalGstAmount;
-    private Map<String,String> elements;
+    private List<PayoutElementDto> elements;
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime payoutStartDate;

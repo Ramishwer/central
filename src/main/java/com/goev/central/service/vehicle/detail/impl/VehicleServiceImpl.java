@@ -61,6 +61,7 @@ public class VehicleServiceImpl implements VehicleService {
             PartnerDao partnerDao =partnerRepository.findByUUID(recommendationForPartnerUUID);
             if(partnerDao!=null) {
                 vehicles = vehicleRepository.findEligibleVehicleForPartnerId(partnerDao.getId());
+
             }
         }
         return getVehicleDtoPaginatedResponseDto(vehicles, result);

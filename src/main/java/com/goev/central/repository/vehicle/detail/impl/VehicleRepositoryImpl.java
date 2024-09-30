@@ -3,7 +3,10 @@ package com.goev.central.repository.vehicle.detail.impl;
 import com.goev.central.dao.vehicle.detail.VehicleDao;
 import com.goev.central.dao.vehicle.detail.VehicleDao;
 import com.goev.central.dao.vehicle.detail.VehicleDao;
+import com.goev.central.enums.partner.PartnerStatus;
+import com.goev.central.enums.partner.PartnerSubStatus;
 import com.goev.central.enums.vehicle.VehicleOnboardingStatus;
+import com.goev.central.enums.vehicle.VehicleStatus;
 import com.goev.central.repository.vehicle.detail.VehicleRepository;
 import com.goev.central.utilities.EventExecutorUtils;
 import com.goev.central.utilities.RequestContext;
@@ -17,6 +20,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 import static com.goev.record.central.Tables.*;
+import static com.goev.record.central.tables.Partners.PARTNERS;
 import static com.goev.record.central.tables.Vehicles.VEHICLES;
 import static com.goev.record.central.tables.Vehicles.VEHICLES;
 import static com.goev.record.central.tables.Vehicles.VEHICLES;
@@ -155,6 +159,7 @@ public class VehicleRepositoryImpl implements VehicleRepository {
 
                                 ))
                 ))
+                .and(VEHICLES.STATUS.eq(VehicleStatus.AVAILABLE.name()))
                 .and(VEHICLES.IS_ACTIVE.eq(true))
                 .and(VEHICLES.STATE.eq(RecordState.ACTIVE.name()))
                 .fetchInto(VehicleDao.class);

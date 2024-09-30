@@ -20,5 +20,6 @@ public class PayoutElementDto {
     private String message;
     private String category;
     private Integer sortingOrder;
+    private Integer value;
     private String uuid;
 }
