@@ -127,17 +127,17 @@ public class PartnerSegmentServiceImpl implements PartnerSegmentService {
         if (partnerSegmentDao == null)
             throw new ResponseException("No partner segment found for Id :" + segmentUUID);
 
-        if (partnerSegmentMappingDto.getPartner() == null)
+        if (partnerSegmentMappingDto.getPartnerDetails() == null)
             throw new ResponseException("No partner details present.");
 
-        PartnerDao partnerDao = partnerRepository.findByUUID(partnerSegmentMappingDto.getPartner().getUuid());
+        PartnerDao partnerDao = partnerRepository.findByUUID(partnerSegmentMappingDto.getPartnerDetails().getUuid());
 
         if (partnerDao == null)
-            throw new ResponseException("No partner found for Id :" + partnerSegmentMappingDto.getPartner().getUuid());
+            throw new ResponseException("No partner found for Id :" + partnerSegmentMappingDto.getPartnerDetails().getUuid());
 
         List<PartnerSegmentMappingDao> mappings = partnerSegmentMappingRepository.findAllByPartnerId(partnerDao.getId());
         if(!CollectionUtils.isEmpty(mappings))
-            throw new ResponseException("Only one mapping can be created for a partner :" + partnerSegmentMappingDto.getPartner().getUuid());
+            throw new ResponseException("Only one mapping can be created for a partner :" + partnerSegmentMappingDto.getPartnerDetails().getUuid());
 
 
         PartnerSegmentMappingDao mappingDao = new PartnerSegmentMappingDao();

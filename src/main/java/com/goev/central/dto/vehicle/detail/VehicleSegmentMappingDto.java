@@ -16,14 +16,14 @@ import lombok.*;
 public class VehicleSegmentMappingDto {
     private String uuid;
     private VehicleSegmentDto segment;
-    private VehicleViewDto vehicle;
+    private VehicleViewDto vehicleDetails;
 
 
     public static VehicleSegmentMappingDto fromDao(VehicleSegmentMappingDao vehicleSegmentMappingDao, VehicleSegmentDto vehicleSegmentDto, VehicleViewDto vehicle){
           return VehicleSegmentMappingDto.builder()
                   .uuid(vehicleSegmentMappingDao.getUuid())
                   .segment(vehicleSegmentDto)
-                  .vehicle(vehicle)
+                  .vehicleDetails(vehicle)
                   .build();
     }
 }

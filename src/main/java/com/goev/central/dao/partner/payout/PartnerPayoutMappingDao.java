@@ -14,7 +14,8 @@ public class PartnerPayoutMappingDao extends BaseDao {
     private DateTime applicableFrom;
     private DateTime applicableTo;
     private Integer partnerId;
-    private Integer payoutModelId;
+    private String triggerType;
     private String status;
+    private String config;
 
 }

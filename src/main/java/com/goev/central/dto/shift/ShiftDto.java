@@ -30,6 +30,8 @@ public class ShiftDto {
     private String shiftType;
 
     public static ShiftDto fromDao(ShiftDao shiftDao) {
+        if(shiftDao == null)
+            return null;
         return ShiftDto.builder()
                 .uuid(shiftDao.getUuid())
                 .name(shiftDao.getName())

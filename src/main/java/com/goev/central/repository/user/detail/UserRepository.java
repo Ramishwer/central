@@ -1,5 +1,6 @@
 package com.goev.central.repository.user.detail;
 
+import com.goev.central.dao.partner.detail.PartnerDao;
 import com.goev.central.dao.user.detail.UserDao;
 
 import java.util.List;
@@ -24,4 +25,6 @@ public interface UserRepository {
     UserDao findByAuthUUID(String authUUID);
 
     UserDao findByPhoneNumber(String phoneNumber);
+
+    List<UserDao> findAllByOnboardingStatus(String onboardingStatus);
 }

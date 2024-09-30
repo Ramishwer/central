@@ -111,7 +111,7 @@ public class PartnerServiceImpl implements PartnerService {
 
         partnerDto.setVehicleDetails(ApplicationConstants.GSON.fromJson(partner.getVehicleDetails(), VehicleViewDto.class));
         partnerDto.setDutyDetails(ApplicationConstants.GSON.fromJson(partner.getDutyDetails(), PartnerDutyDto.class));
-        partnerDto.setBookingDetails(ApplicationConstants.GSON.fromJson(partner.getBookingDetails(), BookingViewDto.class));
+        partnerDto.setBooking(ApplicationConstants.GSON.fromJson(partner.getBookingDetails(), BookingViewDto.class));
         partnerDto.setLocationDetails(ApplicationConstants.GSON.fromJson(partner.getLocationDetails(), LocationDto.class));
         partnerDto.setPartnerDetails(PartnerViewDto.fromDao(partner));
         return partnerDto;
@@ -164,7 +164,7 @@ public class PartnerServiceImpl implements PartnerService {
 
             partnerDto.setVehicleDetails(ApplicationConstants.GSON.fromJson(partner.getVehicleDetails(), VehicleViewDto.class));
             partnerDto.setDutyDetails(ApplicationConstants.GSON.fromJson(partner.getDutyDetails(), PartnerDutyDto.class));
-            partnerDto.setBookingDetails(ApplicationConstants.GSON.fromJson(partner.getBookingDetails(), BookingViewDto.class));
+            partnerDto.setBooking(ApplicationConstants.GSON.fromJson(partner.getBookingDetails(), BookingViewDto.class));
             partnerDto.setLocationDetails(ApplicationConstants.GSON.fromJson(partner.getLocationDetails(), LocationDto.class));
             partnerDto.setPartnerDetails(PartnerViewDto.fromDao(partner));
             if (partner.getSegments() != null) {

@@ -24,7 +24,7 @@ import org.joda.time.DateTime;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PartnerDutyDto {
     private String uuid;
-    private PartnerViewDto partner;
+    private PartnerViewDto partnerDetails;
     private PartnerShiftDto shiftDetails;
     private Long plannedTotalOnlineTimeInMillis;
     private Long plannedTotalPauseTimeInMillis;
@@ -54,7 +54,7 @@ public class PartnerDutyDto {
         PartnerDutyDto result = PartnerDutyDto.builder()
                 .uuid(dutyDao.getUuid())
                 .status(dutyDao.getStatus())
-                .partner(partner)
+                .partnerDetails(partner)
                 .plannedTotalOnlineTimeInMillis(dutyDao.getPlannedTotalOnlineTimeInMillis())
                 .plannedTotalPauseTimeInMillis(dutyDao.getPlannedTotalPauseTimeInMillis())
                 .plannedDutyStartTime(dutyDao.getPlannedDutyStartTime())

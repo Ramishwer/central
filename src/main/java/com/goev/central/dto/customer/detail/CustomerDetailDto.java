@@ -12,7 +12,7 @@ import lombok.*;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CustomerDetailDto {
-    private CustomerViewDto customer;
+    private CustomerViewDto customerDetails;
     private String uuid;
     private String phoneNumber;
     private String profileUrl;

@@ -95,7 +95,7 @@ public class CustomerDetailServiceImpl implements CustomerDetailService {
                 .lastName(customerDetailDao.getLastName())
                 .preferredLanguage(customerDetailDao.getPreferredLanguage())
                 .phoneNumber(customerDetailDao.getPhoneNumber())
-                .customer(getCustomerViewDto(customerDetailDao, customerDao))
+                .customerDetails(getCustomerViewDto(customerDetailDao, customerDao))
                 .build();
     }
 

@@ -54,6 +54,7 @@ public class PartnerPayoutDto {
                .finalizationDate(payoutDao.getFinalizationDate())
                .status(payoutDao.getStatus())
                .payoutSummary(ApplicationConstants.GSON.fromJson(payoutDao.getPayoutSummary(),PartnerPayoutSummaryDto.class))
+               .uuid(payoutDao.getUuid())
                .build();
     }
 }

@@ -28,6 +28,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Slf4j
@@ -100,6 +101,9 @@ public class VehicleServiceImpl implements VehicleService {
         VehicleViewDto vehicleViewDto = VehicleViewDto.fromDao(vehicle);
         if (vehicleViewDto != null) {
             vehicleViewDto.setRemark(vehicleActionDto.getRemark());
+            if(vehicleViewDto.getFields() == null)
+                vehicleViewDto.setFields(new HashMap<>());
+            vehicleViewDto.getFields().put("maintenanceDate",vehicleActionDto.getTimestamp());
             vehicle.setViewInfo(ApplicationConstants.GSON.toJson(vehicleViewDto));
         }
         vehicle = vehicleRepository.update(vehicle);

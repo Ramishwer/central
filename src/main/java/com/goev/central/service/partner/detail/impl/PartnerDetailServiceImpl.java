@@ -64,17 +64,17 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
         }
 
 
-        PartnerDao existingPartnerDao = partnerRepository.findByPhoneNumber(partnerDto.getPartner().getPhoneNumber());
+        PartnerDao existingPartnerDao = partnerRepository.findByPhoneNumber(partnerDto.getPartnerDetails().getPhoneNumber());
 
         if (existingPartnerDao != null) {
-            throw new ResponseException("Error in saving partner: Partner with phone number :" + partnerDto.getPartner().getPhoneNumber() + " already exist");
+            throw new ResponseException("Error in saving partner: Partner with phone number :" + partnerDto.getPartnerDetails().getPhoneNumber() + " already exist");
         }
         PartnerDao partnerDao = new PartnerDao();
 
         partnerDao.setPunchId("GOEV-" + SecretGenerationUtils.getCode());
-        partnerDao.setPhoneNumber(partnerDto.getPartner().getPhoneNumber());
+        partnerDao.setPhoneNumber(partnerDto.getPartnerDetails().getPhoneNumber());
         partnerDao.setAuthUuid(authService.createUser(AuthUserDto.builder()
-                .phoneNumber(partnerDto.getPartner().getPhoneNumber())
+                .phoneNumber(partnerDto.getPartnerDetails().getPhoneNumber())
                 .organizationUUID(ApplicationContext.getOrganizationUUID())
                 .clientUUID(ApplicationConstants.PARTNER_CLIENT_UUID)
                 .build()));
@@ -187,15 +187,15 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
             }
         }
 
-        if (!partner.getPhoneNumber().equals(partnerDetailDto.getPartner().getPhoneNumber())) {
+        if (!partner.getPhoneNumber().equals(partnerDetailDto.getPartnerDetails().getPhoneNumber())) {
 
-            PartnerDao existingPartnerDao = partnerRepository.findByPhoneNumber(partnerDetailDto.getPartner().getPhoneNumber());
+            PartnerDao existingPartnerDao = partnerRepository.findByPhoneNumber(partnerDetailDto.getPartnerDetails().getPhoneNumber());
 
             if (existingPartnerDao != null) {
-                throw new ResponseException("Error in saving partner: Partner with phone number :" + partnerDetailDto.getPartner().getPhoneNumber() + " already exist");
+                throw new ResponseException("Error in saving partner: Partner with phone number :" + partnerDetailDto.getPartnerDetails().getPhoneNumber() + " already exist");
             }
-            partner.setPhoneNumber(partnerDetailDto.getPartner().getPhoneNumber());
-            authService.updateUser(AuthUserDto.builder().uuid(partner.getAuthUuid()).phoneNumber(partnerDetailDto.getPartner().getPhoneNumber()).build());
+            partner.setPhoneNumber(partnerDetailDto.getPartnerDetails().getPhoneNumber());
+            authService.updateUser(AuthUserDto.builder().uuid(partner.getAuthUuid()).phoneNumber(partnerDetailDto.getPartnerDetails().getPhoneNumber()).build());
         }
 
 
@@ -317,15 +317,15 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
         partnerDto.setPhoneNumber(partnerDao.getPhoneNumber());
         partnerDto.setProfileUrl(partnerDao.getProfileUrl());
 
-        result.setPartner(partnerDto);
+        result.setPartnerDetails(partnerDto);
 
 
         if (partnerDetails == null)
             return;
 
-        result.getPartner().setProfileUrl(partnerDetails.getProfileUrl());
-        result.getPartner().setFirstName(partnerDetails.getFirstName());
-        result.getPartner().setLastName(partnerDetails.getLastName());
+        result.getPartnerDetails().setProfileUrl(partnerDetails.getProfileUrl());
+        result.getPartnerDetails().setFirstName(partnerDetails.getFirstName());
+        result.getPartnerDetails().setLastName(partnerDetails.getLastName());
         result.setState(partnerDao.getOnboardingStatus());
         result.setJoiningDate(partnerDetails.getJoiningDate());
         result.setDlNumber(partnerDetails.getDlNumber());

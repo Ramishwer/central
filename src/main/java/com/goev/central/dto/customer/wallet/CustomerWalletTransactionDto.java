@@ -19,7 +19,7 @@ public class CustomerWalletTransactionDto {
     private Integer openingWalletBalance;
     private Integer closingWalletBalance;
     private BookingDto booking;
-    private PaymentDto payment;
+    private PaymentDto paymentDetails;
     private String message;
     private String subtitle;
     private String remark;

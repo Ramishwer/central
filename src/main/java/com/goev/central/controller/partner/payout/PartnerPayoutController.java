@@ -3,7 +3,9 @@ package com.goev.central.controller.partner.payout;
 import com.goev.central.dto.common.FilterDto;
 import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
+import com.goev.central.dto.partner.duty.PartnerShiftMappingDto;
 import com.goev.central.dto.partner.payout.PartnerPayoutDto;
+import com.goev.central.dto.partner.payout.PartnerPayoutMappingDto;
 import com.goev.central.dto.partner.payout.PartnerPayoutSummaryDto;
 import com.goev.central.dto.partner.payout.PartnerPayoutTransactionDto;
 import com.goev.central.service.partner.payout.PartnerPayoutService;
@@ -12,6 +14,8 @@ import com.goev.lib.dto.StatusDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -46,4 +50,19 @@ public class PartnerPayoutController {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerPayoutService.getAllPartnerTransactionsForPayout(partnerUUID, partnerPayoutUUID));
     }
 
+
+
+    @GetMapping("/partners/{partner-uuid}/payout-model-mappings")
+    public ResponseDto<List<PartnerPayoutMappingDto>> getPayoutModelMappings(@PathVariable(value = "partner-uuid") String partnerUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerPayoutService.getPayoutModelMappings(partnerUUID));
+    }
+    @PostMapping("/partners/{partner-uuid}/payout-model-mappings")
+    public ResponseDto<PartnerPayoutMappingDto> createPayoutModelMapping(@PathVariable(value = "partner-uuid") String partnerUUID, @RequestBody PartnerPayoutMappingDto partnerPayoutMappingDto) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerPayoutService.createPayoutModelMapping(partnerUUID, partnerPayoutMappingDto));
+    }
+
+    @DeleteMapping("/partners/{partner-uuid}/payout-model-mappings/{partner-payout-model-mapping-uuid}")
+    public ResponseDto<Boolean> deletePayoutModelMapping(@PathVariable(value = "partner-uuid") String partnerUUID,@PathVariable(value = "partner-payout-model-mapping-uuid") String partnerPayoutModelMappingUUID)  {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, partnerPayoutService.deletePayoutModelMapping(partnerUUID, partnerPayoutModelMappingUUID));
+    }
 }

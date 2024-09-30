@@ -5,6 +5,7 @@ import com.goev.central.dao.user.detail.UserSessionDao;
 import com.goev.central.dto.session.ExchangeTokenRequestDto;
 import com.goev.central.dto.session.SessionDetailsDto;
 import com.goev.central.dto.session.SessionDto;
+import com.goev.central.enums.user.UserOnboardingStatus;
 import com.goev.central.repository.user.detail.UserRepository;
 import com.goev.central.repository.user.detail.UserSessionRepository;
 import com.goev.central.service.auth.AuthService;
@@ -29,9 +30,12 @@ public class SessionServiceImpl implements SessionService {
     @Override
     public SessionDto createSession(PasswordCredentialsDto credentials) {
         UserDao user = userRepository.findByEmail(credentials.getUsername());
-        if (user == null|| user.getAuthUuid() == null)
+        if (user == null || user.getAuthUuid() == null)
             throw new ResponseException("User does not exist");
-        SessionDto sessionDto = authService.createSession(credentials,user.getAuthUuid());
+
+        if (!UserOnboardingStatus.ONBOARDED.name().equals(user.getOnboardingStatus()))
+            throw new ResponseException("User does not exist");
+        SessionDto sessionDto = authService.createSession(credentials, user.getAuthUuid());
         if (sessionDto == null)
             throw new ResponseException("User does not exist");
         UserSessionDao sessionDao = new UserSessionDao();
@@ -70,6 +74,10 @@ public class SessionServiceImpl implements SessionService {
         userSessionRepository.delete(userSessionDao.getId());
 
         UserDao user = userRepository.findById(userSessionDao.getUserId());
+
+
+        if (user == null || !UserOnboardingStatus.ONBOARDED.name().equals(user.getOnboardingStatus()))
+            throw new ResponseException("User does not exist");
         return SessionDto.builder()
                 .accessToken(sessionDto.getAccessToken())
                 .refreshToken(sessionDto.getRefreshToken())
@@ -89,6 +97,8 @@ public class SessionServiceImpl implements SessionService {
         userSessionDao = userSessionRepository.update(userSessionDao);
 
         UserDao user = userRepository.findById(userSessionDao.getUserId());
+        if (user == null || !UserOnboardingStatus.ONBOARDED.name().equals(user.getOnboardingStatus()))
+            throw new ResponseException("User does not exist");
         return SessionDetailsDto.builder()
                 .details(SessionDto.builder()
                         .userUUID(user.getUuid())
@@ -115,7 +125,7 @@ public class SessionServiceImpl implements SessionService {
             throw new ResponseException("User does not exist");
 
         UserDao user = userRepository.findByAuthUUID(sessionDto.getAuthUUID());
-        if (user == null)
+        if (user == null || !UserOnboardingStatus.ONBOARDED.name().equals(user.getOnboardingStatus()))
             throw new ResponseException("User does not exist");
 
         UserSessionDao sessionDao = new UserSessionDao();

@@ -48,7 +48,6 @@ public class PartnerShiftServiceImpl implements PartnerShiftService {
     private final PartnerRepository partnerRepository;
     private final ShiftRepository shiftRepository;
     private final ShiftConfigurationRepository shiftConfigurationRepository;
-    private final PayoutModelRepository payoutModelRepository;
 
     @Override
     public PaginatedResponseDto<PartnerShiftDto> getShifts(String status, PageDto page, FilterDto filter) {
@@ -102,11 +101,7 @@ public class PartnerShiftServiceImpl implements PartnerShiftService {
         partnerShiftMappingDao.setDutyConfig(partnerShiftMappingDto.getDutyConfig());
 
         if (!CollectionUtils.isEmpty(shiftConfigurationDaoList)) {
-            List<ShiftConfigurationDto> shiftConfigurationDtoList = shiftConfigurationDaoList.stream().map(x -> {
-//                PayoutModelDao payoutModelDao = payoutModelRepository.findById(x.getPayoutModelId());
-                return ShiftConfigurationDto.fromDao(x, ShiftDto.fromDao(shiftDao),null);
-            }).toList();
-
+            List<ShiftConfigurationDto> shiftConfigurationDtoList = shiftConfigurationDaoList.stream().map(x -> ShiftConfigurationDto.fromDao(x, ShiftDto.fromDao(shiftDao))).toList();
             partnerShiftMappingDao.setShiftConfig(ApplicationConstants.GSON.toJson(shiftConfigurationDtoList.stream().collect(Collectors.toMap(ShiftConfigurationDto::getDay,Function.identity()))));
         }
 

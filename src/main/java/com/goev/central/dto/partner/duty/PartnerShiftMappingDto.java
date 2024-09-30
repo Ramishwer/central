@@ -23,7 +23,7 @@ import java.util.Map;
 public class PartnerShiftMappingDto {
     private String uuid;
     private ShiftDto shift;
-    private PartnerViewDto partner;
+    private PartnerViewDto partnerDetails;
     private Map<String, ShiftConfigurationDto> shiftConfig;
     private Map<String, Map<String, LocationDto>> locationConfig;
     private String dutyConfig;
@@ -37,7 +37,7 @@ public class PartnerShiftMappingDto {
 
 
         return PartnerShiftMappingDto.builder()
-                .partner(partner)
+                .partnerDetails(partner)
                 .shift(shift)
                 .dutyConfig(partnerShiftMappingDao.getDutyConfig())
                 .shiftConfig(ApplicationConstants.GSON.fromJson(partnerShiftMappingDao.getShiftConfig(), shiftMapType))

@@ -1,9 +1,7 @@
 package com.goev.central.service.shift.impl;
 
-import com.goev.central.dao.payout.PayoutModelDao;
 import com.goev.central.dao.shift.ShiftConfigurationDao;
 import com.goev.central.dao.shift.ShiftDao;
-import com.goev.central.dto.payout.PayoutModelDto;
 import com.goev.central.dto.shift.ShiftConfigurationDto;
 import com.goev.central.dto.shift.ShiftDto;
 import com.goev.central.repository.payout.PayoutModelRepository;
@@ -18,7 +16,6 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -34,7 +31,7 @@ public class ShiftConfigurationServiceImpl implements ShiftConfigurationService 
     private final PayoutModelRepository payoutModelRepository;
 
     @Override
-    public Map<String,ShiftConfigurationDto> getShiftConfigurations(String shiftUUID) {
+    public Map<String, ShiftConfigurationDto> getShiftConfigurations(String shiftUUID) {
         ShiftDao shiftDao = shiftRepository.findByUUID(shiftUUID);
         if (shiftDao == null)
             throw new ResponseException("No shift  found for Id :" + shiftUUID);
@@ -43,10 +40,7 @@ public class ShiftConfigurationServiceImpl implements ShiftConfigurationService 
         if (CollectionUtils.isEmpty(shiftConfigurationDaoList))
             return Collections.emptyMap();
 
-        List<ShiftConfigurationDto> shiftConfigurationDtoList = shiftConfigurationDaoList.stream().map(x -> {
-//            PayoutModelDao payoutModelDao = payoutModelRepository.findById(x.getPayoutModelId());
-            return ShiftConfigurationDto.fromDao(x, ShiftDto.fromDao(shiftDao),null);
-        }).toList();
+        List<ShiftConfigurationDto> shiftConfigurationDtoList = shiftConfigurationDaoList.stream().map(x -> ShiftConfigurationDto.fromDao(x, ShiftDto.fromDao(shiftDao))).toList();
         return shiftConfigurationDtoList.stream().collect(Collectors.toMap(ShiftConfigurationDto::getDay, Function.identity()));
 
     }
@@ -60,11 +54,11 @@ public class ShiftConfigurationServiceImpl implements ShiftConfigurationService 
 
         List<ShiftConfigurationDao> shiftConfigurationDaoList = new ArrayList<>();
 
-        for(Map.Entry<String,ShiftConfigurationDto> entry:shiftConfiguration.entrySet()) {
+        for (Map.Entry<String, ShiftConfigurationDto> entry : shiftConfiguration.entrySet()) {
             ShiftConfigurationDto configurationDto = entry.getValue();
 //            PayoutModelDao payoutModelDao = payoutModelRepository.findByUUID(configurationDto.getPayoutModel().getUuid());
 
-            ShiftConfigurationDao shiftConfigurationDao = ShiftConfigurationDao.fromDto(configurationDto,shiftDao.getId(),null);
+            ShiftConfigurationDao shiftConfigurationDao = ShiftConfigurationDao.fromDto(configurationDto, shiftDao.getId(), null);
             shiftConfigurationDao.setDay(entry.getKey());
             shiftConfigurationDao = shiftConfigurationRepository.save(shiftConfigurationDao);
             if (shiftConfigurationDao == null) {
@@ -74,10 +68,7 @@ public class ShiftConfigurationServiceImpl implements ShiftConfigurationService 
             shiftConfigurationDaoList.add(shiftConfigurationDao);
 
         }
-        List<ShiftConfigurationDto> shiftConfigurationDtoList = shiftConfigurationDaoList.stream().map(x -> {
-//            PayoutModelDao payoutModelDao = payoutModelRepository.findById(x.getPayoutModelId());
-            return ShiftConfigurationDto.fromDao(x, ShiftDto.fromDao(shiftDao),null);
-        }).toList();
+        List<ShiftConfigurationDto> shiftConfigurationDtoList = shiftConfigurationDaoList.stream().map(x -> ShiftConfigurationDto.fromDao(x, ShiftDto.fromDao(shiftDao))).toList();
         return shiftConfigurationDtoList.stream().collect(Collectors.toMap(ShiftConfigurationDto::getDay, Function.identity()));
 
     }

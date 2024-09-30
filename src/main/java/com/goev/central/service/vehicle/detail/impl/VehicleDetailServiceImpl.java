@@ -42,10 +42,10 @@ public class VehicleDetailServiceImpl implements VehicleDetailService {
 
     @Override
     public VehicleDetailDto createVehicle(VehicleDetailDto vehicleDto) {
-        VehicleDao existingVehicle = vehicleRepository.findByPlateNumber(vehicleDto.getVehicle().getPlateNumber());
+        VehicleDao existingVehicle = vehicleRepository.findByPlateNumber(vehicleDto.getVehicleDetails().getPlateNumber());
 
         if (existingVehicle != null) {
-            throw new ResponseException("Error in saving vehicle: Vehicle with Vehicle Number :" + vehicleDto.getVehicle().getPlateNumber() + " already exist");
+            throw new ResponseException("Error in saving vehicle: Vehicle with Vehicle Number :" + vehicleDto.getVehicleDetails().getPlateNumber() + " already exist");
         }
         VehicleDao vehicleDao = getVehicleDao(vehicleDto);
         VehicleDao vehicle = vehicleRepository.save(vehicleDao);
@@ -70,7 +70,7 @@ public class VehicleDetailServiceImpl implements VehicleDetailService {
     private VehicleDao getVehicleDao(VehicleDetailDto vehicleDto) {
         VehicleDao vehicleDao = new VehicleDao();
 
-        vehicleDao.setPlateNumber(vehicleDto.getVehicle().getPlateNumber());
+        vehicleDao.setPlateNumber(vehicleDto.getVehicleDetails().getPlateNumber());
         vehicleDao.setOnboardingStatus(VehicleOnboardingStatus.ONBOARDED.name());
         vehicleDao.setStatus(VehicleStatus.AVAILABLE.name());
         vehicleDao.setSubStatus(VehicleSubStatus.NOT_ASSIGNED.name());
@@ -191,8 +191,8 @@ public class VehicleDetailServiceImpl implements VehicleDetailService {
         newVehicleDetails.setRegistrationDate(vehicleDto.getRegistrationDate());
         newVehicleDetails.setBatteryNumber(vehicleDto.getBatteryNumber());
         newVehicleDetails.setHasDuplicateKeys(vehicleDto.getHasDuplicateKeys());
-        if (vehicleDto.getVehicle() != null)
-            newVehicleDetails.setPlateNumber(vehicleDto.getVehicle().getPlateNumber());
+        if (vehicleDto.getVehicleDetails() != null)
+            newVehicleDetails.setPlateNumber(vehicleDto.getVehicleDetails().getPlateNumber());
 
         if (vehicleDto.getVehicleModel() != null) {
 
@@ -254,7 +254,7 @@ public class VehicleDetailServiceImpl implements VehicleDetailService {
         vehicleDto.setUuid(vehicleDao.getUuid());
         vehicleDto.setImageUrl(vehicleDao.getImageUrl());
         result.setImageUrl(vehicleDao.getImageUrl());
-        result.setVehicle(vehicleDto);
+        result.setVehicleDetails(vehicleDto);
         result.setUuid(vehicleDao.getUuid());
         if (vehicleDetailDao == null)
             return;

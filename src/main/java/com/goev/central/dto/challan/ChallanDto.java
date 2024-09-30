@@ -14,8 +14,8 @@ import lombok.*;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ChallanDto {
     private String uuid;
-    private PartnerViewDto partner;
-    private VehicleViewDto vehicle;
+    private PartnerViewDto partnerDetails;
+    private VehicleViewDto vehicleDetails;
     private String challanType;
     private String remark;
     private String challanUrl;

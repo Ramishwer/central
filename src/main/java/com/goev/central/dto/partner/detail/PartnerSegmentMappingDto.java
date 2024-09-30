@@ -16,16 +16,16 @@ import lombok.*;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PartnerSegmentMappingDto {
     private String uuid;
-    private PartnerSegmentDto segment;
-    private PartnerViewDto partner;
+    private PartnerSegmentDto segmentDetails;
+    private PartnerViewDto partnerDetails;
     private VehicleSegmentDto vehicleSegment;
 
 
     public static PartnerSegmentMappingDto fromDao(PartnerSegmentMappingDao partnerSegmentMappingDao,PartnerSegmentDto partnerSegmentDto,PartnerViewDto partner,VehicleSegmentDto vehicleSegmentDto){
           return PartnerSegmentMappingDto.builder()
                   .uuid(partnerSegmentMappingDao.getUuid())
-                  .segment(partnerSegmentDto)
-                  .partner(partner)
+                  .segmentDetails(partnerSegmentDto)
+                  .partnerDetails(partner)
                   .vehicleSegment(vehicleSegmentDto)
                   .build();
     }

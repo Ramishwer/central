@@ -85,7 +85,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public List<UserDao> findAllActive() {
-        return context.selectFrom(USERS).fetchInto(UserDao.class);
+        return context.selectFrom(USERS).where(USERS.IS_ACTIVE.eq(true)).fetchInto(UserDao.class);
     }
 
     @Override
@@ -101,5 +101,14 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public UserDao findByPhoneNumber(String phoneNumber) {
         return context.selectFrom(USERS).where(USERS.PHONE_NUMBER.eq(phoneNumber)).fetchAnyInto(UserDao.class);
+    }
+
+    @Override
+    public List<UserDao> findAllByOnboardingStatus(String onboardingStatus) {
+            return context.selectFrom(USERS)
+                    .where(USERS.ONBOARDING_STATUS.eq(onboardingStatus))
+                    .and(USERS.IS_ACTIVE.eq(true))
+                    .and(USERS.STATE.eq(RecordState.ACTIVE.name()))
+                    .fetchInto(UserDao.class);
     }
 }

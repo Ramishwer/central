@@ -20,7 +20,7 @@ import org.joda.time.DateTime;
 public class VehicleActionDto {
     private String actionDetails;
     private VehicleAction action;
-    private VehicleViewDto vehicle;
+    private VehicleViewDto vehicleDetails;
     private String status;
     private LatLongDto location;
     private String qrString;

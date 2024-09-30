@@ -32,7 +32,7 @@ import java.util.Map;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PartnerDetailDto {
-    private PartnerViewDto partner;
+    private PartnerViewDto partnerDetails;
     private String uuid;
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)

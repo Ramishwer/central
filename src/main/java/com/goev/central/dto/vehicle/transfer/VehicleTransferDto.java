@@ -16,7 +16,7 @@ import lombok.*;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class VehicleTransferDto {
     private String uuid;
-    private VehicleViewDto vehicle;
+    private VehicleViewDto vehicleDetails;
     private String transferType;
     private TransferUserDetailsDto transferFrom;
     private TransferUserDetailsDto transferTo;
@@ -29,7 +29,7 @@ public class VehicleTransferDto {
     public static VehicleTransferDto fromDao(VehicleTransferDetailDao detailDao, VehicleViewDto vehicleViewDto) {
         VehicleTransferDto result = VehicleTransferDto.builder()
                 .odometerReading(detailDao.getOdometerReading())
-                .vehicle(vehicleViewDto)
+                .vehicleDetails(vehicleViewDto)
                 .status(detailDao.getStatus())
                 .socReading(detailDao.getSocReading())
                 .transferType(detailDao.getTransferType())

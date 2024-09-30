@@ -1,21 +1,28 @@
 package com.goev.central.service.partner.payout.impl;
 
+import com.goev.central.constant.ApplicationConstants;
+import com.goev.central.dao.payout.PayoutModelDao;
 import com.goev.central.dao.partner.detail.PartnerDao;
-import com.goev.central.dao.partner.duty.PartnerShiftDao;
+import com.goev.central.dao.partner.payout.PartnerPayoutMappingDao;
 import com.goev.central.dao.partner.payout.PartnerPayoutDao;
+import com.goev.central.dao.partner.payout.PartnerPayoutMappingDao;
 import com.goev.central.dao.partner.payout.PartnerPayoutTransactionDao;
 import com.goev.central.dto.common.FilterDto;
 import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
+import com.goev.central.dto.payout.PayoutModelDto;
 import com.goev.central.dto.partner.PartnerViewDto;
-import com.goev.central.dto.partner.duty.PartnerShiftDto;
+import com.goev.central.dto.partner.payout.PartnerPayoutMappingDto;
 import com.goev.central.dto.partner.payout.PartnerPayoutDto;
+import com.goev.central.dto.partner.payout.PartnerPayoutMappingDto;
 import com.goev.central.dto.partner.payout.PartnerPayoutSummaryDto;
 import com.goev.central.dto.partner.payout.PartnerPayoutTransactionDto;
 import com.goev.central.enums.partner.PartnerShiftStatus;
 import com.goev.central.repository.partner.detail.PartnerRepository;
+import com.goev.central.repository.partner.payout.PartnerPayoutMappingRepository;
 import com.goev.central.repository.partner.payout.PartnerPayoutRepository;
 import com.goev.central.repository.partner.payout.PartnerPayoutTransactionRepository;
+import com.goev.central.repository.payout.PayoutModelRepository;
 import com.goev.central.service.partner.payout.PartnerPayoutService;
 import com.goev.lib.exceptions.ResponseException;
 import com.google.gson.Gson;
@@ -36,6 +43,9 @@ import java.util.stream.Collectors;
 public class PartnerPayoutServiceImpl implements PartnerPayoutService {
     private final PartnerPayoutRepository partnerPayoutRepository;
     private final PartnerPayoutTransactionRepository partnerPayoutTransactionRepository;
+    private final PartnerPayoutMappingRepository partnerPayoutMappingRepository;
+    private final PayoutModelRepository payoutModelRepository;
+
     private final PartnerRepository partnerRepository;
 
     @Override
@@ -98,10 +108,10 @@ public class PartnerPayoutServiceImpl implements PartnerPayoutService {
     public PaginatedResponseDto<PartnerPayoutDto> getPayouts(String status, PageDto page, FilterDto filter) {
 
         List<PartnerPayoutDao> activePayouts;
-        if(PartnerShiftStatus.IN_PROGRESS.name().equals(status) || PartnerShiftStatus.PENDING.name().equals(status)  )
-            activePayouts = partnerPayoutRepository.findAllByStatus(status,page);
+        if (PartnerShiftStatus.IN_PROGRESS.name().equals(status) || PartnerShiftStatus.PENDING.name().equals(status))
+            activePayouts = partnerPayoutRepository.findAllByStatus(status, page);
         else
-            activePayouts = partnerPayoutRepository.findAllByStatus(status,page,filter);
+            activePayouts = partnerPayoutRepository.findAllByStatus(status, page, filter);
 
         if (CollectionUtils.isEmpty(activePayouts))
             return PaginatedResponseDto.<PartnerPayoutDto>builder().elements(new ArrayList<>()).build();
@@ -117,6 +127,57 @@ public class PartnerPayoutServiceImpl implements PartnerPayoutService {
         });
         return PaginatedResponseDto.<PartnerPayoutDto>builder().elements(payoutList).build();
 
+    }
+
+    @Override
+    public List<PartnerPayoutMappingDto> getPayoutModelMappings(String partnerUUID) {
+        PartnerDao partner = partnerRepository.findByUUID(partnerUUID);
+        if (partner == null)
+            throw new ResponseException("No partner found for Id :" + partnerUUID);
+
+        List<PartnerPayoutMappingDao> partnerPayoutMappingDaoList = partnerPayoutMappingRepository.findAllByPartnerId(partner.getId());
+
+        List<PartnerPayoutMappingDto> result = new ArrayList<>();
+
+        for (PartnerPayoutMappingDao partnerPayoutMappingDao : partnerPayoutMappingDaoList) {
+            result.add(PartnerPayoutMappingDto.fromDao(partnerPayoutMappingDao, PartnerViewDto.fromDao(partner)));
+        }
+
+        return result;
+    }
+
+    @Override
+    public PartnerPayoutMappingDto createPayoutModelMapping(String partnerUUID, PartnerPayoutMappingDto partnerPayoutMappingDto) {
+        PartnerDao partner = partnerRepository.findByUUID(partnerUUID);
+        if (partner == null)
+            throw new ResponseException("No partner found for Id :" + partnerUUID);
+
+        if (partnerPayoutMappingDto.getConfig() == null)
+            throw new ResponseException("No payout model details present.");
+
+        PartnerPayoutMappingDao partnerPayoutMappingDao = new PartnerPayoutMappingDao();
+        partnerPayoutMappingDao.setTriggerType(partnerPayoutMappingDao.getTriggerType());
+        partnerPayoutMappingDao.setPartnerId(partner.getId());
+        partnerPayoutMappingDao.setConfig(ApplicationConstants.GSON.toJson(partnerPayoutMappingDto.getConfig()));
+        partnerPayoutMappingDao = partnerPayoutMappingRepository.save(partnerPayoutMappingDao);
+        if (partnerPayoutMappingDao == null)
+            throw new ResponseException("Error in saving partner payout mapping");
+
+        return PartnerPayoutMappingDto.fromDao(partnerPayoutMappingDao, PartnerViewDto.fromDao(partner));
+    }
+
+    @Override
+    public Boolean deletePayoutModelMapping(String partnerUUID, String partnerPayoutModelMappingUUID) {
+        PartnerDao partner = partnerRepository.findByUUID(partnerUUID);
+        if (partner == null)
+            throw new ResponseException("No partner found for Id :" + partnerUUID);
+
+        PartnerPayoutMappingDao partnerPayoutMappingDao = partnerPayoutMappingRepository.findByUUID(partnerPayoutModelMappingUUID);
+        if (partnerPayoutMappingDao == null)
+            throw new ResponseException("No payout mapping found for Id :" + partnerPayoutModelMappingUUID);
+
+        partnerPayoutMappingRepository.delete(partnerPayoutMappingDao.getId());
+        return true;
     }
 
 

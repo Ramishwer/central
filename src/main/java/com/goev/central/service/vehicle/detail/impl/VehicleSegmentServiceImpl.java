@@ -112,17 +112,17 @@ public class VehicleSegmentServiceImpl implements VehicleSegmentService {
         if (vehicleSegmentDao == null)
             throw new ResponseException("No vehicle segment found for Id :" + segmentUUID);
 
-        if (vehicleSegmentMappingDto.getVehicle() == null)
+        if (vehicleSegmentMappingDto.getVehicleDetails() == null)
             throw new ResponseException("No vehicle details present.");
 
-        VehicleDao vehicleDao = vehicleRepository.findByUUID(vehicleSegmentMappingDto.getVehicle().getUuid());
+        VehicleDao vehicleDao = vehicleRepository.findByUUID(vehicleSegmentMappingDto.getVehicleDetails().getUuid());
 
         if (vehicleDao == null)
-            throw new ResponseException("No vehicle found for Id :" + vehicleSegmentMappingDto.getVehicle().getUuid());
+            throw new ResponseException("No vehicle found for Id :" + vehicleSegmentMappingDto.getVehicleDetails().getUuid());
 
         List<VehicleSegmentMappingDao> mappings = vehicleSegmentMappingRepository.findAllByVehicleId(vehicleDao.getId());
         if(!CollectionUtils.isEmpty(mappings))
-            throw new ResponseException("Only one mapping can be created for a vehicle :" + vehicleSegmentMappingDto.getVehicle().getUuid());
+            throw new ResponseException("Only one mapping can be created for a vehicle :" + vehicleSegmentMappingDto.getVehicleDetails().getUuid());
 
         VehicleSegmentMappingDao mappingDao = new VehicleSegmentMappingDao();
 

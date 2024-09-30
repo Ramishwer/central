@@ -16,4 +16,6 @@ public class UserDao extends BaseDao {
     private String authUuid;
     private String viewInfo;
     private String profileUrl;
+    private String onboardingStatus;
+    private String displayCode;
 }

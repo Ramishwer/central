@@ -27,14 +27,14 @@ public class UserDetailServiceImpl implements UserDetailService {
 
     @Override
     public UserDetailDto createUser(UserDetailDto userDto) {
-        UserDao existingUser = userRepository.findByPhoneNumber(userDto.getUser().getPhoneNumber());
+        UserDao existingUser = userRepository.findByPhoneNumber(userDto.getUserDetails().getPhoneNumber());
 
         if (existingUser != null) {
-            throw new ResponseException("Error in saving user: User with Phone Number :" + userDto.getUser().getPhoneNumber() + " already exist");
+            throw new ResponseException("Error in saving user: User with Phone Number :" + userDto.getUserDetails().getPhoneNumber() + " already exist");
         }
         UserDao userDao = new UserDao();
 
-        userDao.setPhoneNumber(userDto.getUser().getPhoneNumber());
+        userDao.setPhoneNumber(userDto.getUserDetails().getPhoneNumber());
         UserDao user = userRepository.save(userDao);
 
         if (user == null)
@@ -108,12 +108,12 @@ public class UserDetailServiceImpl implements UserDetailService {
     private UserDetailDao getUserDetailDao(UserDetailDto userDto) {
         UserDetailDao newUserDetails = new UserDetailDao();
 
-        if (userDto.getUser() != null) {
+        if (userDto.getUserDetails() != null) {
             newUserDetails.setFirstName(userDto.getFirstName());
             newUserDetails.setLastName(userDto.getLastName());
-            newUserDetails.setEmail(userDto.getUser().getEmail());
+            newUserDetails.setEmail(userDto.getUserDetails().getEmail());
             newUserDetails.setProfileUrl(userDto.getProfileUrl());
-            newUserDetails.setPhoneNumber(userDto.getUser().getPhoneNumber());
+            newUserDetails.setPhoneNumber(userDto.getUserDetails().getPhoneNumber());
         }
 
         return newUserDetails;
@@ -126,7 +126,7 @@ public class UserDetailServiceImpl implements UserDetailService {
         userDto.setAuthUUID(userDao.getAuthUuid());
         userDto.setEmail(userDao.getEmail());
         userDto.setProfileUrl(userDao.getProfileUrl());
-        result.setUser(userDto);
+        result.setUserDetails(userDto);
 
 
         if (userDetails == null)

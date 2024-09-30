@@ -18,11 +18,11 @@ public class PayoutModelController {
     private final PayoutModelService payoutModelService;
 
     @GetMapping("/payout-models")
-    public ResponseDto<PaginatedResponseDto<PayoutModelDto>> getPayoutModels(@RequestParam("count") Integer count,
-                                                                             @RequestParam("start") Integer start,
-                                                                             @RequestParam("from") Long from,
-                                                                             @RequestParam("to") Long to,
-                                                                             @RequestParam("lastUUID") String lastElementUUID) {
+    public ResponseDto<PaginatedResponseDto<PayoutModelDto>> getPayoutModels(@RequestParam(value = "count",required = false) Integer count,
+                                                                             @RequestParam(value ="start",required = false) Integer start,
+                                                                             @RequestParam(value ="from",required = false) Long from,
+                                                                             @RequestParam(value ="to",required = false) Long to,
+                                                                             @RequestParam(value ="lastUUID",required = false) String lastElementUUID) {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, payoutModelService.getPayoutModels());
     }
 

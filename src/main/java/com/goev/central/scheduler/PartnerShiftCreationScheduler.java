@@ -104,7 +104,7 @@ public class PartnerShiftCreationScheduler {
                         continue;
                     }
 
-                    partner.setDutyDetails(ApplicationConstants.GSON.toJson(PartnerDutyDto.builder().partner(PartnerViewDto.fromDao(partner))
+                    partner.setDutyDetails(ApplicationConstants.GSON.toJson(PartnerDutyDto.builder().partnerDetails(PartnerViewDto.fromDao(partner))
                             .shiftDetails(PartnerShiftDto.fromDao(partnerShiftDao, PartnerViewDto.fromDao(partner)))
                             .build()));
                     partner.setSubStatus(PartnerSubStatus.DUTY_ASSIGNED.name());

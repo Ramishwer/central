@@ -27,7 +27,6 @@ public class PartnerShiftDto {
     private String uuid;
     private String shiftStart;
     private String shiftEnd;
-    private PayoutModelDto payoutModel;
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime applicableFromTime;
@@ -40,7 +39,7 @@ public class PartnerShiftDto {
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime estimatedEndTime;
-    private PartnerViewDto partner;
+    private PartnerViewDto partnerDetails;
     private String day;
     private ShiftDto shift;
     private ShiftConfigurationDto shiftConfig;
@@ -75,7 +74,7 @@ public class PartnerShiftDto {
                 .offlineLocationDetails(ApplicationConstants.GSON.fromJson(shift.getOfflineLocationDetails(), LocationDto.class))
                 .assignableVehicleCategoryDetails(ApplicationConstants.GSON.fromJson(shift.getAssignableVehicleCategoryDetails(), VehicleCategoryDto.class))
                 .dutyDate(shift.getDutyDate())
-                .partner(partner)
+                .partnerDetails(partner)
                 .status(shift.getStatus())
                 .subStatus(shift.getSubStatus())
                 .build();

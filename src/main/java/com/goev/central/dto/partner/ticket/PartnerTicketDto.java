@@ -15,7 +15,7 @@ import lombok.*;
 public class PartnerTicketDto {
 
     private String uuid;
-    private PartnerViewDto partner;
+    private PartnerViewDto partnerDetails;
     private String ticketType;
     private String ticketId;
     private String status;

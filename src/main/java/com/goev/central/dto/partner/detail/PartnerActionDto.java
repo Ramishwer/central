@@ -21,7 +21,7 @@ import org.joda.time.DateTime;
 public class PartnerActionDto {
     private String actionDetails;
     private PartnerAction action;
-    private PartnerViewDto partner;
+    private PartnerViewDto partnerDetails;
     private String status;
     private LatLongDto location;
     private String qrString;

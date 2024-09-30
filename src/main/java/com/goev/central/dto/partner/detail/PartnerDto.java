@@ -35,7 +35,7 @@ public class PartnerDto {
     private String subStatus;
     private String profileUrl;
     private VehicleViewDto vehicleDetails;
-    private BookingViewDto bookingDetails;
+    private BookingViewDto booking;
     private LocationDto locationDetails;
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
@@ -60,7 +60,7 @@ public class PartnerDto {
                 .subStatus(partner.getSubStatus())
                 .profileUrl(partner.getProfileUrl())
                 .vehicleDetails(ApplicationConstants.GSON.fromJson(partner.getVehicleDetails(), VehicleViewDto.class))
-                .bookingDetails(ApplicationConstants.GSON.fromJson(partner.getBookingDetails(), BookingViewDto.class))
+                .booking(ApplicationConstants.GSON.fromJson(partner.getBookingDetails(), BookingViewDto.class))
                 .locationDetails(ApplicationConstants.GSON.fromJson(partner.getLocationDetails(), LocationDto.class))
                 .dutyDetails(ApplicationConstants.GSON.fromJson(partner.getDutyDetails(), PartnerDutyDto.class))
                 .locationStatus(partner.getLocationStatus())

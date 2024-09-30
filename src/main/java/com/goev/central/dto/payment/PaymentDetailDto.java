@@ -13,7 +13,7 @@ import lombok.*;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PaymentDetailDto {
     private String uuid;
-    private PaymentDto payment;
+    private PaymentDto paymentDetails;
     private String type;
     private String paymentMethod;
     private String paymentMode;

@@ -13,7 +13,7 @@ import lombok.*;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class VehicleTicketDto {
-    private VehicleViewDto vehicle;
+    private VehicleViewDto vehicleDetails;
     private String ticketType;
     private String ticketId;
     private String status;

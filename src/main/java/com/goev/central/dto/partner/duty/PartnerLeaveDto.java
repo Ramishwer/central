@@ -13,5 +13,5 @@ import lombok.*;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PartnerLeaveDto {
     private String uuid;
-    private PartnerViewDto partner;
+    private PartnerViewDto partnerDetails;
 }

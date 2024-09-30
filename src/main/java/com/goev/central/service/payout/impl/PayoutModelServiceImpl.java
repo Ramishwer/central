@@ -30,9 +30,7 @@ public class PayoutModelServiceImpl implements PayoutModelService {
             return result;
 
         for (PayoutModelDao payoutModelDao : payoutModelDaos) {
-            result.getElements().add(PayoutModelDto.builder()
-                    .uuid(payoutModelDao.getUuid())
-                    .build());
+            result.getElements().add(PayoutModelDto.fromDao(payoutModelDao));
         }
         return result;
     }
