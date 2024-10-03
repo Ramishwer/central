@@ -34,6 +34,8 @@ public class PartnerPayoutDto {
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime finalizationDate;
     private PartnerPayoutSummaryDto payoutSummary;
+    private Integer totalWorkingDays;
+    private Integer totalPayableDays;
     private Integer payoutTotalBookingAmount;
     private Integer payoutTotalAmount;
     private Integer payoutTotalDeductionAmount;
@@ -44,6 +46,8 @@ public class PartnerPayoutDto {
        if(payoutDao == null)
         return null;
        return PartnerPayoutDto.builder()
+               .totalPayableDays(payoutDao.getTotalPayableDays())
+               .totalWorkingDays(payoutDao.getTotalWorkingDays())
                .partnerDetails(partnerViewDto)
                .payoutStartDate(payoutDao.getPayoutStartDate())
                .payoutEndDate(payoutDao.getPayoutEndDate())

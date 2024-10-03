@@ -56,7 +56,7 @@ public class PartnerPayoutEngineScheduler {
                 payoutDao = new PartnerPayoutDao();
                 payoutDao.setPartnerId(partnerPayoutMappingDao.getPartnerId());
                 payoutDao.setPayoutStartDate(monthStart);
-                payoutDao.setPayoutStartDate(monthEnd);
+                payoutDao.setPayoutEndDate(monthEnd);
                 payoutDao.setTotalWorkingDays(totalWorkingDays);
                 payoutDao.setPayoutTotalAmount(0);
                 payoutDao.setPayoutTotalDebitAmount(0);
