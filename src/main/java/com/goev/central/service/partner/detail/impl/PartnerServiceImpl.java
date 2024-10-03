@@ -387,6 +387,17 @@ public class PartnerServiceImpl implements PartnerService {
 
 
     private PartnerDao checkOut(PartnerDao partner, PartnerActionDto actionDto) {
+        partner.setStatus(PartnerStatus.OFF_DUTY.name());
+        partner.setSubStatus(PartnerSubStatus.NO_DUTY.name());
+        partner.setLocationDetails(null);
+        partner.setLocationId(null);
+        VehicleDao vehicle = null;
+        if (partner.getVehicleId() != null) {
+            vehicle = vehicleRepository.findById(partner.getVehicleId());
+            vehicle.setStatus(VehicleStatus.AVAILABLE.name());
+            vehicle =vehicleRepository.update(vehicle);
+
+        }
         PartnerDutyDao currentDuty = partnerDutyRepository.findById(partner.getPartnerDutyId());
         if (currentDuty != null) {
             PartnerShiftDao shiftDao = partnerShiftRepository.findById(currentDuty.getPartnerShiftId());
@@ -394,32 +405,34 @@ public class PartnerServiceImpl implements PartnerService {
                 currentDuty.setActualDutyEndLocationDetails(shiftDao.getOutLocationDetails());
             currentDuty.setStatus(PartnerDutyStatus.COMPLETED.name());
             currentDuty.setActualDutyEndTime(DateTime.now());
+            if(currentDuty.getVehicles()!=null){
+                Type t = new com.google.gson.reflect.TypeToken<List<PartnerDutyVehicleDetailsDto>>(){}.getType();
+                List<PartnerDutyVehicleDetailsDto> vehicles  = ApplicationConstants.GSON.fromJson(currentDuty.getVehicles(),t);
+                if(!CollectionUtils.isEmpty(vehicles) && vehicle !=null){
+                    String plateNumber = vehicle.getPlateNumber();
+                    vehicles = vehicles.stream().peek(vehicleDetailsDto->{
+                        if(vehicleDetailsDto.getReleaseTime()==null && vehicleDetailsDto.getPlateNumber().equals(plateNumber)){
+                            vehicleDetailsDto.setReleaseTime(DateTime.now());
+                            vehicleDetailsDto.setStatus(PartnerDutyVehicleStatus.RELEASED.name());
+                        }
+                    }).toList();
+                    currentDuty.setVehicles(ApplicationConstants.GSON.toJson(vehicles));
+                }
+            }
             partnerDutyRepository.update(currentDuty);
         }
-
-        partner.setStatus(PartnerStatus.OFF_DUTY.name());
-        partner.setSubStatus(PartnerSubStatus.NO_DUTY.name());
-        partner.setPartnerDutyId(null);
-        partner.setBookingDetails(null);
-        partner.setBookingId(null);
-        partner.setPartnerShiftId(null);
-        partner.setLocationDetails(null);
-        partner.setLocationId(null);
-        if (partner.getVehicleId() != null) {
-            VehicleDao vehicle = vehicleRepository.findById(partner.getVehicleId());
-            vehicle.setStatus(VehicleStatus.AVAILABLE.name());
-            vehicleRepository.update(vehicle);
-        }
         partner.setVehicleId(null);
+        partner.setPartnerDutyId(null);
+        partner.setPartnerShiftId(null);
+        partner.setBookingId(null);
+
         if (partner.getPartnerDutyId() == null)
             partner.setDutyDetails(null);
-        if (partner.getVehicleId() == null) {
+        if (partner.getVehicleId() == null)
             partner.setVehicleDetails(null);
-        }
         if (partner.getBookingId() == null)
             partner.setBookingDetails(null);
         partner = partnerRepository.update(partner);
-
         return partner;
     }
 
