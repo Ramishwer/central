@@ -7,6 +7,7 @@ import com.goev.central.dao.vehicle.detail.VehicleDao;
 import com.goev.central.dto.partner.duty.PartnerDutyDto;
 import com.goev.central.dto.partner.duty.PartnerDutyVehicleDetailsDto;
 import com.goev.central.dto.vehicle.VehicleViewDto;
+import com.goev.central.enums.partner.PartnerDutyVehicleStatus;
 import com.goev.central.enums.partner.PartnerStatus;
 import com.goev.central.enums.partner.PartnerSubStatus;
 import com.goev.central.enums.vehicle.VehicleStatus;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -40,7 +42,7 @@ public class VehicleAssignmentScheduler {
         log.info("The {} time is now {}", this.getClass().getName(), DateTime.now());
         List<PartnerDao> allPartners = partnerRepository.findAllUnAssignedPartners();
 
-        Type t= new TypeToken<Set<PartnerDutyVehicleDetailsDto>>(){}.getRawType();
+        Type t= new TypeToken<List<PartnerDutyVehicleDetailsDto>>(){}.getRawType();
 
         for (PartnerDao partnerDao : allPartners) {
             List<VehicleDao> eligibleVehicles = vehicleRepository.findEligibleVehicleForPartnerId(partnerDao.getId());
@@ -67,12 +69,12 @@ public class VehicleAssignmentScheduler {
                     partnerRepository.update(partnerDao);
                     if(partnerDao.getPartnerDutyId()!=null){
                         PartnerDutyDao partnerDutyDao = partnerDutyRepository.findById(partnerDao.getPartnerDutyId());
-                        Set<PartnerDutyVehicleDetailsDto> vehicles = new HashSet<>();
+                        List<PartnerDutyVehicleDetailsDto> vehicles = new ArrayList<>();
 
                         if(partnerDutyDao.getVehicles()!= null){
                             vehicles = ApplicationConstants.GSON.fromJson(partnerDutyDao.getVehicles(),t);
                         }
-                        vehicles.add(PartnerDutyVehicleDetailsDto.builder().plateNumber(vehicle.getPlateNumber()).assignmentTime(DateTime.now()).build());
+                        vehicles.add(PartnerDutyVehicleDetailsDto.builder().vehicleDetails(VehicleViewDto.fromDao(vehicle)).plateNumber(vehicle.getPlateNumber()).status(PartnerDutyVehicleStatus.ASSIGNED.name()).assignmentTime(DateTime.now()).build());
                         partnerDutyDao.setVehicles(ApplicationConstants.GSON.toJson(vehicles));
                         partnerDutyRepository.update(partnerDutyDao);
                     }

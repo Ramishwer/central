@@ -212,8 +212,8 @@ public class PartnerServiceImpl implements PartnerService {
         PartnerDao partner = partnerRepository.findByUUID(partnerUUID);
         if (partner == null)
             throw new ResponseException("No partner found for Id :" + partnerUUID);
-        if(RequestContext.getUserSession()!=null)
-            log.info("Action By User {} By Partner : {} {}", RequestContext.getUserSession().getUserId(),partner.getPunchId(),ApplicationConstants.GSON.toJson(actionDto));
+        if (RequestContext.getUserSession() != null)
+            log.info("Action By User {} By Partner : {} {}", RequestContext.getUserSession().getUserId(), partner.getPunchId(), ApplicationConstants.GSON.toJson(actionDto));
 
         switch (actionDto.getAction()) {
             case DEBOARD -> {
@@ -351,15 +351,16 @@ public class PartnerServiceImpl implements PartnerService {
         partnerDao.setVehicleId(vehicle.getId());
         partnerDao.setVehicleDetails(ApplicationConstants.GSON.toJson(VehicleViewDto.fromDao(vehicle)));
 
-        if(partnerDao.getPartnerDutyId()!=null){
-            Type t= new TypeToken<Set<PartnerDutyVehicleDetailsDto>>(){}.getRawType();
+        if (partnerDao.getPartnerDutyId() != null) {
+            Type t = new TypeToken<List<PartnerDutyVehicleDetailsDto>>() {
+            }.getRawType();
             PartnerDutyDao partnerDutyDao = partnerDutyRepository.findById(partnerDao.getPartnerDutyId());
-            Set<PartnerDutyVehicleDetailsDto> vehicles = new HashSet<>();
+            List<PartnerDutyVehicleDetailsDto> vehicles = new ArrayList<>();
 
-            if(partnerDutyDao.getVehicles()!= null){
-                vehicles = ApplicationConstants.GSON.fromJson(partnerDutyDao.getVehicles(),t);
+            if (partnerDutyDao.getVehicles() != null) {
+                vehicles = ApplicationConstants.GSON.fromJson(partnerDutyDao.getVehicles(), t);
             }
-            vehicles.add(PartnerDutyVehicleDetailsDto.builder().plateNumber(vehicle.getPlateNumber()).assignmentTime(DateTime.now()).build());
+            vehicles.add(PartnerDutyVehicleDetailsDto.builder().vehicleDetails(VehicleViewDto.fromDao(vehicle)).plateNumber(vehicle.getPlateNumber()).status(PartnerDutyVehicleStatus.ASSIGNED.name()).assignmentTime(DateTime.now()).build());
             partnerDutyDao.setVehicles(ApplicationConstants.GSON.toJson(vehicles));
             partnerDutyRepository.update(partnerDutyDao);
         }
@@ -379,6 +380,24 @@ public class PartnerServiceImpl implements PartnerService {
         partnerDao.setSubStatus(PartnerSubStatus.VEHICLE_NOT_ALLOTTED.name());
         partnerDao.setVehicleId(null);
         partnerDao.setVehicleDetails(null);
+
+        if(partnerDao.getPartnerDutyId()!=null){
+            PartnerDutyDao partnerDutyDao = partnerDutyRepository.findById(partnerDao.getPartnerDutyId());
+            if(partnerDutyDao.getVehicles()!=null){
+                Type t = new TypeToken<List<PartnerDutyVehicleDetailsDto>>(){}.getType();
+                List<PartnerDutyVehicleDetailsDto> vehicles  = ApplicationConstants.GSON.fromJson(partnerDutyDao.getVehicles(),t);
+                if(!CollectionUtils.isEmpty(vehicles)){
+                    vehicles = vehicles.stream().peek(vehicleDetailsDto->{
+                        if(vehicleDetailsDto.getReleaseTime()==null && vehicleDetailsDto.getPlateNumber().equals(vehicle.getPlateNumber())){
+                            vehicleDetailsDto.setReleaseTime(DateTime.now());
+                            vehicleDetailsDto.setStatus(PartnerDutyVehicleStatus.RELEASED.name());
+                        }
+                    }).toList();
+                   partnerDutyDao.setVehicles(ApplicationConstants.GSON.toJson(vehicles));
+                   partnerDutyRepository.update(partnerDutyDao);
+                }
+            }
+        }
         return partnerRepository.update(partnerDao);
     }
 
@@ -422,7 +441,7 @@ public class PartnerServiceImpl implements PartnerService {
 
     private PartnerDao goOffline(PartnerDao partner, PartnerActionDto actionDto) {
 
-        if(!PartnerStatus.ONLINE.name().equals(partner.getStatus()))
+        if (!PartnerStatus.ONLINE.name().equals(partner.getStatus()))
             throw new ResponseException("Partner Is not online yet");
         partner.setStatus(PartnerStatus.VEHICLE_ASSIGNED.name());
         partner.setSubStatus(PartnerSubStatus.WAITING_FOR_ONLINE.name());

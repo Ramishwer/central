@@ -17,6 +17,7 @@ import lombok.*;
 import org.joda.time.DateTime;
 
 import java.lang.reflect.Type;
+import java.util.List;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -51,7 +52,7 @@ public class PartnerDutyDto {
     private Long actualTotalOnlineTimeInMillis;
     private Long actualTotalPauseTimeInMillis;
     private String status;
-    private Set<PartnerDutyVehicleDetailsDto> vehicles;
+    private List<PartnerDutyVehicleDetailsDto> vehicles;
 
     public static PartnerDutyDto fromDao(PartnerDutyDao dutyDao, PartnerViewDto partner, PartnerShiftDao shift) {
 
@@ -81,8 +82,8 @@ public class PartnerDutyDto {
         }
 
         if (dutyDao.getVehicles() != null) {
-            Type t= new TypeToken<Set<PartnerDutyVehicleDetailsDto>>(){}.getRawType();
-            Set<PartnerDutyVehicleDetailsDto> vehicles = ApplicationConstants.GSON.fromJson(dutyDao.getVehicles(),t);
+            Type t= new TypeToken<List<PartnerDutyVehicleDetailsDto>>(){}.getRawType();
+            List<PartnerDutyVehicleDetailsDto> vehicles = ApplicationConstants.GSON.fromJson(dutyDao.getVehicles(),t);
             result.setVehicles(vehicles);
         }
 
