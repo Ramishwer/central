@@ -33,7 +33,7 @@ public class PartnerPayoutEngineScheduler {
     private final PartnerPayoutMappingRepository partnerPayoutMappingRepository;
     private final PartnerPayoutRepository partnerPayoutRepository;
 
-    @Scheduled(cron = "0 0 0/6 * * ?" , zone = "Asia/Calcutta")
+    @Scheduled(cron = "0 0 0/1 * * ?" , zone = "Asia/Calcutta")
     public void reportCurrentTime() {
         log.info("The {} time is now {}", this.getClass().getName(), DateTime.now());
         List<PartnerPayoutMappingDao> allPartnerMappings = partnerPayoutMappingRepository.findAllActive();
