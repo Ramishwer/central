@@ -156,23 +156,7 @@ public class PartnerServiceImpl implements PartnerService {
         if (CollectionUtils.isEmpty(partners))
             return result;
         for (PartnerDao partner : partners) {
-            PartnerDto partnerDto = new PartnerDto();
-            partnerDto.setUuid(partner.getUuid());
-            partnerDto.setPunchId(partner.getPunchId());
-            partnerDto.setStatus(partner.getStatus());
-            partnerDto.setSubStatus(partner.getSubStatus());
-            partnerDto.setLocationStatus(partner.getLocationStatus());
-
-            partnerDto.setVehicleDetails(ApplicationConstants.GSON.fromJson(partner.getVehicleDetails(), VehicleViewDto.class));
-            partnerDto.setDutyDetails(ApplicationConstants.GSON.fromJson(partner.getDutyDetails(), PartnerDutyDto.class));
-            partnerDto.setBooking(ApplicationConstants.GSON.fromJson(partner.getBookingDetails(), BookingViewDto.class));
-            partnerDto.setLocationDetails(ApplicationConstants.GSON.fromJson(partner.getLocationDetails(), LocationDto.class));
-            partnerDto.setPartnerDetails(PartnerViewDto.fromDao(partner));
-            if (partner.getSegments() != null) {
-                Type t = new TypeToken<List<PartnerSegmentDto>>() {
-                }.getRawType();
-                partnerDto.setSegments(ApplicationConstants.GSON.fromJson(partner.getSegments(), t));
-            }
+            PartnerDto partnerDto = PartnerDto.fromDao(partner);
             result.getElements().add(partnerDto);
         }
         return result;
