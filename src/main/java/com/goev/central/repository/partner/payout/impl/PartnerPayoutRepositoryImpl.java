@@ -126,7 +126,7 @@ public class PartnerPayoutRepositoryImpl implements PartnerPayoutRepository {
         return context.selectFrom(PARTNER_PAYOUTS)
                 .where(PARTNER_PAYOUTS.PARTNER_ID.eq(partnerId))
                 .and(PARTNER_PAYOUTS.PAYOUT_START_DATE.eq(start))
-                .and(PARTNER_PAYOUTS.PAYOUT_END_DATE.eq(start))
+                .and(PARTNER_PAYOUTS.PAYOUT_END_DATE.eq(end))
                 .and(PARTNER_PAYOUTS.STATE.eq(RecordState.ACTIVE.name()))
                 .and(PARTNER_PAYOUTS.IS_ACTIVE.eq(true))
                 .fetchOneInto(PartnerPayoutDao.class);
