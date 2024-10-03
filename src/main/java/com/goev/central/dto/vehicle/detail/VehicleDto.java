@@ -34,8 +34,6 @@ public class VehicleDto {
     private String status;
     private PartnerViewDto partnerDetails;
     private VehicleTransferDto vehicleTransferDetails;
-    private Integer soc;
-    private Integer dte;
     private String subStatus;
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)

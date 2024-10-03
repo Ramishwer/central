@@ -16,6 +16,8 @@ public class CustomerDetailDao extends BaseDao {
     private String lastName;
     private String email;
     private String preferredLanguage;
+    private String homeLocationDetails;
+    private String gstDetails;
     private Integer customerId;
 }
 

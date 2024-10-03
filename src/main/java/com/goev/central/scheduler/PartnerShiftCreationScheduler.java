@@ -42,7 +42,6 @@ public class PartnerShiftCreationScheduler {
     private final ShiftConfigurationRepository shiftConfigurationRepository;
     private final PartnerRepository partnerRepository;
     private final LocationRepository locationRepository;
-    private final PartnerDetailRepository partnerDetailRepository;
     private final ShiftRepository shiftRepository;
 
     @Scheduled(fixedRate = 2 * 60 * 1000)
@@ -75,7 +74,6 @@ public class PartnerShiftCreationScheduler {
                         partnerShiftDao.setShiftConfig(ApplicationConstants.GSON.toJson(shiftConfigurationDao));
                         partnerShiftDao.setShiftId(partnerShiftMappingDao.getShiftId());
                         partnerShiftDao.setPartnerId(partner.getId());
-                        partnerShiftDao.setPayoutModelId(shiftConfigurationDao.getPayoutModelId());
                         partnerShiftDao.setDay(shiftConfigurationDao.getDay());
                         partnerShiftDao.setEstimatedStartTime(date.plus(formatter.parseDateTime(shiftConfigurationDao.getEstimatedIn()).getMillis()));
                         partnerShiftDao.setEstimatedEndTime(date.plus(formatter.parseDateTime(shiftConfigurationDao.getEstimatedOut()).getMillis()));

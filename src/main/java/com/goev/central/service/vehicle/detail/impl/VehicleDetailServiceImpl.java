@@ -53,7 +53,7 @@ public class VehicleDetailServiceImpl implements VehicleDetailService {
         if (vehicle == null)
             throw new ResponseException("Error in saving details");
 
-        VehicleDetailDao vehicleDetails = getVehicleDetailDao(vehicleDto,vehicleDao);
+        VehicleDetailDao vehicleDetails = getVehicleDetailDao(vehicleDto, vehicleDao);
         vehicleDetails.setVehicleId(vehicle.getId());
         vehicleDetails = vehicleDetailRepository.save(vehicleDetails);
         if (vehicleDetails == null)
@@ -108,6 +108,7 @@ public class VehicleDetailServiceImpl implements VehicleDetailService {
                             .year(vehicleModel.getYear())
                             .month(vehicleModel.getMonth())
                             .variant(vehicleModel.getVariant())
+                            .kmRange(vehicleModel.getKmRange())
                             .name(vehicleModel.getName())
                             .build());
                 }
@@ -239,7 +240,7 @@ public class VehicleDetailServiceImpl implements VehicleDetailService {
 
         newVehicleDetails.setImageUrl(vehicleDto.getImageUrl());
         if (vehicleDto.getImage() != null) {
-            newVehicleDetails.setImageUrl(s3.getUrlForPath(vehicleDto.getImage().getPath(), "image/vehicle/"+vehicleDao.getPlateNumber()));
+            newVehicleDetails.setImageUrl(s3.getUrlForPath(vehicleDto.getImage().getPath(), "image/vehicle/" + vehicleDao.getPlateNumber()));
         }
         newVehicleDetails.setOnboardingDate(vehicleDto.getOnboardingDate());
         newVehicleDetails.setDeboardingDate(vehicleDto.getDeboardingDate());

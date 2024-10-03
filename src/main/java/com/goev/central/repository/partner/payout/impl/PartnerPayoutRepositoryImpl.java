@@ -9,6 +9,7 @@ import com.goev.lib.enums.RecordState;
 import com.goev.record.central.tables.records.PartnerPayoutsRecord;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.joda.time.DateTime;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
@@ -118,5 +119,16 @@ public class PartnerPayoutRepositoryImpl implements PartnerPayoutRepository {
                 .limit(page.getLimit())
                 .offset(page.getStart())
                 .fetchInto(PartnerPayoutDao.class);
+    }
+
+    @Override
+    public PartnerPayoutDao findByPartnerIdAndStartAndEndTime(Integer partnerId, DateTime start, DateTime end) {
+        return context.selectFrom(PARTNER_PAYOUTS)
+                .where(PARTNER_PAYOUTS.PARTNER_ID.eq(partnerId))
+                .and(PARTNER_PAYOUTS.PAYOUT_START_DATE.eq(start))
+                .and(PARTNER_PAYOUTS.PAYOUT_END_DATE.eq(start))
+                .and(PARTNER_PAYOUTS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(PARTNER_PAYOUTS.IS_ACTIVE.eq(true))
+                .fetchOneInto(PartnerPayoutDao.class);
     }
 }

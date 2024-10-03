@@ -5,6 +5,7 @@ import com.goev.central.dao.booking.BookingDao;
 import com.goev.central.dao.partner.detail.PartnerDao;
 import com.goev.central.dto.FirebaseDetailDto;
 import com.goev.central.dto.booking.BookingViewDto;
+import com.goev.central.dto.partner.PartnerStatsDto;
 import com.goev.central.enums.booking.BookingStatus;
 import com.goev.central.enums.booking.BookingSubStatus;
 import com.goev.central.repository.booking.BookingRepository;
@@ -91,13 +92,16 @@ public class FirebaseListener {
                             viewDto.setTimeToReach(BigDecimal.valueOf((viewDto.getDistanceToReach()/1000.0 / 40.0) * 3600000).longValue());
                             booking.setViewInfo(ApplicationConstants.GSON.toJson(viewDto));
                             bookingRepository.update(booking);
-
+                            partnerDao.setStats(ApplicationConstants.GSON.toJson(PartnerStatsDto.builder().gps(data.getLocation().getCoords()).build()));
                             partnerDao.setBookingDetails(ApplicationConstants.GSON.toJson(viewDto));
                             partnerRepository.update(partnerDao);
                         }
 
 
                     }
+                }else if(partnerDao != null){
+                    partnerDao.setStats(ApplicationConstants.GSON.toJson(PartnerStatsDto.builder().gps(data.getLocation().getCoords()).build()));
+                    partnerRepository.update(partnerDao);
                 }
 
 

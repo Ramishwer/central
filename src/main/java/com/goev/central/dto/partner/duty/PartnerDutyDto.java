@@ -12,8 +12,12 @@ import com.goev.central.dto.location.LocationDto;
 import com.goev.central.dto.partner.PartnerViewDto;
 import com.goev.central.dto.shift.ShiftConfigurationDto;
 import com.goev.central.dto.vehicle.detail.VehicleCategoryDto;
+import com.google.common.reflect.TypeToken;
 import lombok.*;
 import org.joda.time.DateTime;
+
+import java.lang.reflect.Type;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -47,9 +51,12 @@ public class PartnerDutyDto {
     private Long actualTotalOnlineTimeInMillis;
     private Long actualTotalPauseTimeInMillis;
     private String status;
+    private Set<PartnerDutyVehicleDetailsDto> vehicles;
 
     public static PartnerDutyDto fromDao(PartnerDutyDao dutyDao, PartnerViewDto partner, PartnerShiftDao shift) {
 
+        if(dutyDao==null)
+            return null;
 
         PartnerDutyDto result = PartnerDutyDto.builder()
                 .uuid(dutyDao.getUuid())
@@ -71,6 +78,12 @@ public class PartnerDutyDto {
         if (shift != null) {
             PartnerShiftDto shiftDto = PartnerShiftDto.fromDao(shift,partner);
             result.setShiftDetails(shiftDto);
+        }
+
+        if (dutyDao.getVehicles() != null) {
+            Type t= new TypeToken<Set<PartnerDutyVehicleDetailsDto>>(){}.getRawType();
+            Set<PartnerDutyVehicleDetailsDto> vehicles = ApplicationConstants.GSON.fromJson(dutyDao.getVehicles(),t);
+            result.setVehicles(vehicles);
         }
 
         return result;

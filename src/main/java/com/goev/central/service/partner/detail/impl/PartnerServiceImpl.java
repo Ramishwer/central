@@ -18,6 +18,7 @@ import com.goev.central.dto.partner.detail.PartnerDto;
 import com.goev.central.dto.partner.detail.PartnerSegmentDto;
 import com.goev.central.dto.partner.detail.PartnerTrackingDto;
 import com.goev.central.dto.partner.duty.PartnerDutyDto;
+import com.goev.central.dto.partner.duty.PartnerDutyVehicleDetailsDto;
 import com.goev.central.dto.vehicle.VehicleViewDto;
 import com.goev.central.enums.booking.BookingStatus;
 import com.goev.central.enums.booking.BookingSubStatus;
@@ -349,6 +350,19 @@ public class PartnerServiceImpl implements PartnerService {
         partnerDao.setSubStatus(PartnerSubStatus.VEHICLE_ALLOTTED.name());
         partnerDao.setVehicleId(vehicle.getId());
         partnerDao.setVehicleDetails(ApplicationConstants.GSON.toJson(VehicleViewDto.fromDao(vehicle)));
+
+        if(partnerDao.getPartnerDutyId()!=null){
+            Type t= new TypeToken<Set<PartnerDutyVehicleDetailsDto>>(){}.getRawType();
+            PartnerDutyDao partnerDutyDao = partnerDutyRepository.findById(partnerDao.getPartnerDutyId());
+            Set<PartnerDutyVehicleDetailsDto> vehicles = new HashSet<>();
+
+            if(partnerDutyDao.getVehicles()!= null){
+                vehicles = ApplicationConstants.GSON.fromJson(partnerDutyDao.getVehicles(),t);
+            }
+            vehicles.add(PartnerDutyVehicleDetailsDto.builder().plateNumber(vehicle.getPlateNumber()).assignmentTime(DateTime.now()).build());
+            partnerDutyDao.setVehicles(ApplicationConstants.GSON.toJson(vehicles));
+            partnerDutyRepository.update(partnerDutyDao);
+        }
         return partnerRepository.update(partnerDao);
 
     }
