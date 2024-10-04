@@ -77,6 +77,8 @@ public class PartnerShiftCreationScheduler {
                         partnerShiftDao.setDay(shiftConfigurationDao.getDay());
                         partnerShiftDao.setEstimatedStartTime(date.plus(formatter.parseDateTime(shiftConfigurationDao.getEstimatedIn()).getMillis()));
                         partnerShiftDao.setEstimatedEndTime(date.plus(formatter.parseDateTime(shiftConfigurationDao.getEstimatedOut()).getMillis()));
+                        if(partnerShiftDao.getEstimatedEndTime().isBefore(partnerShiftDao.getEstimatedStartTime()))
+                            partnerShiftDao.setEstimatedEndTime(partnerShiftDao.getEstimatedEndTime().plusDays(1));
                         if(partner.getViewInfo()!=null) {
                             PartnerViewDto partnerViewDto = PartnerViewDto.fromDao(partner);
                             if(partnerViewDto!=null && partnerViewDto.getHomeLocation()!=null) {
