@@ -124,7 +124,7 @@ public class PartnerPayoutTransactionScheduler {
                     break;
                 }
             }
-            if(isPresent){
+            if(!CollectionUtils.isEmpty(allShifts) && isPresent){
                 Integer baseAmount = Integer.parseInt(payoutElementDto.getVariables().stream().filter(x -> "Base Amount".equals(x.getKey())).findFirst().orElse(VariableDto.builder().value(String.valueOf(0)).build()).getValue());
                 value = baseAmount / totalWorkingDays;
             }
