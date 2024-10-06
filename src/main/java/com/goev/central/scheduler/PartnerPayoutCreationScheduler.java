@@ -5,6 +5,8 @@ import com.goev.central.constant.ApplicationConstants;
 import com.goev.central.dao.partner.payout.PartnerPayoutDao;
 import com.goev.central.dao.partner.payout.PartnerPayoutMappingDao;
 import com.goev.central.dao.partner.payout.PartnerPayoutTransactionDao;
+import com.goev.central.dto.partner.payout.PartnerPayoutDto;
+import com.goev.central.dto.partner.payout.PartnerPayoutSummaryDto;
 import com.goev.central.dto.payout.PayoutElementDto;
 import com.goev.central.dto.payout.PayoutModelDto;
 import com.goev.central.enums.partner.PartnerPayoutStatus;
@@ -91,8 +93,15 @@ public class PartnerPayoutCreationScheduler {
                         mergedElements.get(entry.getKey()).setValue(mergedElements.get(entry.getKey()).getValue() + payoutElementDto.getValue());
                     }
                 }
+                PartnerPayoutSummaryDto summaryDto = PartnerPayoutSummaryDto.builder()
+                        .partnerPayout(PartnerPayoutDto.fromDao(payoutDao,null))
+                        .payoutStartDate(payoutDao.getPayoutStartDate())
+                        .payoutEndDate(payoutDao.getPayoutEndDate())
+                        .totalPayoutAmount(payoutDao.getPayoutTotalAmount())
+                        .elements(new ArrayList<>(mergedElements.values()))
+                        .build();
 
-                payoutDao.setPayoutSummary(ApplicationConstants.GSON.toJson(mergedElements.values()));
+                payoutDao.setPayoutSummary(ApplicationConstants.GSON.toJson(summaryDto));
                 payoutDao = partnerPayoutRepository.update(payoutDao);
             }
 

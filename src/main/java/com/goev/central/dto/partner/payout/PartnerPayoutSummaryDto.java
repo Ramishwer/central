@@ -20,13 +20,8 @@ import java.util.Map;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PartnerPayoutSummaryDto {
+    private PartnerPayoutDto partnerPayout;
     private Integer totalPayoutAmount;
-    private Integer totalCreditAmount;
-    private Integer totalDebitAmount;
-    private Integer totalBookingAmount;
-    private Integer totalDeductionAmount;
-    private Integer totalCashbookAmount;
-    private Integer totalGstAmount;
     private List<PayoutElementDto> elements;
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
