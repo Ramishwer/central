@@ -43,7 +43,7 @@ public class PartnerPayoutTransactionScheduler {
     private final PartnerDutyRepository partnerDutyRepository;
 
 
-    @Scheduled(cron = "1 0/30 * * * ?", zone = "Asia/Calcutta")
+    @Scheduled(cron = "1 0/15 * * * ?", zone = "Asia/Calcutta")
     public void reportCurrentTime() {
         log.info("The {} time is now {}", this.getClass().getName(), DateTime.now());
         List<PartnerPayoutDao> allLivePayouts = partnerPayoutRepository.findAllInProgressPayouts();
