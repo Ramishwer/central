@@ -46,8 +46,14 @@ public class PartnerPayoutTransactionScheduler {
     @Scheduled(cron = "1 0/15 * * * ?", zone = "Asia/Calcutta")
     public void reportCurrentTime() {
         log.info("The {} time is now {}", this.getClass().getName(), DateTime.now());
+        calculatePayout(DateTime.now());
+
+
+    }
+
+    public void calculatePayout(DateTime executionTime) {
         List<PartnerPayoutDao> allLivePayouts = partnerPayoutRepository.findAllInProgressPayouts();
-        DateTime start = DateTime.now().withZone(ApplicationConstants.TIME_ZONE).minusDays(1).withTimeAtStartOfDay();
+        DateTime start = executionTime.withZone(ApplicationConstants.TIME_ZONE).minusDays(1).withTimeAtStartOfDay();
         DateTime end = start.plusDays(1).minus(1L);
         DateTimeFormatter format = DateTimeFormat.forPattern("dd-MM-yyyy");
         String day = String.valueOf(start.withZone(ApplicationConstants.TIME_ZONE).getDayOfWeek());
@@ -80,8 +86,6 @@ public class PartnerPayoutTransactionScheduler {
             partnerPayoutTransactionDao.setAmount(calculateAmount(calculatedPayoutElements));
             partnerPayoutTransactionRepository.update(partnerPayoutTransactionDao);
         }
-
-
     }
 
     private Integer calculateAmount(List<PayoutElementDto> calculatedPayoutElements) {
@@ -115,8 +119,18 @@ public class PartnerPayoutTransactionScheduler {
         } else if ("ABSENT_DAYS".equals(payoutElementDto.getName())) {
             value = allShifts.stream().filter(x -> PartnerShiftSubStatus.ABSENT.name().equals(x.getSubStatus())).toList().size();
         } else if ("FIXED_AMOUNT".equals(payoutElementDto.getName())) {
-            Integer baseAmount = Integer.parseInt(payoutElementDto.getVariables().stream().filter(x -> "Base Amount".equals(x.getKey())).findFirst().orElse(VariableDto.builder().value(String.valueOf(0)).build()).getValue());
-            value = baseAmount / totalWorkingDays;
+            boolean isPresent = true;
+            for(PartnerShiftDao shifts : allShifts){
+                if(!PartnerShiftSubStatus.PRESENT.name().equals(shifts.getSubStatus())) {
+                    isPresent = false;
+                    break;
+                }
+            }
+            if(isPresent){
+                Integer baseAmount = Integer.parseInt(payoutElementDto.getVariables().stream().filter(x -> "Base Amount".equals(x.getKey())).findFirst().orElse(VariableDto.builder().value(String.valueOf(0)).build()).getValue());
+                value = baseAmount / totalWorkingDays;
+            }
+
         } else if ("LATE_PENALTY".equals(payoutElementDto.getName())) {
             allDuties.sort(Comparator.comparingLong(o -> o.getActualDutyStartTime().getMillis()));
             if (!CollectionUtils.isEmpty(allDuties)) {
