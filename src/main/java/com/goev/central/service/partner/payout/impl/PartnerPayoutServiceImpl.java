@@ -34,7 +34,6 @@ import com.goev.central.repository.payout.PayoutModelRepository;
 import com.goev.central.service.partner.payout.PartnerPayoutService;
 import com.goev.lib.exceptions.ResponseException;
 import com.google.common.reflect.TypeToken;
-import com.google.gson.Gson;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -91,7 +90,7 @@ public class PartnerPayoutServiceImpl implements PartnerPayoutService {
         if (partnerPayoutDao == null)
             throw new ResponseException("No partner payout  found for Id :" + partnerPayoutUUID);
 
-        return new Gson().fromJson(partnerPayoutDao.getPayoutSummary(), PartnerPayoutSummaryDto.class);
+        return ApplicationConstants.GSON.fromJson(partnerPayoutDao.getPayoutSummary(), PartnerPayoutSummaryDto.class);
     }
 
     @Override
@@ -111,9 +110,11 @@ public class PartnerPayoutServiceImpl implements PartnerPayoutService {
             return result;
 
         for (PartnerPayoutTransactionDao partnerPayoutTransactionDao : partnerPayoutTransactionDaos) {
-            result.getElements().add(PartnerPayoutTransactionDto.builder()
-                    .uuid(partnerPayoutTransactionDao.getUuid())
-                    .build());
+            result.getElements().add(PartnerPayoutTransactionDto
+                    .fromDao(partnerPayoutTransactionDao,
+                            PartnerPayoutDto.fromDao(partnerPayoutDao,
+                                    PartnerViewDto.fromDao(partnerDao)),
+                            PartnerViewDto.fromDao(partnerDao)));
         }
         return result;
     }
