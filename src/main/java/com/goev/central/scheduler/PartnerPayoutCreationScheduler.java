@@ -20,10 +20,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -80,26 +77,22 @@ public class PartnerPayoutCreationScheduler {
                 allPayoutTransactions.stream().filter(x -> x.getCalculatedPayoutElements() != null).forEach(x -> {
                     allPayoutElements.addAll(ApplicationConstants.GSON.fromJson(x.getCalculatedPayoutElements(), t1));
                 });
-                List<PayoutElementDto> calculatedPayoutElements = allPayoutElements.stream()
-                        .collect(Collectors.groupingBy(PayoutElementDto::getName))
-                        .values().stream()
-                        .map(payoutElementDtoList -> payoutElementDtoList.stream()
-                                .reduce((f1, f2) -> PayoutElementDto.builder()
-                                        .uuid(f1.getUuid())
-                                        .title(f1.getTitle())
-                                        .description(f1.getDescription())
-                                        .categoryDetails(f1.getCategoryDetails())
-                                        .isVisible(f1.getIsVisible())
-                                        .name(f1.getName())
-                                        .triggerEvent(f1.getTriggerEvent())
-                                        .rules(f1.getRules())
-                                        .type(f1.getType())
-                                        .value(f1.getValue() + f2.getValue())
-                                        .build()))
-                        .map(Optional::get)
-                        .toList();
-                payoutDao.setPayoutSummary(ApplicationConstants.GSON.toJson(calculatedPayoutElements));
 
+                Map<String, List<PayoutElementDto>> nameWisePayoutModel = allPayoutElements.stream().collect(Collectors.groupingBy(PayoutElementDto::getName));
+
+                Map<String, PayoutElementDto> mergedElements = new HashMap<>();
+
+                for (Map.Entry<String, List<PayoutElementDto>> entry : nameWisePayoutModel.entrySet()) {
+                    for (PayoutElementDto payoutElementDto : entry.getValue()) {
+                        if (!mergedElements.containsKey(entry.getKey())) {
+                            mergedElements.put(entry.getKey(), payoutElementDto);
+                            continue;
+                        }
+                        mergedElements.get(entry.getKey()).setValue(mergedElements.get(entry.getKey()).getValue() + payoutElementDto.getValue());
+                    }
+                }
+
+                payoutDao.setPayoutSummary(ApplicationConstants.GSON.toJson(mergedElements.values()));
                 payoutDao = partnerPayoutRepository.update(payoutDao);
             }
 
