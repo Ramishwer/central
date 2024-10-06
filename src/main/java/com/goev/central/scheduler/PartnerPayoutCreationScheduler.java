@@ -94,7 +94,7 @@ public class PartnerPayoutCreationScheduler {
                     }
                 }
                 PartnerPayoutSummaryDto summaryDto = PartnerPayoutSummaryDto.builder()
-                        .partnerPayout(PartnerPayoutDto.fromDao(payoutDao,null))
+                        .partnerPayout(PartnerPayoutDto.builder().uuid(payoutDao.getUuid()).build())
                         .payoutStartDate(payoutDao.getPayoutStartDate())
                         .payoutEndDate(payoutDao.getPayoutEndDate())
                         .totalPayoutAmount(payoutDao.getPayoutTotalAmount())
