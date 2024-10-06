@@ -43,7 +43,7 @@ public class PartnerPayoutTransactionScheduler {
     private final PartnerDutyRepository partnerDutyRepository;
 
 
-    @Scheduled(cron = "1 1 0/8 * * ?", zone = "Asia/Calcutta")
+    @Scheduled(cron = "1 1 0/4 * * ?", zone = "Asia/Calcutta")
     public void reportCurrentTime() {
         log.info("The {} time is now {}", this.getClass().getName(), DateTime.now());
         calculatePayout(DateTime.now());
