@@ -1,6 +1,7 @@
 package com.goev.central.repository.partner.payout;
 
 import com.goev.central.dao.partner.payout.PartnerPayoutTransactionDao;
+import org.joda.time.DateTime;
 
 import java.util.List;
 
@@ -20,4 +21,7 @@ public interface PartnerPayoutTransactionRepository {
     List<PartnerPayoutTransactionDao> findAllActive();
 
     List<PartnerPayoutTransactionDao> findAllByPartnerPayoutId(Integer id);
+
+    PartnerPayoutTransactionDao findByPartnerPayoutIdAndDayAndDate(Integer partnerPayoutId, String day, String string);
+
 }

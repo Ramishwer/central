@@ -1,5 +1,6 @@
 package com.goev.central.repository.partner.duty;
 
+import com.goev.central.dao.partner.duty.PartnerDutyDao;
 import com.goev.central.dao.partner.duty.PartnerShiftDao;
 import com.goev.central.dto.common.FilterDto;
 import com.goev.central.dto.common.PageDto;
@@ -33,4 +34,7 @@ public interface PartnerShiftRepository {
     PartnerShiftDao findByPartnerIdShiftIdDayDate(Integer partnerId, Integer shiftId, String currentDay, DateTime date);
 
     List<PartnerShiftDao> findAllByPartnerIdAndShiftIdAndStatus(Integer id, Integer shiftId, String name);
+
+    List<PartnerShiftDao> findAllByPartnerIdAndStatusAndStartTimeBetweenStartAndEnd(Integer partnerId, String name, DateTime start, DateTime end);
+
 }

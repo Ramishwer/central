@@ -7,9 +7,13 @@ import com.fasterxml.jackson.datatype.joda.ser.DateTimeSerializer;
 import com.goev.central.constant.ApplicationConstants;
 import com.goev.central.dao.partner.detail.PartnerDao;
 import com.goev.central.dto.location.LocationDto;
+import com.goev.central.dto.partner.detail.PartnerSegmentDto;
+import com.google.common.reflect.TypeToken;
 import lombok.*;
 import org.joda.time.DateTime;
 
+import java.lang.reflect.Type;
+import java.util.List;
 import java.util.Map;
 
 @AllArgsConstructor
@@ -36,6 +40,7 @@ public class PartnerViewDto {
     private PartnerStatsDto stats;
     private String remark;
     private Map<String,Object> fields;
+    private List<PartnerSegmentDto> segments;
 
 
     public static String getPartnerName(PartnerViewDto partnerViewDto) {
@@ -52,6 +57,13 @@ public class PartnerViewDto {
         PartnerViewDto result =ApplicationConstants.GSON.fromJson(partnerDao.getViewInfo(), PartnerViewDto.class);
         result.setUuid(partnerDao.getUuid());
         result.setState(partnerDao.getOnboardingStatus());
+        result.setHomeLocation(ApplicationConstants.GSON.fromJson(partnerDao.getHomeLocationDetails(), LocationDto.class));
+
+        if (partnerDao.getSegments() != null) {
+            Type t = new TypeToken<List<PartnerSegmentDto>>() {
+            }.getRawType();
+            result.setSegments(ApplicationConstants.GSON.fromJson(partnerDao.getSegments(), t));
+        }
         return result;
     }
 }

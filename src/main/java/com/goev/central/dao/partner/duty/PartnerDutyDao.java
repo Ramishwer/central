@@ -37,6 +37,8 @@ public class PartnerDutyDao extends BaseDao {
 
     private DateTime plannedOnlineTime;
     private DateTime actualOnlineTime;
+
+    private DateTime maxOvertimeCalculationTime;
     private String vehicles;
 }
 

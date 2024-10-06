@@ -18,4 +18,5 @@ public interface PayoutElementRepository {
     List<PayoutElementDao> findAllByIds(List<Integer> ids);
 
     List<PayoutElementDao> findAllActive();
+
 }

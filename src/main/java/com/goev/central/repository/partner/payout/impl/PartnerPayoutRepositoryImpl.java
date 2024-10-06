@@ -2,8 +2,10 @@ package com.goev.central.repository.partner.payout.impl;
 
 import com.goev.central.dao.partner.duty.PartnerShiftDao;
 import com.goev.central.dao.partner.payout.PartnerPayoutDao;
+import com.goev.central.dao.partner.payout.PartnerPayoutTransactionDao;
 import com.goev.central.dto.common.FilterDto;
 import com.goev.central.dto.common.PageDto;
+import com.goev.central.enums.partner.PartnerPayoutStatus;
 import com.goev.central.repository.partner.payout.PartnerPayoutRepository;
 import com.goev.lib.enums.RecordState;
 import com.goev.record.central.tables.records.PartnerPayoutsRecord;
@@ -131,4 +133,14 @@ public class PartnerPayoutRepositoryImpl implements PartnerPayoutRepository {
                 .and(PARTNER_PAYOUTS.IS_ACTIVE.eq(true))
                 .fetchOneInto(PartnerPayoutDao.class);
     }
+
+    @Override
+    public List<PartnerPayoutDao> findAllInProgressPayouts() {
+        return context.selectFrom(PARTNER_PAYOUTS)
+                .where(PARTNER_PAYOUTS.STATUS.eq(PartnerPayoutStatus.IN_PROGRESS.name()))
+                .and(PARTNER_PAYOUTS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(PARTNER_PAYOUTS.IS_ACTIVE.eq(true))
+                .fetchInto(PartnerPayoutDao.class);
+    }
+
 }

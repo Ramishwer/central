@@ -124,4 +124,15 @@ public class PartnerDutyRepositoryImpl implements PartnerDutyRepository {
                 .offset(page.getStart())
                 .fetchInto(PartnerDutyDao.class);
     }
+
+    @Override
+    public List<PartnerDutyDao> findAllByPartnerIdAndPartnerShiftIdsAndStatus(Integer partnerId, List<Integer> partnerShiftIds,String status) {
+        return context.selectFrom(PARTNER_DUTIES)
+                .where(PARTNER_DUTIES.PARTNER_ID.eq(partnerId))
+                .and(PARTNER_DUTIES.PARTNER_SHIFT_ID.in(partnerShiftIds))
+                .and(PARTNER_DUTIES.STATUS.eq(status))
+                .and(PARTNER_DUTIES.STATE.eq(RecordState.ACTIVE.name()))
+                .and(PARTNER_DUTIES.IS_ACTIVE.eq(true))
+                .fetchInto(PartnerDutyDao.class);
+    }
 }

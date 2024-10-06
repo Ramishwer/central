@@ -1,37 +1,48 @@
 package com.goev.central.service.partner.payout.impl;
 
 import com.goev.central.constant.ApplicationConstants;
-import com.goev.central.dao.payout.PayoutModelDao;
 import com.goev.central.dao.partner.detail.PartnerDao;
-import com.goev.central.dao.partner.payout.PartnerPayoutMappingDao;
 import com.goev.central.dao.partner.payout.PartnerPayoutDao;
 import com.goev.central.dao.partner.payout.PartnerPayoutMappingDao;
 import com.goev.central.dao.partner.payout.PartnerPayoutTransactionDao;
+import com.goev.central.dao.payout.PayoutCategoryDao;
+import com.goev.central.dao.payout.PayoutElementDao;
+import com.goev.central.dao.payout.PayoutModelConfigurationDao;
+import com.goev.central.dao.payout.PayoutModelDao;
+import com.goev.central.dto.VariableDto;
 import com.goev.central.dto.common.FilterDto;
 import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
-import com.goev.central.dto.payout.PayoutModelDto;
 import com.goev.central.dto.partner.PartnerViewDto;
-import com.goev.central.dto.partner.payout.PartnerPayoutMappingDto;
 import com.goev.central.dto.partner.payout.PartnerPayoutDto;
 import com.goev.central.dto.partner.payout.PartnerPayoutMappingDto;
 import com.goev.central.dto.partner.payout.PartnerPayoutSummaryDto;
 import com.goev.central.dto.partner.payout.PartnerPayoutTransactionDto;
+import com.goev.central.dto.payout.PayoutCategoryDto;
+import com.goev.central.dto.payout.PayoutConfigDto;
+import com.goev.central.dto.payout.PayoutElementDto;
+import com.goev.central.dto.payout.PayoutModelDto;
 import com.goev.central.enums.partner.PartnerShiftStatus;
 import com.goev.central.repository.partner.detail.PartnerRepository;
 import com.goev.central.repository.partner.payout.PartnerPayoutMappingRepository;
 import com.goev.central.repository.partner.payout.PartnerPayoutRepository;
 import com.goev.central.repository.partner.payout.PartnerPayoutTransactionRepository;
+import com.goev.central.repository.payout.PayoutCategoryRepository;
+import com.goev.central.repository.payout.PayoutElementRepository;
+import com.goev.central.repository.payout.PayoutModelConfigurationRepository;
 import com.goev.central.repository.payout.PayoutModelRepository;
 import com.goev.central.service.partner.payout.PartnerPayoutService;
 import com.goev.lib.exceptions.ResponseException;
+import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -45,6 +56,9 @@ public class PartnerPayoutServiceImpl implements PartnerPayoutService {
     private final PartnerPayoutTransactionRepository partnerPayoutTransactionRepository;
     private final PartnerPayoutMappingRepository partnerPayoutMappingRepository;
     private final PayoutModelRepository payoutModelRepository;
+    private final PayoutModelConfigurationRepository payoutModelConfigurationRepository;
+    private final PayoutElementRepository payoutElementRepository;
+    private final PayoutCategoryRepository payoutCategoryRepository;
 
     private final PartnerRepository partnerRepository;
 
@@ -152,18 +166,59 @@ public class PartnerPayoutServiceImpl implements PartnerPayoutService {
         if (partner == null)
             throw new ResponseException("No partner found for Id :" + partnerUUID);
 
-        if (partnerPayoutMappingDto.getConfig() == null)
+        if (partnerPayoutMappingDto.getConfig() == null || partnerPayoutMappingDto.getConfig().isEmpty())
             throw new ResponseException("No payout model details present.");
 
         PartnerPayoutMappingDao partnerPayoutMappingDao = new PartnerPayoutMappingDao();
         partnerPayoutMappingDao.setTriggerType(partnerPayoutMappingDao.getTriggerType());
         partnerPayoutMappingDao.setPartnerId(partner.getId());
         partnerPayoutMappingDao.setConfig(ApplicationConstants.GSON.toJson(partnerPayoutMappingDto.getConfig()));
+        partnerPayoutMappingDao.setPayoutConfig(ApplicationConstants.GSON.toJson(getPayoutConfig(partnerPayoutMappingDto.getConfig())));
         partnerPayoutMappingDao = partnerPayoutMappingRepository.save(partnerPayoutMappingDao);
         if (partnerPayoutMappingDao == null)
             throw new ResponseException("Error in saving partner payout mapping");
 
         return PartnerPayoutMappingDto.fromDao(partnerPayoutMappingDao, PartnerViewDto.fromDao(partner));
+    }
+
+    private Map<String, PayoutConfigDto> getPayoutConfig(Map<String, PayoutModelDto> config) {
+
+        Type t = new TypeToken<List<VariableDto>>() {
+        }.getType();
+
+        Map<String, PayoutConfigDto> result = new HashMap<>();
+
+        for (Map.Entry<String, PayoutModelDto> entry : config.entrySet()) {
+            String day = entry.getKey();
+            PayoutModelDto modelDto = entry.getValue();
+            PayoutConfigDto payoutConfigDto = PayoutConfigDto.builder().payoutModelConfig(modelDto).build();
+
+            PayoutModelDao payoutModelDao = payoutModelRepository.findByUUID(modelDto.getUuid());
+
+            List<PayoutModelConfigurationDao> payoutModelConfigurationDaoList = payoutModelConfigurationRepository.findByPayoutModelIdAndDay(payoutModelDao.getId(), day);
+
+            List<PayoutElementDao> payoutElementDtoList = payoutElementRepository.findAllByIds(payoutModelConfigurationDaoList.stream().map(PayoutModelConfigurationDao::getPayoutElementId).toList());
+            if (!CollectionUtils.isEmpty(payoutElementDtoList)) {
+                Map<Integer, List<VariableDto>> elementWiseVariables = payoutModelConfigurationDaoList.stream().collect(Collectors.toMap(PayoutModelConfigurationDao::getPayoutElementId, y -> {
+                            if (y.getVariableValues() == null)
+                                return new ArrayList<>();
+                            return ApplicationConstants.GSON.fromJson(y.getVariableValues(), t);
+                        }
+                ));
+                List<PayoutElementDto> elementList = new ArrayList<>();
+                for (PayoutElementDao elementDao : payoutElementDtoList) {
+                    PayoutCategoryDao category = payoutCategoryRepository.findById(elementDao.getPayoutCategoryId());
+                    PayoutElementDto resultDto = PayoutElementDto.fromDao(elementDao, PayoutCategoryDto.fromDao(category));
+                    resultDto.setVariables(elementWiseVariables.get(elementDao.getId()));
+                    elementList.add(resultDto);
+
+                }
+                payoutConfigDto.setPayoutElementsConfig(elementList);
+            }
+            result.put(day, payoutConfigDto);
+
+        }
+        return result;
     }
 
     @Override

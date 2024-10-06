@@ -17,5 +17,6 @@ public class PartnerPayoutMappingDao extends BaseDao {
     private String triggerType;
     private String status;
     private String config;
+    private String payoutConfig;
 
 }

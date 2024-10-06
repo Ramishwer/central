@@ -53,6 +53,9 @@ public class PartnerDutyDto {
     private Long actualTotalPauseTimeInMillis;
     private String status;
     private List<PartnerDutyVehicleDetailsDto> vehicles;
+    @JsonSerialize(using = DateTimeSerializer.class)
+    @JsonDeserialize(using = DateTimeDeserializer.class)
+    private DateTime maxOvertimeCalculationTime;
 
     public static PartnerDutyDto fromDao(PartnerDutyDao dutyDao, PartnerViewDto partner, PartnerShiftDao shift) {
 
@@ -74,6 +77,7 @@ public class PartnerDutyDto {
                 .actualDutyEndTime(dutyDao.getActualDutyEndTime())
                 .actualDutyStartLocationDetails(ApplicationConstants.GSON.fromJson(dutyDao.getActualDutyStartLocationDetails(), LocationDto.class))
                 .actualDutyEndLocationDetails(ApplicationConstants.GSON.fromJson(dutyDao.getActualDutyEndLocationDetails(), LocationDto.class))
+                .maxOvertimeCalculationTime(dutyDao.getMaxOvertimeCalculationTime())
                 .build();
 
         if (shift != null) {

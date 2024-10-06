@@ -17,13 +17,9 @@ public class PartnerPayoutDao extends BaseDao {
     private String status;
     private DateTime finalizationDate;
     private Integer totalWorkingDays;
-    private Integer totalPayableDays;
     private String payoutSummary;
-    private Integer payoutTotalBookingAmount;
     private Integer payoutTotalAmount;
-    private Integer payoutTotalDeductionAmount;
-    private Integer payoutTotalCreditAmount;
-    private Integer payoutTotalDebitAmount;
+    private String payoutConfig;
 }
 
 

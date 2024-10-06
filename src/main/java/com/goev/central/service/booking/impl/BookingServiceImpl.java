@@ -91,8 +91,8 @@ public class BookingServiceImpl implements BookingService {
         bookingDao.setCustomerId(customer.getId());
         bookingRequest.getCustomerDetails().setUuid(customer.getUuid());
         bookingDao.setCustomerDetails(ApplicationConstants.GSON.toJson(bookingRequest.getCustomerDetails()));
-        bookingDao.setStartLocationDetails(ApplicationConstants.GSON.toJson(bookingRequest.getStartLocationDetails(), LatLongDto.class));
-        bookingDao.setEndLocationDetails(ApplicationConstants.GSON.toJson(bookingRequest.getEndLocationDetails(), LatLongDto.class));
+        bookingDao.setStartLocationDetails(ApplicationConstants.GSON.toJson(bookingRequest.getStartLocationDetails()));
+        bookingDao.setEndLocationDetails(ApplicationConstants.GSON.toJson(bookingRequest.getEndLocationDetails()));
         bookingDao.setStatus(BookingStatus.CONFIRMED.name());
         bookingDao.setSubStatus(BookingSubStatus.UNASSIGNED.name());
         bookingDao.setPlannedStartTime(startTime);

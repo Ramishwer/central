@@ -55,13 +55,14 @@ public class VehicleServiceImpl implements VehicleService {
     public PaginatedResponseDto<VehicleDto> getVehicleStatus(String status, String recommendationForPartnerUUID) {
         PaginatedResponseDto<VehicleDto> result = PaginatedResponseDto.<VehicleDto>builder().elements(new ArrayList<>()).build();
         List<VehicleDao> vehicles = new ArrayList<>();
-        if (recommendationForPartnerUUID == null)
+        if (recommendationForPartnerUUID == null) {
             vehicles = vehicleRepository.findAllByStatus(status);
-        else {
+        } else {
             PartnerDao partnerDao =partnerRepository.findByUUID(recommendationForPartnerUUID);
             if(partnerDao!=null) {
                 vehicles = vehicleRepository.findEligibleVehicleForPartnerId(partnerDao.getId());
-
+                if(!CollectionUtils.isEmpty(vehicles))
+                    vehicles  = vehicles.stream().filter(x->x.getHomeLocationId()!=null && x.getHomeLocationId().equals(partnerDao.getHomeLocationId())).toList();
             }
         }
         return getVehicleDtoPaginatedResponseDto(vehicles, result);

@@ -18,4 +18,6 @@ public interface PayoutModelConfigurationRepository {
     List<PayoutModelConfigurationDao> findAllByIds(List<Integer> ids);
 
     List<PayoutModelConfigurationDao> findAllActive();
+
+    List<PayoutModelConfigurationDao> findByPayoutModelIdAndDay(Integer id, String day);
 }

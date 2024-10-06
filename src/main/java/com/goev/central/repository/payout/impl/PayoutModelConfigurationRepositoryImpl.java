@@ -87,4 +87,14 @@ public class PayoutModelConfigurationRepositoryImpl implements PayoutModelConfig
     public List<PayoutModelConfigurationDao> findAllActive() {
         return context.selectFrom(PAYOUT_MODEL_CONFIGURATIONS).fetchInto(PayoutModelConfigurationDao.class);
     }
+
+    @Override
+    public List<PayoutModelConfigurationDao> findByPayoutModelIdAndDay(Integer payoutModelId, String day) {
+        return context.selectFrom(PAYOUT_MODEL_CONFIGURATIONS)
+                .where(PAYOUT_MODEL_CONFIGURATIONS.PAYOUT_MODEL_ID.eq(payoutModelId))
+                .and(PAYOUT_MODEL_CONFIGURATIONS.DAY.eq(day))
+                .and(PAYOUT_MODEL_CONFIGURATIONS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(PAYOUT_MODEL_CONFIGURATIONS.IS_ACTIVE.eq(true))
+                .fetchInto(PayoutModelConfigurationDao.class);
+    }
 }

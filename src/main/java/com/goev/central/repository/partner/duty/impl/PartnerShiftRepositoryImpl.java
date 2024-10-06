@@ -1,5 +1,6 @@
 package com.goev.central.repository.partner.duty.impl;
 
+import com.goev.central.dao.partner.duty.PartnerDutyDao;
 import com.goev.central.dao.partner.duty.PartnerShiftDao;
 import com.goev.central.dto.common.FilterDto;
 import com.goev.central.dto.common.PageDto;
@@ -161,4 +162,16 @@ public class PartnerShiftRepositoryImpl implements PartnerShiftRepository {
                 .and(PARTNER_SHIFTS.IS_ACTIVE.eq(true))
                 .fetchInto(PartnerShiftDao.class);
     }
+
+    @Override
+    public List<PartnerShiftDao> findAllByPartnerIdAndStatusAndStartTimeBetweenStartAndEnd(Integer partnerId, String status, DateTime start, DateTime end) {
+        return context.selectFrom(PARTNER_SHIFTS)
+                .where(PARTNER_SHIFTS.PARTNER_ID.eq(partnerId))
+                .and(PARTNER_SHIFTS.ESTIMATED_START_TIME.between(start,end))
+                .and(PARTNER_SHIFTS.STATUS.eq(status))
+                .and(PARTNER_SHIFTS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(PARTNER_SHIFTS.IS_ACTIVE.eq(true))
+                .fetchInto(PartnerShiftDao.class);
+    }
+
 }

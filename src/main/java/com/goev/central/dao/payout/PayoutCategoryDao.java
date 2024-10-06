@@ -9,18 +9,12 @@ import lombok.*;
 @Setter
 @ToString
 @Builder
-public class PayoutElementDao extends BaseDao {
+public class PayoutCategoryDao extends BaseDao {
     private String name;
     private String type;
     private String description;
-    private String rules;
-    private String title;
-    private String subtitle;
-    private String message;
-    private Integer payoutCategoryId;
-    private Integer sortingOrder;
+    private String label;
     private Boolean isVisible;
-    private String triggerEvent;
 }
 
 

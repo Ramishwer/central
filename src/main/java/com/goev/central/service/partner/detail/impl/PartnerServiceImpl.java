@@ -648,7 +648,7 @@ public class PartnerServiceImpl implements PartnerService {
         newDuty.setPlannedDutyStartLocationId(partnerShiftDao.getInLocationId());
         newDuty.setPlannedOnlineLocationId(partnerShiftDao.getOnlineLocationId());
         newDuty.setPlannedDutyEndLocationId(partnerShiftDao.getOutLocationId());
-
+        newDuty.setMaxOvertimeCalculationTime(partnerShiftDao.getEstimatedEndTime());
         newDuty = partnerDutyRepository.save(newDuty);
 
         partner.setLocationDetails(partnerShiftDao.getInLocationDetails());

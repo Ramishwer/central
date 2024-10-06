@@ -80,7 +80,10 @@ public class PayoutElementRepositoryImpl implements PayoutElementRepository {
 
     @Override
     public List<PayoutElementDao> findAllByIds(List<Integer> ids) {
-        return context.selectFrom(PAYOUT_ELEMENTS).where(PAYOUT_ELEMENTS.ID.in(ids)).fetchInto(PayoutElementDao.class);
+        return context.selectFrom(PAYOUT_ELEMENTS)
+                .where(PAYOUT_ELEMENTS.ID.in(ids))
+                .orderBy(PAYOUT_ELEMENTS.SORTING_ORDER)
+                .fetchInto(PayoutElementDao.class);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.goev.central.repository.partner.payout;
 
 import com.goev.central.dao.partner.payout.PartnerPayoutDao;
+import com.goev.central.dao.partner.payout.PartnerPayoutTransactionDao;
 import com.goev.central.dto.common.FilterDto;
 import com.goev.central.dto.common.PageDto;
 import org.joda.time.DateTime;
@@ -29,4 +30,7 @@ public interface PartnerPayoutRepository {
     List<PartnerPayoutDao> findAllByStatus(String status, PageDto page);
 
     PartnerPayoutDao findByPartnerIdAndStartAndEndTime(Integer partnerId, DateTime start, DateTime end);
+
+    List<PartnerPayoutDao> findAllInProgressPayouts();
+
 }

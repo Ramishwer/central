@@ -6,6 +6,7 @@ import com.goev.lib.enums.RecordState;
 import com.goev.record.central.tables.records.PartnerPayoutTransactionsRecord;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.joda.time.DateTime;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
@@ -89,7 +90,24 @@ public class PartnerPayoutTransactionRepositoryImpl implements PartnerPayoutTran
     }
 
     @Override
-    public List<PartnerPayoutTransactionDao> findAllByPartnerPayoutId(Integer id) {
-        return context.selectFrom(PARTNER_PAYOUT_TRANSACTIONS).where(PARTNER_PAYOUT_TRANSACTIONS.PARTNER_PAYOUT_ID.eq(id)).fetchInto(PartnerPayoutTransactionDao.class);
+    public List<PartnerPayoutTransactionDao> findAllByPartnerPayoutId(Integer partnerPayoutId) {
+        return context.selectFrom(PARTNER_PAYOUT_TRANSACTIONS)
+                .where(PARTNER_PAYOUT_TRANSACTIONS.PARTNER_PAYOUT_ID.eq(partnerPayoutId))
+                .and(PARTNER_PAYOUT_TRANSACTIONS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(PARTNER_PAYOUT_TRANSACTIONS.IS_ACTIVE.eq(true))
+                .fetchInto(PartnerPayoutTransactionDao.class);
     }
+
+    @Override
+    public PartnerPayoutTransactionDao findByPartnerPayoutIdAndDayAndDate(Integer partnerPayoutId, String day, String date) {
+        return context.selectFrom(PARTNER_PAYOUT_TRANSACTIONS)
+                .where(PARTNER_PAYOUT_TRANSACTIONS.PARTNER_PAYOUT_ID.eq(partnerPayoutId))
+                .and(PARTNER_PAYOUT_TRANSACTIONS.DAY.eq(day))
+                .and(PARTNER_PAYOUT_TRANSACTIONS.DATE.eq(date))
+                .and(PARTNER_PAYOUT_TRANSACTIONS.STATE.eq(RecordState.ACTIVE.name()))
+                .and(PARTNER_PAYOUT_TRANSACTIONS.IS_ACTIVE.eq(true))
+                .fetchOneInto(PartnerPayoutTransactionDao.class);
+    }
+
+
 }
