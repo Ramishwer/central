@@ -2,14 +2,17 @@ package com.goev.central.scheduler;
 
 
 import com.goev.central.constant.ApplicationConstants;
+import com.goev.central.dao.partner.detail.PartnerDao;
 import com.goev.central.dao.partner.payout.PartnerPayoutDao;
 import com.goev.central.dao.partner.payout.PartnerPayoutMappingDao;
 import com.goev.central.dao.partner.payout.PartnerPayoutTransactionDao;
+import com.goev.central.dto.partner.PartnerViewDto;
 import com.goev.central.dto.partner.payout.PartnerPayoutDto;
 import com.goev.central.dto.partner.payout.PartnerPayoutSummaryDto;
 import com.goev.central.dto.payout.PayoutElementDto;
 import com.goev.central.dto.payout.PayoutModelDto;
 import com.goev.central.enums.partner.PartnerPayoutStatus;
+import com.goev.central.repository.partner.detail.PartnerRepository;
 import com.goev.central.repository.partner.payout.PartnerPayoutMappingRepository;
 import com.goev.central.repository.partner.payout.PartnerPayoutRepository;
 import com.goev.central.repository.partner.payout.PartnerPayoutTransactionRepository;
@@ -30,6 +33,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class PartnerPayoutCreationScheduler {
 
+    private final PartnerRepository partnerRepository;
     private final PartnerPayoutMappingRepository partnerPayoutMappingRepository;
     private final PartnerPayoutRepository partnerPayoutRepository;
     private final PartnerPayoutTransactionRepository partnerPayoutTransactionRepository;
@@ -93,8 +97,16 @@ public class PartnerPayoutCreationScheduler {
                         mergedElements.get(entry.getKey()).setValue(mergedElements.get(entry.getKey()).getValue() + payoutElementDto.getValue());
                     }
                 }
+
+                PartnerDao partner = partnerRepository.findById(payoutDao.getPartnerId());
                 PartnerPayoutSummaryDto summaryDto = PartnerPayoutSummaryDto.builder()
-                        .partnerPayout(PartnerPayoutDto.builder().uuid(payoutDao.getUuid()).build())
+                        .partnerPayout(PartnerPayoutDto.builder()
+                                .uuid(payoutDao.getUuid())
+                                .finalizationDate(payoutDao.getFinalizationDate())
+                                .totalWorkingDays(payoutDao.getTotalWorkingDays())
+                                .partnerDetails(PartnerViewDto.fromDao(partner))
+                                .status(payoutDao.getStatus())
+                                .build())
                         .payoutStartDate(payoutDao.getPayoutStartDate())
                         .payoutEndDate(payoutDao.getPayoutEndDate())
                         .totalPayoutAmount(payoutDao.getPayoutTotalAmount())
