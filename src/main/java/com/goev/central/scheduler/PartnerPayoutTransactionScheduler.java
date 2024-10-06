@@ -120,7 +120,7 @@ public class PartnerPayoutTransactionScheduler {
         } else if ("LATE_PENALTY".equals(payoutElementDto.getName())) {
             allDuties.sort(Comparator.comparingLong(o -> o.getActualDutyStartTime().getMillis()));
             if (!CollectionUtils.isEmpty(allDuties)) {
-                PartnerDutyDao firstDuty = allDuties.getFirst();
+                PartnerDutyDao firstDuty = allDuties.get(0);
                 boolean isPartnerLateInDuty = firstDuty.getActualDutyStartTime().isAfter(firstDuty.getPlannedDutyStartTime().plusMinutes(20));
                 if (isPartnerLateInDuty)
                     value = 100;
@@ -129,7 +129,7 @@ public class PartnerPayoutTransactionScheduler {
         } else if ("OVERTIME".equals(payoutElementDto.getName())) {
             allDuties.sort(Comparator.comparingLong(o -> o.getActualDutyStartTime().getMillis()));
             if (!CollectionUtils.isEmpty(allDuties)) {
-                PartnerDutyDao lastDuty = allDuties.getLast();
+                PartnerDutyDao lastDuty = allDuties.get(allDuties.size()-1);
                 boolean isOvertimeToBeGiven = lastDuty.getActualDutyEndTime().isAfter(lastDuty.getPlannedDutyEndTime());
                 if (isOvertimeToBeGiven)
                     value = BigDecimal.valueOf((Math.min(lastDuty.getMaxOvertimeCalculationTime().getMillis(),lastDuty.getActualDutyEndTime().getMillis()) - lastDuty.getPlannedDutyEndTime().getMillis())/60000L).intValue();
