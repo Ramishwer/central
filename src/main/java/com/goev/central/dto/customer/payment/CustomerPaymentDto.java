@@ -40,7 +40,7 @@ public class CustomerPaymentDto {
     private String paymentUUID;
     private CustomerViewDto customer;
     private BookingViewDto booking;
-    private PaymentDto paymentDetails;
+    private PaymentDto payment;
 }
 
 

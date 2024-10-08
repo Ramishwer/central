@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.goev.central.dto.business.BusinessClientDto;
 import com.goev.central.dto.business.BusinessSegmentDto;
 import com.goev.central.dto.customer.CustomerViewDto;
-import com.goev.central.dto.customer.detail.CustomerDetailDto;
-import com.goev.central.dto.payment.PaymentDetailDto;
 import com.goev.central.dto.vehicle.detail.VehicleCategoryDto;
 import com.goev.central.enums.booking.BookingRequestAction;
 import com.goev.lib.dto.ContactDetailsDto;
@@ -31,6 +29,7 @@ public class BookingRequestDto {
     private BookingPaymentDto paymentDetails;
     private ContactDetailsDto startContact;
     private ContactDetailsDto endContact;
+    private VehicleCategoryDto requestedVehicleCategory;
     private Long duration;
     private Long distance;
     private BookingPricingDetailDto pricingDetails;

@@ -111,7 +111,8 @@ public class PartnerPayoutTransactionScheduler {
     private Integer getValueForElement(PayoutElementDto payoutElementDto, Integer totalWorkingDays, List<PartnerShiftDao> allShifts, List<PartnerDutyDao> allDuties) {
         int value = 0;
         if ("PAYABLE_DAYS".equals(payoutElementDto.getName())) {
-            value =allShifts.size();
+            if(!CollectionUtils.isEmpty(allShifts))
+                value =allShifts.stream().map(x->x.getDutyDate().getMillis()).distinct().toList().size();
         } else if ("PRESENT_DAYS".equals(payoutElementDto.getName())) {
            value = allShifts.stream().filter(x -> PartnerShiftSubStatus.PRESENT.name().equals(x.getSubStatus())).toList().size();
         } else if ("ABSENT_DAYS".equals(payoutElementDto.getName())) {

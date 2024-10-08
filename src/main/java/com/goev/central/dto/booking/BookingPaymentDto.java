@@ -38,7 +38,7 @@ public class BookingPaymentDto {
     private String paymentType;
     private String paymentUUID;
     private BookingViewDto booking;
-    private PaymentDto paymentDetails;
+    private PaymentDto payment;
 }
 
 
