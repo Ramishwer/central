@@ -12,6 +12,7 @@ import com.goev.central.dto.business.BusinessClientDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.enums.EntityType;
 import com.goev.central.enums.booking.BookingScheduleStatus;
+import com.goev.central.enums.customer.CustomerOnboardingStatus;
 import com.goev.central.repository.booking.BookingScheduleConfigurationRepository;
 import com.goev.central.repository.booking.BookingScheduleRepository;
 import com.goev.central.repository.business.BusinessClientDetailRepository;
@@ -65,6 +66,7 @@ public class BookingScheduleServiceImpl implements BookingScheduleService {
         if(customer == null){
             customer = new CustomerDao();
             customer.setPhoneNumber(customer.getPhoneNumber());
+            customer.setStatus(CustomerOnboardingStatus.ONBOARDED.name());
             customer = customerRepository.save(customer);
             bookingRequestDto.getCustomerDetails().setUuid(customer.getUuid());
         }

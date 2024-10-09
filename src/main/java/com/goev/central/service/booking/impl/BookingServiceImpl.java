@@ -16,6 +16,7 @@ import com.goev.central.dto.vehicle.VehicleViewDto;
 import com.goev.central.enums.booking.BookingStatus;
 import com.goev.central.enums.booking.BookingSubStatus;
 import com.goev.central.enums.booking.SchedulingTypes;
+import com.goev.central.enums.customer.CustomerOnboardingStatus;
 import com.goev.central.enums.partner.PartnerStatus;
 import com.goev.central.enums.partner.PartnerSubStatus;
 import com.goev.central.repository.booking.BookingRepository;
@@ -74,6 +75,7 @@ public class BookingServiceImpl implements BookingService {
         if(customer == null){
             customer = new CustomerDao();
             customer.setPhoneNumber(customer.getPhoneNumber());
+            customer.setOnboardingStatus(CustomerOnboardingStatus.ONBOARDED.name());
             customer = customerRepository.save(customer);
 
         }

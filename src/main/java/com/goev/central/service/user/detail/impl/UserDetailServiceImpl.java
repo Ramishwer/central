@@ -6,6 +6,7 @@ import com.goev.central.dao.user.detail.UserDetailDao;
 import com.goev.central.dto.auth.AuthUserDto;
 import com.goev.central.dto.user.UserViewDto;
 import com.goev.central.dto.user.detail.UserDetailDto;
+import com.goev.central.enums.user.UserOnboardingStatus;
 import com.goev.central.repository.user.detail.UserDetailRepository;
 import com.goev.central.repository.user.detail.UserRepository;
 import com.goev.central.service.auth.AuthService;
@@ -37,6 +38,7 @@ public class UserDetailServiceImpl implements UserDetailService {
 
         userDao.setPhoneNumber(userDto.getUserDetails().getPhoneNumber());
         userDao.setEmail(userDto.getUserDetails().getEmail());
+        userDao.setOnboardingStatus(UserOnboardingStatus.ONBOARDED.name());
         userDao.setDisplayCode("USR-"+SecretGenerationUtils.getCode());
         UserDao user = userRepository.save(userDao);
 
