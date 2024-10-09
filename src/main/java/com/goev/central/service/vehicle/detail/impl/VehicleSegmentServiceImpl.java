@@ -183,7 +183,7 @@ public class VehicleSegmentServiceImpl implements VehicleSegmentService {
 
         for (VehicleSegmentMappingDao vehicleSegmentMappingDao : vehicleSegmentMappingDaoList) {
             VehicleDao vehicle = vehicleRepository.findById(vehicleSegmentMappingDao.getVehicleId());
-            if (vehicle == null || VehicleOnboardingStatus.DEBOARDED.name().equals(vehicle.getOnboardingStatus()))
+            if (vehicle == null || !VehicleOnboardingStatus.ONBOARDED.name().equals(vehicle.getOnboardingStatus()))
                 continue;
             result.add(VehicleSegmentMappingDto.fromDao(vehicleSegmentMappingDao, VehicleSegmentDto.fromDao(vehicleSegmentDao), VehicleViewDto.fromDao(vehicle)));
         }

@@ -124,11 +124,12 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
                 result.setHomeLocation(LocationDto.builder().uuid(locationDao.getUuid()).name(locationDao.getName()).build());
             }
         }
-        if(partnerDetails.getJoiningDate()!=null){
+
+        if (partnerDetails.getJoiningDate() != null) {
             result.getFields().put("joiningDate", partnerDetails.getJoiningDate());
         }
 
-        if(partnerDetails.getDrivingTestStatus()!=null){
+        if (partnerDetails.getDrivingTestStatus() != null) {
             result.getFields().put("drivingTestStatus", partnerDetails.getDrivingTestStatus());
         }
 
@@ -284,6 +285,9 @@ public class PartnerDetailServiceImpl implements PartnerDetailService {
 
             partnerDao.setHomeLocationId(locationDao.getId());
             partnerDao.setHomeLocationDetails(ApplicationConstants.GSON.toJson(LocationDto.fromDao(locationDao)));
+        }else{
+            partnerDao.setHomeLocationId(null);
+            partnerDao.setHomeLocationDetails(null);
         }
 
 

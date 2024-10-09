@@ -199,7 +199,7 @@ public class PartnerSegmentServiceImpl implements PartnerSegmentService {
 
         for (PartnerSegmentMappingDao partnerSegmentMappingDao : partnerSegmentMappingDaoList) {
             PartnerDao partner = partnerRepository.findById(partnerSegmentMappingDao.getPartnerId());
-            if (partner == null || PartnerOnboardingStatus.DEBOARDED.name().equals(partner.getOnboardingStatus()))
+            if (partner == null || !PartnerOnboardingStatus.ONBOARDED.name().equals(partner.getOnboardingStatus()))
                 continue;
 
             result.add(PartnerSegmentMappingDto.fromDao(partnerSegmentMappingDao,PartnerSegmentDto.fromDao(partnerSegmentDao),  PartnerViewDto.fromDao(partner),null));

@@ -154,8 +154,8 @@ public class VehicleDetailServiceImpl implements VehicleDetailService {
         vehicle.setImageUrl(vehicleDetails.getImageUrl());
         vehicle.setVehicleDetailsId(vehicleDetails.getId());
         vehicle.setViewInfo(ApplicationConstants.GSON.toJson(getVehicleViewDto(vehicleDetails, vehicle)));
-        vehicleRepository.update(vehicle);
-        return getVehicleDetailDto(vehicle, vehicleDetailDao);
+        vehicle = vehicleRepository.update(vehicle);
+        return getVehicleDetailDto(vehicle, vehicleDetails);
     }
 
     @Override
@@ -219,7 +219,9 @@ public class VehicleDetailServiceImpl implements VehicleDetailService {
             newVehicleDetails.setHomeLocationId(locationDao.getId());
             vehicleDao.setHomeLocationId(locationDao.getId());
             vehicleDao.setHomeLocationDetails(ApplicationConstants.GSON.toJson(LocationDto.fromDao(locationDao)));
-
+        }else{
+            vehicleDao.setHomeLocationId(null);
+            vehicleDao.setHomeLocationDetails(null);
         }
 
         if (vehicleDto.getVehicleFinancer() != null) {
