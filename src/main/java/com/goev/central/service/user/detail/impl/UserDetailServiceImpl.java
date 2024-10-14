@@ -1,12 +1,15 @@
 package com.goev.central.service.user.detail.impl;
 
 import com.goev.central.constant.ApplicationConstants;
+import com.goev.central.dao.user.authorization.UserRoleDao;
 import com.goev.central.dao.user.detail.UserDao;
 import com.goev.central.dao.user.detail.UserDetailDao;
 import com.goev.central.dto.auth.AuthUserDto;
 import com.goev.central.dto.user.UserViewDto;
+import com.goev.central.dto.user.authorization.UserRoleDto;
 import com.goev.central.dto.user.detail.UserDetailDto;
 import com.goev.central.enums.user.UserOnboardingStatus;
+import com.goev.central.repository.user.authorization.UserRoleRepository;
 import com.goev.central.repository.user.detail.UserDetailRepository;
 import com.goev.central.repository.user.detail.UserRepository;
 import com.goev.central.service.auth.AuthService;
@@ -25,6 +28,7 @@ public class UserDetailServiceImpl implements UserDetailService {
 
     private final UserRepository userRepository;
     private final UserDetailRepository userDetailRepository;
+    private final UserRoleRepository userRoleRepository;
     private final AuthService authService;
 
     @Override
@@ -39,7 +43,16 @@ public class UserDetailServiceImpl implements UserDetailService {
         userDao.setPhoneNumber(userDto.getUserDetails().getPhoneNumber());
         userDao.setEmail(userDto.getUserDetails().getEmail());
         userDao.setOnboardingStatus(UserOnboardingStatus.ONBOARDED.name());
-        userDao.setDisplayCode("USR-"+SecretGenerationUtils.getCode());
+        userDao.setDisplayCode("USR-" + SecretGenerationUtils.getCode());
+
+        if (userDto.getRole() != null) {
+            UserRoleDao userRoleDao = userRoleRepository.findByUUID(userDto.getRole().getUuid());
+            if (userRoleDao != null) {
+                userDao.setRole(ApplicationConstants.GSON.toJson(UserRoleDto.fromDao(userRoleDao)));
+                userDao.setRoleId(userRoleDao.getId());
+            }
+
+        }
         UserDao user = userRepository.save(userDao);
 
         if (user == null)
@@ -53,10 +66,10 @@ public class UserDetailServiceImpl implements UserDetailService {
 
         user.setUserDetailsId(userDetails.getId());
         user.setAuthUuid(authService.createUser(AuthUserDto.builder()
-                        .email(userDetails.getEmail())
-                        .phoneNumber(userDetails.getPhoneNumber())
-                        .organizationUUID(ApplicationContext.getOrganizationUUID())
-                        .clientUUID(ApplicationConstants.CLIENT_UUID)
+                .email(userDetails.getEmail())
+                .phoneNumber(userDetails.getPhoneNumber())
+                .organizationUUID(ApplicationContext.getOrganizationUUID())
+                .clientUUID(ApplicationConstants.CLIENT_UUID)
                 .build()));
         user.setViewInfo(ApplicationConstants.GSON.toJson(getUserViewDto(userDetails, user)));
         userRepository.update(user);
@@ -103,6 +116,14 @@ public class UserDetailServiceImpl implements UserDetailService {
         userRepository.delete(userDetailDao.getId());
         user.setUserDetailsId(userDetails.getId());
         user.setViewInfo(ApplicationConstants.GSON.toJson(getUserViewDto(userDetails, user)));
+        if (userDetailDto.getRole() != null) {
+            UserRoleDao userRoleDao = userRoleRepository.findByUUID(userDetailDto.getRole().getUuid());
+            if (userRoleDao != null) {
+                user.setRole(ApplicationConstants.GSON.toJson(UserRoleDto.fromDao(userRoleDao)));
+                user.setRoleId(userRoleDao.getId());
+            }
+
+        }
         userRepository.update(user);
         UserDetailDto result = UserDetailDto.builder().build();
         setUserDetails(result, user, userDetailDao);
@@ -149,7 +170,7 @@ public class UserDetailServiceImpl implements UserDetailService {
                 .lastName(userDetails.getLastName())
                 .email(userDetails.getEmail())
                 .phoneNumber(userDetails.getPhoneNumber())
-                .role(userDao.getRole())
+                .role(ApplicationConstants.GSON.fromJson(userDao.getRole(), UserRoleDto.class))
                 .profileUrl(userDao.getProfileUrl())
                 .uuid(userDao.getUuid())
                 .build();

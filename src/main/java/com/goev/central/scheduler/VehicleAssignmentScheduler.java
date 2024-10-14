@@ -51,9 +51,11 @@ public class VehicleAssignmentScheduler {
                 continue;
             }
             log.info("Eligible Vehicles For Partner {} {}",partnerDao.getId(),eligibleVehicles.stream().map(VehicleDao::getPlateNumber).toList());
+
             for (VehicleDao vehicle : eligibleVehicles) {
                 if(!VehicleStatus.AVAILABLE.name().equals(vehicle.getStatus()))
                     continue;
+
                 PartnerDao existingPartner = partnerRepository.findByVehicleId(vehicle.getId());
                 if (existingPartner != null)
                     continue;
@@ -66,7 +68,7 @@ public class VehicleAssignmentScheduler {
                     partnerDao.setSubStatus(PartnerSubStatus.VEHICLE_ALLOTTED.name());
                     partnerDao.setVehicleId(vehicle.getId());
                     partnerDao.setVehicleDetails(ApplicationConstants.GSON.toJson(VehicleViewDto.fromDao(vehicle)));
-                    partnerRepository.update(partnerDao);
+                    partnerDao = partnerRepository.update(partnerDao);
                     if(partnerDao.getPartnerDutyId()!=null){
                         PartnerDutyDao partnerDutyDao = partnerDutyRepository.findById(partnerDao.getPartnerDutyId());
                         List<PartnerDutyVehicleDetailsDto> vehicles = new ArrayList<>();
@@ -80,6 +82,7 @@ public class VehicleAssignmentScheduler {
                     }
                     vehicle.setStatus(VehicleStatus.ALLOTTED.name());
                     vehicleRepository.update(vehicle);
+                    break;
                 }
             }
 

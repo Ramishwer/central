@@ -1,5 +1,6 @@
 package com.goev.central.repository.vehicle.detail.impl;
 
+import com.goev.central.dao.partner.detail.PartnerDao;
 import com.goev.central.dao.vehicle.detail.VehicleDao;
 import com.goev.central.dao.vehicle.detail.VehicleDao;
 import com.goev.central.dao.vehicle.detail.VehicleDao;
@@ -11,9 +12,11 @@ import com.goev.central.repository.vehicle.detail.VehicleRepository;
 import com.goev.central.utilities.EventExecutorUtils;
 import com.goev.central.utilities.RequestContext;
 import com.goev.lib.enums.RecordState;
+import com.goev.lib.utilities.ApplicationContext;
 import com.goev.record.central.tables.records.VehiclesRecord;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.joda.time.DateTime;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
@@ -163,5 +166,23 @@ public class VehicleRepositoryImpl implements VehicleRepository {
                 .and(VEHICLES.IS_ACTIVE.eq(true))
                 .and(VEHICLES.STATE.eq(RecordState.ACTIVE.name()))
                 .fetchInto(VehicleDao.class);
+    }
+
+    @Override
+    public void updateStats(Integer vehicleId, String stats) {
+        context.update(VEHICLES)
+                .set(VEHICLES.STATS,stats)
+                .set(VEHICLES.UPDATED_BY, ApplicationContext.getAuthUUID())
+                .set(VEHICLES.UPDATED_ON, DateTime.now())
+                .set(VEHICLES.API_SOURCE, ApplicationContext.getApplicationSource())
+                .where(VEHICLES.ID.eq(vehicleId))
+                .and(VEHICLES.IS_ACTIVE.eq(true)).execute();
+
+        VehicleDao vehicleDao = context.selectFrom(VEHICLES)
+                .where(VEHICLES.ID.eq(vehicleId))
+                .and(VEHICLES.IS_ACTIVE.eq(true))
+                .fetchAnyInto(VehicleDao.class);
+        if (!"EVENT".equals(RequestContext.getRequestSource()))
+            eventExecutor.fireEvent("VehicleUpdateEvent", vehicleDao);
     }
 }

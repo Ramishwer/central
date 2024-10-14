@@ -28,4 +28,6 @@ public interface VehicleRepository {
     List<VehicleDao> findAllActiveWithPartnerId();
 
     List<VehicleDao> findEligibleVehicleForPartnerId(Integer partnerId);
+
+    void updateStats(Integer vehicleId, String stats);
 }

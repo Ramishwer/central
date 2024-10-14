@@ -9,16 +9,17 @@ import com.goev.central.repository.partner.detail.PartnerRepository;
 import com.goev.central.utilities.EventExecutorUtils;
 import com.goev.central.utilities.RequestContext;
 import com.goev.lib.enums.RecordState;
+import com.goev.lib.utilities.ApplicationContext;
 import com.goev.record.central.tables.records.PartnersRecord;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.joda.time.DateTime;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static com.goev.record.central.Tables.BUSINESS_SEGMENT_MAPPINGS;
-import static com.goev.record.central.Tables.PARTNER_SEGMENT_MAPPINGS;
+import static com.goev.record.central.Tables.*;
 import static com.goev.record.central.tables.Partners.PARTNERS;
 import static com.goev.record.central.tables.Vehicles.VEHICLES;
 
@@ -199,5 +200,59 @@ public class PartnerRepositoryImpl implements PartnerRepository {
                 .and(PARTNERS.IS_ACTIVE.eq(true))
                 .and(PARTNERS.STATE.eq(RecordState.ACTIVE.name()))
                 .fetchInto(PartnerDao.class);
+    }
+
+    @Override
+    public void updateBookingDetails(Integer partnerId, String bookingDetails) {
+        context.update(PARTNERS)
+                .set(PARTNERS.BOOKING_DETAILS,bookingDetails)
+                .set(PARTNERS.UPDATED_BY, ApplicationContext.getAuthUUID())
+                .set(PARTNERS.UPDATED_ON, DateTime.now())
+                .set(PARTNERS.API_SOURCE, ApplicationContext.getApplicationSource())
+                .where(PARTNERS.ID.eq(partnerId))
+                .and(PARTNERS.IS_ACTIVE.eq(true)).execute();
+
+        PartnerDao partner = context.selectFrom(PARTNERS)
+                .where(PARTNERS.ID.eq(partnerId))
+                .and(PARTNERS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PartnerDao.class);
+        if (!"EVENT".equals(RequestContext.getRequestSource()))
+            eventExecutor.fireEvent("PartnerUpdateEvent", partner);
+    }
+
+    @Override
+    public void updateStats(Integer partnerId, String stats) {
+        context.update(PARTNERS)
+                .set(PARTNERS.STATS,stats)
+                .set(PARTNERS.UPDATED_BY, ApplicationContext.getAuthUUID())
+                .set(PARTNERS.UPDATED_ON, DateTime.now())
+                .set(PARTNERS.API_SOURCE, ApplicationContext.getApplicationSource())
+                .where(PARTNERS.ID.eq(partnerId))
+                .and(PARTNERS.IS_ACTIVE.eq(true)).execute();
+
+        PartnerDao partner = context.selectFrom(PARTNERS)
+                .where(PARTNERS.ID.eq(partnerId))
+                .and(PARTNERS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PartnerDao.class);
+        if (!"EVENT".equals(RequestContext.getRequestSource()))
+            eventExecutor.fireEvent("PartnerUpdateEvent", partner);
+    }
+
+    @Override
+    public void updateVehicleDetails(Integer partnerId, String vehicleDetails) {
+        context.update(PARTNERS)
+                .set(PARTNERS.VEHICLE_DETAILS,vehicleDetails)
+                .set(PARTNERS.UPDATED_BY, ApplicationContext.getAuthUUID())
+                .set(PARTNERS.UPDATED_ON, DateTime.now())
+                .set(PARTNERS.API_SOURCE, ApplicationContext.getApplicationSource())
+                .where(PARTNERS.ID.eq(partnerId))
+                .and(PARTNERS.IS_ACTIVE.eq(true)).execute();
+
+        PartnerDao partner = context.selectFrom(PARTNERS)
+                .where(PARTNERS.ID.eq(partnerId))
+                .and(PARTNERS.IS_ACTIVE.eq(true))
+                .fetchAnyInto(PartnerDao.class);
+        if (!"EVENT".equals(RequestContext.getRequestSource()))
+            eventExecutor.fireEvent("PartnerUpdateEvent", partner);
     }
 }

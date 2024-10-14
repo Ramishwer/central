@@ -15,4 +15,5 @@ public class VehicleStatsDto {
     private StatsDto soc;
     private StatsDto dte;
     private StatsDto odometer;
+    private Integer kmRange;
 }

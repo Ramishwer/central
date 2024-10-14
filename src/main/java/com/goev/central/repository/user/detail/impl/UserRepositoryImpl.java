@@ -1,16 +1,22 @@
 package com.goev.central.repository.user.detail.impl;
 
+import com.goev.central.dao.partner.detail.PartnerDao;
 import com.goev.central.dao.user.detail.UserDao;
+import com.goev.central.enums.user.UserOnboardingStatus;
 import com.goev.central.repository.user.detail.UserRepository;
+import com.goev.central.utilities.RequestContext;
 import com.goev.lib.enums.RecordState;
+import com.goev.lib.utilities.ApplicationContext;
 import com.goev.record.central.tables.records.UsersRecord;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.joda.time.DateTime;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import static com.goev.record.central.tables.Partners.PARTNERS;
 import static com.goev.record.central.tables.Users.USERS;
 
 @Slf4j
@@ -110,5 +116,18 @@ public class UserRepositoryImpl implements UserRepository {
                     .and(USERS.IS_ACTIVE.eq(true))
                     .and(USERS.STATE.eq(RecordState.ACTIVE.name()))
                     .fetchInto(UserDao.class);
+    }
+
+
+    @Override
+    public void updateRole(Integer roleId, String userRoleDto){
+        context.update(USERS)
+                .set(USERS.ROLE,userRoleDto)
+                .set(USERS.UPDATED_BY, ApplicationContext.getAuthUUID())
+                .set(USERS.UPDATED_ON, DateTime.now())
+                .set(USERS.API_SOURCE, ApplicationContext.getApplicationSource())
+                .where(USERS.ROLE_ID.eq(roleId))
+                .and(USERS.ONBOARDING_STATUS.eq(UserOnboardingStatus.ONBOARDED.name()))
+                .and(USERS.IS_ACTIVE.eq(true)).execute();
     }
 }

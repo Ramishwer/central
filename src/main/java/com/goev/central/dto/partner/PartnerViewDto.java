@@ -39,7 +39,7 @@ public class PartnerViewDto {
     private LocationDto homeLocation;
     private PartnerStatsDto stats;
     private String remark;
-    private Map<String,Object> fields;
+    private Map<String, Object> fields;
     private List<PartnerSegmentDto> segments;
 
 
@@ -54,10 +54,11 @@ public class PartnerViewDto {
     public static PartnerViewDto fromDao(PartnerDao partnerDao) {
         if (partnerDao.getViewInfo() == null)
             return null;
-        PartnerViewDto result =ApplicationConstants.GSON.fromJson(partnerDao.getViewInfo(), PartnerViewDto.class);
+        PartnerViewDto result = ApplicationConstants.GSON.fromJson(partnerDao.getViewInfo(), PartnerViewDto.class);
         result.setUuid(partnerDao.getUuid());
         result.setState(partnerDao.getOnboardingStatus());
         result.setHomeLocation(ApplicationConstants.GSON.fromJson(partnerDao.getHomeLocationDetails(), LocationDto.class));
+        result.setStats(ApplicationConstants.GSON.fromJson(partnerDao.getStats(), PartnerStatsDto.class));
 
         if (partnerDao.getSegments() != null) {
             Type t = new TypeToken<List<PartnerSegmentDto>>() {

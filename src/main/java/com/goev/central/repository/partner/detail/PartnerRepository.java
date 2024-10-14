@@ -31,4 +31,8 @@ public interface PartnerRepository {
 
     List<PartnerDao> findAllUnAssignedPartners();
     List<PartnerDao> findAllEligiblePartnersForBusinessSegment(Integer businessSegmentId);
+
+    void updateBookingDetails(Integer partnerId, String bookingDetails);
+    void updateStats(Integer partnerId, String stats);
+    void updateVehicleDetails(Integer partnerId, String vehicleDetails);
 }

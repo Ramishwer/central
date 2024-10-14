@@ -3,6 +3,7 @@ package com.goev.central.dto.user.detail;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.goev.central.dao.user.detail.UserDao;
+import com.goev.central.dto.user.authorization.UserRoleDto;
 import lombok.*;
 
 @AllArgsConstructor
@@ -15,7 +16,7 @@ import lombok.*;
 public class UserDto {
     private String email;
     private String phoneNumber;
-    private String role;
+    private UserRoleDto role;
     private String authUUID;
     private String uuid;
     private String profileUrl;

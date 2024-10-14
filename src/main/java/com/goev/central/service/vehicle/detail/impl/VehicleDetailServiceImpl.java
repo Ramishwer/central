@@ -5,6 +5,7 @@ import com.goev.central.dao.location.LocationDao;
 import com.goev.central.dao.vehicle.detail.*;
 import com.goev.central.dto.common.QrValueDto;
 import com.goev.central.dto.location.LocationDto;
+import com.goev.central.dto.vehicle.VehicleStatsDto;
 import com.goev.central.dto.vehicle.VehicleViewDto;
 import com.goev.central.dto.vehicle.detail.*;
 import com.goev.central.enums.vehicle.VehicleOnboardingStatus;
@@ -201,6 +202,15 @@ public class VehicleDetailServiceImpl implements VehicleDetailService {
             if (vehicleModelDao == null)
                 throw new ResponseException("No vehicle model found for Id :" + vehicleDto.getVehicleModel().getUuid());
             newVehicleDetails.setVehicleModelId(vehicleModelDao.getId());
+
+            if(vehicleModelDao.getKmRange()!=null) {
+                VehicleStatsDto statsDto = VehicleStatsDto.builder().build();
+                if(vehicleDao.getStats()!=null){
+                    statsDto = ApplicationConstants.GSON.fromJson(vehicleDao.getStats(), VehicleStatsDto.class);
+                }
+                statsDto.setKmRange(vehicleModelDao.getKmRange());
+                vehicleDao.setStats(ApplicationConstants.GSON.toJson(statsDto));
+            }
         }
 
         if (vehicleDto.getVehicleCategory() != null) {

@@ -11,4 +11,5 @@ import lombok.*;
 public class UserRoleDao extends BaseDao {
     private String name;
     private String description;
+    private String permissions;
 }

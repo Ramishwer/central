@@ -2,6 +2,7 @@ package com.goev.central.dto.user.detail;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.goev.central.dto.user.UserViewDto;
+import com.goev.central.dto.user.authorization.UserRoleDto;
 import lombok.*;
 
 @AllArgsConstructor
@@ -18,5 +19,5 @@ public class UserDetailDto {
     private String lastName;
     private String state;
     private String profileUrl;
-    private String role;
+    private UserRoleDto role;
 }

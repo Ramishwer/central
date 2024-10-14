@@ -3,17 +3,21 @@ package com.goev.central.scheduler;
 import com.goev.central.constant.ApplicationConstants;
 import com.goev.central.dao.partner.duty.PartnerDutyDao;
 import com.goev.central.dao.partner.duty.PartnerShiftDao;
+import com.goev.central.dao.partner.payout.PartnerCreditDebitTransactionDao;
 import com.goev.central.dao.partner.payout.PartnerPayoutDao;
 import com.goev.central.dao.partner.payout.PartnerPayoutTransactionDao;
 import com.goev.central.dto.VariableDto;
 import com.goev.central.dto.payout.PayoutConfigDto;
 import com.goev.central.dto.payout.PayoutElementDto;
+import com.goev.central.enums.TransactionType;
+import com.goev.central.enums.partner.PartnerCreditDebitTransactionStatus;
 import com.goev.central.enums.partner.PartnerDutyStatus;
 import com.goev.central.enums.partner.PartnerShiftStatus;
 import com.goev.central.enums.partner.PartnerShiftSubStatus;
 import com.goev.central.enums.payout.PayoutElementType;
 import com.goev.central.repository.partner.duty.PartnerDutyRepository;
 import com.goev.central.repository.partner.duty.PartnerShiftRepository;
+import com.goev.central.repository.partner.payout.PartnerCreditDebitTransactionRepository;
 import com.goev.central.repository.partner.payout.PartnerPayoutRepository;
 import com.goev.central.repository.partner.payout.PartnerPayoutTransactionRepository;
 import com.google.common.reflect.TypeToken;
@@ -32,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -41,9 +46,10 @@ public class PartnerPayoutTransactionScheduler {
     private final PartnerPayoutTransactionRepository partnerPayoutTransactionRepository;
     private final PartnerShiftRepository partnerShiftRepository;
     private final PartnerDutyRepository partnerDutyRepository;
+    private final PartnerCreditDebitTransactionRepository partnerCreditDebitTransactionRepository;
 
 
-    @Scheduled(cron = "1 1 0/4 * * ?", zone = "Asia/Calcutta")
+    @Scheduled(cron = "1 1 * * * ?", zone = "Asia/Calcutta")
     public void reportCurrentTime() {
         log.info("The {} time is now {}", this.getClass().getName(), DateTime.now());
         calculatePayout(DateTime.now());
@@ -77,8 +83,9 @@ public class PartnerPayoutTransactionScheduler {
             }
             List<PartnerShiftDao> allShifts = partnerShiftRepository.findAllByPartnerIdAndStatusAndStartTimeBetweenStartAndEnd(payoutDao.getPartnerId(), PartnerShiftStatus.COMPLETED.name(), start, end);
             List<PartnerDutyDao> allDuties = partnerDutyRepository.findAllByPartnerIdAndPartnerShiftIdsAndStatus(payoutDao.getPartnerId(), allShifts.stream().map(PartnerShiftDao::getId).toList(), PartnerDutyStatus.COMPLETED.name());
+            List<PartnerCreditDebitTransactionDao> allCreditDebitTransactions = partnerCreditDebitTransactionRepository.findAllByPartnerPayoutIdAndPartnerIdAndTransactionTimeBetween(payoutDao.getId(), payoutDao.getPartnerId(),start,end);
 
-            List<PayoutElementDto> calculatedPayoutElements = calculatePayoutElement(config, payoutDao.getTotalWorkingDays(), allShifts, allDuties);
+            List<PayoutElementDto> calculatedPayoutElements = calculatePayoutElement(config, payoutDao.getTotalWorkingDays(), allShifts, allDuties,allCreditDebitTransactions);
             partnerPayoutTransactionDao.setCalculatedPayoutElements(ApplicationConstants.GSON.toJson(calculatedPayoutElements));
             partnerPayoutTransactionDao.setTransactionTime(DateTime.now());
             partnerPayoutTransactionDao.setAmount(calculateAmount(calculatedPayoutElements));
@@ -99,16 +106,16 @@ public class PartnerPayoutTransactionScheduler {
         return amount;
     }
 
-    private List<PayoutElementDto> calculatePayoutElement(PayoutConfigDto payoutConfigDto, Integer totalWorkingDays, List<PartnerShiftDao> allShifts, List<PartnerDutyDao> allDuties) {
+    private List<PayoutElementDto> calculatePayoutElement(PayoutConfigDto payoutConfigDto, Integer totalWorkingDays, List<PartnerShiftDao> allShifts, List<PartnerDutyDao> allDuties, List<PartnerCreditDebitTransactionDao> allCreditDebitTransactions) {
         List<PayoutElementDto> result = new ArrayList<>();
         for (PayoutElementDto payoutElementDto : payoutConfigDto.getPayoutElementsConfig()) {
-            payoutElementDto.setValue(getValueForElement(payoutElementDto, totalWorkingDays, allShifts, allDuties));
+            payoutElementDto.setValue(getValueForElement(payoutElementDto, totalWorkingDays, allShifts, allDuties,allCreditDebitTransactions));
             result.add(payoutElementDto);
         }
         return result;
     }
 
-    private Integer getValueForElement(PayoutElementDto payoutElementDto, Integer totalWorkingDays, List<PartnerShiftDao> allShifts, List<PartnerDutyDao> allDuties) {
+    private Integer getValueForElement(PayoutElementDto payoutElementDto, Integer totalWorkingDays, List<PartnerShiftDao> allShifts, List<PartnerDutyDao> allDuties,List<PartnerCreditDebitTransactionDao> allCreditDebitTransactions) {
         int value = 0;
         if ("PAYABLE_DAYS".equals(payoutElementDto.getName())) {
             if(!CollectionUtils.isEmpty(allShifts))
@@ -146,6 +153,18 @@ public class PartnerPayoutTransactionScheduler {
                 boolean isOvertimeToBeGiven = lastDuty.getActualDutyEndTime().isAfter(lastDuty.getPlannedDutyEndTime());
                 if (isOvertimeToBeGiven)
                     value = BigDecimal.valueOf((Math.min(lastDuty.getMaxOvertimeCalculationTime().getMillis(),lastDuty.getActualDutyEndTime().getMillis()) - lastDuty.getPlannedDutyEndTime().getMillis())/60000L).intValue();
+            }
+
+        } else if ("CREDIT".equals(payoutElementDto.getName())) {
+            List<PartnerCreditDebitTransactionDao> allCreditTransactions =allCreditDebitTransactions.stream().filter(x-> TransactionType.CREDIT.name().equals(x.getTransactionType())).toList();
+            if (!CollectionUtils.isEmpty(allCreditTransactions)) {
+                value = allCreditTransactions.stream().mapToInt(PartnerCreditDebitTransactionDao::getAmount).sum();
+            }
+
+        } else if ("DEBIT".equals(payoutElementDto.getName())) {
+            List<PartnerCreditDebitTransactionDao> allDebitTransactions =allCreditDebitTransactions.stream().filter(x-> TransactionType.DEBIT.name().equals(x.getTransactionType())).toList();
+            if (!CollectionUtils.isEmpty(allDebitTransactions)) {
+                value = allDebitTransactions.stream().mapToInt(PartnerCreditDebitTransactionDao::getAmount).sum();
             }
 
         }

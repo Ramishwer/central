@@ -9,6 +9,7 @@ import com.fasterxml.jackson.datatype.joda.ser.DateTimeSerializer;
 import com.goev.central.constant.ApplicationConstants;
 import com.goev.central.dao.user.detail.UserDao;
 import com.goev.central.dto.partner.PartnerViewDto;
+import com.goev.central.dto.user.authorization.UserRoleDto;
 import lombok.*;
 import org.joda.time.DateTime;
 
@@ -26,7 +27,7 @@ public class UserViewDto {
     private String phoneNumber;
     private String firstName;
     private String lastName;
-    private String role;
+    private UserRoleDto role;
     private String authUUID;
     private String uuid;
     private String profileUrl;
@@ -46,6 +47,7 @@ public class UserViewDto {
         UserViewDto result = ApplicationConstants.GSON.fromJson(userDao.getViewInfo(), UserViewDto.class);
         result.setUuid(userDao.getUuid());
         result.setState(userDao.getOnboardingStatus());
+        result.setRole(ApplicationConstants.GSON.fromJson(userDao.getRole(),UserRoleDto.class));
         return result;
     }
 }

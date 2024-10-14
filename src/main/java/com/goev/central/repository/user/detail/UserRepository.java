@@ -2,6 +2,7 @@ package com.goev.central.repository.user.detail;
 
 import com.goev.central.dao.partner.detail.PartnerDao;
 import com.goev.central.dao.user.detail.UserDao;
+import com.goev.central.dto.user.authorization.UserRoleDto;
 
 import java.util.List;
 
@@ -27,4 +28,6 @@ public interface UserRepository {
     UserDao findByPhoneNumber(String phoneNumber);
 
     List<UserDao> findAllByOnboardingStatus(String onboardingStatus);
+
+    void updateRole(Integer roleId, String userRoleDto);
 }

@@ -2,6 +2,7 @@ package com.goev.central.service.partner.payout.impl;
 
 import com.goev.central.constant.ApplicationConstants;
 import com.goev.central.dao.partner.detail.PartnerDao;
+import com.goev.central.dao.partner.payout.PartnerCreditDebitTransactionDao;
 import com.goev.central.dao.partner.payout.PartnerPayoutDao;
 import com.goev.central.dao.partner.payout.PartnerPayoutMappingDao;
 import com.goev.central.dao.partner.payout.PartnerPayoutTransactionDao;
@@ -14,16 +15,16 @@ import com.goev.central.dto.common.FilterDto;
 import com.goev.central.dto.common.PageDto;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.partner.PartnerViewDto;
-import com.goev.central.dto.partner.payout.PartnerPayoutDto;
-import com.goev.central.dto.partner.payout.PartnerPayoutMappingDto;
-import com.goev.central.dto.partner.payout.PartnerPayoutSummaryDto;
-import com.goev.central.dto.partner.payout.PartnerPayoutTransactionDto;
+import com.goev.central.dto.partner.payout.*;
 import com.goev.central.dto.payout.PayoutCategoryDto;
 import com.goev.central.dto.payout.PayoutConfigDto;
 import com.goev.central.dto.payout.PayoutElementDto;
 import com.goev.central.dto.payout.PayoutModelDto;
+import com.goev.central.enums.TransactionType;
+import com.goev.central.enums.partner.PartnerCreditDebitTransactionStatus;
 import com.goev.central.enums.partner.PartnerShiftStatus;
 import com.goev.central.repository.partner.detail.PartnerRepository;
+import com.goev.central.repository.partner.payout.PartnerCreditDebitTransactionRepository;
 import com.goev.central.repository.partner.payout.PartnerPayoutMappingRepository;
 import com.goev.central.repository.partner.payout.PartnerPayoutRepository;
 import com.goev.central.repository.partner.payout.PartnerPayoutTransactionRepository;
@@ -36,6 +37,7 @@ import com.goev.lib.exceptions.ResponseException;
 import com.google.common.reflect.TypeToken;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -58,8 +60,8 @@ public class PartnerPayoutServiceImpl implements PartnerPayoutService {
     private final PayoutModelConfigurationRepository payoutModelConfigurationRepository;
     private final PayoutElementRepository payoutElementRepository;
     private final PayoutCategoryRepository payoutCategoryRepository;
-
     private final PartnerRepository partnerRepository;
+    private final PartnerCreditDebitTransactionRepository partnerCreditDebitTransactionRepository;
 
     @Override
     public PaginatedResponseDto<PartnerPayoutDto> getPayoutsForPartner(String partnerUUID) {
@@ -233,6 +235,71 @@ public class PartnerPayoutServiceImpl implements PartnerPayoutService {
             throw new ResponseException("No payout mapping found for Id :" + partnerPayoutModelMappingUUID);
 
         partnerPayoutMappingRepository.delete(partnerPayoutMappingDao.getId());
+        return true;
+    }
+
+    @Override
+    public PaginatedResponseDto<PartnerCreditDebitTransactionDto> getPartnerPayoutCreditDebitTransaction(String partnerUUID, String partnerPayoutUUID) {
+        PartnerDao partner = partnerRepository.findByUUID(partnerUUID);
+        if (partner == null)
+            throw new ResponseException("No partner found for Id :" + partnerUUID);
+
+        PartnerPayoutDao partnerPayoutDao = partnerPayoutRepository.findByUUID(partnerPayoutUUID);
+        if (partnerPayoutDao == null)
+            throw new ResponseException("No partner payout  found for Id :" + partnerPayoutUUID);
+
+        PaginatedResponseDto<PartnerCreditDebitTransactionDto> result = PaginatedResponseDto.<PartnerCreditDebitTransactionDto>builder().elements(new ArrayList<>()).build();
+        List<PartnerCreditDebitTransactionDao> partnerCreditDebitTransactionDaoList = partnerCreditDebitTransactionRepository.findAllByPartnerPayoutIdAndPartnerId(partnerPayoutDao.getId(),partner.getId());
+        if (CollectionUtils.isEmpty(partnerCreditDebitTransactionDaoList))
+            return result;
+
+        for (PartnerCreditDebitTransactionDao partnerCreditDebitTransactionDao : partnerCreditDebitTransactionDaoList) {
+            result.getElements().add(PartnerCreditDebitTransactionDto
+                    .fromDao(partnerCreditDebitTransactionDao,
+                            PartnerPayoutDto.fromDao(partnerPayoutDao,
+                                    PartnerViewDto.fromDao(partner)),
+                            PartnerViewDto.fromDao(partner)));
+        }
+        return result;
+
+    }
+
+    @Override
+    public PartnerCreditDebitTransactionDto savePartnerPayoutCreditDebitTransaction(String partnerUUID, String partnerPayoutUUID, PartnerCreditDebitTransactionDto partnerCreditDebitTransactionDto) {
+        PartnerDao partner = partnerRepository.findByUUID(partnerUUID);
+        if (partner == null)
+            throw new ResponseException("No partner found for Id :" + partnerUUID);
+
+        PartnerPayoutDao partnerPayoutDao = partnerPayoutRepository.findByUUID(partnerPayoutUUID);
+        if (partnerPayoutDao == null)
+            throw new ResponseException("No partner payout  found for Id :" + partnerPayoutUUID);
+
+        PartnerCreditDebitTransactionDao transactionDao =  PartnerCreditDebitTransactionDao.fromDto(partnerCreditDebitTransactionDto,partner.getId(),partnerPayoutDao.getId());
+        transactionDao.setStatus(PartnerCreditDebitTransactionStatus.CREATED.name());
+        transactionDao.setTransactionTime(DateTime.now());
+        transactionDao = partnerCreditDebitTransactionRepository.save(transactionDao);
+        return PartnerCreditDebitTransactionDto
+                .fromDao(transactionDao,
+                        PartnerPayoutDto.fromDao(partnerPayoutDao,
+                                PartnerViewDto.fromDao(partner)),
+                        PartnerViewDto.fromDao(partner));
+    }
+
+    @Override
+    public Boolean deletePartnerPayoutCreditDebitTransaction(String partnerUUID, String partnerPayoutUUID, String partnerCreditDebitTransactionUUID) {
+        PartnerDao partner = partnerRepository.findByUUID(partnerUUID);
+        if (partner == null)
+            throw new ResponseException("No partner found for Id :" + partnerUUID);
+
+        PartnerPayoutDao partnerPayoutDao = partnerPayoutRepository.findByUUID(partnerPayoutUUID);
+        if (partnerPayoutDao == null)
+            throw new ResponseException("No partner payout  found for Id :" + partnerPayoutUUID);
+
+        PartnerCreditDebitTransactionDao creditDebitTransactionDao = partnerCreditDebitTransactionRepository.findByUUID(partnerCreditDebitTransactionUUID);
+        if (creditDebitTransactionDao == null)
+            throw new ResponseException("No transaction found for Id :" + partnerCreditDebitTransactionUUID);
+
+        partnerCreditDebitTransactionRepository.delete(creditDebitTransactionDao.getId());
         return true;
     }
 

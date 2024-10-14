@@ -142,9 +142,8 @@ public class UserServiceImpl implements UserService {
         UserDao user = userRepository.findById(userSession.getUserId());
         if (user == null)
             throw new ResponseException("No user found");
-        UserViewDto result = ApplicationConstants.GSON.fromJson(user.getViewInfo(), UserViewDto.class);
-        result.setUuid(user.getUuid());
-        return result;
+
+        return UserViewDto.fromDao(user);
 
     }
 }
