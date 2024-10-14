@@ -146,12 +146,7 @@ public class UserDetailServiceImpl implements UserDetailService {
     }
 
     private void setUserDetails(UserDetailDto result, UserDao userDao, UserDetailDao userDetails) {
-        UserViewDto userDto = new UserViewDto();
-        userDto.setUuid(userDao.getUuid());
-        userDto.setPhoneNumber(userDao.getPhoneNumber());
-        userDto.setAuthUUID(userDao.getAuthUuid());
-        userDto.setEmail(userDao.getEmail());
-        userDto.setProfileUrl(userDao.getProfileUrl());
+        UserViewDto userDto = UserViewDto.fromDao(userDao);
         result.setUserDetails(userDto);
 
 

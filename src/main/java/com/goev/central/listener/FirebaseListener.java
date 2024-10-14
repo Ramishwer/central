@@ -83,36 +83,38 @@ public class FirebaseListener {
                 if (partnerDao != null) {
                     int distanceMoved = 0;
 
-                    if(partnerDao.getStats()!=null){
+                    if (partnerDao.getStats() != null) {
                         PartnerStatsDto statsDto = ApplicationConstants.GSON.fromJson(partnerDao.getStats(), PartnerStatsDto.class);
-                        if(statsDto!=null && statsDto.getGps()!=null) {
-                            distanceMoved =BigDecimal.valueOf(DistanceUtils.calculateDistance(data.getLocation().getCoords(), statsDto.getGps())).intValue();
+                        if (statsDto != null && statsDto.getGps() != null) {
+                            distanceMoved = BigDecimal.valueOf(DistanceUtils.calculateDistance(data.getLocation().getCoords(), statsDto.getGps())).intValue();
                         }
                     }
 
 
                     if (partnerDao.getVehicleId() != null) {
                         VehicleDao vehicleDao = vehicleRepository.findById(partnerDao.getVehicleId());
-                        if(vehicleDao.getStats()!=null){
+                        if (vehicleDao.getStats() != null) {
                             VehicleStatsDto statsDto = ApplicationConstants.GSON.fromJson(vehicleDao.getStats(), VehicleStatsDto.class);
-                            if(statsDto!=null && statsDto.getSoc()!=null && statsDto.getKmRange()!=null){
-                                Integer manualDte = statsDto.getSoc().getManual() * statsDto.getKmRange()*10;
-                                Integer calculatedDte =  (statsDto.getSoc().getCalculated()!=null?statsDto.getSoc().getCalculated():statsDto.getSoc().getManual()) * statsDto.getKmRange()*10 - distanceMoved;
+                            if (statsDto != null && statsDto.getSoc() != null && statsDto.getKmRange() != null) {
+                                Integer manualDte = statsDto.getSoc().getManual() * statsDto.getKmRange() * 10;
+                                Integer calculatedDte = (statsDto.getSoc().getCalculated() != null ? statsDto.getSoc().getCalculated() : statsDto.getSoc().getManual()) * statsDto.getKmRange() * 10 - distanceMoved;
                                 statsDto.setDte(StatsDto.builder()
                                         .manual(manualDte)
                                         .manualTimestamp(statsDto.getSoc().getManualTimestamp())
                                         .calculated(calculatedDte)
-                                        .calculatedTimestamp(DateTime.now().getMillis()).build());
+                                        .calculatedTimestamp(DateTime.now().getMillis())
+                                        .timestamp(DateTime.now().getMillis()).build());
 
                                 statsDto.setSoc(StatsDto.builder()
                                         .manual(statsDto.getSoc().getManual())
                                         .manualTimestamp(statsDto.getSoc().getManualTimestamp())
-                                        .calculated(calculatedDte/statsDto.getKmRange()*100)
-                                        .calculatedTimestamp(DateTime.now().getMillis()).build());
+                                        .calculated(calculatedDte / (statsDto.getKmRange()*1000) * 100)
+                                        .calculatedTimestamp(DateTime.now().getMillis())
+                                        .timestamp(DateTime.now().getMillis()).build());
 
-                                vehicleRepository.updateStats(vehicleDao.getId(),ApplicationConstants.GSON.toJson(statsDto));
+                                vehicleRepository.updateStats(vehicleDao.getId(), ApplicationConstants.GSON.toJson(statsDto));
                                 VehicleViewDto vehicleViewDto = VehicleViewDto.fromDao(vehicleDao);
-                                if(vehicleViewDto!=null) {
+                                if (vehicleViewDto != null) {
                                     vehicleViewDto.setStats(statsDto);
                                     partnerRepository.updateVehicleDetails(partnerDao.getId(), ApplicationConstants.GSON.toJson(vehicleViewDto));
                                 }
