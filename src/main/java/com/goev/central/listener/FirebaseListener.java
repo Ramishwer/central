@@ -87,6 +87,8 @@ public class FirebaseListener {
                         PartnerStatsDto statsDto = ApplicationConstants.GSON.fromJson(partnerDao.getStats(), PartnerStatsDto.class);
                         if (statsDto != null && statsDto.getGps() != null) {
                             distanceMoved = BigDecimal.valueOf(DistanceUtils.calculateDistance(data.getLocation().getCoords(), statsDto.getGps())).intValue();
+
+                            log.info("Distance Moved : {} for Partner : {}",distanceMoved,partnerDao.getPunchId());
                         }
                     }
 
@@ -108,7 +110,7 @@ public class FirebaseListener {
                                 statsDto.setSoc(StatsDto.builder()
                                         .manual(statsDto.getSoc().getManual())
                                         .manualTimestamp(statsDto.getSoc().getManualTimestamp())
-                                        .calculated(calculatedDte / (statsDto.getKmRange()*1000) * 100)
+                                        .calculated(BigDecimal.valueOf(calculatedDte / (statsDto.getKmRange()*1000.0) * 100).intValue())
                                         .calculatedTimestamp(DateTime.now().getMillis())
                                         .timestamp(DateTime.now().getMillis()).build());
 
