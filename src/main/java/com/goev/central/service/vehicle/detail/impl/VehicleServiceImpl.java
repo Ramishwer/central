@@ -90,6 +90,13 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     private VehicleDao sendToMaintenance(VehicleDao vehicle, VehicleActionDto vehicleActionDto) {
+
+
+        PartnerDao assignedPartner = partnerRepository.findByVehicleId(vehicle.getId());
+        if(assignedPartner!=null)
+            throw new ResponseException("Vehicle is assigned to a partner please release it first");
+
+
         vehicle.setStatus(VehicleStatus.MAINTENANCE.name());
         vehicle.setSubStatus(VehicleSubStatus.NOT_ASSIGNED.name());
         vehicle.setPartnerDetails(null);
@@ -114,6 +121,10 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     private VehicleDao releaseVehicle(VehicleDao vehicle, VehicleActionDto vehicleActionDto) {
+        PartnerDao assignedPartner = partnerRepository.findByVehicleId(vehicle.getId());
+        if(assignedPartner!=null)
+            throw new ResponseException("Vehicle is assigned to a partner please release it first");
+
         vehicle.setStatus(VehicleStatus.AVAILABLE.name());
         vehicle.setSubStatus(VehicleSubStatus.NOT_ASSIGNED.name());
         vehicle.setPartnerDetails(null);
