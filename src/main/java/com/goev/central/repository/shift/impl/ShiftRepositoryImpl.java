@@ -62,7 +62,6 @@ public class ShiftRepositoryImpl implements ShiftRepository {
 
 
 //    public void delete(Integer id) {
-//        System.out.println("shift ddelete"+id);
 //        context.update(SHIFTS)
 //                .set(SHIFTS.STATE, RecordState.DELETED.name())
 //                .where(SHIFTS.ID.eq(id))
