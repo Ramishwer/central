@@ -16,5 +16,5 @@ public enum PartnerAction {
     UNPAUSE,
     ENROUTE, ARRIVE, START, END, COMPLETE,
     GO_OFFLINE,
-    CHECK_OUT
+    ONBOARD, CHECK_OUT
 }

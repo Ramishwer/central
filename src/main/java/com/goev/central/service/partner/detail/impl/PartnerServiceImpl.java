@@ -203,6 +203,9 @@ public class PartnerServiceImpl implements PartnerService {
             case DEBOARD -> {
                 partner = deboardPartner(partner, actionDto);
             }
+            case ONBOARD -> {
+                partner = onboardPartner(partner, actionDto);
+            }
             case SUSPEND -> {
                 partner = suspendPartner(partner, actionDto);
             }
@@ -296,6 +299,20 @@ public class PartnerServiceImpl implements PartnerService {
         return updatePartnerOnboardingStatus(partner, PartnerOnboardingStatus.DEBOARDED);
     }
 
+    private PartnerDao onboardPartner(PartnerDao partner, PartnerActionDto actionDto) {
+        PartnerDetailDao partnerDetailDao = partnerDetailRepository.findById(partner.getPartnerDetailsId());
+        if (partnerDetailDao != null) {
+            partnerDetailDao.setRemark(actionDto.getRemark());
+            partnerDetailDao.setDeboardingDate(DateTime.now());
+            partnerDetailRepository.update(partnerDetailDao);
+            PartnerViewDto viewDto = PartnerViewDto.fromDao(partner);
+            if (viewDto != null) {
+                viewDto.setRemark(actionDto.getRemark());
+                partner.setViewInfo(ApplicationConstants.GSON.toJson(viewDto));
+            }
+        }
+        return updatePartnerOnboardingStatus(partner, PartnerOnboardingStatus.ONBOARDED);
+    }
     private PartnerDao changeVehicle(PartnerDao partner, PartnerActionDto actionDto) {
         VehicleDao vehicle = vehicleRepository.findByUUID(actionDto.getVehicleUUID());
         if (vehicle == null)
