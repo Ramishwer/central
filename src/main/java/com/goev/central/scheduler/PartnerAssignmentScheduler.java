@@ -33,7 +33,7 @@ public class PartnerAssignmentScheduler {
     private final PartnerRepository partnerRepository;
     private final VehicleRepository vehicleRepository;
 
-    //@Scheduled(fixedRate = 60 * 1000)
+    @Scheduled(fixedRate = 60 * 1000)
     public void reportCurrentTime() {
         log.info("The {} time is now {}", this.getClass().getName(), DateTime.now());
         List<BookingDao> allBooking = bookingRepository.findAllActive(Collections.singletonList(BookingStatus.IN_PROGRESS.name()), BookingSubStatus.UNASSIGNED.name(), null, null);
