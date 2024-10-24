@@ -24,7 +24,11 @@ public class BookingStartingScheduler {
     @Scheduled(fixedRate = 1 *60 * 1000)
     public void reportCurrentTime() {
         log.info("The {} time is now {}",this.getClass().getName() ,DateTime.now());
-        List<BookingDao> allBooking =bookingRepository.findAllActiveWithTime(DateTime.now().minusDays(1),DateTime.now().plusHours(2));
+        //List<BookingDao> allBooking =bookingRepository.findAllActiveWithTime(DateTime.now().minusDays(1),DateTime.now().plusHours(2));
+        List<BookingDao> allBooking = bookingRepository.findAllActiveWithTime(
+                DateTime.now().minusDays(1),
+                DateTime.now().plusMinutes(20) // 20 minutes from now
+        );
 
         for(BookingDao bookingDao:allBooking){
           bookingDao.setStatus(BookingStatus.IN_PROGRESS.name());
