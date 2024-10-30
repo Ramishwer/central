@@ -34,7 +34,7 @@ public class SessionServiceImpl implements SessionService {
             throw new ResponseException("User does not exist");
 
         if (!UserOnboardingStatus.ONBOARDED.name().equals(user.getOnboardingStatus()))
-            throw new ResponseException("User does not exist");
+            throw new ResponseException("User not exist");
         SessionDto sessionDto = authService.createSession(credentials, user.getAuthUuid());
         if (sessionDto == null)
             throw new ResponseException("User does not exist");
