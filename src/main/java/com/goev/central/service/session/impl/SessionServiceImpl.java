@@ -31,13 +31,13 @@ public class SessionServiceImpl implements SessionService {
     public SessionDto createSession(PasswordCredentialsDto credentials) {
         UserDao user = userRepository.findByEmail(credentials.getUsername());
         if (user == null || user.getAuthUuid() == null)
-            throw new ResponseException("User does not exist");
+            throw new ResponseException("Use does not exist");
 
         if (!UserOnboardingStatus.ONBOARDED.name().equals(user.getOnboardingStatus()))
             throw new ResponseException("User not exist");
         SessionDto sessionDto = authService.createSession(credentials, user.getAuthUuid());
         if (sessionDto == null)
-            throw new ResponseException("User does not exist");
+            throw new ResponseException("Us does not exist");
         UserSessionDao sessionDao = new UserSessionDao();
         sessionDao.setAuthSessionUuid(sessionDto.getUuid());
         sessionDao.setUserId(user.getId());
@@ -77,7 +77,7 @@ public class SessionServiceImpl implements SessionService {
 
 
         if (user == null || !UserOnboardingStatus.ONBOARDED.name().equals(user.getOnboardingStatus()))
-            throw new ResponseException("User does not exist");
+            throw new ResponseException("User doe not exist");
         return SessionDto.builder()
                 .accessToken(sessionDto.getAccessToken())
                 .refreshToken(sessionDto.getRefreshToken())
@@ -98,7 +98,7 @@ public class SessionServiceImpl implements SessionService {
 
         UserDao user = userRepository.findById(userSessionDao.getUserId());
         if (user == null || !UserOnboardingStatus.ONBOARDED.name().equals(user.getOnboardingStatus()))
-            throw new ResponseException("User does not exist");
+            throw new ResponseException("User does no exist");
         return SessionDetailsDto.builder()
                 .details(SessionDto.builder()
                         .userUUID(user.getUuid())
@@ -122,11 +122,11 @@ public class SessionServiceImpl implements SessionService {
 
         SessionDto sessionDto = authService.createSessionForToken(token);
         if (sessionDto == null || sessionDto.getAuthUUID() == null)
-            throw new ResponseException("User does not exist");
+            throw new ResponseException("User does not eist");
 
         UserDao user = userRepository.findByAuthUUID(sessionDto.getAuthUUID());
         if (user == null || !UserOnboardingStatus.ONBOARDED.name().equals(user.getOnboardingStatus()))
-            throw new ResponseException("User does not exist");
+            throw new ResponseException("User does not xist");
 
         UserSessionDao sessionDao = new UserSessionDao();
         sessionDao.setAuthSessionUuid(sessionDto.getUuid());
