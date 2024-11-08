@@ -36,4 +36,9 @@ public class EarningRuleController {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, earningService.getEarningRules());
     }
 
+    @GetMapping("/earning/rule/{earning-rule-uuid}")
+    public ResponseDto<EarningRuleDto> getEarningRules(@PathVariable(value = "earning-rule-uuid") String earningRuleUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, earningService.getEarningRuleDetails(earningRuleUUID));
+    }
+
 }

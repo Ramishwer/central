@@ -105,4 +105,11 @@ public class EarningRuleServiceImpl implements EarningRuleService {
         return newSerialNumber;
     }
 
+    @Override
+    public EarningRuleDto getEarningRuleDetails(String earningRuleUUID){
+        EarningRuleDao earningRuleDao = earningRuleRepository.findByUUID(earningRuleUUID);
+        if (earningRuleDao == null)
+            throw new ResponseException("No Earning Rule found for Id :" + earningRuleUUID);
+        return EarningRuleDto.fromDao(earningRuleDao);
+    }
 }

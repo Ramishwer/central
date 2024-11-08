@@ -10,4 +10,6 @@ public interface EarningRuleService {
    EarningRuleDto createEarningRule(EarningRuleDto earningRuleDto);
 
    EarningRuleDto updateEarningRule (EarningRuleDto earningRuleDto , String earningRuleUUID);
+
+   EarningRuleDto getEarningRuleDetails(String earningRuleUUID);
 }
