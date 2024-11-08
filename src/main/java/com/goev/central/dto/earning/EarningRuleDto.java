@@ -28,7 +28,6 @@ public class EarningRuleDto {
     private String checks;
     private Integer checkValue;
     private Long validTill;
-    private Boolean isActive;
     private String status;
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
