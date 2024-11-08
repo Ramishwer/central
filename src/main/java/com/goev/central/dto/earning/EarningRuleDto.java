@@ -53,6 +53,7 @@ public class EarningRuleDto {
                 .checks(earningRuleDao.getChecks())
                 .checkValue(earningRuleDao.getCheckValue())
                 .validTill(earningRuleDao.getValidTill())
+                .isActive(earningRuleDao.getIsActive())
                 .createdOn(earningRuleDao.getCreatedOn())
                 .createdBy(earningRuleDao.getCreatedBy())
                 .build();
