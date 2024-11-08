@@ -48,7 +48,6 @@ public class EarningRuleServiceImpl implements EarningRuleService {
         earningRuleDao.setChecks(earningRuleDto.getChecks());
         earningRuleDao.setCheckValue(earningRuleDto.getCheckValue());
         earningRuleDao.setValidTill(earningRuleDto.getValidTill());
-        earningRuleDao.setIsActive(earningRuleDto.getIsActive());
         earningRuleDao.setCreatedOn(earningRuleDto.getCreatedOn());
         earningRuleDao.setCreatedBy(earningRuleDto.getCreatedBy());
         earningRuleDao=earningRuleRepository.save(earningRuleDao);

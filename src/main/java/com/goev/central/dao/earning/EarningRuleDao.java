@@ -24,7 +24,6 @@ public class EarningRuleDao extends BaseDao {
     private String checks;
     private Integer checkValue;
     private Long validTill;
-    private Boolean isActive;
     public void getUuid(String uuid) {
     }
 }

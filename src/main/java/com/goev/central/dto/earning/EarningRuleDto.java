@@ -29,6 +29,7 @@ public class EarningRuleDto {
     private Integer checkValue;
     private Long validTill;
     private Boolean isActive;
+    private String status;
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime createdOn;
@@ -53,7 +54,7 @@ public class EarningRuleDto {
                 .checks(earningRuleDao.getChecks())
                 .checkValue(earningRuleDao.getCheckValue())
                 .validTill(earningRuleDao.getValidTill())
-                .isActive(earningRuleDao.getIsActive())
+                .status(earningRuleDao.getIsActive()?"ACTIVE":"INACTIVE")
                 .createdOn(earningRuleDao.getCreatedOn())
                 .createdBy(earningRuleDao.getCreatedBy())
                 .build();
