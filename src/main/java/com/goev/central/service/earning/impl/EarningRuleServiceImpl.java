@@ -111,4 +111,13 @@ public class EarningRuleServiceImpl implements EarningRuleService {
             throw new ResponseException("No Earning Rule found for Id :" + earningRuleUUID);
         return EarningRuleDto.fromDao(earningRuleDao);
     }
+
+    @Override
+    public boolean inactiveEarningRule(String earningRuleUUID){
+        EarningRuleDao earningRuleDao = earningRuleRepository.findByUUID(earningRuleUUID);
+        if (earningRuleDao == null)
+            throw new ResponseException("No Earning Rule found for Id :" + earningRuleUUID);
+        earningRuleRepository.delete(earningRuleDao.getId());
+        return true;
+    }
 }

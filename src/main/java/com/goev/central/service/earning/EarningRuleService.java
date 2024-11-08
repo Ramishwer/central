@@ -12,4 +12,6 @@ public interface EarningRuleService {
    EarningRuleDto updateEarningRule (EarningRuleDto earningRuleDto , String earningRuleUUID);
 
    EarningRuleDto getEarningRuleDetails(String earningRuleUUID);
+
+   boolean inactiveEarningRule(String earningRuleUUID);
 }

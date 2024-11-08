@@ -41,4 +41,8 @@ public class EarningRuleController {
         return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, earningService.getEarningRuleDetails(earningRuleUUID));
     }
 
+    @DeleteMapping("/earning/rule/{earning-rule-uuid}")
+    public ResponseDto<Boolean> inactiveEarningRules(@PathVariable(value = "earning-rule-uuid") String earningRuleUUID) {
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, earningService.inactiveEarningRule(earningRuleUUID));
+    }
 }

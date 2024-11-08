@@ -17,4 +17,6 @@ public interface EarningRuleRepository {
     EarningRuleDao update(EarningRuleDao earningRuleDao);
 
     Optional<EarningRuleDao> findLastRuleIdInEarningRule ();
+
+    void delete(Integer id);
 }

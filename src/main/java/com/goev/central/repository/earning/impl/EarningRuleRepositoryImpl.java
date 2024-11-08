@@ -88,4 +88,12 @@ public class EarningRuleRepositoryImpl implements EarningRuleRepository {
     public List<EarningRuleDao> findAll(){
         return context.selectFrom(EARNING_RULE).fetchInto(EarningRuleDao.class);
     }
+
+    @Override
+    public void delete(Integer id){
+        context.update(EARNING_RULE)
+                .set(EARNING_RULE.IS_ACTIVE, false)
+                .where(EARNING_RULE.ID.eq(id))
+                .execute();
+    }
 }
