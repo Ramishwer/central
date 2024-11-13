@@ -1,15 +1,9 @@
 package com.goev.central.repository.earning.impl;
-
 import com.goev.central.dao.earning.EarningRuleDao;
-import com.goev.central.dao.engine.EngineRuleDao;
-import com.goev.central.dao.engine.EngineRuleFieldDao;
-import com.goev.central.dto.earning.EarningRuleDto;
 import com.goev.central.repository.earning.EarningRuleRepository;
 import com.goev.central.utilities.EventExecutorUtils;
 import com.goev.central.utilities.RequestContext;
-import com.goev.record.central.tables.EarningRule;
 import com.goev.record.central.tables.records.EarningRuleRecord;
-import com.goev.record.central.tables.records.EngineRuleFieldsRecord;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.DSLContext;
@@ -19,8 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.goev.record.central.tables.EarningRule.EARNING_RULE;
-import static com.goev.record.central.tables.EngineRuleFields.ENGINE_RULE_FIELDS;
-import static com.goev.record.central.tables.EngineRules.ENGINE_RULES;
+
 
 @Slf4j
 @Repository
@@ -47,6 +40,8 @@ public class EarningRuleRepositoryImpl implements EarningRuleRepository {
         earningRuleDao.setIsActive(earningRuleRecord.getIsActive());
         earningRuleDao.setCreatedOn(earningRuleRecord.getCreatedOn());
         earningRuleDao.setCreatedBy(earningRuleRecord.getCreatedBy());
+        if (!"EVENT".equals(RequestContext.getRequestSource()))
+            eventExecutor.fireEvent("EarningRuleSaveEvent", earningRuleDao);
         return earningRuleDao;
     }
 
@@ -67,6 +62,9 @@ public class EarningRuleRepositoryImpl implements EarningRuleRepository {
         newEarningRuleDao.setIsActive(earningRuleRecord.getIsActive());
         newEarningRuleDao.setCreatedOn(earningRuleRecord.getCreatedOn());
         newEarningRuleDao.setCreatedBy(earningRuleRecord.getCreatedBy());
+        if (!"EVENT".equals(RequestContext.getRequestSource()))
+            eventExecutor.fireEvent("EarningRuleUpdateEvent", newEarningRuleDao);
+
         return newEarningRuleDao;
     }
 
