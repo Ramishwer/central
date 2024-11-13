@@ -6,6 +6,7 @@ import com.goev.central.dao.booking.BookingDao;
 import com.goev.central.dao.customer.detail.CustomerDao;
 import com.goev.central.dao.customer.detail.CustomerDetailDao;
 import com.goev.central.dao.customer.payment.CustomerPaymentDao;
+import com.goev.central.dao.earning.EarningRuleDao;
 import com.goev.central.dao.location.LocationDao;
 import com.goev.central.dao.partner.detail.PartnerDao;
 import com.goev.central.dao.partner.detail.PartnerDetailDao;
@@ -30,6 +31,8 @@ import com.goev.central.event.events.customer.save.CustomerSaveEvent;
 import com.goev.central.event.events.customer.update.CustomerDetailUpdateEvent;
 import com.goev.central.event.events.customer.update.CustomerPaymentUpdateEvent;
 import com.goev.central.event.events.customer.update.CustomerUpdateEvent;
+import com.goev.central.event.events.earning.save.EarningRuleSaveEvent;
+import com.goev.central.event.events.earning.update.EarningRuleUpdateEvent;
 import com.goev.central.event.events.location.save.LocationSaveEvent;
 import com.goev.central.event.events.location.update.LocationUpdateEvent;
 import com.goev.central.event.events.partner.PartnerOnboardingStatusCheckEvent;
@@ -189,6 +192,12 @@ public class EventExecutorUtils {
             }
             case "VehicleDetailUpdateEvent" -> {
                 return fireEvent(SpringContext.getBean(VehicleDetailUpdateEvent.class), (VehicleDetailDao) data, executionTime);
+            }
+            case "EarningRuleSaveEvent" -> {
+                return fireEvent(SpringContext.getBean(EarningRuleSaveEvent.class), (EarningRuleDao) data, executionTime);
+            }
+            case "EarningRuleUpdateEvent" ->{
+                return fireEvent(SpringContext.getBean(EarningRuleUpdateEvent.class), (EarningRuleDao) data, executionTime);
             }
 
 
