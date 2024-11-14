@@ -15,6 +15,8 @@ import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static com.goev.record.central.tables.Partners.PARTNERS;
 import static com.goev.record.central.tables.Users.USERS;
@@ -130,4 +132,14 @@ public class UserRepositoryImpl implements UserRepository {
                 .and(USERS.ONBOARDING_STATUS.eq(UserOnboardingStatus.ONBOARDED.name()))
                 .and(USERS.IS_ACTIVE.eq(true)).execute();
     }
+
+    @Override
+    public Map<String, Integer> findAllUserDetailsIdsByUUID(Set<String> createdByUuids) {
+        return context.select(USERS.UUID, USERS.USER_DETAILS_ID)
+                .from(USERS)
+                .where(USERS.UUID.in(createdByUuids))
+                .fetch()
+                .intoMap(record -> record.get(USERS.UUID), record -> record.get(USERS.USER_DETAILS_ID));
+    }
+
 }

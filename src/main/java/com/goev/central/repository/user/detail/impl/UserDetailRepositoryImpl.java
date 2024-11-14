@@ -10,8 +10,10 @@ import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 
 import static com.goev.record.central.tables.UserDetails.USER_DETAILS;
+import static com.goev.record.central.tables.Users.USERS;
 
 @Repository
 @AllArgsConstructor
@@ -86,4 +88,16 @@ public class UserDetailRepositoryImpl implements UserDetailRepository {
     public List<UserDetailDao> findAllActive() {
         return context.selectFrom(USER_DETAILS).fetchInto(UserDetailDao.class);
     }
+
+
+    @Override
+    public List<String> findUserNameByUserDetailsIds(List<Integer> userDetailsIds) {
+        return context.select(
+                        USER_DETAILS.FIRST_NAME.concat(" ").concat(USER_DETAILS.LAST_NAME)
+                )
+                .from(USER_DETAILS)
+                .where(USER_DETAILS.ID.in(userDetailsIds))
+                .fetchInto(String.class); // This fetches the result as a List<String>
+    }
+
 }

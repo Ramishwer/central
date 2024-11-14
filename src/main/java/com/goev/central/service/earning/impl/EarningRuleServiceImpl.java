@@ -4,6 +4,8 @@ import com.goev.central.dao.earning.EarningRuleDao;
 import com.goev.central.dto.common.PaginatedResponseDto;
 import com.goev.central.dto.earning.EarningRuleDto;
 import com.goev.central.repository.earning.EarningRuleRepository;
+import com.goev.central.repository.user.detail.UserDetailRepository;
+import com.goev.central.repository.user.detail.UserRepository;
 import com.goev.central.service.earning.EarningRuleService;
 import com.goev.lib.exceptions.ResponseException;
 import lombok.AllArgsConstructor;
@@ -12,16 +14,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 @AllArgsConstructor
 public class EarningRuleServiceImpl implements EarningRuleService {
     private final EarningRuleRepository earningRuleRepository;
-
+    private final UserRepository userRepository;
+    private final UserDetailRepository userDetailRepository;
 
     @Override
     public PaginatedResponseDto<EarningRuleDto> getEarningRules(){
@@ -30,7 +32,32 @@ public class EarningRuleServiceImpl implements EarningRuleService {
         if (CollectionUtils.isEmpty(earningRuleDaos))
             return result;
 
+        Set<String> createdByUuids = earningRuleDaos.stream()
+                .map(EarningRuleDao::getCreatedBy)
+                .collect(Collectors.toSet());
+
+        Map<String, Integer> uuidToDetailIdMap = userRepository.findAllUserDetailsIdsByUUID(createdByUuids);
+        List<Integer> userDetailsIds = new ArrayList<>(uuidToDetailIdMap.values());
+        List<String> userNames = userDetailRepository.findUserNameByUserDetailsIds(userDetailsIds);
+
+        Map<Integer, String> detailIdToUserNameMap = new HashMap<>();
+        for (int i = 0; i < userDetailsIds.size(); i++) {
+            detailIdToUserNameMap.put(userDetailsIds.get(i), userNames.get(i));
+        }
+
+        Map<String, String> uuidToUserNameMap = new HashMap<>();
+        for (Map.Entry<String, Integer> entry : uuidToDetailIdMap.entrySet()) {
+            String uuid = entry.getKey();
+            Integer userDetailsId = entry.getValue();
+            String userName = detailIdToUserNameMap.get(userDetailsId);
+            uuidToUserNameMap.put(uuid, userName);
+        }
         for (EarningRuleDao engineRuleDao :earningRuleDaos ) {
+            String createdByUuid = engineRuleDao.getCreatedBy();
+            if (uuidToUserNameMap.containsKey(createdByUuid)) {
+                String createdByName = uuidToUserNameMap.get(createdByUuid);
+                engineRuleDao.setCreatedBy(createdByName);
+            }
             result.getElements().add(EarningRuleDto.fromDao(engineRuleDao));
         }
         return result;
