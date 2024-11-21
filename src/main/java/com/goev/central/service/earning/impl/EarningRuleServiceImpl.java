@@ -79,6 +79,7 @@ public class EarningRuleServiceImpl implements EarningRuleService {
         newEarningRuleDao.setValidTill(earningRuleDto.getValidTill());
         newEarningRuleDao.setUpdatedOn(earningRuleDto.getUpdatedOn());
         newEarningRuleDao.setUpdatedBy(earningRuleDto.getUpdatedBy());
+        newEarningRuleDao.setIsActive(earningRuleDto.getIsActive());
         earningRuleDao = earningRuleRepository.update(newEarningRuleDao);
 
         if (earningRuleDao == null)
