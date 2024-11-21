@@ -64,6 +64,7 @@ public class EarningRuleRepositoryImpl implements EarningRuleRepository {
         newEarningRuleDao.setIsActive(earningRuleRecord.getIsActive());
         newEarningRuleDao.setCreatedOn(earningRuleRecord.getCreatedOn());
         newEarningRuleDao.setCreatedBy(earningRuleRecord.getCreatedBy());
+        newEarningRuleDao.setIsActive(earningRuleRecord.getIsActive());
         if (!"EVENT".equals(RequestContext.getRequestSource()))
             eventExecutor.fireEvent("EarningRuleUpdateEvent", newEarningRuleDao);
 

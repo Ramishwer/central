@@ -37,7 +37,7 @@ public class EarningRuleDto {
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime updatedOn;
     private String updatedBy;
-
+    private Boolean isActive;
     public static EarningRuleDto fromDao(EarningRuleDao earningRuleDao){
         if(earningRuleDao==null){
             return null;
@@ -56,6 +56,7 @@ public class EarningRuleDto {
                 .status(earningRuleDao.getIsActive()?"ACTIVE":"INACTIVE")
                 .createdOn(earningRuleDao.getCreatedOn())
                 .createdBy(earningRuleDao.getCreatedBy())
+                .isActive(earningRuleDao.getIsActive())
                 .build();
     }
 
