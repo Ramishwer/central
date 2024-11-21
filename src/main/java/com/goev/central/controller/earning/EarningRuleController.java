@@ -8,7 +8,10 @@ import com.goev.lib.dto.ResponseDto;
 import com.goev.lib.dto.StatusDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.joda.time.DateTime;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -32,8 +35,15 @@ public class EarningRuleController {
                                                                              @RequestParam(value = "start", required = false) Integer start,
                                                                              @RequestParam(value = "from", required = false) Long from,
                                                                              @RequestParam(value = "to", required = false) Long to,
+                                                                             @RequestParam(value = "status")String Status,
                                                                              @RequestParam(value = "lastUUID", required = false) String lastElementUUID) {
-        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, earningService.getEarningRules());
+        DateTime fromDateTime = null;
+        DateTime toDateTime = null;
+        if(from!=null)
+            fromDateTime = new DateTime(from);
+        if(to!=null)
+            toDateTime = new DateTime(to);
+        return new ResponseDto<>(StatusDto.builder().message("SUCCESS").build(), 200, earningService.getEarningRules(Status, fromDateTime,toDateTime));
     }
 
     @GetMapping("/earning/rule/{earning-rule-uuid}")

@@ -10,6 +10,7 @@ import com.goev.central.service.earning.EarningRuleService;
 import com.goev.lib.exceptions.ResponseException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -26,9 +27,9 @@ public class EarningRuleServiceImpl implements EarningRuleService {
     private final UserDetailRepository userDetailRepository;
 
     @Override
-    public PaginatedResponseDto<EarningRuleDto> getEarningRules(){
+    public PaginatedResponseDto<EarningRuleDto> getEarningRules(String status, DateTime from, DateTime to){
         PaginatedResponseDto<EarningRuleDto> result = PaginatedResponseDto.<EarningRuleDto>builder().elements(new ArrayList<>()).build();
-        List<EarningRuleDao> earningRuleDaos = earningRuleRepository.findAll();
+        List<EarningRuleDao> earningRuleDaos = earningRuleRepository.findAllBySatusAndDateRange(status, from, to);
         if (CollectionUtils.isEmpty(earningRuleDaos))
             return result;
 
@@ -146,4 +147,5 @@ public class EarningRuleServiceImpl implements EarningRuleService {
         earningRuleRepository.delete(earningRuleDao.getId());
         return true;
     }
+
 }

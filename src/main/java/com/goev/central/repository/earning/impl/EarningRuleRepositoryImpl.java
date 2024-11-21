@@ -6,7 +6,9 @@ import com.goev.central.utilities.RequestContext;
 import com.goev.record.central.tables.records.EarningRuleRecord;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.joda.time.DateTime;
 import org.jooq.DSLContext;
+import org.jooq.SelectQuery;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -83,8 +85,20 @@ public class EarningRuleRepositoryImpl implements EarningRuleRepository {
     }
 
     @Override
-    public List<EarningRuleDao> findAll(){
-        return context.selectFrom(EARNING_RULE).fetchInto(EarningRuleDao.class);
+    public List<EarningRuleDao> findAllBySatusAndDateRange(String status, DateTime from, DateTime to){
+        boolean isActive=true;
+        if("ACTIVE".equals(status)){
+            isActive=true;
+        }else{
+            isActive=false;
+        }
+        SelectQuery<EarningRuleRecord> query = context.selectFrom(EARNING_RULE)
+                                               .where(EARNING_RULE.IS_ACTIVE.eq(isActive))
+                                               .getQuery();
+        if (from != null && to!=null)
+            query.addConditions(EARNING_RULE.CREATED_ON.between(from,to));
+
+        return query.fetchInto(EarningRuleDao.class);
     }
 
     @Override
@@ -93,5 +107,13 @@ public class EarningRuleRepositoryImpl implements EarningRuleRepository {
                 .set(EARNING_RULE.IS_ACTIVE, false)
                 .where(EARNING_RULE.ID.eq(id))
                 .execute();
+    }
+
+    @Override
+    public EarningRuleDao findAllByClientName(String clientName) {
+        return context.selectFrom(EARNING_RULE)
+                .where(EARNING_RULE.CLIENT_NAME.eq(clientName))
+                .and(EARNING_RULE.IS_ACTIVE.eq(true))
+                .fetchAnyInto(EarningRuleDao.class);
     }
 }
