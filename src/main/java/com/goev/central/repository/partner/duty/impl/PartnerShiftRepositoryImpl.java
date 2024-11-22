@@ -174,4 +174,33 @@ public class PartnerShiftRepositoryImpl implements PartnerShiftRepository {
                 .fetchInto(PartnerShiftDao.class);
     }
 
+    @Override
+    public PartnerShiftDao findPartnerShiftDetailsByPartnerIdAndDutyDate(Integer id, DateTime dutyDate) {
+        return context.selectFrom(PARTNER_SHIFTS)
+                .where(PARTNER_SHIFTS.PARTNER_ID.eq(id))
+                .and(PARTNER_SHIFTS.DUTY_DATE.eq(dutyDate))
+                .fetchAnyInto(PartnerShiftDao.class); // Fetch any one record
+    }
+
+    @Override
+    public Integer getNumberOfPresentDays (Integer id , DateTime monthStartDate , DateTime monthEndDate){
+        return context
+                .selectCount()
+                .from(PARTNER_SHIFTS)
+                .where(PARTNER_SHIFTS.PARTNER_ID.eq(id))
+                .and(PARTNER_SHIFTS.SUB_STATUS.eq("PRESENT"))
+                .and(PARTNER_SHIFTS.DUTY_DATE.between(monthStartDate, monthEndDate))
+                .fetchOne(0, Integer.class);
+    }
+
+    @Override
+    public Integer getNumberOfAbsentDays (Integer id , DateTime monthStartDate , DateTime monthEndDate){
+        return context
+                .selectCount()
+                .from(PARTNER_SHIFTS)
+                .where(PARTNER_SHIFTS.PARTNER_ID.eq(id))
+                .and(PARTNER_SHIFTS.SUB_STATUS.eq("ABSENT"))
+                .and(PARTNER_SHIFTS.DUTY_DATE.between(monthStartDate, monthEndDate))
+                .fetchOne(0, Integer.class);
+    }
 }

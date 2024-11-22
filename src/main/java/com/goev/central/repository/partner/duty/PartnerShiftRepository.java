@@ -37,4 +37,10 @@ public interface PartnerShiftRepository {
 
     List<PartnerShiftDao> findAllByPartnerIdAndStatusAndStartTimeBetweenStartAndEnd(Integer partnerId, String name, DateTime start, DateTime end);
 
+    PartnerShiftDao findPartnerShiftDetailsByPartnerIdAndDutyDate(Integer id, DateTime dutyDate);
+
+    Integer getNumberOfPresentDays (Integer id , DateTime monthStartDate , DateTime monthEndDate);
+
+    Integer getNumberOfAbsentDays (Integer id , DateTime monthStartDate , DateTime monthEndDat);
+
 }
