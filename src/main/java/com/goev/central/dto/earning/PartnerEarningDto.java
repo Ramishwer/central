@@ -40,7 +40,6 @@ public class PartnerEarningDto {
         if(partnerEarningDao==null){
             return null;
         }
-        System.out.println("partnerEarningDao"+partnerEarningDao);
         return PartnerEarningDto.builder()
                 .uuid(partnerEarningDao.getUuid())
                 .ruleId(partnerEarningDao.getEarningRuleId())

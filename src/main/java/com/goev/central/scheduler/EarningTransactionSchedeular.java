@@ -27,10 +27,10 @@ import java.util.List;
 @Component
 @AllArgsConstructor
 public class EarningTransactionSchedeular {
-    final PartnerRepository partnerRepository;
-    final EarningRuleRepository earningRuleRepository;
-    final PartnerShiftRepository partnerShiftRepository;
-    final PartnerFixedEarningRepository earningRepository;
+    private final PartnerRepository partnerRepository;
+    private final EarningRuleRepository earningRuleRepository;
+    private final PartnerShiftRepository partnerShiftRepository;
+    private final PartnerFixedEarningRepository earningRepository;
 
     @Scheduled(cron = "1 1 * * * ?", zone = "Asia/Calcutta")
     public void reportCurrentTime() {

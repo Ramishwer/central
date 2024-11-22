@@ -1,6 +1,7 @@
 package com.goev.central.repository.earning.impl;
 
 import com.goev.central.dao.earning.EarningRuleDao;
+import com.goev.central.dao.earning.PartnerFixedEarningTransactionDao;
 import com.goev.central.dao.partner.detail.PartnerDao;
 import com.goev.central.repository.earning.PartnerFixedEarningRepository;
 import com.goev.central.utilities.EventExecutorUtils;
@@ -11,6 +12,9 @@ import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
 import org.springframework.stereotype.Repository;
 import com.goev.record.central.tables.records.PartnerFixedEarningTransactionRecord;
+
+import java.util.List;
+
 import static com.goev.record.central.tables.PartnerFixedEarningTransaction.PARTNER_FIXED_EARNING_TRANSACTION;
 
 @Slf4j
@@ -52,6 +56,16 @@ public class PartnerFixedEarningRepositoryImpl implements PartnerFixedEarningRep
         Float totalTransactionAmountFloat = totalTransactionAmount != null ? totalTransactionAmount.floatValue() : 0.0f;
 
         return totalTransactionAmountFloat;
+    }
+
+    @Override
+    public List<PartnerFixedEarningTransactionDao> getPartnerFixedEarningTransactionDeatils(Integer partnerId , DateTime monthStartDate , DateTime monthEndDate){
+
+        return context.selectFrom(PARTNER_FIXED_EARNING_TRANSACTION)
+                .where(PARTNER_FIXED_EARNING_TRANSACTION.PARTNER_ID.eq(partnerId))
+                .and(PARTNER_FIXED_EARNING_TRANSACTION.TRANSACTION_DATE.between(
+                        monthStartDate, monthEndDate))
+                .fetchInto(PartnerFixedEarningTransactionDao.class);
     }
 
 }

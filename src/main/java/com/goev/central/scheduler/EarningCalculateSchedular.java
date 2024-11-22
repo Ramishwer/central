@@ -30,12 +30,12 @@ import java.util.List;
 @Component
 @AllArgsConstructor
 public class EarningCalculateSchedular {
-    final PartnerRepository partnerRepository;
-    final PartnerShiftRepository partnerShiftRepository;
-    final PartnerFixedEarningRepository partnerFixedEarningRepository;
-    final EarningRuleRepository earningRuleRepository;
-    final PartnerPayoutRepository partnerPayoutRepository;
-    final PartnerTotalEarningRepository partnerTotalEarningRepository;
+    private final PartnerRepository partnerRepository;
+    private final PartnerShiftRepository partnerShiftRepository;
+    private final PartnerFixedEarningRepository partnerFixedEarningRepository;
+    private final EarningRuleRepository earningRuleRepository;
+    private final PartnerPayoutRepository partnerPayoutRepository;
+    private final PartnerTotalEarningRepository partnerTotalEarningRepository;
 
     @Scheduled(cron = "0 0 2 * * ?", zone = "Asia/Calcutta")
     public void reportCurrentTime() {
