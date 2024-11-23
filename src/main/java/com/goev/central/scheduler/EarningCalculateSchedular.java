@@ -61,8 +61,7 @@ public class EarningCalculateSchedular {
             if (segments!=null) {
                 String segmentName = segments.get(0).getName();
                 EarningRuleDao earningRuleDao = earningRuleRepository.findAllByClientName(segmentName);
-                if (earningRuleDao == null) {
-                    List<PartnerPayoutDao> partnerPayoutDao = partnerPayoutRepository.findAllByPartnerId(partner.getId());
+                if (earningRuleDao!=null) {
                     Float totalFixedEarning = partnerFixedEarningRepository.getTotalFixedEarning(partner, monthStartDate, monthEndDate);
 
                     Integer noOfPresentDays = partnerShiftRepository.getNumberOfPresentDays(partner.getId(), monthStartDate, monthEndDate);
