@@ -32,7 +32,7 @@ public class EarningTransactionSchedeular {
     private final PartnerShiftRepository partnerShiftRepository;
     private final PartnerFixedEarningRepository earningRepository;
 
-    @Scheduled(cron = "1 1 * * * ?", zone = "Asia/Calcutta")
+    @Scheduled(cron = "1 1 1 * * ?", zone = "Asia/Calcutta")
     public void reportCurrentTime() {
         log.info("The {} time is now {}", this.getClass().getName(), DateTime.now());
         calculateEarningPerDay(DateTime.now());
