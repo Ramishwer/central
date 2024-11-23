@@ -55,35 +55,34 @@ public class EarningCalculateSchedular {
         for (PartnerDao partner : partners) {
             String segmentString = partner.getSegments();
             Gson gson = new Gson();
-            System.out.println(partner.getId());
             Type segmentListType = new TypeToken<List<PartnerSegmentDto>>() {
             }.getType();
             List<PartnerSegmentDto> segments = gson.fromJson(segmentString, segmentListType);
-            if (!segments.isEmpty()) {
+            if (segments!=null) {
                 String segmentName = segments.get(0).getName();
                 EarningRuleDao earningRuleDao = earningRuleRepository.findAllByClientName(segmentName);
                 if (earningRuleDao == null) {
-                    throw new ResponseException("No Earning Rule found for this client :" + segmentName);
+                    List<PartnerPayoutDao> partnerPayoutDao = partnerPayoutRepository.findAllByPartnerId(partner.getId());
+                    Float totalFixedEarning = partnerFixedEarningRepository.getTotalFixedEarning(partner, monthStartDate, monthEndDate);
+
+                    Integer noOfPresentDays = partnerShiftRepository.getNumberOfPresentDays(partner.getId(), monthStartDate, monthEndDate);
+
+                    Integer noOfAbsentDays = partnerShiftRepository.getNumberOfAbsentDays(partner.getId(), monthStartDate, monthEndDate);
+
+                    PartnerEarningDao partnerEarningDao = partnerTotalEarningRepository.getPartnerEarningDetails(partner, monthStartDate, monthEndDate);
+
+                    if (partnerEarningDao == null) {
+                        partnerTotalEarningRepository.savePartnerTotalEarning(partner, earningRuleDao,monthStartDate, monthEndDate, totalFixedEarning, noOfPresentDays, noOfAbsentDays);
+                    } else {
+                        partnerEarningDao.setStartDate(monthStartDate);
+                        partnerEarningDao.setEndDate(monthEndDate);
+                        partnerEarningDao.setTotalEarning(totalFixedEarning);
+                        partnerEarningDao.setPresentDays(noOfPresentDays);
+                        partnerEarningDao.setAbsentDays(noOfAbsentDays);
+                        partnerTotalEarningRepository.updatePartnerTotalEarning(partnerEarningDao);
+                    }
                 }
-                List<PartnerPayoutDao> partnerPayoutDao = partnerPayoutRepository.findAllByPartnerId(partner.getId());
-                Float totalFixedEarning = partnerFixedEarningRepository.getTotalFixedEarning(partner, monthStartDate, monthEndDate);
 
-                Integer noOfPresentDays = partnerShiftRepository.getNumberOfPresentDays(partner.getId(), monthStartDate, monthEndDate);
-
-                Integer noOfAbsentDays = partnerShiftRepository.getNumberOfAbsentDays(partner.getId(), monthStartDate, monthEndDate);
-
-                PartnerEarningDao partnerEarningDao = partnerTotalEarningRepository.getPartnerEarningDetails(partner, monthStartDate, monthEndDate);
-
-                if (partnerEarningDao == null) {
-                    partnerTotalEarningRepository.savePartnerTotalEarning(partner, earningRuleDao,monthStartDate, monthEndDate, totalFixedEarning, noOfPresentDays, noOfAbsentDays);
-                } else {
-                    partnerEarningDao.setStartDate(monthStartDate);
-                    partnerEarningDao.setEndDate(monthEndDate);
-                    partnerEarningDao.setTotalEarning(totalFixedEarning);
-                    partnerEarningDao.setPresentDays(noOfPresentDays);
-                    partnerEarningDao.setAbsentDays(noOfAbsentDays);
-                    partnerTotalEarningRepository.updatePartnerTotalEarning(partnerEarningDao);
-                }
 
 
             }
