@@ -37,7 +37,8 @@ public class EarningCalculateSchedular {
     private final PartnerPayoutRepository partnerPayoutRepository;
     private final PartnerTotalEarningRepository partnerTotalEarningRepository;
 
-    @Scheduled(cron = "0 0 2 * * ?", zone = "Asia/Calcutta")
+    //@Scheduled(cron = "0 0 2 * * ?", zone = "Asia/Calcutta")
+    @Scheduled(fixedRate = 120 * 1000)
     public void reportCurrentTime() {
         log.info("The {} time is now {}", this.getClass().getName(), DateTime.now());
         calculateEarning(DateTime.now());
