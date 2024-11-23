@@ -41,31 +41,29 @@ public class EarningTransactionSchedeular {
     public void calculateEarningPerDay(DateTime executionTime){
         DateTime start = executionTime.withZone(ApplicationConstants.TIME_ZONE).minusDays(1).withTimeAtStartOfDay();
 
-        System.out.println("startdate"+start.getMillis());
         List<PartnerDao> OnBoardedPartners = partnerRepository.findAllByOnboardingStatus("ONBOARDED");
-
         for(PartnerDao partner : OnBoardedPartners) {
             String segmentString = partner.getSegments();
             Gson gson = new Gson();
             Type segmentListType = new TypeToken<List<PartnerSegmentDto>>(){}.getType();
             List<PartnerSegmentDto> segments = gson.fromJson(segmentString, segmentListType);
-            if (!segments.isEmpty()) {
+            if (segments!=null) {
                 String segmentName = segments.get(0).getName();
                 EarningRuleDao earningRuleDao = earningRuleRepository.findAllByClientName(segmentName);
-                if(earningRuleDao==null) {
-                    throw new ResponseException("No Earning Rule found for this client :" + segmentName);
-                }
-                float fixedEarningPerDay= 0;
-                PartnerShiftDao partnerShiftDao = partnerShiftRepository.findPartnerShiftDetailsByPartnerIdAndDutyDate(partner.getId(),start);
-                if(partnerShiftDao !=null){
-                    if(PartnerShiftSubStatus.PRESENT.name().equals(partnerShiftDao.getSubStatus())){
-                        int fixedIncome = earningRuleDao.getFixedIncome();
-                        int checkValue = earningRuleDao.getCheckValue();
-                        fixedEarningPerDay = (float) fixedIncome/checkValue;
-                    }
+                if(earningRuleDao!=null) {
+                    float fixedEarningPerDay= 0;
+                    PartnerShiftDao partnerShiftDao = partnerShiftRepository.findPartnerShiftDetailsByPartnerIdAndDutyDate(partner.getId(),start);
+                    if(partnerShiftDao !=null){
+                        if(PartnerShiftSubStatus.PRESENT.name().equals(partnerShiftDao.getSubStatus())){
+                            int fixedIncome = earningRuleDao.getFixedIncome();
+                            int checkValue = earningRuleDao.getCheckValue();
+                            fixedEarningPerDay = (float) fixedIncome/checkValue;
+                        }
 
+                    }
+                    earningRepository.saveEarningTransaction(partner,earningRuleDao,fixedEarningPerDay,start);
                 }
-                earningRepository.saveEarningTransaction(partner,earningRuleDao,fixedEarningPerDay,start);
+
 
 
             }
