@@ -1,10 +1,12 @@
 package com.goev.central.repository.earning.impl;
 
 import com.goev.central.dao.earning.EarningRuleDao;
+import com.goev.central.dao.earning.PartnerFixedEarningSaveEventDataDao;
 import com.goev.central.dao.earning.PartnerFixedEarningTransactionDao;
 import com.goev.central.dao.partner.detail.PartnerDao;
 import com.goev.central.repository.earning.PartnerFixedEarningRepository;
 import com.goev.central.utilities.EventExecutorUtils;
+import com.goev.central.utilities.RequestContext;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
@@ -26,7 +28,7 @@ public class PartnerFixedEarningRepositoryImpl implements PartnerFixedEarningRep
 
 
     @Override
-    public void saveEarningTransaction (PartnerDao partnerDao, EarningRuleDao earningRuleDao , Float fixedEarning, DateTime start){
+    public void saveEarningTransaction (PartnerDao partnerDao, EarningRuleDao earningRuleDao , Float fixedEarning, DateTime start) {
         PartnerFixedEarningTransactionRecord partnerFixedEarningTransactionRecord = context.newRecord(PARTNER_FIXED_EARNING_TRANSACTION);
         partnerFixedEarningTransactionRecord.setEarningRuleId(earningRuleDao.getRuleId());
         partnerFixedEarningTransactionRecord.setPartnerId(partnerDao.getId());
@@ -40,7 +42,10 @@ public class PartnerFixedEarningRepositoryImpl implements PartnerFixedEarningRep
         partnerFixedEarningTransactionRecord.setApiSource("CENTRAL");
 
         partnerFixedEarningTransactionRecord.store();
-
+        if (!"EVENT".equals(RequestContext.getRequestSource())){
+            PartnerFixedEarningSaveEventDataDao eventData = new PartnerFixedEarningSaveEventDataDao(earningRuleDao,partnerDao, fixedEarning, start);
+            eventExecutor.fireEvent("PartnerFixedEarningTransactionSaveEvent", eventData);
+    }
     }
 
 

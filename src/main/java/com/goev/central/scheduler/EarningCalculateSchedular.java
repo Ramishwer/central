@@ -34,7 +34,6 @@ public class EarningCalculateSchedular {
     private final PartnerShiftRepository partnerShiftRepository;
     private final PartnerFixedEarningRepository partnerFixedEarningRepository;
     private final EarningRuleRepository earningRuleRepository;
-    private final PartnerPayoutRepository partnerPayoutRepository;
     private final PartnerTotalEarningRepository partnerTotalEarningRepository;
 
     @Scheduled(cron = "0 0 2 * * ?", zone = "Asia/Calcutta")

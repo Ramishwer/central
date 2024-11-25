@@ -5,6 +5,8 @@ import com.goev.central.dao.earning.PartnerEarningDao;
 import com.goev.central.dao.partner.detail.PartnerDao;
 import com.goev.central.repository.earning.PartnerTotalEarningRepository;
 import com.goev.central.utilities.EventExecutorUtils;
+import com.goev.central.utilities.RequestContext;
+import com.goev.record.central.tables.PartnerEarning;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
@@ -52,6 +54,27 @@ public class PartnerTotalEarningRepositoryImpl implements PartnerTotalEarningRep
         partnerEarningRecord.store();
 
 
+        PartnerEarningDao partnerEarningDao = new PartnerEarningDao();
+        partnerEarningDao.setEarningRuleId(earningRuleDao.getRuleId());
+        partnerEarningDao.setPartnerId(partner.getId());
+        partnerEarningDao.setBusinessType(earningRuleDao.getBusinessType());
+        partnerEarningDao.setClientName(earningRuleDao.getClientName());
+        partnerEarningDao.setStartDate(monthStartDate);
+        partnerEarningDao.setEndDate(monthEndDate);
+        partnerEarningDao.setTotalEarning(totalFixedEaring);
+        partnerEarningDao.setTransactionType("CREDIT");
+        partnerEarningDao.setTransactionStatus("COMPLETED");
+        partnerEarningDao.setPresentDays(noOfPersentdays);
+        partnerEarningDao.setAbsentDays(noOfAbsentdays);
+        partnerEarningDao.setTotalWorkingDays(earningRuleDao.getCheckValue());
+
+
+        if (!"EVENT".equals(RequestContext.getRequestSource())){
+            System.out.println("EVENTEVENTEVENTEVENT");
+            eventExecutor.fireEvent("PartnerTotalEarningSaveEvent", partnerEarningDao);
+        }
+
+
 
     }
 
@@ -60,6 +83,11 @@ public class PartnerTotalEarningRepositoryImpl implements PartnerTotalEarningRep
     public void updatePartnerTotalEarning (PartnerEarningDao partnerEarningDao){
         PartnerEarningRecord partnerEarningRecord = context.newRecord(PARTNER_EARNING,partnerEarningDao);
         partnerEarningRecord.update();
+
+        if (!"EVENT".equals(RequestContext.getRequestSource())){
+            System.out.println("EVENTEVENTEVENTEVENT22");
+            eventExecutor.fireEvent("PartnerTotalEarningSaveEvent", partnerEarningDao);
+        }
 
     }
 }

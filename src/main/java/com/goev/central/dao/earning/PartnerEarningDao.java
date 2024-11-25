@@ -12,9 +12,6 @@ import org.jooq.impl.QOM;
 @ToString
 @Builder
 public class PartnerEarningDao extends BaseDao {
-
-    private Integer id;
-    private String uuid;
     private String earningRuleId;
     private Integer partnerId;
     private String businessType;

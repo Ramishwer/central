@@ -4,7 +4,6 @@ import com.goev.central.constant.ApplicationConstants;
 import com.goev.central.dao.earning.PartnerEarningDao;
 import com.goev.central.dao.earning.PartnerFixedEarningTransactionDao;
 import com.goev.central.dao.partner.detail.PartnerDao;
-import com.goev.central.dto.earning.EarningRuleDto;
 import com.goev.central.dto.earning.PartnerEarningDto;
 import com.goev.central.dto.earning.PartnerFixedEarningTransactionDto;
 import com.goev.central.repository.earning.PartnerEarningRepository;

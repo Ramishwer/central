@@ -1,7 +1,6 @@
 package com.goev.central.repository.earning;
 
 import com.goev.central.dao.earning.EarningRuleDao;
-import com.goev.central.dao.earning.PartnerEarningDao;
 import com.goev.central.dao.earning.PartnerFixedEarningTransactionDao;
 import com.goev.central.dao.partner.detail.PartnerDao;
 import org.joda.time.DateTime;
