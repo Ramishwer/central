@@ -45,7 +45,12 @@ public class PartnerEarningSreviceImpl implements PartnerEarningService {
 
         PartnerEarningDao partnerEarningDao = partnerEarningRepository.getPartnerEarningDetails(partnerDao.getId(), monthStartDate, monthEndDate);
         if(partnerEarningDao==null){
-            throw new ResponseException("No Earning found for Uuid :" + partnerUuid);
+            partnerEarningDao = new PartnerEarningDao();
+            partnerEarningDao.setStartDate(monthStartDate);
+            partnerEarningDao.setEndDate(monthEndDate);
+            partnerEarningDao.setTotalEarning(0f);
+            return PartnerEarningDto.fromDao(partnerEarningDao);
+
         }
 
         return PartnerEarningDto.fromDao(partnerEarningDao);
