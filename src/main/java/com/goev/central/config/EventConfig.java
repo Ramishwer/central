@@ -96,7 +96,8 @@ public class EventConfig {
             VehicleAssetTransferDetailSaveEventHandler vehicleAssetTransferDetailSaveEventHandler,
             VehicleAssetMappingSaveEventHandler vehicleAssetMappingSaveEventHandler,
             BookingSaveEventHandler bookingSaveEventHandler,
-            LocationSaveEventHandler locationSaveEventHandler
+            LocationSaveEventHandler locationSaveEventHandler,
+            PartnerDeviceDetailsSaveEventHandler partnerDeviceDetailsSaveEventHandler
 
 
     ) {
@@ -126,6 +127,7 @@ public class EventConfig {
         eventProcessor.registerEvents(new VehicleAssetMappingUpdateEvent());
         eventProcessor.registerEvents(new BookingUpdateEvent());
         eventProcessor.registerEvents(new LocationUpdateEvent());
+        eventProcessor.registerEvents(new PartnerDeviceDetailsSaveEvent());
 
 
         eventProcessor.registerEventHandlers(new AssetUpdateEvent(), assetUpdateEventHandler);
@@ -148,6 +150,7 @@ public class EventConfig {
         eventProcessor.registerEventHandlers(new VehicleAssetMappingUpdateEvent(), vehicleAssetMappingUpdateEventHandler);
         eventProcessor.registerEventHandlers(new BookingUpdateEvent(), bookingUpdateEventHandler);
         eventProcessor.registerEventHandlers(new LocationUpdateEvent(), locationUpdateEventHandler);
+        eventProcessor.registerEventHandlers(new PartnerDeviceDetailsSaveEvent(),partnerDeviceDetailsSaveEventHandler);
 
 
         eventProcessor.registerEvents(new AssetSaveEvent());
