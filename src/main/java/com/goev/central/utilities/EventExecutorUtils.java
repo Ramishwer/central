@@ -10,6 +10,7 @@ import com.goev.central.dao.earning.EarningRuleDao;
 import com.goev.central.dao.earning.PartnerEarningDao;
 import com.goev.central.dao.earning.PartnerFixedEarningSaveEventDataDao;
 import com.goev.central.dao.location.LocationDao;
+import com.goev.central.dao.overtime.OverTimeRuleDao;
 import com.goev.central.dao.partner.detail.PartnerDao;
 import com.goev.central.dao.partner.detail.PartnerDetailDao;
 import com.goev.central.dao.partner.document.PartnerDocumentDao;
@@ -39,6 +40,7 @@ import com.goev.central.event.events.earning.save.PartnerTotalEarningSaveEvent;
 import com.goev.central.event.events.earning.update.EarningRuleUpdateEvent;
 import com.goev.central.event.events.location.save.LocationSaveEvent;
 import com.goev.central.event.events.location.update.LocationUpdateEvent;
+import com.goev.central.event.events.overtime.save.OverTimeRuleSaveEvent;
 import com.goev.central.event.events.partner.PartnerOnboardingStatusCheckEvent;
 import com.goev.central.event.events.partner.save.*;
 import com.goev.central.event.events.partner.update.*;
@@ -208,6 +210,9 @@ public class EventExecutorUtils {
             }
             case "PartnerTotalEarningSaveEvent" ->{
                 return fireEvent(SpringContext.getBean(PartnerTotalEarningSaveEvent.class), (PartnerEarningDao) data, executionTime);
+            }
+            case "OverTimeRuleSaveEvent" ->{
+                return fireEvent(SpringContext.getBean(OverTimeRuleSaveEvent.class), (OverTimeRuleDao) data, executionTime);
             }
             default -> {
                 return false;
